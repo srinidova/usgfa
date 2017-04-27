@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Event">
+		<insert id="addEvent" parameterClass="com.dto.EventDTO">
+		insert into
+		event(eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn)
+		values(#eventId#,#eventName#,#noOfDays#,#timeFrom#,#timeEnd#,#address#,#place#,#mandal#,#district#,#state#,#landMark#,#pinCode#,#moreInfo#,#updatedBy#,#updatedOn#)
+	</insert>
+	<select id="getEventDetails" resultClass="com.dto.EventDTO">
+		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from event
+	</select> 
+	<select id="getEventById" parameterClass="java.lang.String"
+		resultClass="com.dto.EventDTO">
+		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from
+		event where eventId = #value#
+	</select>
+	<update id="eventUpdate" parameterClass="com.dto.EventDTO">
+		update event set eventName
+		= #eventName#, noOfDays = #noOfDays#, timeFrom = #timeFrom#, timeEnd = #timeEnd#, address
+		= #address#, place = #place#, mandal = #mandal#, district = #district#, state = #state#, landMark = #landMark#, pinCode = #pinCode#, moreInfo = #moreInfo#,
+		updatedBy = #updatedBy#, updatedOn = #updatedOn#
+		where
+		eventId = #eventId#
+	</update>
+	<delete id="deleteEvent" parameterClass="com.dto.EventDTO">
+		delete from event where
+		eventId = #eventId#
+	</delete>
+</sqlMap>

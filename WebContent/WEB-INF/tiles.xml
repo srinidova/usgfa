@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="base.definition" template="/WEB-INF/pages/home.jsp">
+		<put-attribute name="includes" value="/WEB-INF/pages/includes.jsp" />
+		<put-attribute name="topheader" value="/WEB-INF/pages/topheader.jsp" />
+		<put-attribute name="header" value="/WEB-INF/pages/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/pages/menu.jsp" />
+		<put-attribute name="main" value="/WEB-INF/pages/main.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/pages/footer.jsp" />
+
+	</definition>
+
+	<!-- Login -->
+	<definition name="eventHome" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/eventReg.jsp" />
+	</definition>
+	<definition name="eventList" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/eventList.jsp" />
+	</definition>
+	<definition name="eventProf" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/eventProfile.jsp" />
+	</definition>
+	<definition name="eventEdit" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/eventEdit.jsp" />
+	</definition>
+	
+	<definition name="newsHome" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/news.jsp" />
+	</definition>
+	<definition name="newsList" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/newsList.jsp" />
+	</definition>
+	<definition name="newsProfile" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/newsProfile.jsp" />
+	</definition>
+	<definition name="programHome" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/program.jsp" />
+	</definition>
+	<definition name="programList" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/progList.jsp" />
+	</definition>
+	<definition name="programProfile" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/programProfile.jsp" />
+	</definition>
+	<definition name="successStoriesHome" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/successStories.jsp" />
+	</definition>
+	<definition name="successStoriesList" extends="base.definition">
+		<put-attribute name="main"
+			value="/WEB-INF/pages/successStoriesList.jsp" />
+	</definition>
+	<definition name="successStoriesProfile" extends="base.definition">
+		<put-attribute name="main"
+			value="/WEB-INF/pages/successStoriesProfile.jsp" />
+	</definition>
+	<definition name="memberHome" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/member.jsp" />
+	</definition>
+	<definition name="memberReg" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/memberReg.jsp" />
+	</definition>
+	<definition name="memberList" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/memberList.jsp" />
+	</definition>
+	<definition name="memberProfile" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/memberProfile.jsp" />
+	</definition>
+	<definition name="contactUs" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/contactUs.jsp" />
+	</definition>
+		<definition name="aboutUs" extends="base.definition">
+		<put-attribute name="main" value="/WEB-INF/pages/aboutUs.jsp" />
+	</definition>
+	<!-- <definition name="" extends="base.definition"> <put-attribute name="main" 
+		value="/WEB-INF/pages/billingDetails.jsp" /> </definition> -->
+
+</tiles-definitions>
+
+

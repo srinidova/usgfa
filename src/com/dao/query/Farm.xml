@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Farm">
+		<insert id="addFarm" parameterClass="com.dto.FarmDTO">
+		insert into
+		farm(farmId,farmName,farmPlace,farmAddress,farmMandal,farmDistrict,aboutFarm,farmState,farmPincode)
+		values(#farmId#,#farmName#,#farmPlace#,#farmAddress#,#farmMandal#,#farmDistrict#,#aboutFarm#,#farmState#,#farmPincode#)
+	</insert>
+	<select id="getFarmDetails" resultClass="com.dto.FarmDTO">
+		select
+		farmId,farmName,farmPlace,farmAddress,farmMandal,farmDistrict,aboutFarm,farmState,farmPincode from
+		farm
+	</select>
+	<select id="getFarmDetailsByMemberId"  parameterClass="java.lang.String"
+	resultClass="com.dto.FarmDTO">
+		select
+		farmId,farmName,farmPlace,farmAddress,farmMandal,farmDistrict,aboutFarm,farmState,farmPincode from
+		farm where farmId in (select farmId from memberfarm where memberId = #value#)
+	</select>
+	<update id="farmUpdate" parameterClass="com.dto.FarmDTO">
+		update farm set farmName
+		= #farmName#, farmPlace = #farmPlace#, farmAddress = #farmAddress#, farmMandal = #farmMandal#, farmDistrict
+		= #farmDistrict#, aboutFarm = #aboutFarm#, farmState = #farmState#, farmPincode = #farmPincode# 
+		where
+		farmId = #farmId#
+	</update>
+</sqlMap>

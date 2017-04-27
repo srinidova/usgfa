@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Stories">
+	<insert id="addStories" parameterClass="com.dto.StoriesDTO">
+		insert into
+		stories(storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn)
+		values(#storiesId#,#title#,#name#,#profession#,#farmName#,#farmAddress#,#place#,#mandal#,#district#,#farmState#,#farmPinCode#,#aboutFarm#,#updatedBy#,#updatedOn#)
+	</insert>
+	<select id="getStoriesDetails" resultClass="com.dto.StoriesDTO">
+		select
+		storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn from
+		stories
+	</select>
+	<delete id="deleteStories" parameterClass="com.dto.StoriesDTO">
+		delete from stories where
+		storiesId = #storiesId#
+	</delete>
+	<select id="getStoriesProfile" parameterClass="com.dto.StoriesDTO"
+		resultClass="com.dto.StoriesDTO">
+		select
+		storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn from
+		stories where storiesId = #storiesId#
+	</select>
+	<select id="getStoriesById" parameterClass="java.lang.String"
+		resultClass="com.dto.StoriesDTO">
+		select
+		storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn from
+		stories where storiesId = #value#
+	</select>
+	<update id="storiesUpdate" parameterClass="com.dto.StoriesDTO">
+       update stories set title = #title#, name = #name#, profession = #profession#, farmName = #farmName#, farmAddress
+		= #farmAddress#, place = #place#, mandal = #mandal#, district = #district#, farmState = #farmState#, farmPinCode = #farmPinCode#,
+		aboutFarm = #aboutFarm#, updatedBy = #updatedBy#, updatedOn = #updatedOn#
+		where
+		storiesId = #storiesId#
+
+	</update>
+</sqlMap>

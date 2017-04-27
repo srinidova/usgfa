@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Employee">
+	<select id="getBloodGroup" resultClass="com.dto.BloodGroupDTO">
+		select GroupName,GroupId from BloodGroups
+	</select>
+	<select id="getSkillDetails" resultClass="com.dto.SkillsDTO">
+		select SkillName,SkillId from SkillSets
+	</select>
+	<select id="getSkillDetailsById" parameterClass="java.lang.String"
+		resultClass="com.dto.SkillsDTO">
+		select EmpId,SkillId from UserSkills where EmpId = #value#
+	</select>
+	<select id="getEmpDetails" resultClass="com.dto.EmployeeDTO">
+		select group_concat(SkillName) as empSkillsName,u.EmpId as empId,u.EmpName
+		as empName,u.EmpGender as empGender,b.GroupName as
+		empGroupName,u.EmpAddress as empAddress,EmpPhotoPath as empPhoto
+		from UserInfo u inner join BloodGroups b
+		on EmpGroupId = GroupId
+		inner join UserSkills us
+		on us.EmpId = u.EmpId
+		inner join SkillSets ss
+		on ss.SkillId = us.SkillId group by EmpId
+	</select>
+	<select id="getEmpDetailsById" parameterClass="java.lang.String"
+		resultClass="com.dto.EmployeeDTO">
+		select u.EmpId as empId,u.EmpName as empName,b.GroupId as
+		empGroupId,u.EmpGender as empGender,b.GroupName as
+		empGroupName,u.EmpAddress as empAddress,EmpPhotoPath as empPhoto
+		from UserInfo u inner join BloodGroups b
+		on EmpGroupId = GroupId and empId = #value#
+	</select>
+	<insert id="setUserDetails" parameterClass="com.dto.EmployeeDTO">
+		insert into
+		UserInfo(EmpId,EmpName,EmpGender,EmpGroupId,EmpAddress,EmpPhotoPath)
+		values(#empId#,#empName#,#empGender#,#empGroupId#,#empAddress#,#empPhoto#)
+	</insert>
+	<update id="updateUserDetails" parameterClass="com.dto.EmployeeDTO">
+		update UserInfo
+		set EmpName = #empName#,EmpGender = #empGender#,EmpGroupId =
+		#empGroupId#,EmpAddress = #empAddress#,
+		EmpPhotoPath = #empPhoto# where
+		EmpId = #empId#
+	</update>
+	<insert id="setUserSkills" parameterClass="com.dto.EmployeeDTO">
+		insert into
+		UserSkills(SkillId,EmpId) values(#empSkills#,#empId#)
+	</insert>
+	<delete id="deleteEmpDetails" parameterClass="com.dto.EmployeeDTO">
+		delete from UserInfo where EmpId = #empId#
+	</delete>
+	<delete id="deleteEmpSkills" parameterClass="com.dto.EmployeeDTO">
+		delete from UserSkills where EmpId = #empId#
+	</delete>
+	<insert id="setNewsDetails" parameterClass="com.dto.NewsDTO">
+		insert into
+		news(newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn)
+		values(#newsId#,#newsTitle#,#date#,#paper#,#link#,#moreInfo#,#updatedBy#,#updatedOn#)
+	</insert>
+</sqlMap>

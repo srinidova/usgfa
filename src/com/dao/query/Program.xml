@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Program">
+		<insert id="addProgram" parameterClass="com.dto.ProgramDTO">
+		insert into
+		program(programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn)
+		values(#programId#,#programName#,#duration#,#dateAndTimeFrom#,#dateAndTimeTo#,#channel#,#guest#,#youtube#,#moreInfo#,#updatedBy#,#updatedOn#)
+	</insert>
+	
+	    <select id="getProgramDetails" resultClass="com.dto.ProgramDTO">
+		select programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn from program
+	</select>
+	<select id="getProgramProfile" parameterClass="com.dto.ProgramDTO" resultClass="com.dto.ProgramDTO">
+		select programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn from program where programId = #programId#
+	</select>
+	<delete id="deleteProgram" parameterClass="com.dto.ProgramDTO">
+		delete from program where programId = #programId#
+	</delete>
+	<select id="getProgramById" parameterClass="java.lang.String"
+		resultClass="com.dto.ProgramDTO">
+		select programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn from program where programId = #value#
+	</select>
+	<update id="programUpdate" parameterClass="com.dto.ProgramDTO">
+		update program set programName
+		= #programName#,duration = #duration#, dateAndTimeFrom = #dateAndTimeFrom#, dateAndTimeTo = #dateAndTimeTo#, channel = #channel#, guest
+		= #guest#, youtube = #youtube#, moreInfo = #moreInfo#, updatedBy = #updatedBy#, updatedOn = #updatedOn#
+		where
+		programId = #programId#
+	</update>
+</sqlMap>

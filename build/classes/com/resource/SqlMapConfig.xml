@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings useStatementNamespaces="true" />
+
+	<transactionManager type="JDBC">
+		<dataSource type="SIMPLE">
+
+			<!-- <property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/test" />
+			<property name="JDBC.Username" value="root" />
+			<property name="JDBC.Password" value="root" /> -->
+    <property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3309/dovasoft_usgfa" />
+			<property name="JDBC.Username" value="root" />
+			<property name="JDBC.Password" value="pass@123" />
+		</dataSource>
+	</transactionManager>
+
+	<sqlMap resource="com/dao/query/Employee.xml" />
+	<sqlMap resource="com/dao/query/News.xml" />
+	<sqlMap resource="com/dao/query/Event.xml" />
+	<sqlMap resource="com/dao/query/Program.xml" />
+	<sqlMap resource="com/dao/query/Stories.xml" />
+	<sqlMap resource="com/dao/query/Member.xml" />
+	<sqlMap resource="com/dao/query/Farm.xml" />
+	<sqlMap resource="com/dao/query/MemberFarm.xml" />
+	<sqlMap resource="com/dao/query/UploadFile.xml" />
+	<sqlMap resource="com/dao/query/NewsFile.xml" />
+	<sqlMap resource="com/dao/query/ProgramFile.xml" />
+	<sqlMap resource="com/dao/query/EventFile.xml" />
+	<sqlMap resource="com/dao/query/MemberFile.xml" />
+	<sqlMap resource="com/dao/query/StoriesFile.xml" />
+</sqlMapConfig>
