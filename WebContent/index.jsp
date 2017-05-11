@@ -58,7 +58,7 @@
 								ullamcorper sollicitudin arcu, ut fermentum magna ultricies
 								quis. Proin aliquet, est ut pellentesque malesuada, purus enim
 								egestas nisl.</p>
-							<a href="aboutus.html">READ MORE</a>
+							<a href="aboutUs.jsp">READ MORE</a>
 						</div>
 					</div>
 				</div>
@@ -377,7 +377,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="eventList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -504,7 +504,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="eventList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -631,7 +631,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="eventList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -644,7 +644,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href='eventList'>More Events</a>
+													<a href='eventList.jsp'>More Events</a>
 												</div>
 											</div>
 										</div>
@@ -732,7 +732,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="programList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -810,7 +810,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="programList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -888,7 +888,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="programList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -901,7 +901,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href="programs.html">More Programs</a>
+													<a href="programList.jsp">More Programs</a>
 												</div>
 											</div>
 										</div>
@@ -984,7 +984,7 @@
 																		<!-------------event gallery end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="NewsList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1057,7 +1057,7 @@
 																		<!-------------event gallery end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="newsList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1130,7 +1130,7 @@
 																		<!-------------event gallery end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="newsList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1143,7 +1143,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href="news.html">More News</a>
+													<a href="newsList.jsp">More News</a>
 												</div>
 											</div>
 										</div>
@@ -1279,7 +1279,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="storiesList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1406,7 +1406,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="storiesList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1533,7 +1533,7 @@
 																		<!-------------event video end------------->
 
 																		<div class="readmore">
-																			<a href="#">More info...</a>
+																			<a href="storiesList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>
@@ -1546,7 +1546,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href="#">More Sucess Stories</a>
+													<a href="storiesList.jsp">More Sucess Stories</a>
 												</div>
 											</div>
 										</div>

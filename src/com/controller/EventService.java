@@ -17,12 +17,20 @@ import org.apache.commons.lang.StringUtils;
 
 import com.bo.EventBO;
 import com.bo.EventFileBO;
+import com.bo.EventGuestBO;
+import com.bo.FarmBO;
+import com.bo.GuestBO;
+import com.bo.MemberBO;
 import com.bo.NewsBO;
 import com.bo.ProgramFileBO;
 import com.bo.UploadFileBO;
 import com.dao.EventDAO;
 import com.dto.EventDTO;
 import com.dto.EventFileDTO;
+import com.dto.EventGuestDTO;
+import com.dto.FarmDTO;
+import com.dto.GuestDTO;
+import com.dto.MemberFarmDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramFileDTO;
 import com.dto.UploadFileDTO;
@@ -49,10 +57,16 @@ public class EventService {
 			@QueryParam("state") String state,
 			@QueryParam("landMark") String landMark,
 			@QueryParam("pincode") String pinCode,
-			@QueryParam("moreInfo") String moreInfo) {
+			@QueryParam("moreInfo") String moreInfo,
+			@QueryParam("guestId") String guestId,
+			@QueryParam("title") String title,
+			@QueryParam("name") String name,
+			@QueryParam("designation") String designation) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
+		String resultGuest = "fail";
+		String resultEventGuest = "fail";
 
 		//System.out.println("1.a In addEvent---------- eventName===" + eventName);
 		//System.out.println("1.b In addEvent---------- timeFrom===" + timeFrom);
@@ -81,46 +95,25 @@ public class EventService {
 				
 				EventBO bo = new EventBO();
 				result = bo.addEvent(eventDto);
-				//result = bo.addNewsDetails(eventDto);
-				HttpSession session = request.getSession();
-				HashMap<String,String> hmImages = (HashMap<String,String>)session.getAttribute("UPLOADED_FILELIST");
-				if(hmImages != null && hmImages.size() > 0){
-					for(Map.Entry m:hmImages.entrySet()){
-						String sFileId  = (String) m.getKey();
-						String sFilePath  = (String) m.getValue();
-						System.out.println("--------------sFileId---------"+sFileId);
-						System.out.println("--------------sFilePath---------"+sFilePath);
-						//System.out.println(m.getKey()+" "+m.getValue());
+				
+				GuestDTO guestDto = new GuestDTO();
+				String sGuestId = CommonUtils.getAutoGenId();
+				guestDto.setGuestId(sGuestId);
+				guestDto.setTitle(title);
+				guestDto.setName(name);
+				guestDto.setDesignation(designation);
+				
+				GuestBO guestBo = new GuestBO();
+				resultGuest = guestBo.addGuest(guestDto);
+				
+				EventGuestDTO eventGuestDto = new EventGuestDTO();
+				eventGuestDto.setEventId(sId);
+				eventGuestDto.setGuestId(sGuestId);
+				EventGuestBO eventGuestBo = new EventGuestBO();
+				resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
 					
-					// saving in to uploadFile Table
-					UploadFileDTO uploadFileDto = new UploadFileDTO();
-					uploadFileDto.setFileId(sFileId);
-					uploadFileDto.setFilePath(sFilePath);
-				    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
-				    
-				    UploadFileBO filebo = new UploadFileBO();
-				    resultFile = filebo.addUploadFileDetails(uploadFileDto);
-				    System.out.println("resultFile===="+resultFile);
-				    
-				 // saving in to newsFile Table
-				    
-				    EventFileDTO  eventFileDto = new EventFileDTO();
-				    eventFileDto.setFileId(sFileId);
-				    eventFileDto.setEventId(sId);
-				   // programFileDto.setProgramId(sId);
-				   /* newsFileDto.setFileId(sFileId);
-				    newsFileDto.setNewsId(sId);*/
-				    System.out.println("eventFile---------"+sId);
-				    EventFileBO eventFileBo = new EventFileBO();
-				    /*ProgramFileBO programFileBo = new ProgramFileBO();
-				    resultFile = programFileBo.programFile(programFileDto);*/
-				    resultFile = eventFileBo.eventFile(eventFileDto);
-				   /* NewsFileBO newsFileBo = new NewsFileBO();
-				    resultNewsFile = newsFileBo.newsFile(newsFileDto);*/
-				    
-				    System.out.println("resultFile===="+resultFile);
-					}
-				}
+				System.out.println("resultEventGuest"+resultEventGuest);
+				CommonUtils.saveFileData(request, sId, "EVENT");
 			}
 			
 			//System.out.println("result........." + result);
@@ -196,19 +189,18 @@ public class EventService {
 		String eventId = (String) session.getAttribute("EVENTID");
 		//System.out.println("1a. *****Called getEventProfile**********eventId==" + eventId);
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
+		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
 		try {
 			if (StringUtils.isNotEmpty(eventId)) {
 				EventDTO dto = new EventDTO();
 				dto.setEventId(eventId);
 
-				/*NewsDTO dto = new NewsDTO();
-				dto.setNewsId(newsId);
-*/              EventBO bo = new EventBO();
+				
+                EventBO bo = new EventBO();
                 eventList = bo.getEventProfile(dto);
-				/*NewsBO bo = new NewsBO();
-				newsList = bo.getNewsProfile(dto);*/
-
+				
 				//System.out.println("****eventList.size==" + eventList.size());
 				//System.out.println("arraylist--->" + eventList.toString());
 				if (!(eventList.size() < 0)) {
@@ -216,9 +208,28 @@ public class EventService {
 				} else {
 					jobj.put("EventProfile", "failed");
 				}
+				/*GuestDTO guestDto = new GuestDTO();
+				GuestBO guestBo = new GuestBO();
+				guestList = guestBo.getGuestDetails();
+				
+				//guestDto.setName(name);
+				if (!(guestList.size() < 0)) {
+					jobj.put("GuestProfile", guestList);
+				}*/
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		// get program image
+		EventFileDTO eventFileDto = new EventFileDTO();
+		eventFileDto.setEventId(eventId);
+		System.out.println("****eventImages==" + eventFileDto.getEventId());
+		EventFileBO eventFileBo = new EventFileBO();
+		lstUploadFileDTO = eventFileBo.getEventImages(eventFileDto);
+		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+			System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+			jobj.put("EVENTFILES", lstUploadFileDTO);
 		}
 		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
@@ -234,6 +245,7 @@ public class EventService {
 		String eventId = (String) session.getAttribute("EVENTID");
 		//System.out.println("1a. *****Called editEvent**********eventId==" + eventId);
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
+		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
 
 		try {
 			if (StringUtils.isNotEmpty(eventId)) {
@@ -242,13 +254,6 @@ public class EventService {
 				EventBO bo = new EventBO();
 				eventList = bo.getEventProfile(dto);
 				
-
-				/*NewsDTO dto = new NewsDTO();
-				dto.setNewsId(newsId);
-
-				NewsBO bo = new NewsBO();
-				newsList = bo.getNewsProfile(dto);*/
-
 				//System.out.println("****eventList.size==" + eventList.size());
 				//System.out.println("arraylist--->" + eventList.toString());
 				if (!(eventList.size() < 0)) {
@@ -256,6 +261,20 @@ public class EventService {
 				} else {
 					jobj.put("EditEvent", "failed");
 				}
+				EventGuestDTO eventGuestDto = new EventGuestDTO();
+				eventGuestDto.setEventId(eventId);
+				//memberFarmDto.setMemberId(memberId);
+				GuestBO gbo = new GuestBO();
+				//guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
+				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
+				//FarmBO fbo  = new FarmBO();
+				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
+				
+				//System.out.println("****farmList.size==" + farmList.size());
+				if (!(guestList.size() < 0)) {
+					jobj.put("EventGuestEdit", guestList);
+				}
+				//System.out.println("****guestList.size==" + guestList.size());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -312,6 +331,7 @@ public class EventService {
 				result = bo.eventUpdate(eventDto);
 				//result = bo.addEvent(eventDto);
 				//result = bo.addNewsDetails(eventDto);
+				CommonUtils.saveFileData(request, eventId, "EVENT");
 			}
 			
 			//System.out.println("result........." + result);
@@ -350,4 +370,20 @@ public class EventService {
 		return jobj1;
 
 	}
+	/*@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getEventImages")
+    public JSONObject getEventImages(@Context HttpServletRequest request,@QueryParam("eventId") String newsId,@QueryParam("fileId") String fileId){
+		
+		JSONObject jobj = new JSONObject();
+		
+		String result ="fail";
+		
+		UploadFileDTO uploadFileDto = new UploadFileDTO();
+		uploadFileDto.setFileId(fileId);
+		
+		EventBO bo = new EventBO();
+		result = bo.getEventImage(uploadFileDto);
+		return jobj;
+	}*/
 }

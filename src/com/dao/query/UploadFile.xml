@@ -7,5 +7,24 @@
 		uploadfile(fileId,filePath,showPublic,updatedBy,updatedOn)
 		values(#fileId#,#filePath#,#showPublic#,#updatedBy#,#updatedOn#)
 	</insert>
-	
+	<select id="getNewsImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from newsfile where newsId = #value#)
+	</select>
+	<select id="getProgramImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from programfile where programId = #value#)
+	</select>
+	<select id="getEventImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from eventfile where eventId = #value#)
+	</select>
+	<select id="getStoriesImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from storiesfile where storiesId = #value#)
+	</select>
+	<select id="getMemberImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from memberfile where memberId = #value#)
+	</select>
 </sqlMap>

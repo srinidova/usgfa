@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.connection.IbatisFactory;
 import com.dto.NewsDTO;
 import com.dto.StoriesDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class StoriesDAO {
@@ -94,6 +95,20 @@ public class StoriesDAO {
 			//System.out.println("3. In StoriesDAO storiesUpdate---------- getStoriesTitle===" + storiesDto.getTitle());
 			//System.out.println("3. In StoriesDAO storiesUpdate---------- getStoriesId===" + storiesDto.getStoriesId());
 			session.insert("Stories.storiesUpdate", storiesDto);
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String getStoriesImage(UploadFileDTO uploadFileDto) {
+		String result = "fail";
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
+			session.insert("News.newsUpdate", uploadFileDto);
 
 			result = "success";
 		} catch (Exception e) {

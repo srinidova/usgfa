@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.bo.EventBO;
 import com.bo.NewsBO;
 import com.bo.ProgramBO;
 import com.bo.ProgramFileBO;
@@ -273,6 +274,7 @@ public class StoriesService {
 			String storiesId = (String) session.getAttribute("STORIESID");
 			//System.out.println("1a. *****Called getStoriesProfile**********storiesId==" + storiesId);
 			ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
+			ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
 			try {
 				if (StringUtils.isNotEmpty(storiesId)) {
@@ -298,6 +300,16 @@ public class StoriesService {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			// get stories images
+			StoriesFileDTO storiesFileDto = new StoriesFileDTO();
+			storiesFileDto.setStoriesId(storiesId);
+			System.out.println("****storiesImages==" + storiesFileDto.getStoriesId());
+			StoriesFileBO storiesFileBo = new StoriesFileBO();
+			lstUploadFileDTO = storiesFileBo.getStoriesImages(storiesFileDto);
+			if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+				System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+				jobj.put("STORIESFILES", lstUploadFileDTO);
 			}
 			//System.out.println("Profile jobj-->" + jobj);
 			return jobj;
@@ -392,6 +404,7 @@ public class StoriesService {
 					
 					StoriesBO  bo = new StoriesBO();
 					result = bo.storiesUpdate(storiesDto);
+					CommonUtils.saveFileData(request, storiesId, "STORIES");
 				}
 				//System.out.println("result........." + result);
 				if (!"fail".equals(result)) {
@@ -429,6 +442,20 @@ public class StoriesService {
 			return jobj1;
 
 		}
+		/*public JSONObject getStoriesImages(@Context HttpServletRequest request,@QueryParam("eventId") String newsId,@QueryParam("fileId") String fileId){
+			
+			JSONObject jobj = new JSONObject();
+			
+			String result ="fail";
+			
+			UploadFileDTO uploadFileDto = new UploadFileDTO();
+			uploadFileDto.setFileId(fileId);
+			
+			StoriesBO bo = new StoriesBO();
+			result = bo.getStoriesImage(uploadFileDto);
+			//result = bo.getEventImage(uploadFileDto);
+			return jobj;
+		}*/
 }
 
 

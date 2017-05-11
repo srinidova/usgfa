@@ -26,10 +26,14 @@
 	<sqlMap resource="com/dao/query/Member.xml" />
 	<sqlMap resource="com/dao/query/Farm.xml" />
 	<sqlMap resource="com/dao/query/MemberFarm.xml" />
+	<sqlMap resource="com/dao/query/ContactUs.xml" />
 	<sqlMap resource="com/dao/query/UploadFile.xml" />
 	<sqlMap resource="com/dao/query/NewsFile.xml" />
 	<sqlMap resource="com/dao/query/ProgramFile.xml" />
 	<sqlMap resource="com/dao/query/EventFile.xml" />
 	<sqlMap resource="com/dao/query/MemberFile.xml" />
 	<sqlMap resource="com/dao/query/StoriesFile.xml" />
+	<sqlMap resource="com/dao/query/FarmFile.xml" />
+	<sqlMap resource="com/dao/query/Guest.xml" /> 
+	<sqlMap resource="com/dao/query/EventGuest.xml" />
 </sqlMapConfig>

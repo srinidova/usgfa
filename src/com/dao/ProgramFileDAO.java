@@ -23,6 +23,23 @@ public class ProgramFileDAO {
 		}
 		return result;
 	}
+	
+	public ArrayList<UploadFileDTO> getProgramImages(ProgramFileDTO programFileDto) {
+		String result = "fail";
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			System.out.println("3. In ProgramDAO getProgramImage---------- fileId===" + programFileDto.getProgramId());
+			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getProgramImages", programFileDto.getProgramId());
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lstUploadFileDTO;
+	}
+	
 
 	
 }

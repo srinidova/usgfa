@@ -22,6 +22,20 @@ public class NewsFileDAO {
 		}
 		return result;
 	}
+	public ArrayList<UploadFileDTO> getNewsImages(NewsFileDTO newsFileDto) {
+		String result = "fail";
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
 
+			System.out.println("3. In NewsDAO getNewsImage---------- fileId===" + newsFileDto.getNewsId());
+			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getNewsImages", newsFileDto.getNewsId());
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lstUploadFileDTO;
+	}
 	
 }

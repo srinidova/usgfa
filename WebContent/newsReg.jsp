@@ -21,43 +21,90 @@
 	<%-- <jsp:include page="banner.jsp" /> --%>
 	<!----------------------banner end---------------------------------->
 <head>
+<style>
+.your-class::-webkit-input-placeholder {
+	color: red;
+}
+
+.default-class::-webkit-input-placeholder {
+	color: red;
+}
+</style>
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/jquery-ui.css">
 <link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
 <!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
 <script src="js/jquery-ui.js" type="text/javascript"></script>
 <script src="js/jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="js/chosen.jquery.js"></script>
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
+<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
 <!-- <script type="text/javascript" src="js/news.js"></script> -->
 <script type="text/javascript">
-function newsSave(){
-	var newsTitle = $("#newsTitle").val();
-	var date = $("#date").val();
-	var paper = $("#paper").val();
-	var link = $("#link").val();
-	var moreInfo = $("#moreInfo").val();
+	function newsFarmValidation() {
+		//alert("==Entered==");
+		$("#newsMessage").text("");
+		//alert("==1==");
+		var newsTitle = document.getElementById("newsTitle");
+		var date = document.getElementById("date");
+		var paper = document.getElementById("paper");
+		var link = document.getElementById("link");
+		var moreInfo = document.getElementById("moreInfo");
+		//alert("==2==");
+		if (emptyCheck(newsTitle, "Name Title", "newsMessage")
+				&& minLenCheck(newsTitle, 5, "Name Title", "newsMessage")
+				&& maxLenCheck(newsTitle, 10, "Name Title", "newsMessage")
+				&& allLetter(newsTitle, "Name Title", "newsMessage")
+				&& emptyCheck(date, "Date", "newsMessage")
+				&& twoFieldsCheck(paper, link, "Paper or Link/Url",
+						"newsMessage")
+				&& (emptyCheck(moreInfo, "More Info", "newsMessage"))) {
 
-	
-	var newsObject = new Object();
-	newsObject.newsTitle = newsTitle;
-	newsObject.paper = paper;
-	newsObject.date = date;
-	newsObject.link = link;
-	newsObject.moreInfo = moreInfo;
-$
-	.ajax({
-		data : newsObject,
-		url : "emp/newsService/addNews",
-		success : function(data) {
-			if (data.Msg = "success") {
-			}
+			newsSave();
 		}
-	});
-	
-}
+
+	}
+
+	function newsSave() {
+		var newsTitle = $("#newsTitle").val();
+		var date = $("#date").val();
+		var paper = $("#paper").val();
+		var link = $("#link").val();
+		var moreInfo = $("#moreInfo").val();
+
+		var newsObject = new Object();
+		newsObject.newsTitle = newsTitle;
+		newsObject.paper = paper;
+		newsObject.date = date;
+		newsObject.link = link;
+		newsObject.moreInfo = moreInfo;
+
+		//alert("-----b4 ajax-------");
+
+		$.ajax({
+			data : newsObject,
+			url : "emp/newsService/addNews",
+			success : function(data) {
+
+				if (data.Msg = "success") {
+					//window.location.href = "newsList.jsp";
+					window.location.href = "newsList.jsp";
+					alert("in to newsSave");
+				}
+			}
+		});
+		 /* $.ajax({
+			data : newsObject,
+			url : "emp/newsService/getNewsImages",
+			success : function(data) {
+				if (data.Msg = "success") {
+					alert("in to newsSave");
+				}
+			}
+		});  */
+
+	}
 </script>
 </head>
 <!----------------------body_content start-------------------------->
@@ -83,16 +130,16 @@ $
 			<div class="from">
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="event_name">Name Title</label> <input type="text"
-							class="form-control" id="newsTitle" name="newsTitle">
+						<label for="event_name">Name Title *</label> <input type="text"
+							class="form-control" id="newsTitle" name="newsTitle" tabindex="1">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="time_from">Date</label>
-						<div class='input-group date' id='datetimepicker8'>
-							<input type='text' class="form-control" id="date" name="date" />
-							<span class="input-group-addon"> <span
+						<label for="time_from">Date *</label>
+						<div class='input-group date' id=''>
+							<input type='text' class="form-control" id="date" name="date"
+								tabindex="2" /> <span class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
@@ -100,21 +147,21 @@ $
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark"> Paper</label> <input type="text"
-							class="form-control" id="paper" name="paper">
+						<label for="land_mark">Paper</label> <input type="text"
+							class="form-control" id="paper" name="paper" tabindex="3">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="land_mark">Link/Url</label> <input type="text"
-							class="form-control" id="link" name="link">
+							class="form-control" id="link" name="link" tabindex="4">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="more_info">More Info</label>
+						<label for="more_info">More Info *</label>
 						<textarea class="form-control" rows="5" id="moreInfo"
-							name="moreInfo"></textarea>
+							name="moreInfo" tabindex="5"></textarea>
 					</div>
 				</div>
 				<!-------------------------Upload Photo--------------------------------------->
@@ -126,12 +173,14 @@ $
 							</div>
 						</div>
 						<div class="upload_img">
-						<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
-							<div class="form-group col-md-6">
-								<label for="Upload Photo">Select Photo(s)</label> 
-								<input id="file"  name ="file" class="file form-control" type="file">
-								<a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
-							</div>
+							<form method="post" action="emp/commonUtils/upload"
+								enctype="multipart/form-data">
+								<div class="form-group col-md-6">
+									<label for="Upload Photo">Select Photo(s)</label> <input
+										id="file" name="file" class="file form-control" type="file">
+									<a href="#"><button
+											class="btn btn-success btn-sm text-right">Upload</button></a>
+								</div>
 							</form>
 						</div>
 					</div>
@@ -150,13 +199,22 @@ $
 				<!-------------------------submit button--------------------------------------->
 				<div class="col-md-10">
 					<div class="submit_button text-right">
-						<a href='newsList.jsp'><button
-								class="btn btn-success btn-sm text-right " onclick="newsSave();">Submit</button></a>
+						<!-- <a href='#'> -->
+						<button class="btn btn-success btn-sm text-right "
+							onclick="newsFarmValidation();">Submit</button>
+						<!-- </a> -->
 
 					</div>
-					<div class="message">
-						<h3>saved sucessfully</h3>
+					<div class="message" id="">
+
+						<h3>
+							<aside class=" " id="newsMessage" style="display: none">
+							</aside>
+						</h3>
 					</div>
+					<h4>* These fields are required</h4>
+					<!-- <div class="col-md-12"> <br>
+                    <small class="text-muted " style="text-align:right; float:right;"><strong>*</strong> These fields are required.</small> </div> -->
 				</div>
 
 				<!-------------------------submit button end--------------------------------------->

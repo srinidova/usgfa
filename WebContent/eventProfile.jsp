@@ -47,6 +47,7 @@ $(document)
 .ready(
 		function() {
 			//alert("-------in Event Profile--Jsp---");
+			var html = '';
 			$
 					.ajax({
 						url : "emp/eventService/getEventProfile",
@@ -56,7 +57,7 @@ $(document)
 											data.EventProfile,
 											function(key, val) {
 												//alert("getEventProfile---*****123*****-------eventId=="+data.EventProfile[key].eventId);
-												
+												alert("getEventProfile---*****123*****-------eventProfDateTimeFrom=="+data.EventProfile[key].timeFrom);
 											    $('#eventProfEventName').text(data.EventProfile[key].eventName);
 												 
 												$('#eventProfNoOfDays').text(data.EventProfile[key].noOfDays); 
@@ -66,11 +67,42 @@ $(document)
 												$('#eventProfMoreInfo').text(data.EventProfile[key].moreInfo);
 												$('#eventProfEventId').val(data.EventProfile[key].eventId); 
 											})
+											$.each(
+													data.EVENTFILES,
+													function(key, val) {
+														alert("EVENTFILES---*****99999999999*****-------filePath=="+data.EVENTFILES[key].filePath);
+														html = html
+														+'<li>'
+														+'<div class="fff">'
+															+'<div class="photo">'
+																+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a>'
+															+'</div>'
+															+'<div class="img_tiltle" style="margin-top: 7px;">'
+																+'<h2>Image 1</h2>'
+															+'</div>'
+															+'<div class="caption" style="margin-top: 0px;">'
+																+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
+																	+'<div class="suceee_msg">'
+																		+'<h4>Updated successfully</h4>'
+																	+'</div>'
+																+'</div>'
+																+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																	+'<div class="suceee_msg">'
+																		+'<h4>Delete Message</h4>'
+																	+'</div>'
+																+'</div>'
+															+'</div>'
+														+'</div>'
+														+'</li>'
+
+													})
+													$(html).appendTo("#eventImages");
 						}
 					});
 		});
 function editProfEvent() {
 	//alert("editProfEvent---**********-------eventProfEventId=="+ $("#eventProfEventId").val());
+	alert("editProfEvent---**********-------eventProfDateTimeFrom=="+ $('#eventProfDateTimeFrom ').val());
 	var eventId = $("#eventProfEventId").val();
 	//alert("editProfEvent---**********-------eventId=="+eventId);
 	var eventObject = new Object();
@@ -94,7 +126,7 @@ function editProfEvent() {
 		<div class="container">
 			<div class="row">
 				<div class="aboutus">
-					<h2>Event Form Profile</h2>
+					<h2>Event Profile</h2>
 					<div class="line3"></div>
 				</div>
 			</div>
@@ -196,7 +228,8 @@ function editProfEvent() {
 									<div class="carousel-inner">
 										<div class="item active">
 											<ul style="padding-left: 0px;">
-												<li>
+											<div id="programImages"></div>
+												<!-- <li>
 													<div class="fff">
 														<div class="photo">
 															<a class="g-image" href="#" data-image-id=""
@@ -228,7 +261,7 @@ function editProfEvent() {
 															</div>
 														</div>
 													</div>
-												</li>
+												</li> -->
 											</ul>
 										</div>
 										<div class="item ">

@@ -7,16 +7,16 @@
           <h2>QUICK LINKS</h2>
           <div class="line2"></div>
           <ul>
-            <li><a href="index.html">HOME</a></li>
-            <li><a href="aboutus.html">ABOUT US</a></li>
-            <li><a href="programs.html">PROGRAMS</a></li>
-            <li><a href="#">EVENTS</a></li>
+            <li><a href="/usgfa">HOME</a></li>
+            <li><a href="aboutUs.jsp">ABOUT US</a></li>
+            <li><a href="programList.jsp">PROGRAMS</a></li>
+            <li><a href="eventList.jsp">EVENTS</a></li>
           </ul>
           <ul style="margin-left:35px;">
-            <li><a href="news.html">NEWS</a></li>
-            <li><a href="#">SUCESS STORIES</a></li>
-            <li><a href="member.html">MEMBER</a></li>
-            <li><a href="contcatus.html">CONTACT US</a></li>
+            <li><a href="newsList.jsp">NEWS</a></li>
+            <li><a href="storiesList.jsp">SUCESS STORIES</a></li>
+            <li><a href="memberList.jsp">MEMBER</a></li>
+            <li><a href="contactUs.jsp">CONTACT US</a></li>
           </ul>
         </div>
       </div>

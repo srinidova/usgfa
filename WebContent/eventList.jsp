@@ -112,6 +112,7 @@ function editEvent(eventId){
 		url : "emp/eventService/getEventId",
 		success : function(data) {
 			if (data.Msg = "success") {
+				//window.location.href = "storiesList.jsp";
 			}
 		}
 	});

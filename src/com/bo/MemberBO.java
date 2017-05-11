@@ -10,6 +10,7 @@ import com.dto.EmployeeDTO;
 import com.dto.EventDTO;
 import com.dto.MemberDTO;
 import com.dto.NewsDTO;
+import com.dto.UploadFileDTO;
 
 public class MemberBO {
 
@@ -52,5 +53,10 @@ public class MemberBO {
 	     //return dao.addEvent(eventDto);
 		/*NewsDAO dao = new NewsDAO();
 		return dao.deleteNews(newsDto);*/
+	}
+public String getMemberImage(UploadFileDTO uploadFileDto){
+		
+		MemberDAO dao = new MemberDAO();
+		return dao.getMemberImage(uploadFileDto);
 	}
 }

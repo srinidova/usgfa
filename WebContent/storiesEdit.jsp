@@ -37,7 +37,41 @@
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
-        
+function storiesEditFarmValidation() {
+	//alert("==Entered==");
+	$("#storiesMessage").text("");
+	//alert("==1==");
+	var name = document.getElementById("storiesEditName");
+	var profession = document.getElementById("storiesEditProfession");
+	var farmName = document.getElementById("storiesEditFarmName");
+	var farmAddress = document.getElementById("storiesEditFarmAddress");
+	var place = document.getElementById("storiesEditPlace");
+	var mandal = document.getElementById("storiesEditMandal");
+	var district = document.getElementById("storiesEditDistrict");
+	var farmPinCode = document.getElementById("storiesEditFarmPinCode");
+	var aboutFarm = document.getElementById("storiesEditAboutFarm");
+	//alert("==2==");
+	if (emptyCheck(name, "Name", "storiesMessage")
+			&& minLenCheck(name, 5, "Name", "storiesMessage")
+			&& maxLenCheck(name, 10, "Name", "storiesMessage")
+			&& allLetter(name, "Name", "storiesMessage")
+			&& emptyCheck(profession, "Profession", "storiesMessage")
+			&& emptyCheck(farmName, "Farm Name", "storiesMessage")
+			&& emptyCheck(farmAddress, "Farm Address", "storiesMessage")
+			&& emptyCheck(place, "Farm Place/City", "storiesMessage")
+			&& emptyCheck(mandal, "Mandal", "storiesMessage")
+			&& emptyCheck(district, "District", "storiesMessage")
+			&& emptyCheck(farmPinCode, "Farm Pin Code", "storiesMessage")
+			&& allNumber(farmPinCode, "Farm Pin Code", "storiesMessage")
+			&& minLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
+			&& maxLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
+			&& emptyCheck(aboutFarm, "About You/Farm", "storiesMessage")
+			) {
+
+		storiesUpdate();
+	}
+
+}     
 $(document).ready(function() {
 	//alert("-------in editStories--Jsp---");
 	$.ajax({
@@ -78,7 +112,98 @@ function storiesUpdate(){
 	var farmState = $("#storiesEditFarmState").val();
 	var farmPinCode = $("#storiesEditFarmPinCode").val();
 	var aboutFarm = $("#storiesEditAboutFarm").val();
-	
+	  if($('#storiesEditName').val().length == 0 ) {
+		    $('#storiesEditName').css('color','red');
+		    $("#storiesEditName").css("border-color","red");
+		    $("#storiesEditName").attr("placeholder","Please enter StoriesName");
+		    $('#storiesEditName').addClass('your-class');
+		    $("#storiesMessage").text('Please Enter EventName');
+	    	$("#storiesMessage").show();
+	       	$("#storiesMessage").fadeOut(20000);
+		    return false;
+		    }
+	    else if($('#storiesEditProfession').val().length == 0 )  {
+		    $('#storiesEditProfession').css('color','red');
+		    $("#storiesEditProfession").css("border-color","red");
+		    $("#storiesEditProfession").attr("placeholder","Please enter profession");
+		    $('#storiesEditProfession').addClass('your-class');
+		    $("#storiesMessage").text("Please enter profession.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditFarmName').val().length == 0 )  {
+		    $('#storiesEditFarmName').css('color','red');
+		    $("#storiesEditFarmName").css("border-color","red");
+		    $("#storiesEditFarmName").attr("placeholder","Please enter farmName");
+		    $('#storiesEditFarmName').addClass('your-class');
+		    $("#storiesMessage").text("Please enter farmName.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditFarmAddress').val().length == 0 )  {
+		    $('#storiesEditFarmAddress').css('color','red');
+		    $("#storiesEditFarmAddress").css("border-color","red");
+		    $("#storiesEditFarmAddress").attr("placeholder","Please enter farmAddress");
+		    $('#storiesEditFarmAddress').addClass('your-class');
+		    $("#storiesMessage").text("Please enter farmAddress.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    
+	    else if($('#storiesEditPlace').val().length == 0 )  {
+		    $('#storiesEditPlace').css('color','red');
+		    $("#storiesEditPlace").css("border-color","red");
+		    $("#storiesEditPlace").attr("placeholder","Please enter place");
+		    $('#storiesEditPlace').addClass('your-class');
+		    $("#storiesMessage").text("Please enter place.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditMandal').val().length == 0 )  {
+		    $('#storiesEditMandal').css('color','red');
+		    $("#storiesEditMandal").css("border-color","red");
+		    $("#storiesEditMandal").attr("placeholder","Please enter mandal");
+		    $('#storiesEditMandal').addClass('your-class');
+		    $("#storiesMessage").text("Please enter mandal.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditDistrict').val().length == 0 )  {
+		    $('#storiesEditDistrict').css('color','red');
+		    $("#storiesEditDistrict").css("border-color","red");
+		    $("#storiesEditDistrict").attr("placeholder","Please enter district");
+		    $('#storiesEditDistrict').addClass('your-class');
+		    $("#storiesMessage").text("Please enter district.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditFarmPinCode').val().length == 0 )  {
+		    $('#storiesEditFarmPinCode').css('color','red');
+		    $("#storiesEditFarmPinCode").css("border-color","red");
+		    $("#storiesEditFarmPinCode").attr("placeholder","Please enter farmPinCode");
+		    $('#storiesEditFarmPinCode').addClass('your-class');
+		    $("#storiesMessage").text("Please enter farmPinCode.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+	    else if($('#storiesEditAboutFarm').val().length == 0 )  {
+		    $('#storiesEditAboutFarm').css('color','red');
+		    $("#storiesEditAboutFarm").css("border-color","red");
+		    $("#storiesEditAboutFarm").attr("placeholder","Please enter aboutFarm");
+		    $('#storiesEditAboutFarm').addClass('your-class');
+		    $("#storiesMessage").text("Please enter aboutFarm.");
+		    $("#storiesMessage").show();
+	        $("#storiesMessage").fadeOut(15000);
+		    return false;
+		    }
+
 	var storiesObject = new Object();
 	storiesObject.storiesId = storiesId;
 	storiesObject.title = title;
@@ -98,6 +223,7 @@ function storiesUpdate(){
 		url : "emp/storiesService/storiesUpdate",
 		success : function(data) {
 			if (data.Msg = "success") {
+				window.location.href = "storiesList.jsp";
 			}
 		}
 	});
@@ -113,7 +239,7 @@ function storiesUpdate(){
   <div class="container" >
     <div class="row">
       <div class="aboutus">
-        <h2>Success Stories</h2>
+        <h2>Stories Edit</h2>
         <div class="line3"></div>
       </div>
     </div>
@@ -219,13 +345,17 @@ function storiesUpdate(){
             <div class="image"> <img src="images/img.png" class="img-responsive img-thumbnail" > </div>
           </div>
           <div class="upload_img">
+          <form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
             <div class="form-group col-md-6">
-              <label for="Upload Photo">Upload Photo(s)</label>
-              <input id="file-0b" class="file form-control" type="file" >
+              <label for="Upload Photo">Select Photo(s)</label>
+              <input id="file"  name ="file" class="file form-control" type="file">
+               <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
             </div>
+            </form>
           </div>
         </div>
       </div>
+      
       
       <!-------------------------Upload Photo end---------------------------------------> 
       
@@ -237,11 +367,11 @@ function storiesUpdate(){
       <!-------------------------submit button--------------------------------------->
       <div class="col-md-10">
         <div class="submit_button text-right">
-          <a href='storiesList.jsp'><button class="btn btn-success btn-sm text-right " onclick ="storiesUpdate();">Submit</button></a>
+          <a href='#'><button class="btn btn-success btn-sm text-right " onclick ="storiesEditFarmValidation();">Submit</button></a>
           
         </div>
         <div class="message">
-            <h3>saved sucessfully</h3>
+            <h3><aside class=" " id="storiesMessage" style="display: none">Save Sucessfully</aside></h3>
           </div>
       </div>
       

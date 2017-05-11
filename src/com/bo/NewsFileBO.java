@@ -18,5 +18,10 @@ public class NewsFileBO {
 		return dao.newsFile(newsFileDto);
 		//return dao.addUploadFileDetails(uploadFileDto);
 	}
-	
+    public ArrayList<UploadFileDTO> getNewsImages(NewsFileDTO newsFileDto){
+	System.out.println("2. In newsFile---------- newsFile===" + newsFileDto.getNewsId());
+	//System.out.println("2. In newsFile---------- newsFile===" + uploadFileDto.);
+		NewsFileDAO newsFileDao = new NewsFileDAO();
+		return newsFileDao.getNewsImages(newsFileDto);
+	}
 }

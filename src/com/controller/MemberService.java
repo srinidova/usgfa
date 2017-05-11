@@ -1,8 +1,6 @@
 package com.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,21 +13,15 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.bo.EventBO;
 import com.bo.FarmBO;
 import com.bo.MemberBO;
 import com.bo.MemberFarmBO;
 import com.bo.MemberFileBO;
 import com.bo.NewsBO;
-import com.bo.ProgramFileBO;
-import com.bo.UploadFileBO;
-import com.dto.EventDTO;
 import com.dto.FarmDTO;
 import com.dto.MemberDTO;
 import com.dto.MemberFarmDTO;
 import com.dto.MemberFileDTO;
-import com.dto.NewsDTO;
-import com.dto.ProgramFileDTO;
 import com.dto.UploadFileDTO;
 import com.util.CommonUtils;
 
@@ -67,7 +59,7 @@ public class MemberService {
 			@QueryParam("aboutFarm") String aboutFarm,
 			@QueryParam("farmState") String farmState,
 			@QueryParam("farmPincode") String farmPincode) {
-		//System.out.println("in to controller");
+		System.out.println("in to controller");
 		JSONObject jObj = new JSONObject();
 		String memberResult = "fail";
 		String farmResult = "fail";
@@ -75,20 +67,11 @@ public class MemberService {
 		String resultFileBo = "fail";
 		String resultFile = "fail";
 
-		//System.out.println("1.a In addMember---------- title===" + title);
-		//System.out.println("1.b In addMember---------- firstName===" + firstName);
-		//System.out.println("1.d In addMember---------- middleName===" + middleName);
-		//System.out.println("1.d In addMember---------- profession===" + profession);
-		//System.out.println("1.d In addMember---------- state===" + state);
-		//System.out.println("1.d In addMember---------- farmName===" + farmName);
-		//System.out.println("1.d In addMember---------- farmPlace===" + farmPlace);
-		//System.out.println("1.d In addMember---------- farmAddress===" + farmAddress);
-
 		try {
 			if (StringUtils.isNotEmpty(title)) {
 				MemberDTO memberDto = new MemberDTO();
-				String sMemberId = CommonUtils.getAutoGenId();
-				memberDto.setMemberId(sMemberId);
+				String sId = CommonUtils.getAutoGenId();
+				memberDto.setMemberId(sId);
 				memberDto.setTitle(title);
 				memberDto.setFirstName(firstName);
 				memberDto.setMiddleName(middleName);
@@ -108,40 +91,8 @@ public class MemberService {
 				
 				MemberBO bo = new MemberBO();
 				memberResult = bo.addMember(memberDto);
-				HttpSession session = request.getSession();
-				HashMap<String,String> hmImages = (HashMap<String,String>)session.getAttribute("UPLOADED_FILELIST");
-				if(hmImages != null && hmImages.size() > 0){
-					for(Map.Entry m:hmImages.entrySet()){
-						String sFileId  = (String) m.getKey();
-						String sFilePath  = (String) m.getValue();
-						System.out.println("--------------sFileId---------"+sFileId);
-						System.out.println("--------------sFilePath---------"+sFilePath);
-						//System.out.println(m.getKey()+" "+m.getValue());
-					
-					// saving in to uploadFile Table
-					UploadFileDTO uploadFileDto = new UploadFileDTO();
-					uploadFileDto.setFileId(sFileId);
-					uploadFileDto.setFilePath(sFilePath);
-				    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
-				    
-				    UploadFileBO filebo = new UploadFileBO();
-				    resultFileBo = filebo.addUploadFileDetails(uploadFileDto);
-				    System.out.println("resultFile===="+resultFileBo);
-				    
-				 // saving in to memberFile Table
-				    MemberFileDTO memberFileDto = new MemberFileDTO();
-				    memberFileDto.setFileId(sFileId);
-				    memberFileDto.setMemberId(sMemberId);
-				    
-				    
-				    System.out.println("programFile---------"+sMemberId);
-				    MemberFileBO memberFileBo = new MemberFileBO(); 
-				    resultFile = memberFileBo.memberFile(memberFileDto);
-				    
-				    
-				    System.out.println("resultFile===="+resultFile);
-					}
-				}
+				CommonUtils.saveFileData(request, sId, "MEMBER");
+				
 				
 				FarmDTO farmDto = new FarmDTO();
 				String sFarmId = CommonUtils.getAutoGenId();
@@ -159,24 +110,17 @@ public class MemberService {
 				FarmBO farmBo = new FarmBO();
 				farmResult = farmBo.addFarm(farmDto);
 				//farmResult = farmBo.addFarm(farmDto);
-				
+				//CommonUtils.saveFileData(request, sFarmId, "FARM");
 				
 				
 				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
 				memberFarmDto.setFarmId(sFarmId);
-				memberFarmDto.setMemberId(sMemberId);
+				memberFarmDto.setMemberId(sId);
 				MemberFarmBO memberfarmBo = new MemberFarmBO();
 				memberfarmResult = memberfarmBo.addMemberFarm(memberFarmDto);
-				/*MemberFarmBO memberfarmBo = new MemberFarmBO();
-				memberfarmResult = memberfarmBo.addMemberFarm(memberFarmDto);*/
-				//MemberFarmDTO memberFarmDto = new MemberFarmDTO();
-				/*MemberFarmDTO memberFarmDto = new MemberFarmDTO();
-				memberFarmDto.set*/
-				//MemberFarmDTO memberFarmDto = new MemberFarmDTO();
+				
 		}
-			////System.out.println("result........." + memberResult);
-			////System.out.println("result........." + farmResult);
-			////System.out.println("result........." + memberfarmResult);
+			
 			if (!"fail".equals(memberResult)) {
 				jObj.put("Msg", memberResult);
 			} else {
@@ -217,33 +161,7 @@ public class MemberService {
 		return jobj1;
 
 	}
-	/*@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getFarmDetails")
-	public JSONObject getFarmDetails() {
-		JSONObject jobj1 = new JSONObject();
-		//JSONObject jobj2 = new JSONObject();
-		FarmBO bo = new FarmBO();
-		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
-		try {
-			//System.out.println("1. *****Called getFarmDetails**********");
-			farmList = bo.getFarmDetails();
-			//memberList = bo.getMemberDetails();
-			//memberList = bo.getNewsDetails();
-			//System.out.println("****memberList.size==" + farmList.size());
-			//System.out.println("arraylist--->" + farmList.toString());
-			if (!(farmList.size() < 0)) {
-				jobj1.put("FarmDetails", farmList);
-			} else {
-				jobj1.put("FarmDetails", "failed");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		//System.out.println("jobj-->" + jobj1);
-		return jobj1;
-
-	}*/
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberId")
@@ -276,6 +194,7 @@ public class MemberService {
 		//System.out.println("1a. *****Called getMemberProfile**********memberId==" + memberId);
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
 		try {
 			if (StringUtils.isNotEmpty(memberId)) {
@@ -307,6 +226,16 @@ public class MemberService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		// get member images
+		MemberFileDTO memberFileDto = new MemberFileDTO();
+		memberFileDto.setMemberId(memberId);
+		System.out.println("****memberImages==" + memberFileDto.getMemberId());
+		MemberFileBO memberFileBo = new MemberFileBO();
+		lstUploadFileDTO = memberFileBo.getMemberImages(memberFileDto);
+		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+			System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+			jobj.put("MEMBERFILES", lstUploadFileDTO);
 		}
 		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
@@ -387,11 +316,11 @@ public class MemberService {
 			@QueryParam("aboutFarm") String aboutFarm,
 			@QueryParam("farmState") String farmState,
 			@QueryParam("farmPincode") String farmPincode) {
-		//System.out.println("in to memberUpdate controller");
+		System.out.println("in to memberUpdate controller");
 		JSONObject jObj = new JSONObject();
 		String memberResult = "fail";
 		String farmResult = "fail";
-		String memberfarmResult = "fail";
+		//String memberfarmResult = "fail";
 		
 
 		//System.out.println("1.a In memberUpdate---------- title===" + title);
@@ -406,7 +335,8 @@ public class MemberService {
 		try {
 			if (StringUtils.isNotEmpty(title)) {
 				MemberDTO memberDto = new MemberDTO();
-				memberDto.setMemberId( CommonUtils.getAutoGenId());
+				memberDto.setMemberId(memberId);
+				//memberDto.setMemberId( CommonUtils.getAutoGenId());
 				memberDto.setTitle(title);
 				memberDto.setFirstName(firstName);
 				memberDto.setMiddleName(middleName);
@@ -429,8 +359,9 @@ public class MemberService {
 				
 				
 				FarmDTO farmDto = new FarmDTO();
-				
 				farmDto.setFarmId(farmId);
+				//String sId = CommonUtils.getAutoGenId();
+				//farmDto.setFarmId(sId);
 				farmDto.setFarmName(farmName);
 				farmDto.setFarmPlace(farmPlace);
 				farmDto.setFarmAddress(farmAddress);
@@ -452,13 +383,14 @@ public class MemberService {
 				memberFarmDto.setMemberId(memberId);
 				MemberFarmBO memberfarmBo = new MemberFarmBO();
 				//memberfarmResult = memberfarmBo.memberFarmUpdate(memberFarmDto);
-				
+				//CommonUtils.saveFileData(request, memberId, "MEMBER");
+				//CommonUtils.saveFileData(request, farmId, "Farm");
 				
 				
 		}
 			//System.out.println("result........." + memberResult);
 			//System.out.println("result........." + farmResult);
-			////System.out.println("result........." + memberfarmResult);
+			//System.out.println("result........." + memberfarmResult);
 			if (!"fail".equals(memberResult)) {
 				jObj.put("Msg", memberResult);
 			} else {
@@ -502,5 +434,25 @@ public class MemberService {
 		return jobj1;
 
 	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getMemberImages")
+    public JSONObject getMemberImages(@Context HttpServletRequest request,@QueryParam("memberId") String newsId,@QueryParam("fileId") String fileId){
+		
+		JSONObject jobj = new JSONObject();
+		
+		String result ="fail";
+		
+		HttpSession session = request.getSession();
+		String memberId = (String) session.getAttribute("MEMBERID");
+		
+		UploadFileDTO uploadFileDto = new UploadFileDTO();
+		uploadFileDto.setFileId(fileId);
+		
+		MemberBO bo = new MemberBO();
+		result = bo.getMemberImage(uploadFileDto);
+		return jobj;
+	}
+	
 }
 

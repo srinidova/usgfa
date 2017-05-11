@@ -18,5 +18,12 @@ public class ProgramFileBO {
 		ProgramFileDAO dao = new ProgramFileDAO();
 		return dao.programFile(programFileDto);
 	}
-	
+	public ArrayList<UploadFileDTO> getProgramImages(ProgramFileDTO programFileDto){
+		System.out.println("2. In programFile---------- programFile===" + programFileDto.getProgramId());
+		//System.out.println("2. In newsFile---------- newsFile===" + uploadFileDto.);
+		ProgramFileDAO programFileDao = new ProgramFileDAO();
+			NewsFileDAO newsFileDao = new NewsFileDAO();
+			return programFileDao.getProgramImages(programFileDto);
+			//return newsFileDao.getNewsImages(newsFileDto);
+		}
 }

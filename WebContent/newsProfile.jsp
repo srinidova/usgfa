@@ -38,6 +38,7 @@
 			.ready(
 					function() {
 						//alert("-------in News Profile--Jsp---");
+						var html = '';
 						$
 								.ajax({
 									url : "emp/newsService/getNewsProfile",
@@ -67,8 +68,41 @@
 																	.val(
 																			data.NewsProfile[key].newsId);
 														})
+														
+														$.each(
+																data.NEWSFILES,
+																function(key, val) {
+																	alert("NEWSFILES---*****99999999999*****-------filePath=="+data.NEWSFILES[key].filePath);
+																	html = html
+																	+'<li class="col-md-12">'
+																		+'<div class="fff">'
+																			+'<div class="thumbnail">'
+																				+'<a href="#"> <img src='+data.NEWSFILES[key].filePath+' class="img-responsive" alt=""></a>'
+																			+'</div>'
+																			+'<div class="img_tiltle">'
+																				+'<h2>Image 1</h2>'
+																			+'</div>'
+																			+'<div class="caption">'
+																				+'<div class="checkbox">'
+																					+'<label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
+																					+'<div class="suceee_msg"><h4>Updated successfully</h4></div>'
+																				+'</div>'
+																				+'<div class="delete_box">'
+																					+'<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																					+'<div class="suceee_msg"><h4>Delete Message</h4></div>'
+																				+'</div>'
+																			+'</div>'
+																		+'</div>'
+																	+'</li>'
+
+																})
+																$(html).appendTo("#newsImages");
 									}
+								
+								
 								});
+						
+
 					});
 	function editProfNews() {
 		//alert("editProfNews---**********-------newsProfNewsId=="+ $("#newsProfNewsId").val());
@@ -160,11 +194,12 @@
 								<div class="carousel-inner">
 									<div class="item active">
 										<ul class="thumbnails">
+											<!-- <div id="newsImages"></div> -->
 											<li class="col-md-12">
 												<div class="fff">
 													<div class="thumbnail">
 														<a href="#"> <img
-															src="images/5326574-a-sheep-wallpapers.jpg"
+															src="images/5326574-a-sheep-wallpapers.JPG"
 															class="img-responsive" alt="">
 														</a>
 													</div>

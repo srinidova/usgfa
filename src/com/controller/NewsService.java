@@ -65,44 +65,8 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				result = bo.addNewsDetails(newsDto);
 				
-				//HashMap<Integer,String> hm = new HashMap<Integer,String>();
-				HttpSession session = request.getSession();
+				CommonUtils.saveFileData(request, sId, "NEWS");
 				
-				HashMap<String,String> hmImages = (HashMap<String,String>)session.getAttribute("UPLOADED_FILELIST");
-				if(hmImages != null && hmImages.size() > 0){
-					for(Map.Entry m:hmImages.entrySet()){
-						String sFileId  = (String) m.getKey();
-						String sFilePath  = (String) m.getValue();
-						System.out.println("--------------sFileId---------"+sFileId);
-						System.out.println("--------------sFilePath---------"+sFilePath);
-						//System.out.println(m.getKey()+" "+m.getValue());
-					
-					// saving in to uploadFile Table
-					UploadFileDTO uploadFileDto = new UploadFileDTO();
-					uploadFileDto.setFileId(sFileId);
-					uploadFileDto.setFilePath(sFilePath);
-				    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
-				    
-				    UploadFileBO filebo = new UploadFileBO();
-				    resultFile = filebo.addUploadFileDetails(uploadFileDto);
-				    System.out.println("resultFile===="+resultFile);
-				    
-				 // saving in to newsFile Table
-				    
-				    NewsFileDTO  newsFileDto = new NewsFileDTO();
-				    newsFileDto.setFileId(sFileId);
-				    newsFileDto.setNewsId(sId);
-				    System.out.println("newsFile---------"+sId);
-				    NewsFileBO newsFileBo = new NewsFileBO();
-				    resultNewsFile = newsFileBo.newsFile(newsFileDto);
-				    
-				    System.out.println("resultNewsFile===="+resultNewsFile);
-					}
-				}
-				
-
-			    
-			    
 			}
 			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
@@ -196,7 +160,8 @@ public class NewsService {
 		String newsId = (String) session.getAttribute("NEWSID");
 		//System.out.println("1a. *****Called getNewsProfile**********newsId==" + newsId);
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
-
+          String resultImage = "fail";
+          ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		try {
 			if (StringUtils.isNotEmpty(newsId)) {
 
@@ -212,6 +177,21 @@ public class NewsService {
 					jobj.put("NewsProfile", newsList);
 				} else {
 					jobj.put("NewsProfile", "failed");
+				}
+				
+				//get news Images 
+
+				NewsFileDTO newsFileDto = new NewsFileDTO();
+				
+				newsFileDto.setNewsId(newsId);
+				
+				System.out.println("****newsImages==" + newsFileDto.getNewsId());
+				NewsFileBO newsFileBo = new NewsFileBO();
+				lstUploadFileDTO =  newsFileBo.getNewsImages(newsFileDto);
+				if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+					System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+					jobj.put("NEWSFILES", lstUploadFileDTO);
+					//session.setAttribute("NEWSFILES", lstUploadFileDTO);
 				}
 			}
 		} catch (Exception e) {
@@ -232,6 +212,8 @@ public class NewsService {
 		String newsId = (String) session.getAttribute("NEWSID");
 		//System.out.println("1a. *****Called editNews**********newsId==" + newsId);
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
+		String resultFileEdit ="fail";
+		String resultNewsFileEdit ="fail";
 
 		try {
 			if (StringUtils.isNotEmpty(newsId)) {
@@ -244,6 +226,7 @@ public class NewsService {
 
 				//System.out.println("****newsList.size==" + newsList.size());
 				//System.out.println("arraylist--->" + newsList.toString());
+				
 				if (!(newsList.size() < 0)) {
 					jobj.put("EditNews", newsList);
 				} else {
@@ -293,6 +276,8 @@ public class NewsService {
 
 				NewsBO bo = new NewsBO();
 				result = bo.newsUpdate(newsDto);
+				
+				CommonUtils.saveFileData(request, newsId, "NEWS");
 			}
 			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
@@ -306,4 +291,19 @@ public class NewsService {
 		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
+	/*@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getNewsImages")
+	public JSONObject getNewsImages(@Context HttpServletRequest request,@QueryParam("newsId") String newsId){
+		
+		JSONObject jobj = new JSONObject();
+		
+		String result ="fail";
+		
+		NewsFileDTO newsFileDto = new NewsFileDTO();
+		
+		NewsFileBO newsFilebo = new NewsFileBO();
+		result = newsFilebo.getNewsImages(newsFileDto);
+		return jobj;
+	}*/
 }

@@ -9,6 +9,7 @@ import com.dto.EmployeeDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.SkillsDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class ProgramDAO {
@@ -112,6 +113,20 @@ public class ProgramDAO {
 
 			//System.out.println("3. In ProgramDAO programUpdate---------- getProgramName===" + programDto.getProgramName());
 			session.insert("Program.programUpdate", programDto);
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String getProgramImage(UploadFileDTO uploadFileDto) {
+		String result = "fail";
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
+			session.insert("News.newsUpdate", uploadFileDto);
 
 			result = "success";
 		} catch (Exception e) {

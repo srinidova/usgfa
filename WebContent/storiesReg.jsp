@@ -37,7 +37,42 @@
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
-        
+function storiesFarmValidation() {
+	//alert("==Entered==");
+	$("#storiesMessage").text("");
+	//alert("==1==");
+	var name = document.getElementById("name");
+	var profession = document.getElementById("profession");
+	var farmName = document.getElementById("farmName");
+	var farmAddress = document.getElementById("farmAddress");
+	var place = document.getElementById("place");
+	var mandal = document.getElementById("mandal");
+	var district = document.getElementById("district");
+	var farmPinCode = document.getElementById("farmPinCode");
+	var aboutFarm = document.getElementById("aboutFarm");
+	//alert("==2==");
+	if (emptyCheck(name, "Name", "storiesMessage")
+			&& minLenCheck(name, 5, "Name", "storiesMessage")
+			&& maxLenCheck(name, 10, "Name", "storiesMessage")
+			&& allLetter(name, "Name", "storiesMessage")
+			&& emptyCheck(profession, "Profession", "storiesMessage")
+			&& emptyCheck(farmName, "Farm Name", "storiesMessage")
+			&& emptyCheck(farmAddress, "Farm Address", "storiesMessage")
+			&& emptyCheck(place, "Farm Place/City", "storiesMessage")
+			&& emptyCheck(mandal, "Mandal", "storiesMessage")
+			&& emptyCheck(district, "District", "storiesMessage")
+			&& emptyCheck(farmPinCode, "Farm Pin Code", "storiesMessage")
+			&& allNumber(farmPinCode, "Farm Pin Code", "storiesMessage")
+			&& minLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
+			&& maxLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
+			&& emptyCheck(aboutFarm, "About You/Farm", "storiesMessage")
+			) {
+
+		saveStories();
+	}
+
+}
+     
    function saveStories(){
 	   //alert(" in to js stories page----------------");
 	   var title = $("#title").val();
@@ -54,9 +89,7 @@
 	   
 	   //alert("title----------------"+title);
 	   //alert("name----------------"+name);
-	   
-	   
-	   
+	  
 	   var storiesObject = new Object();
 	   
 	   
@@ -79,6 +112,18 @@
 			success : function(data) {
 				if (data.Msg = "success") {
 					//alert("b4...........");
+					window.location.href = "storiesList.jsp";
+					//alert("a4...........");
+				}
+			}
+		});
+	   $
+		.ajax({
+			data : uploadFile,
+			url : "emp/storiesService/getStoriesImages",
+			success : function(data) {
+				if (data.Msg = "success") {
+					//alert("b4...........");
 					//window.location.href = "newsList.jsp";
 					//alert("a4...........");
 				}
@@ -96,7 +141,7 @@
   <div class="container" >
     <div class="row">
       <div class="aboutus">
-        <h2>Success Stories</h2>
+        <h2>Stories New</h2>
         <div class="line3"></div>
       </div>
     </div>
@@ -124,31 +169,31 @@
       </div>
      <div class="col-md-5">
         <div class="form-group">
-          <label for="first_name">Name</label>
-          <input type="text" class="form-control" id="name" name="name">
+          <label for="first_name">Name *</label>
+          <input type="text" class="form-control" id="name" name="name" onkeyup="removeError(this.id);">
         </div>
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="profession">Profession</label>
+          <label for="profession">Profession *</label>
           <input type="text" class="form-control" id="profession" name="profession">
         </div>
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="farm_name">Farm Name</label>
+          <label for="farm_name">Farm Name *</label>
           <input type="text" class="form-control" id="farmName" name="farmName">
         </div>
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="farm_address">Farm Address</label>
+          <label for="farm_address">Farm Address *</label>
           <textarea class="form-control" rows="5" id="farmAddress" name="farmAddress"></textarea>
         </div>
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="farm_place_city">Farm Place/City</label>
+          <label for="farm_place_city">Farm Place/City *</label>
           <input type="text" class="form-control" id="place" name="place">
         </div>
       </div>
@@ -156,13 +201,13 @@
       
       <div class="col-md-5">
         <div class="form-group">
-          <label for="mandal">Mandal</label>
+          <label for="mandal">Mandal *</label>
           <input type="text" class="form-control" id="mandal" name="mandal">
         </div>
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="district">District</label>
+          <label for="district">District *</label>
           <input type="text" class="form-control" id="district" name="district">
         </div>
       </div>
@@ -178,7 +223,7 @@
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="farm_pin_code">Farm Pin Code</label>
+          <label for="farm_pin_code">Farm Pin Code *</label>
           <input type="text" class="form-control" id="farmPinCode" name="farmPinCode">
         </div>
       </div>
@@ -221,12 +266,13 @@
       <!-------------------------submit button--------------------------------------->
       <div class="col-md-10">
         <div class="submit_button text-right">
-          <a href='storiesList.jsp'><button class="btn btn-success btn-sm text-right " onclick ="saveStories();">Submit</button></a>
+          <a href='#'><button class="btn btn-success btn-sm text-right " onclick ="storiesFarmValidation();">Submit</button></a>
           
         </div>
         <div class="message">
-            <h3>saved sucessfully</h3>
+            <h3><aside class=" " id="storiesMessage" style="display: none">Save Sucessfully</aside></h3>
           </div>
+          <h4>* These fields are required</h4>
       </div>
       
       <!-------------------------submit button end--------------------------------------->

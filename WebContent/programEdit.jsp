@@ -36,7 +36,36 @@
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 
+function programEditFarmValidation() {
+	//alert("==Entered==");
+	$("#programMessage").text("");
+	//alert("==1==");
+	var programName = document.getElementById("programEditName");
+	var duration = document.getElementById("programEditDuration");
+	var dateAndTimeFrom = document.getElementById("programEditDateAndTimeFrom");
+	var dateAndTimeTo = document.getElementById("programEditDateAndTimeTo");
+	var channel = document.getElementById("programEditChannel");
+	var guest = document.getElementById("programEditGuest");
+	var youtube = document.getElementById("programEditYoutube");
+	var moreInfo = document.getElementById("programEditMoreInfo");
+	//alert("==2==");
+	if (emptyCheck(programName, "Program Name", "programMessage")
+			&& minLenCheck(programName, 5, "Program Name", "programMessage")
+			&& maxLenCheck(programName, 10, "Program Name", "programMessage")
+			&& allLetter(programName, "Program Name", "programMessage")
+			&& emptyCheck(duration, "Duration", "programMessage")
+			&& emptyCheck(dateAndTimeFrom, "Date & TimeFrom", "programMessage")
+			&& emptyCheck(dateAndTimeTo, "Date & Time To", "programMessage")
+			&& emptyCheck(channel, "Channel", "programMessage")
+			&& emptyCheck(guest, "Guest", "programMessage")
+			&& emptyCheck(youtube, "Youtube", "programMessage")
+			&& emptyCheck(moreInfo, "More Info", "programMessage")
+			) {
 
+		programUpdate();
+	}
+
+}
 $(document).ready(function() {
 	//alert("-------in editProgram--Jsp---");
 	$.ajax({
@@ -55,6 +84,7 @@ $(document).ready(function() {
 							$('#programEditChannel').val(data.EditProgram[key].channel);
 							$('#programEditGuest').val(data.EditProgram[key].guest);
 							$('#programEditYoutube').val(data.EditProgram[key].youtube);
+							alert("-------in editProgram--Jsp---programEditYoutube=="+data.EditProgram[key].youtube);
 							$('#programEditMoreInfo').val(data.EditProgram[key].moreInfo);
 						}
 				)
@@ -73,6 +103,7 @@ function programUpdate(){
 	var youtube  = $("#programEditYoutube").val();
 	var moreInfo  = $("#programEditMoreInfo").val();
 	
+	
 	var programObject = new Object();
 	programObject.programId = programId;
 	programObject.programName = programName;
@@ -90,6 +121,7 @@ function programUpdate(){
 		url : "emp/programService/programUpdate",
 		success : function(data) {
 			if (data.Msg = "success") {
+				window.location.href = "programList.jsp";
 			}
 		}
 	});
@@ -105,7 +137,7 @@ function programUpdate(){
   <div class="container" >
     <div class="row">
       <div class="aboutus">
-        <h2>Program Form</h2>
+        <h2>Program Edit</h2>
         <div class="line3"></div>
       </div>
     </div>
@@ -182,10 +214,13 @@ function programUpdate(){
             <div class="image"> <img src="images/img.png" class="img-responsive img-thumbnail" > </div>
           </div>
           <div class="upload_img">
+          <form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
             <div class="form-group col-md-6">
-              <label for="Upload Photo">Upload Photo(s)</label>
-              <input id="file-0b" class="file form-control" type="file" >
+              <label for="Upload Photo">Select Photo(s)</label>
+               <input id="file"  name ="file" class="file form-control" type="file">
+              <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
             </div>
+            </form>
           </div>
         </div>
       </div>
@@ -203,11 +238,12 @@ function programUpdate(){
       <!-------------------------submit button--------------------------------------->
       <div class="col-md-10">
         <div class="submit_button text-right">
-          <a href='programList.jsp'><button class="btn btn-success btn-sm text-right " onclick="programUpdate();">Submit</button></a>
+          <a href='#'><button class="btn btn-success btn-sm text-right " onclick="programEditFarmValidation();">Submit</button></a>
           
         </div>
         <div class="message">
-            <h3>saved sucessfully</h3>
+            <h3><aside class=" " id="programMessage" style="display: none">Save Sucessfully</aside></h3>
+            <h4>* These fields are required</h4>
           </div>
       </div>
       

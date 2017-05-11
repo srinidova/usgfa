@@ -23,6 +23,21 @@ public class EventFileDAO {
 		}
 		return result;
 	}
+	public ArrayList<UploadFileDTO> getEventImages(EventFileDTO eventFileDto) {
+		String result = "fail";
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
 
+			System.out.println("3. In EventDAO getEventImage---------- fileId===" + eventFileDto.getEventId());
+			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getEventImages", eventFileDto.getEventId());
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lstUploadFileDTO;
+	}
+	
 	
 }

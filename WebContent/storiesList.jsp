@@ -146,7 +146,7 @@ function deleteStories(storiesId){
   <div class="container" >
     <div class="row">
       <div class="aboutus">
-        <h2>Success Stories List</h2>
+        <h2>Stories List</h2>
         <div class="line3"></div>
       </div>
     </div>

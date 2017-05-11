@@ -8,6 +8,7 @@ import com.dao.ProgramDAO;
 import com.dto.EmployeeDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.dao.client.Dao;
 
 public class ProgramBO {
@@ -49,6 +50,10 @@ public class ProgramBO {
 		return dao.programUpdate(programDto);
 		//return dao.programUpdate(newsDto);
 	}
-
+    public String getProgramImage(UploadFileDTO uploadFileDto){
+		
+		ProgramDAO dao = new ProgramDAO();
+		return dao.getProgramImage(uploadFileDto);
+	}
 }
 

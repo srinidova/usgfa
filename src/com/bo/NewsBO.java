@@ -3,7 +3,9 @@ package com.bo;
 import java.util.ArrayList;
 
 import com.dao.NewsDAO;
+import com.dao.NewsFileDAO;
 import com.dto.NewsDTO;
+import com.dto.UploadFileDTO;
 
 public class NewsBO {
 
@@ -33,4 +35,5 @@ public class NewsBO {
 		NewsDAO dao = new NewsDAO();
 		return dao.newsUpdate(newsDto);
 	}
+	
 }

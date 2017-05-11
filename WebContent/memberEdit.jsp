@@ -37,7 +37,64 @@
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 
+function memberEditFarmValidation() {
+	//alert("==Entered==");
+	$("#memberMessage").text("");
+	//alert("==1==");
+	var firstName = document.getElementById("memberEditFirstName");
+	var middleName = document.getElementById("memberEditMiddleName");
+	var lastName = document.getElementById("memberEditLastName");
+	var mobile = document.getElementById("memberEditMobile");
+	var email = document.getElementById("memberEditEmail");
+	var address = document.getElementById("memberEditAddress");
+	var place = document.getElementById("memberEditPlace");
+	var mandal = document.getElementById("memberEditMandal");
+	var district = document.getElementById("memberEditDistrict");
+	var pincode = document.getElementById("memberEditPincode");
+	var farmName = document.getElementById("memberFarmEditFarmName");
+	var farmPlace = document.getElementById("memberFarmEditFarmPlace");
+	var farmAddress = document.getElementById("memberFarmEditFarmAddress");
+	var farmMandal = document.getElementById("memberFarmEditFarmMandal");
+	var farmDistrict = document.getElementById("memberFarmEditFarmDistrict");
+	var aboutFarm = document.getElementById("memberFarmEditAboutFarm");
+	var farmPincode = document.getElementById("memberFarmEditFarmPincode");
+	//alert("==2==");
+	if (emptyCheck(firstName, "First Name", "memberMessage")
+			&& minLenCheck(firstName, 5, "First Name", "memberMessage")
+			&& maxLenCheck(firstName, 10, "First Name", "memberMessage")
+			&& allLetter(firstName, "First Name", "memberMessage")
+			&& emptyCheck(middleName, "Middle Name", "memberMessage")
+			&& emptyCheck(lastName, "Surname/Last Name", "memberMessage")
+			&& emptyCheck(mobile, "Mobile/Contact No ", "memberMessage")
+			&& allNumber(mobile, "Mobile/Contact No ", "memberMessage")
+			&& minLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
+			&& maxLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
+			/* && allNumber(email, "Email", "memberMessage") */
+			&& emptyCheck(email, "Email ", "memberMessage")
+			&& emptyCheck(address, "Address", "memberMessage")
+			&& emptyCheck(place, "Place/City", "memberMessage")
+			&& emptyCheck(mandal, "Mandal", "memberMessage")
+			&& emptyCheck(district, "District", "memberMessage")
+			&& emptyCheck(pincode, "Pin Code", "memberMessage")
+			&& allNumber(pincode, "Pin Code", "memberMessage")
+			&& minLenCheck(pincode, 6, "Pin Code", "memberMessage")
+			&& maxLenCheck(pincode, 6, "Pin Code", "memberMessage")
+			&& emptyCheck(farmName, "Farm Name", "memberMessage")
+			&& emptyCheck(farmPlace, "Farm Place/City", "memberMessage")
+			&& emptyCheck(farmAddress, "Farm Address", "memberMessage")
+			&& emptyCheck(farmMandal, "Mandal", "memberMessage")
+			&& emptyCheck(farmDistrict, "District", "memberMessage")
+			&& emptyCheck(aboutFarm, "About You/Farm", "memberMessage")
+			&& emptyCheck(farmPincode, "Farm Pin Code", "memberMessage")
+			&& allNumber(farmPincode, "Farm Pin Code", "memberMessage")
+			&& minLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
+			&& maxLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
+			) {
 
+		memberUpdate1();
+	}
+
+}
 
 $(document).ready(function() {
 	//alert("-------in editMember--Jsp---");
@@ -147,13 +204,17 @@ function memberUpdate1(){
 	 ////alert("--------farmName----------"+memberObject.farmName);
 	 
 	
-	////alert("in to farm update")
+	alert("in to farm update")
 $
 	.ajax({
 		data : memberObject,
 		url : "emp/memberService/memberUpdate",
 		success : function(data) {
 			if (data.Msg = "success") {
+				alert("...........b4............");
+				
+				
+				window.location.href = "memberList.jsp";
 			}
 		}
 	});
@@ -330,18 +391,19 @@ $
 						<div class="col-md-12">
 							<div class="col-md-2">
 								<div class="image">
-									<img src="images/img.png"
-										class="img-responsive img-thumbnail g-image" href="#"
-										data-image-id="1" data-toggle="modal" data-title=""
+									<img src="images/img.png" class="img-responsive img-thumbnail g-image" href="#" data-image-id="1" data-toggle="modal" data-title=""
 										data-caption="" data-image="images/placeholder.jpg"
 										data-target="#image-gallery">
 								</div>
 							</div>
 							<div class="upload_img">
+							<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
 								<div class="form-group col-md-6">
-									<label for="Upload Photo">Upload Photo(s)</label> <input
-										id="file-0b" class="file form-control" type="file">
+									<label for="Upload Photo">Select Photo(s)</label> 
+									<input id="file"  name ="file" class="file form-control" type="file">
+                              <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
 								</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -431,12 +493,12 @@ $
 			<!-------------------------submit button--------------------------------------->
 			<div class="col-md-12">
 				<div class="submit_button text-right">
-					<a href='memberList.jsp'><button
+					<a href='#'><button
 							class="btn btn-success btn-sm text-right "
-							onclick="memberUpdate1();">Submit</button></a>
+							onclick="memberEditFarmValidation();">Submit</button></a>
 				</div>
 				<div class="message">
-					<h3>saved sucessfully</h3>
+					<h3><aside class=" " id="memberMessage" style="display: none">Save Sucessfully</aside></h3>
 				</div>
 			</div>
 

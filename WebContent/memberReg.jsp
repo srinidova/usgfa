@@ -36,11 +36,68 @@
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
+function memberFarmValidation() {
+	//alert("==Entered==");
+	$("#memberMessage").text("");
+	//alert("==1==");
+	var firstName = document.getElementById("firstName");
+	var middleName = document.getElementById("middleName");
+	var lastName = document.getElementById("lastName");
+	var mobile = document.getElementById("mobile");
+	var email = document.getElementById("email");
+	var address = document.getElementById("address");
+	var place = document.getElementById("place");
+	var mandal = document.getElementById("mandal");
+	var district = document.getElementById("district");
+	var pincode = document.getElementById("pincode");
+	var farmName = document.getElementById("farmName");
+	var farmPlace = document.getElementById("farmPlace");
+	var farmAddress = document.getElementById("farmAddress");
+	var farmMandal = document.getElementById("farmMandal");
+	var farmDistrict = document.getElementById("farmDistrict");
+	var aboutFarm = document.getElementById("aboutFarm");
+	var farmPincode = document.getElementById("farmPincode");
+	//alert("==2==");
+	if (emptyCheck(firstName, "First Name", "memberMessage")
+			&& minLenCheck(firstName, 5, "First Name", "memberMessage")
+			&& maxLenCheck(firstName, 10, "First Name", "memberMessage")
+			&& allLetter(firstName, "First Name", "memberMessage")
+			&& emptyCheck(middleName, "Middle Name", "memberMessage")
+			&& emptyCheck(lastName, "Surname/Last Name", "memberMessage")
+			&& emptyCheck(mobile, "Mobile/Contact No ", "memberMessage")
+			&& allNumber(mobile, "Mobile/Contact No ", "memberMessage")
+			&& minLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
+			&& maxLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
+			/* && allNumber(email, "Email", "memberMessage") */
+			&& emptyCheck(email, "Email ", "memberMessage")
+			&& emptyCheck(address, "Address", "memberMessage")
+			&& emptyCheck(place, "Place/City", "memberMessage")
+			&& emptyCheck(mandal, "Mandal", "memberMessage")
+			&& emptyCheck(district, "District", "memberMessage")
+			&& emptyCheck(pincode, "Pin Code", "memberMessage")
+			&& allNumber(pincode, "Pin Code", "memberMessage")
+			&& minLenCheck(pincode, 6, "Pin Code", "memberMessage")
+			&& maxLenCheck(pincode, 6, "Pin Code", "memberMessage")
+			&& emptyCheck(farmName, "Farm Name", "memberMessage")
+			&& emptyCheck(farmPlace, "Farm Place/City", "memberMessage")
+			&& emptyCheck(farmAddress, "Farm Address", "memberMessage")
+			&& emptyCheck(farmMandal, "Mandal", "memberMessage")
+			&& emptyCheck(farmDistrict, "District", "memberMessage")
+			&& emptyCheck(aboutFarm, "About You/Farm", "memberMessage")
+			&& emptyCheck(farmPincode, "Farm Pin Code", "memberMessage")
+			&& allNumber(farmPincode, "Farm Pin Code", "memberMessage")
+			&& minLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
+			&& maxLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
+			) {
 
+		saveMember();
+	}
+
+}
 
 
 	function saveMember(){
-	//alert(" in to js page----------------");
+	alert(" in to js page----------------");
 	var title = $("#title").val();
 	var firstName =$("#firstName").val();
 	var middleName = $("#middleName").val();
@@ -71,7 +128,8 @@
 	////alert("title----------------"+title);
 	////alert("firstName----------------"+firstName);
 	////alert("profession----------------"+profession);
-	////alert("farmName----------------"+farmName);
+	alert("farmName----------------"+farmName);
+	
 	
 	
 	var memberObject = new Object();
@@ -105,12 +163,25 @@
 	memberObject.haveFarm = haveFarm;
 	//alert("------------f-----------");
 	
-	
+	/* UploadFile uploadFile = new UploadFile();
+	uploadFile.fileId = fileId; */
 	
 	$
 	.ajax({
 		data : memberObject,
 		url : "emp/memberService/addMember",
+		success : function(data) {
+			if (data.Msg = "success") {
+				alert("b4...........");
+				window.location.href = "memberList.jsp";
+				//alert("a4...........");
+			}
+		}
+	});
+	$
+	.ajax({
+		data : uploadFile,
+		url : "emp/memberService/getMemberImages",
 		success : function(data) {
 			if (data.Msg = "success") {
 				//alert("b4...........");
@@ -119,7 +190,6 @@
 			}
 		}
 	});
-	
 }
 
 </script>
@@ -131,7 +201,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="aboutus">
-					<h2>Member Registration</h2>
+					<h2>Member New</h2>
 					<div class="line3"></div>
 				</div>
 			</div>
@@ -161,7 +231,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="first_name">First Name</label> <input type="text"
+							<label for="first_name">First Name *</label> <input type="text"
 								class="form-control" id="firstName" name="firstName">
 						</div>
 					</div>
@@ -179,7 +249,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="mobile_contact_no">Mobile/Contact No</label> <input
+							<label for="mobile_contact_no">Mobile/Contact No *</label> <input
 								type="text" class="form-control" id="mobile" name="mobile">
 						</div>
 					</div>
@@ -198,19 +268,19 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="place_city">Place/City</label> <input type="text"
+							<label for="place_city">Place/City *</label> <input type="text"
 								class="form-control" id="place" name="place">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="mandal">Mandal</label> <input type="text"
+							<label for="mandal">Mandal *</label> <input type="text"
 								class="form-control" id="mandal" name="mandal">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="district">District</label> <input type="text"
+							<label for="district">District *</label> <input type="text"
 								class="form-control" id="district" name="district">
 						</div>
 					</div>
@@ -226,7 +296,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="pin_code">Pin Code</label> <input type="text"
+							<label for="pin_code">Pin Code *</label> <input type="text"
 								class="form-control" id="pincode" name="pincode">
 						</div>
 					</div>
@@ -348,13 +418,14 @@
 			<!-------------------------submit button--------------------------------------->
 			<div class="col-md-12">
 				<div class="submit_button text-right">
-					<a href='memberList.jsp'><button
+					<a href='#'><button
 							class="btn btn-success btn-sm text-right "
-							onclick="saveMember();">Submit</button></a>
+							onclick="memberFarmValidation();">Submit</button></a>
 				</div>
 				<div class="message">
-					<h3>saved sucessfully</h3>
+					<h3><aside class=" " id="memberMessage" style="display: none">Save Sucessfully</aside></h3>
 				</div>
+				<h4>* These fields are required</h4>
 			</div>
 
 			<!-------------------------submit button end--------------------------------------->
@@ -371,32 +442,32 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="farm_name">Farm Name</label> <input type="text"
+						<label for="farm_name">Farm Name *</label> <input type="text"
 							class="form-control" id="farmName" name="farmName">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="farm_place_city">Farm Place/City</label> <input
+						<label for="farm_place_city">Farm Place/City *</label> <input
 							type="text" class="form-control" id="farmPlace" name="farmPlace">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="farm_address">Farm Address</label>
+						<label for="farm_address">Farm Address *</label>
 						<textarea class="form-control" rows="5" id="farmAddress"
 							name="farmAddress"></textarea>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="mandal">Mandal</label> <input type="text"
+						<label for="mandal">Mandal *</label> <input type="text"
 							class="form-control" id="farmMandal" name="farmMandal">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="district">District </label> <input type="text"
+						<label for="district">District *</label> <input type="text"
 							class="form-control" id="farmDistrict" name="farmDistrict">
 					</div>
 				</div>
@@ -421,7 +492,7 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="farm_pin_code">Farm Pin Code </label> <input
+						<label for="farm_pin_code">Farm Pin Code *</label> <input
 							type="text" class="form-control" id="farmPincode"
 							name="farmPincode">
 					</div>
@@ -434,10 +505,13 @@
           <div class="image"> <img src="images/img.png" class="img-responsive"> </div>
         </div>-->
 						<div class="upload_img">
+						<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
 							<div class="form-group col-md-7">
-								<label for="Upload Photo">Upload Farm Photo(s)</label> <input
-									id="file-0b" class="file form-control" type="file">
+								<label for="Upload Photo">Upload Farm Photo(s)</label> 
+								<input id="file"  name ="file" class="file form-control" type="file">
+								<a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
 							</div>
+							</form>
 						</div>
 					</div>
 				</div>

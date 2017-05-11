@@ -11,6 +11,7 @@ import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.SkillsDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class MemberDAO {
@@ -82,6 +83,20 @@ public class MemberDAO {
 			//System.out.println("3. In EventDAO getdeleteEvent----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("Member.deleteMember", memberDto);
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String getMemberImage(UploadFileDTO uploadFileDto) {
+		String result = "fail";
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
+			session.insert("News.newsUpdate", uploadFileDto);
+
 			result = "success";
 		} catch (Exception e) {
 			e.printStackTrace();

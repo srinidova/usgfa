@@ -35,6 +35,45 @@
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
+function eventEditFarmValidation() {
+	//alert("==Entered==");
+	$("#eventMessage").text("");
+	//alert("==1==");
+	var eventName = document.getElementById("eventEditEventName");
+	var noOfDays = document.getElementById("eventEditNoOfDays");
+	var timeFrom = document.getElementById("eventEditTimeFrom");
+	var timeEnd = document.getElementById("eventEditTimeEnd");
+	var address = document.getElementById("eventEditAddress");
+	var place = document.getElementById("eventEditPlace");
+	var mandal = document.getElementById("eventEditMandal");
+	var moreInfo = document.getElementById("eventEditMoreInfo");
+	var district = document.getElementById("eventEditDistrict");
+	var landMark = document.getElementById("eventEditLandMark");
+	var pincode = document.getElementById("eventEditPincode");
+	//alert("==2==");
+	if (emptyCheck(eventName, "Event Name", "eventMessage")
+			&& minLenCheck(eventName, 5, "Event Name", "eventMessage")
+			&& maxLenCheck(eventName, 10, "Event Name", "eventMessage")
+			&& allLetter(eventName, "Event Name", "eventMessage")
+			&& emptyCheck(noOfDays, "No.of days", "eventMessage")
+			&& emptyCheck(timeFrom, "Time From", "eventMessage")
+			&& emptyCheck(timeEnd, "Time End", "eventMessage")
+			&& emptyCheck(address, "Address", "eventMessage")
+			&& emptyCheck(place, "Place/City", "eventMessage")
+			&& emptyCheck(mandal, "Mandal", "eventMessage")
+			&& emptyCheck(moreInfo, "More Info", "eventMessage")
+			&& emptyCheck(district, "District", "eventMessage")
+			&& emptyCheck(landMark, "Land Mark", "eventMessage")
+			&& emptyCheck(pincode, "Pin Code", "eventMessage")
+			&& minLenCheck(pincode, 6, "Pin Code", "eventMessage")
+			&& maxLenCheck(pincode, 6, "Pin Code", "eventMessage")
+			&& allNumber(pincode, 6, "Pin Code", "eventMessage")
+			) {
+
+		eventUpdate();
+	}
+
+}
 $(document).ready(function() {
 	//alert("-------in editEvent--Jsp---");
 	$.ajax({
@@ -44,6 +83,7 @@ $(document).ready(function() {
 						data.EditEvent,
 						function(key, val) {
 							//alert("-------in editEvent--Jsp---eventTitle=="+data.EditEvent[key].timeFrom);
+							
 						$('#eventId').val(data.EditEvent[key].eventId);	
 						$('#eventEditEventName').val(data.EditEvent[key].eventName);
 					 	$('#eventEditNoOfDays').val(data.EditEvent[key].noOfDays);
@@ -56,12 +96,23 @@ $(document).ready(function() {
 						$('#eventEditstate').val(data.EditEvent[key].state);
 						$('#eventEditLandMark').val(data.EditEvent[key].landMark);
 						$('#eventEditPincode').val(data.EditEvent[key].pincode);
+						alert("-------in editEvent--Jsp---pincode=="+data.EditEvent[key].pincode);
 						$('#eventEditMoreInfo').val(data.EditEvent[key].moreInfo);
 						
 						
 						
 						}
 				)
+				$.each(
+											data.EventGuestEdit,
+											function(key, val) {
+												//alert("memberFarmEditFarmName --------- farmName=="+data.MemberFarmEdit[key].farmState);
+												$('#guestEditTitle').val(data.EventGuestEdit[key].title);
+												$('#guestEditName').val(data.EventGuestEdit[key].name);
+												$('#guestEditDesignation').val(data.EventGuestEdit[key].designation);
+												$('#guestEditguestId').val(data.MemberFarmEdit[key].guestId);
+												
+										})
 		}
 	});
 });
@@ -100,7 +151,7 @@ function eventUpdate(){
 	eventObject.landMark = landMark;
 	eventObject.pincode = pincode; 
 	//alert("eventId----------------"+eventId);
-	
+	alert("pincode----------------"+pincode);
 	 $
 	.ajax({
 		data : eventObject,
@@ -108,7 +159,7 @@ function eventUpdate(){
 		success : function(data) {
 			if (data.Msg = "success") {
 				//alert("b4...........");
-				//window.location.href = "newsList.jsp";
+				window.location.href = "eventList.jsp";
 				//alert("a4...........");
 			}
 			else{
@@ -125,7 +176,7 @@ function eventUpdate(){
 		<div class="container">
 			<div class="row">
 				<div class="aboutus">
-					<h2>Event Form</h2>
+					<h2>Event Edit</h2>
 					<div class="line3"></div>
 				</div>
 			</div>
@@ -138,8 +189,8 @@ function eventUpdate(){
 			<div class="col-md-12">
 
 				<div class="from">
-					<form name="myForm" method="post" id="contact-form"
-						class="form-horizontal" action="" onsubmit="">
+					<!-- <form name="myForm" method="post" id="contact-form"
+						class="form-horizontal" action="" onsubmit=""> -->
 						<div class="col-md-5">
 							<div class="form-group">
 								<label for="event_name">Event Name</label> 
@@ -228,22 +279,23 @@ function eventUpdate(){
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="pin_code">Pin Code</label> <input type="text"
-									class="form-control" id="eventEditPincode"
-									name="eventEditPincode">
+								<label for="pin_code">Pin Code</label> <input type="text" class="form-control" id="eventEditPincode" name="eventEditPincode">
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="upload_img">
+							<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
 								<div class="form-group">
 									<label for="Upload Photo">Upload Event Photos / Videos</label>
-									<input id="file-0b" class="file form-control" type="file">
+									<input id="file"  name ="file" class="file form-control" type="file">
+									<a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
 								</div>
+								</form>
 							</div>
 						</div>
 						<div class="clearfix"></div>
 
-					</form>
+					<!-- </form> -->
 				</div>
 				<div class="clearfix"></div>
 
@@ -259,27 +311,30 @@ function eventUpdate(){
 							<div class="from">
 								<div class="col-md-3">
 									<div class="form-group">
-										<label for="title">Title</label> <select class="form-control">
-											<option selected="selected" id="guestfrm_title"
-												name="title[]">--select--</option>
+										<label for="title">Title</label> 
+										<select class="form-control">
+											<option selected="selected" id="guestEditTitle"
+												name="guestEditTitle">--select--</option>
 											<option>Mr</option>
 											<option>Ms</option>
 											<option>Dr</option>
 											<option>Prof</option>
 										</select>
+										<input type="hidden" class="form-control" id="guestEditguestId"
+							name="guestEditguestId">
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="name">Name</label> <input type="text"
-											class="form-control" id="guestfrm_name">
+											class="form-control" id="guestEditName" name ="guestEditName">
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="designation">Designation</label> <input
-											type="text" class="form-control" id="guestfrm_designation"
-											name="designation">
+											type="text" class="form-control" id="guestEditDesignation"
+											name="guestEditDesignation">
 									</div>
 								</div>
 								<div class="col-md-2">
@@ -300,13 +355,10 @@ function eventUpdate(){
 				<!-------------------------submit button--------------------------------------->
 				<div class="col-md-10">
 					<div class="submit_button text-right">
-						<a href='eventList.jsp'><button
-								class="btn btn-success btn-sm text-right "
-								onclick="eventUpdate();">Submit</button></a>
-
+						<a href='#'><button class="btn btn-success btn-sm text-right " onclick="eventEditFarmValidation();">Submit</button></a>
 					</div>
 					<div class="message" id="eventfrm_message">
-						<h3>saved sucessfully</h3>
+						<h3><aside class=" " id="eventMessage" style="display: none">Save Sucessfully</aside></h3>
 					</div>
 				</div>
 

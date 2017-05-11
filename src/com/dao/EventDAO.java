@@ -10,6 +10,7 @@ import com.dto.EventDTO;
 import com.dto.NewsDTO;
 import com.dto.SkillsDTO;
 import com.dto.StoriesDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class EventDAO {
@@ -122,6 +123,20 @@ public class EventDAO {
 			//System.out.println("3. In EventDAO getdeleteEvent----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("Event.deleteEvent", eventDto);
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public String getEventImage(UploadFileDTO uploadFileDto) {
+		String result = "fail";
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
+			session.insert("News.newsUpdate", uploadFileDto);
+
 			result = "success";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ContactUs">
+	<insert id="addContact" parameterClass="com.dto.ContactUsDTO">
+		insert into
+		contactus(contactId,name,email,subject,message,updatedOn)
+		values(#contactId#,#name#,#email#,#subject#,#message#,#updatedOn#)
+	</insert>
+	<!-- <select id="getNewsDetails" resultClass="com.dto.NewsDTO">
+		select
+		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
+		news
+	</select>
+	<delete id="deleteNews" parameterClass="com.dto.NewsDTO">
+		delete from news where
+		newsId = #newsId#
+	</delete>
+	<select id="getNewsProfile" parameterClass="com.dto.NewsDTO"
+		resultClass="com.dto.NewsDTO">
+		select
+		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
+		news where newsId = #newsId#
+	</select>
+	<select id="getNewsById" parameterClass="java.lang.String"
+		resultClass="com.dto.NewsDTO">
+		select
+		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
+		news where newsId = #value#
+	</select>
+	<update id="newsUpdate" parameterClass="com.dto.NewsDTO">
+		update news set newsTitle
+		= #newsTitle#, date = #date#, paper = #paper#, link = #link#, moreInfo
+		= #moreInfo#, updatedBy = #updatedBy#, updatedOn = #updatedOn#
+		where
+		newsId = #newsId#
+	</update> -->
+</sqlMap>

@@ -76,6 +76,35 @@
 																	.val(
 																			data.StoriesProfile[key].storiesId);
 														})
+														$.each(
+																data.STORIESFILES,
+																function(key, val) {
+																	alert("STORIESFILES---*****99999999999*****-------filePath=="+data.STORIESFILES[key].filePath);
+																	html = html
+																	+'<li class="col-md-12">'
+																	+'<div class="fff">'
+																	  +'<div class="thumbnail"> <a href="#"> <img src="images/5326574-a-sheep-wallpapers.jpg" class="img-responsive" alt=""> </a> </div>'
+																	  +'<div class="img_tiltle">'
+																	    +'<h2>Image 1</h2>'
+																	  +'</div>'
+																	  +'<div class="caption">'
+																	    +'<div class="checkbox">'
+																	      +'<label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
+																	      +'<div class="suceee_msg">'
+																		+'<h4>Updated successfully</h4>'
+																	      +'</div>'
+																	    +'</div>'
+																	    +'<div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																	      +'<div class="suceee_msg">'
+																		+'<h4>Delete Message</h4>'
+																	      +'</div>'
+																	    +'</div>'
+																	  +'</div>'
+																	+'</div>'
+																      +'</li>'
+
+																})
+																$(html).appendTo("#storiesImages");
 									}
 								});
 					});
@@ -104,7 +133,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="aboutus">
-					<h2>Success Stories Form Profile</h2>
+					<h2> Stories Profile</h2>
 					<div class="line3"></div>
 				</div>
 			</div>
@@ -117,7 +146,7 @@
     <div class="col-xs-12 col-sm-12 col-md-10 toppad" >
       <div class="panel panel-info">
         <div class="panel-heading">
-          <h3 class="panel-title">Success Stories Form Profile</h3>
+          <h3 class="panel-title">Stories Profile</h3>
         </div>
         <div class="panel-body">
           <div class="row">
@@ -167,7 +196,7 @@
                 <div class="carousel-inner">
                   <div class="item active">
                     <ul class="thumbnails">
-                      <li class="col-md-12">
+                      <!-- <li class="col-md-12">
                         <div class="fff">
                           <div class="thumbnail"> <a href="#"> <img src="images/5326574-a-sheep-wallpapers.jpg" class="img-responsive" alt=""> </a> </div>
                           <div class="img_tiltle">
@@ -189,7 +218,7 @@
                             </div>
                           </div>
                         </div>
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
                   <div class="item ">

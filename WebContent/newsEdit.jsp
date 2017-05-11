@@ -32,16 +32,40 @@
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
 <!-- <script type="text/javascript" src="js/news.js"></script> -->
+<script type="text/javascript" src="js/scriptUtils.js"></script>
 <script type="text/javascript">
+function newsEditFarmValidation() {
+	//alert("==Entered==");
+	$("#newsMessage").text("");
+	//alert("==1==");
+	var newsTitle = document.getElementById("newsEditTitle");
+	var date = document.getElementById("newsEditDate");
+	var paper = document.getElementById("newsEditPaper");
+	var link = document.getElementById("newsEditLink");
+	var moreInfo = document.getElementById("newsEditMoreInfo");
+	//alert("==2==");
+	if (emptyCheck(newsEditTitle, "Name Title", "newsMessage")
+			&& minLenCheck(newsEditTitle, 5, "Name Title", "newsMessage")
+			&& maxLenCheck(newsEditTitle, 10, "Name Title", "newsMessage")
+			&& allLetter(newsEditTitle, "Name Title", "newsMessage")
+			&& emptyCheck(newsEditDate, "Date", "newsMessage")
+			&& twoFieldsCheck(newsEditPaper, newsEditLink, "Paper or Link/Url",
+					"newsMessage")
+			&& (emptyCheck(newsEditMoreInfo, "More Info", "newsMessage"))) {
+
+		newsUpdate();
+	}
+
+}
 $(document).ready(function() {
-	//////alert("-------in editNews--Jsp---");
+	alert("-------in editNews--Jsp---");
 	$.ajax({
 		url : "emp/newsService/editNews",
 		success : function(data) {
 				$.each(
 						data.EditNews,
 						function(key, val) {
-							////alert("-------in editNews--Jsp---newsTitle=="+data.EditNews[key].newsTitle);
+							alert("-------in editNews--Jsp---newsTitle=="+data.EditNews[key].newsTitle);
 						$('#newsId').val(data.EditNews[key].newsId);	
 						$('#newsEditTitle').val(data.EditNews[key].newsTitle);
 					 	$('#newsEditDate').val(data.EditNews[key].date);
@@ -62,6 +86,7 @@ function newsUpdate(){
 	var link = $("#newsEditLink").val();
 	var moreInfo = $("#newsEditMoreInfo").val();
 
+	alert("in to newsEditPage");
 	
 	var newsObject = new Object();
 	newsObject.newsId = newsId;
@@ -76,6 +101,9 @@ $
 		url : "emp/newsService/newsUpdate",
 		success : function(data) {
 			if (data.Msg = "success") {
+				alert("in to newsEdit");
+				window.location.href = "newsList.jsp";
+				alert("a4...........newsEdit");
 			}
 		}
 	});
@@ -106,40 +134,38 @@ $
 			<div class="from">
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="event_name">Name Title</label> <input type="text"
-							class="form-control" id="newsEditTitle" name="newsEditTitle">
-						<input type="hidden" class="form-control" id="newsId"
-							name="newsId">
+						<label for="event_name">Name Title</label> 
+						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle">
+						<input type="hidden" class="form-control" id="newsId" name="newsId">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="time_from">Date</label>
 						<div class='input-group date' id='datetimepicker8'>
-							<input type='text' class="form-control" id="newsEditDate"
-								name="newsEditDate" /> <span class="input-group-addon"> <span
-								class="glyphicon glyphicon-calendar"></span>
+							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" /> 
+							<span class="input-group-addon">
+							 <span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark"> Paper</label> <input type="text"
-							class="form-control" id="newsEditPaper" name="newsEditPaper">
+						<label for="land_mark"> Paper</label> 
+						<input type="text" class="form-control" id="newsEditPaper" name="newsEditPaper">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Link/Url</label> <input type="text"
-							class="form-control" id="newsEditLink" name="newsEditLink">
+						<label for="land_mark">Link/Url</label> 
+						<input type="text" class="form-control" id="newsEditLink" name="newsEditLink">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">More Info</label>
-						<textarea class="form-control" rows="5" id="newsEditMoreInfo"
-							name="newsEditMoreInfo"></textarea>
+						<textarea class="form-control" rows="5" id="newsEditMoreInfo" name="newsEditMoreInfo"></textarea>
 					</div>
 				</div>
 				<!-------------------------Upload Photo--------------------------------------->
@@ -151,10 +177,13 @@ $
 							</div>
 						</div>
 						<div class="upload_img">
+						<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
 							<div class="form-group col-md-6">
-								<label for="Upload Photo">Upload Photo(s)</label> <input
-									id="file-0b" class="file form-control" type="file">
+								<label for="Upload Photo">Select Photo(s)</label> 
+								<input id="file"  name ="file" class="file form-control" type="file">
+								<a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
 							</div>
+						</form>
 						</div>
 					</div>
 				</div>
@@ -172,13 +201,10 @@ $
 				<!-------------------------submit button--------------------------------------->
 				<div class="col-md-10">
 					<div class="submit_button text-right">
-						<a href='newsList.jsp'><button
-								class="btn btn-success btn-sm text-right "
-								onclick="newsUpdate();">Submit</button></a>
-
+						<a href='#'><button class="btn btn-success btn-sm text-right " onclick="newsEditFarmValidation();">Submit</button></a>
 					</div>
 					<div class="message">
-						<h3>saved sucessfully</h3>
+						<h3><aside class=" " id="newsMessage" style="display: none">Save Sucessfully</aside></h3>
 					</div>
 				</div>
 

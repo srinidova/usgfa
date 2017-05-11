@@ -3,6 +3,7 @@ package com.dao;
 import java.util.ArrayList;
 
 import com.connection.IbatisFactory;
+import com.dto.EventFileDTO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.StoriesFileDTO;
@@ -24,5 +25,19 @@ public class StoriesFileDAO {
 		return result;
 	}
 
-	
+	public ArrayList<UploadFileDTO> getStoriesImages(StoriesFileDTO storiesFileDto) {
+		String result = "fail";
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			System.out.println("3. In StoriesDAO getStoriesImage---------- fileId===" + storiesFileDto.getStoriesId());
+			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getStoriesImages", storiesFileDto.getStoriesId());
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lstUploadFileDTO;
+	}
 }

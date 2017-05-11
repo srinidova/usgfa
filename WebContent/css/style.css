@@ -1695,7 +1695,8 @@ li {
 }
 .message {
 	text-align: right;
-	float: right;margin-top:1.2em;
+	float: right;
+	margin-top: -75px;
 }
 .message h3 {
 	font-size: 18px;

@@ -2,10 +2,12 @@ package com.bo;
 
 import java.util.ArrayList;
 
+import com.dao.EventDAO;
 import com.dao.NewsDAO;
 import com.dao.StoriesDAO;
 import com.dto.NewsDTO;
 import com.dto.StoriesDTO;
+import com.dto.UploadFileDTO;
 
 public class StoriesBO {
 
@@ -38,4 +40,10 @@ public class StoriesBO {
 		StoriesDAO  dao = new StoriesDAO();
 		return dao.storiesUpdate(storiesDto);
 	}
+public String getStoriesImage(UploadFileDTO uploadFileDto){
+		
+		StoriesDAO dao = new StoriesDAO();
+		return dao.getStoriesImage(uploadFileDto);
+        //return dao.getEventImage(uploadFileDto);
+}
 }

@@ -24,6 +24,18 @@
         
         
          <head>
+         <style>
+.your-class::-webkit-input-placeholder {
+	color: red;
+}
+
+.default-class::-webkit-input-placeholder {
+	color: red;
+	
+	
+}
+
+</style>
 <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/jquery-ui.css">
 <link rel="stylesheet" href="css/jquery-ui.min.css">
@@ -34,7 +46,39 @@
 <script type="text/javascript" src="js/chosen.jquery.js"></script>
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="js/vendor-date.js"></script>
+<script type="text/javascript" src="js/scriptUtils.js"></script> 
 <script type="text/javascript">
+function programFarmValidation() {
+	//alert("==Entered==");
+	$("#programMessage").text("");
+	//alert("==1==");
+	var programName = document.getElementById("programName");
+	var duration = document.getElementById("duration");
+	var dateAndTimeFrom = document.getElementById("dateAndTimeFrom");
+	var dateAndTimeTo = document.getElementById("dateAndTimeTo");
+	var channel = document.getElementById("channel");
+	var guest = document.getElementById("guest");
+	var youtube = document.getElementById("youtube");
+	var moreInfo = document.getElementById("moreInfo");
+	//alert("==2==");
+	if (emptyCheck(programName, "Program Name", "programMessage")
+			&& minLenCheck(programName, 5, "Program Name", "programMessage")
+			&& maxLenCheck(programName, 10, "Program Name", "programMessage")
+			&& allLetter(programName, "Program Name", "programMessage")
+			&& emptyCheck(duration, "Duration", "programMessage")
+			&& emptyCheck(dateAndTimeFrom, "Date & TimeFrom", "programMessage")
+			&& emptyCheck(dateAndTimeTo, "Date & Time To", "programMessage")
+			&& emptyCheck(channel, "Channel", "programMessage")
+			&& emptyCheck(guest, "Guest", "programMessage")
+			&& emptyCheck(youtube, "Youtube", "programMessage")
+			&& emptyCheck(moreInfo, "More Info", "programMessage")
+			) {
+
+		saveProgram();
+	}
+
+}
+
 function saveProgram(){
 	//alert(" in to js page----------------");
 	var programName = $("#programName").val();
@@ -66,12 +110,23 @@ function saveProgram(){
 		success : function(data) {
 			if (data.Msg = "success") {
 				//alert("b4...........");
+				window.location.href = "programList.jsp";
+				//alert("a4...........");
+			}
+		}
+	});
+	$
+	.ajax({
+		data : uploadFile,
+		url : "emp/programService/getProgramImages",
+		success : function(data) {
+			if (data.Msg = "success") {
+				//alert("b4...........");
 				//window.location.href = "newsList.jsp";
 				//alert("a4...........");
 			}
 		}
 	});
-	
 }
 </script>
 </head>
@@ -82,7 +137,7 @@ function saveProgram(){
   <div class="container" >
     <div class="row">
       <div class="aboutus">
-        <h2>Program Form</h2>
+        <h2>Program New</h2>
         <div class="line3"></div>
       </div>
     </div>
@@ -98,19 +153,19 @@ function saveProgram(){
 <div class="from">
       <div class="col-md-5">
         <div class="form-group">
-          <label for="program_name">Program Name</label>
+          <label for="program_name">Program Name *</label>
           <input type="text" class="form-control" id="programName" name="programName">
         </div>
       </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="duration"> Duration</label>
+            <label for="duration">Duration *</label>
             <input type="text" class="form-control" id="duration"  name="duration">
           </div>
         </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="date & TimeFrom">Date & TimeFrom </label>
+            <label for="date & TimeFrom">Date & TimeFrom *</label>
             <div class='input-group date' id='datetimepicker8'>
               <input type='text' class="form-control"  id="dateAndTimeFrom" name="dateAndTimeFrom"/>
               <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
@@ -118,7 +173,7 @@ function saveProgram(){
         </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="date&Time To">Date & Time To </label>
+            <label for="date&Time To">Date & Time To *</label>
             <div class='input-group date' id='datetimepicker8'>
               <input type='text' class="form-control"  id="dateAndTimeTo" name ="dateAndTimeTo"/>
               <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
@@ -126,13 +181,13 @@ function saveProgram(){
         </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="channel"> Channel</label>
+            <label for="channel">Channel</label>
             <input type="text" class="form-control" id="channel"  name="channel">
           </div>
         </div>
 		        <div class="col-md-5">
           <div class="form-group">
-            <label for="guest"> Guest</label>
+            <label for="guest">Guest</label>
             <input type="text" class="form-control" id="guest"  name="guest">
           </div>
         </div>
@@ -181,12 +236,13 @@ function saveProgram(){
       <!-------------------------submit button--------------------------------------->
       <div class="col-md-10">
         <div class="submit_button text-right">
-          <a href='programList.jsp'><button class="btn btn-success btn-sm text-right " onclick="saveProgram();">Submit</button></a>
+          <a href='#'><button class="btn btn-success btn-sm text-right " onclick="programFarmValidation();">Submit</button></a>
           
         </div>
         <div class="message">
-            <h3>saved sucessfully</h3>
+            <h3><aside class=" " id="programMessage" style="display: none">Save Sucessfully</aside></h3>
           </div>
+          <h4>* These fields are required</h4>
       </div>
       
       <!-------------------------submit button end--------------------------------------->

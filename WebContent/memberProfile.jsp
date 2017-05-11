@@ -35,6 +35,7 @@
 	$(document)
 			.ready(
 					function() {
+						var html =' ';
 						//alert("-------in Member Profile--Jsp---");
 						$
 								.ajax({
@@ -78,6 +79,36 @@
 												$('#memberFarmProfAboutFarm').text(data.MemberFarmProfile[key].aboutFarm);
 												
 										})
+										$.each(
+												data.MEMBERFILES,
+												function(key, val) {
+													alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
+													html = html
+													+'<li>'
+													+'<div class="fff">'
+														+'<div class="photo">'
+															+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a>'
+														+'</div>'
+														+'<div class="img_tiltle" style="margin-top: 7px;">'
+															+'<h2>Image 1</h2>'
+														+'</div>'
+														+'<div class="caption" style="margin-top: 0px;">'
+															+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
+																+'<div class="suceee_msg">'
+																	+'<h4>Updated successfully</h4>'
+																+'</div>'
+															+'</div>'
+															+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																+'<div class="suceee_msg">'
+																	+'<h4>Delete Message</h4>'
+																+'</div>'
+															+'</div>'
+														+'</div>'
+													+'</div>'
+													+'</li>'
+
+												})
+												$(html).appendTo("#eventImages");
 									}
 								});
 					});
@@ -244,7 +275,7 @@
                   <div class="carousel-inner">
                     <div class="item active">
                       <ul style="padding-left:0px;">
-                        <li>
+                       <!--  <li>
                           <div class="fff">
                             <div class="photo"> <a class="g-image" href="#" data-image-id="1" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a> </div>
                             <div class="img_tiltle" style="margin-top: 7px;">
@@ -266,7 +297,7 @@
                               </div>
                             </div>
                           </div>
-                        </li>
+                        </li> -->
                       </ul>
                     </div>
                     <div class="item ">

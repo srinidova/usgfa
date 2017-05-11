@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import com.dao.EmployeeDAO;
 import com.dao.EventDAO;
+import com.dao.MemberDAO;
 import com.dao.NewsDAO;
 import com.dao.StoriesDAO;
 import com.dto.EmployeeDTO;
 import com.dto.EventDTO;
 import com.dto.NewsDTO;
 import com.dto.StoriesDTO;
+import com.dto.UploadFileDTO;
 
 public class EventBO {
 
@@ -51,4 +53,9 @@ public class EventBO {
 		/*NewsDAO dao = new NewsDAO();
 		return dao.deleteNews(newsDto);*/
 	}
+public String getEventImage(UploadFileDTO uploadFileDto){
+		
+		EventDAO dao = new EventDAO();
+        return dao.getEventImage(uploadFileDto);
+}
 }

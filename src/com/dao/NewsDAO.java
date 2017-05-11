@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.connection.IbatisFactory;
 import com.dto.NewsDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class NewsDAO {
@@ -84,4 +85,5 @@ public class NewsDAO {
 		}
 		return result;
 	}
+	
 }

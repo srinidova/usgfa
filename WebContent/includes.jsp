@@ -17,4 +17,5 @@
     <script src="js/vendor-datepicker.js" type="text/javascript"></script>
     <script src="js/vendor-readmore.js" type="text/javascript"></script>
     <script src="js/main.js" type="text/javascript"></script> 
+    <script type="text/javascript" src="js/scriptUtils.js"></script>
     <!----------------------menus script------------------------------>
