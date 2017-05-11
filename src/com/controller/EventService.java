@@ -2,6 +2,7 @@ package com.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +68,7 @@ public class EventService {
 		String resultFile = "fail";
 		String resultGuest = "fail";
 		String resultEventGuest = "fail";
+
 
 		//System.out.println("1.a In addEvent---------- eventName===" + eventName);
 		//System.out.println("1.b In addEvent---------- timeFrom===" + timeFrom);

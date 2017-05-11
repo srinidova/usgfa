@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="../css/chosen.min.css">
-<link rel="stylesheet" href="../css/jquery-ui.css">
-<link rel="stylesheet" href="../css/jquery-ui.min.css">
-<script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="../js/jquery-ui.js" type="text/javascript"></script>
-<script src="../js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="../js/chosen.jquery.js"></script>
-<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+<link rel="stylesheet" href="css/chosen.min.css">
+<link rel="stylesheet" href="css/jquery-ui.css">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
+
+<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
 
 <meta charset="UTF-8">
 <title>USGFA</title>

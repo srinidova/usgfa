@@ -2,20 +2,36 @@
         <meta charset="utf-8">
         <title>USGFA</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-         <link href="css/fileinput.css" rel="stylesheet" type="text/css">
-        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="css/style.css" rel="stylesheet" type="text/css">
+                
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	
+        <link rel="stylesheet" href="css/chosen.min.css">
+		<link rel="stylesheet" href="css/jquery-ui.css">
+		<link rel="stylesheet" href="css/jquery-ui.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/fileinput.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
     </head>
+    
     <!----------------------menus script------------------------------> 
-     <script src="js/bootstrap.min.js" type="text/javascript"></script> 
-      <script src="js/fileinput.js" type="text/javascript"></script> 
-    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script> 
-    <script src="js/popup.js" type="text/javascript"></script> 
-    <script src="js/vendor-date.js" type="text/javascript"></script>
-    <script src="js/vendor-datepicker.js" type="text/javascript"></script>
-    <script src="js/vendor-readmore.js" type="text/javascript"></script>
-    <script src="js/main.js" type="text/javascript"></script> 
+    
+      
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script> 
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/chosen.jquery.js"></script>
+	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script> 
+    <script type="text/javascript" src="js/vendor-datepicker.js"></script>
+    <script type="text/javascript" src="js/vendor-readmore.js"></script>
+    <script type="text/javascript" src="js/main.js"></script> 
     <script type="text/javascript" src="js/scriptUtils.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/fileinput.js"></script>
+    <script type="text/javascript" src="js/vendor-date.js"></script> 
+    
+    
+    
+
     <!----------------------menus script------------------------------>
