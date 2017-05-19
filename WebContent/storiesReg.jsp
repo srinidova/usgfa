@@ -2,40 +2,6 @@
 <html>
 <body>
 <head>
-<!-- <script type="text/javascript" src="js/successStories.js"></script> -->
-</head>
-    <!----------------------top_header start-------------------------------->
-    <jsp:include page="includes.jsp"/> 
-    <!----------------------top_header end----------------------------------> 
-    <body>
-        <!----------------------top_header start---------------------------->
-        <jsp:include page="topheader.jsp"/> 
-        <!----------------------top_header end------------------------------> 
-
-        <!----------------------header  start------------------------------->
-        <jsp:include page="header.jsp"/> 
-        <!----------------------header end----------------------------------> 
-
-        <!----------------------menus start--------------------------------->
-        <jsp:include page="menu.jsp"/> 
-        <!----------------------menus end-----------------------------------> 
-
-        <!----------------------banner start-------------------------------->
-        <%-- <jsp:include page="banner.jsp"/>  --%>
-        <!----------------------banner end----------------------------------> 
-        
-        
-        <head>
-        <link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 function storiesFarmValidation() {
 	//alert("==Entered==");
@@ -53,19 +19,35 @@ function storiesFarmValidation() {
 	//alert("==2==");
 	if (emptyCheck(name, "Name", "storiesMessage")
 			&& minLenCheck(name, 5, "Name", "storiesMessage")
-			&& maxLenCheck(name, 10, "Name", "storiesMessage")
+			&& maxLenCheck(name, 30, "Name", "storiesMessage")
 			&& allLetter(name, "Name", "storiesMessage")
 			&& emptyCheck(profession, "Profession", "storiesMessage")
 			&& emptyCheck(farmName, "Farm Name", "storiesMessage")
+			&& allLetter(farmName, "Farm Name", "storiesMessage")
+			&& minLenCheck(farmName, 5, "Farm Name", "storiesMessage")
+			&& maxLenCheck(farmName, 30, "Farm Name", "storiesMessage")
 			&& emptyCheck(farmAddress, "Farm Address", "storiesMessage")
+			&& minLenCheck(farmAddress, 5, "Farm Address", "storiesMessage")
+			&& maxLenCheck(farmAddress, 30, "Farm Address", "storiesMessage")
 			&& emptyCheck(place, "Farm Place/City", "storiesMessage")
+			&& allLetter(place, "Farm Place/City", "storiesMessage")
+			&& minLenCheck(place, 5, "Farm Place/City", "storiesMessage")
+			&& maxLenCheck(place, 30, "Farm Place/City", "storiesMessage")
 			&& emptyCheck(mandal, "Mandal", "storiesMessage")
+			&& allLetter(mandal, "Mandal", "storiesMessage")
+			&& minLenCheck(mandal, 5, "Mandal", "storiesMessage")
+			&& maxLenCheck(mandal, 30, "Mandal", "storiesMessage")
 			&& emptyCheck(district, "District", "storiesMessage")
+			&& allLetter(district, "District", "storiesMessage")
+			&& minLenCheck(district, 5, "District", "storiesMessage")
+			&& maxLenCheck(district, 30, "District", "storiesMessage")
 			&& emptyCheck(farmPinCode, "Farm Pin Code", "storiesMessage")
 			&& allNumber(farmPinCode, "Farm Pin Code", "storiesMessage")
 			&& minLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
 			&& maxLenCheck(farmPinCode, 6, "Farm Pin Code", "storiesMessage")
 			&& emptyCheck(aboutFarm, "About You/Farm", "storiesMessage")
+			&& minLenCheck(aboutFarm, 5, "About You/Farm", "storiesMessage")
+			&& maxLenCheck(aboutFarm, 250, "About You/Farm", "storiesMessage")
 			) {
 
 		saveStories();
@@ -133,6 +115,31 @@ function storiesFarmValidation() {
         
 </script>
 </head>
+    <!----------------------top_header start-------------------------------->
+    <jsp:include page="includes.jsp"/> 
+    <!----------------------top_header end----------------------------------> 
+    <body>
+        <!----------------------top_header start---------------------------->
+        <jsp:include page="topheader.jsp"/> 
+        <!----------------------top_header end------------------------------> 
+
+        <!----------------------header  start------------------------------->
+        <jsp:include page="header.jsp"/> 
+        <!----------------------header end----------------------------------> 
+
+        <!----------------------menus start--------------------------------->
+        <jsp:include page="menu.jsp"/> 
+        <!----------------------menus end-----------------------------------> 
+
+        <!----------------------banner start-------------------------------->
+        <%-- <jsp:include page="banner.jsp"/>  --%>
+        <!----------------------banner end----------------------------------> 
+        
+        
+        <head>
+       
+
+</head>
         
 	<!----------------------body_content start-------------------------->
 	
@@ -155,6 +162,9 @@ function storiesFarmValidation() {
 <div class="col-md-12">
 
 <div class="from">
+		<div class="form-group">
+			<label for="event_name"><h4>* These fields are required</h4></label>
+		</div>
       <div class="col-md-5">
         <div class="form-group">
           <label for="title">Title</label>
@@ -223,7 +233,7 @@ function storiesFarmValidation() {
       </div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="farm_pin_code">Farm Pin Code *</label>
+          <label for="farm_pin_code">Farm Pin Code</label>
           <input type="text" class="form-control" id="farmPinCode" name="farmPinCode">
         </div>
       </div>
@@ -272,7 +282,6 @@ function storiesFarmValidation() {
         <div class="message">
             <h3><aside class=" " id="storiesMessage" style="display: none">Save Sucessfully</aside></h3>
           </div>
-          <h4>* These fields are required</h4>
       </div>
       
       <!-------------------------submit button end--------------------------------------->

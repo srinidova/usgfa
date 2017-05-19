@@ -20,17 +20,32 @@
 	<!----------------------banner start-------------------------------->
 	<%-- <jsp:include page="banner.jsp" /> --%>
 	<!----------------------banner end---------------------------------->
+	
+	                 <style>
+        
+        #newsListData{
+    width: 100%;
+    float: left;
+    margin: auto;
+    display: inline-table;
+}
+
+
+  
+    tr td.e_mn{width:330px;}
+    tr td.e_mn_1{width:150px;}
+     tr td.e_mn_2{width:150px;}
+      tr td.e_mn_3{width:280px;}
+    
+
+td ul.actions li {
+    /* display: inline-block; */
+    display: block;
+}
+
+        </style>
 <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	//alert("-------1-----");
@@ -39,7 +54,7 @@ $(document).ready(function() {
 
 function getNewsDetails() {
 	//alert("-------2-----");
-	var html = '';
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/newsService/getNewsDetails",
 				success : function(data) {
@@ -50,11 +65,11 @@ function getNewsDetails() {
 								
 									html = html
 									     + '<tr>'
-										     + '<td style="width: 360px;">'+data.NewsDetails[key].newsTitle+'</td>'
-										     +  '<td style="width: 160px;">'+data.NewsDetails[key].date+'</td>'
-											 +  '<td style="width: 160px;">'+data.NewsDetails[key].paper+'</td>'
-											 +  '<td>'+data.NewsDetails[key].link+'</td>'
-											 +  '<td style ="width:50px;">'
+										     + '<td class="e_mn">'+data.NewsDetails[key].newsTitle+'</td>'
+										     +  '<td class="e_mn_1">'+data.NewsDetails[key].date+'</td>'
+											 +  '<td class="e_mn_2">'+data.NewsDetails[key].paper+'</td>'
+											 +  '<td class="e_mn_3">'+data.NewsDetails[key].link+'</td>'
+											 +  '<td class="e_mn_">'
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
 											 			+ '<a href="newsProfile.jsp"> '
@@ -83,6 +98,7 @@ function getNewsDetails() {
 							}
 					)
 					$(html).appendTo("#newsListData");
+					$(html).appendTo("</table></div></div>");
 				}
 					
 	});
@@ -159,7 +175,7 @@ function editNews(newsId){
 					<div class="row">
 
 						<div class="col-md-10">
-							<div class="table-responsive">
+							<div class="">
 								<table class="table  table-bordered">
 									<tr>
 										<th>Name Title</th>
@@ -218,12 +234,12 @@ function editNews(newsId){
 								<div class="member_list">
 									<div class="row">
 
-										<div class="col-md-10">
-											<div class="table-responsive">
+										<div class="col-md-12">
+											
 												<table class="table  table-bordered">
 													<div id="newsListData"></div>
 												</table>
-											</div>
+											
 										</div>
 									</div>
 								</div>

@@ -1,46 +1,6 @@
 <!doctype html>
 <html>
-<body>
-	<!----------------------top_header start-------------------------------->
-	<jsp:include page="includes.jsp" />
-	<!----------------------top_header end---------------------------------->
-<body>
-	<!----------------------top_header start---------------------------->
-	<jsp:include page="topheader.jsp" />
-	<!----------------------top_header end------------------------------>
-
-	<!----------------------header  start------------------------------->
-	<jsp:include page="header.jsp" />
-	<!----------------------header end---------------------------------->
-
-	<!----------------------menus start--------------------------------->
-	<jsp:include page="menu.jsp" />
-	<!----------------------menus end----------------------------------->
-
-	<!----------------------banner start-------------------------------->
-	<%-- <jsp:include page="banner.jsp" /> --%>
-	<!----------------------banner end---------------------------------->
 <head>
-<style>
-.your-class::-webkit-input-placeholder {
-	color: red;
-}
-
-.default-class::-webkit-input-placeholder {
-	color: red;
-}
-</style>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script type="text/javascript" src="js/news.js"></script> -->
 <script type="text/javascript">
 	function newsFarmValidation() {
 		//alert("==Entered==");
@@ -53,13 +13,20 @@
 		var moreInfo = document.getElementById("moreInfo");
 		//alert("==2==");
 		if (emptyCheck(newsTitle, "Name Title", "newsMessage")
-				&& minLenCheck(newsTitle, 5, "Name Title", "newsMessage")
-				&& maxLenCheck(newsTitle, 10, "Name Title", "newsMessage")
+				&& minLenCheck(newsTitle, 5, "newsTitle", "newsMessage")
+				&& maxLenCheck(newsTitle, 30, "Name Title", "newsMessage")
 				&& allLetter(newsTitle, "Name Title", "newsMessage")
 				&& emptyCheck(date, "Date", "newsMessage")
-				&& twoFieldsCheck(paper, link, "Paper or Link/Url",
-						"newsMessage")
-				&& (emptyCheck(moreInfo, "More Info", "newsMessage"))) {
+				&& minLenCheck(date, 5, "newsTitle", "newsMessage")
+				&& maxLenCheck(date, 30, "Name Title", "newsMessage")
+				&& twoFieldsCheck(paper, link, "Paper or Link/Url","newsMessage")
+			   /*  && minLenCheck(paper, 5, "Paper", "newsMessage")
+				&& maxLenCheck(paper, 30, "Paper", "newsMessage")
+				&& minLenCheck(link, 5, "Link/Url", "newsMessage")
+				&& maxLenCheck(link, 30, "Link/Url", "newsMessage") */
+				&& (emptyCheck(moreInfo, "More Info", "newsMessage")
+				&& minLenCheck(moreInfo, 5, "More Info", "newsMessage")
+				&& maxLenCheck(moreInfo, 30, "More Info", "newsMessage"))) {
 
 			newsSave();
 		}
@@ -90,7 +57,7 @@
 				if (data.Msg = "success") {
 					//window.location.href = "newsList.jsp";
 					window.location.href = "newsList.jsp";
-					alert("in to newsSave");
+					//alert("in to newsSave");
 				}
 			}
 		});
@@ -106,6 +73,38 @@
 
 	}
 </script>
+</head>
+<body>
+	<!----------------------top_header start-------------------------------->
+	<jsp:include page="includes.jsp" />
+	<!----------------------top_header end---------------------------------->
+<body>
+	<!----------------------top_header start---------------------------->
+	<jsp:include page="topheader.jsp" />
+	<!----------------------top_header end------------------------------>
+
+	<!----------------------header  start------------------------------->
+	<jsp:include page="header.jsp" />
+	<!----------------------header end---------------------------------->
+
+	<!----------------------menus start--------------------------------->
+	<jsp:include page="menu.jsp" />
+	<!----------------------menus end----------------------------------->
+
+	<!----------------------banner start-------------------------------->
+	<%-- <jsp:include page="banner.jsp" /> --%>
+	<!----------------------banner end---------------------------------->
+<head>
+<style>
+.your-class::-webkit-input-placeholder {
+	color: red;
+}
+
+.default-class::-webkit-input-placeholder {
+	color: red;
+}
+</style>
+
 </head>
 <!----------------------body_content start-------------------------->
 
@@ -128,16 +127,20 @@
 		<div class="col-md-12">
 
 			<div class="from">
+				<div class="form-group">
+					<label for="event_name"><h4>* These fields are required</h4></label>
+				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="event_name">Name Title *</label> <input type="text"
-							class="form-control" id="newsTitle" name="newsTitle" tabindex="1">
+							class="form-control" id="newsTitle" name="newsTitle" tabindex="1"  required data-error="">
+                      <div class="help-block with-errors"></div>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="time_from">Date *</label>
-						<div class='input-group date' id=''>
+						<div class='input-group date' id="newsDate">
 							<input type='text' class="form-control" id="date" name="date"
 								tabindex="2" /> <span class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
@@ -212,7 +215,6 @@
 							</aside>
 						</h3>
 					</div>
-					<h4>* These fields are required</h4>
 					<!-- <div class="col-md-12"> <br>
                     <small class="text-muted " style="text-align:right; float:right;"><strong>*</strong> These fields are required.</small> </div> -->
 				</div>
@@ -231,6 +233,30 @@
 <!----------------------footer start ------------------------------->
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
+<script type="text/javascript">
+    $(function () {
+	
+        $('#newsDate').datetimepicker({
+			 useCurrent: false,
+        	 format: 'DD/MM/YYYY'
+			});
+
+		$('.cross_icon').click(function(){
+			alert('asdfasdf')
+			$(this).parent().remove()
+			});
+    });
+	
+	function addItem(e){
+		var html = $('.addOne').html();
+		$('#content_block').append(html);
+		//$(e).append(html);
+		
+		
+				
+	}
+	
+</script> 
 </body>
 </html>
 <jsp:include page="login.jsp" />

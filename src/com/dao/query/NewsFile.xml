@@ -7,5 +7,7 @@
 		newsfile(newsId,fileId)
 		values(#newsId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteNewsFile" parameterClass="com.dto.NewsFileDTO">
+		delete from newsfile  where newsId = #newsId# and  fileId = #fileId#
+	</delete>
 </sqlMap>

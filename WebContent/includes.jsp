@@ -17,21 +17,20 @@
     
       
     <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script> 
-	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/chosen.jquery.js"></script>
 	<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/popup.js"></script> 
     <script type="text/javascript" src="js/vendor-datepicker.js"></script>
-    <script type="text/javascript" src="js/vendor-readmore.js"></script>
-    <script type="text/javascript" src="js/main.js"></script> 
-    <script type="text/javascript" src="js/scriptUtils.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/fileinput.js"></script>
     <script type="text/javascript" src="js/vendor-date.js"></script> 
-    
-    
+    <script type="text/javascript" src="js/vendor-readmore.js"></script>
+    <script type="text/javascript" src="js/validator.min.js"></script>
+    <script type="text/javascript" src="js/fileinput.js"></script>
+    <script type="text/javascript" src="js/scriptUtils.js"></script>
+    <script type="text/javascript" src="js/main.js"></script> 
+
     
 
     <!----------------------menus script------------------------------>

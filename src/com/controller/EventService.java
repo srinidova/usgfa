@@ -352,7 +352,7 @@ public class EventService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteEvent")
 	public JSONObject deleteEvent(@QueryParam("eventId") String eventId) {
-		//System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
+		System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
 		JSONObject jobj1 = new JSONObject();
 		EventBO bo =new EventBO();
 		EventDTO dto = new EventDTO();

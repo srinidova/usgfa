@@ -15,4 +15,20 @@ public class UploadFileBO {
 		return dao.addUploadFileDetails(uploadFileDto);
 	}
 	
+	public String deleteImage(String fileId) {
+		System.out.println("2. In deleteUpload---------- fileId===" +fileId);
+		UploadFileDAO dao = new UploadFileDAO();
+		return dao.deleteImage(fileId);
+	}
+/*	public ArrayList<UploadFileDTO> getImageDetailsById(UploadFileDTO uploadFileDto) {
+		System.out.println("2. In getImageDetailsById---------- getImageDetailsById===" + uploadFileDto.getFileId());
+		UploadFileDAO dao = new UploadFileDAO();
+		return dao.getImageDetailsById(uploadFileDto);
+	}*/
+	
+	public String updateShowAsPublic(UploadFileDTO uploadFileDTO) {
+		System.out.println("2. In UploadFileBO---------- updateShowAsPublic===");
+		UploadFileDAO dao = new UploadFileDAO();
+		return dao.updateShowAsPublic(uploadFileDTO);
+	}
 }

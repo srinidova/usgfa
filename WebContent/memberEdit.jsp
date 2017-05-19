@@ -25,16 +25,7 @@
 	<!----------------------banner end---------------------------------->
 	
 	  <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 
 function memberEditFarmValidation() {
@@ -61,30 +52,60 @@ function memberEditFarmValidation() {
 	//alert("==2==");
 	if (emptyCheck(firstName, "First Name", "memberMessage")
 			&& minLenCheck(firstName, 5, "First Name", "memberMessage")
-			&& maxLenCheck(firstName, 10, "First Name", "memberMessage")
+			&& maxLenCheck(firstName, 30, "First Name", "memberMessage")
 			&& allLetter(firstName, "First Name", "memberMessage")
 			&& emptyCheck(middleName, "Middle Name", "memberMessage")
+			&& allLetter(middleName, "Middle Name", "memberMessage")
 			&& emptyCheck(lastName, "Surname/Last Name", "memberMessage")
+			&& allLetter(lastName, "Surname/Last Name", "memberMessage")
 			&& emptyCheck(mobile, "Mobile/Contact No ", "memberMessage")
 			&& allNumber(mobile, "Mobile/Contact No ", "memberMessage")
 			&& minLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
 			&& maxLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
 			/* && allNumber(email, "Email", "memberMessage") */
 			&& emptyCheck(email, "Email ", "memberMessage")
+			&& eMail(email, "Email ", "memberMessage")
 			&& emptyCheck(address, "Address", "memberMessage")
+			&& minLenCheck(address, 5, "Address", "memberMessage")
+			&& maxLenCheck(address, 30, "Address", "memberMessage")
 			&& emptyCheck(place, "Place/City", "memberMessage")
+			&& allLetter(place, "Place/City", "memberMessage")
+			&& minLenCheck(place, 5, "Place/City", "memberMessage")
+			&& maxLenCheck(place, 30, "Place/City", "memberMessage")
 			&& emptyCheck(mandal, "Mandal", "memberMessage")
+			&& allLetter(mandal, "Mandal", "memberMessage")
+			&& minLenCheck(mandal, 5, "Mandal", "memberMessage")
+			&& maxLenCheck(mandal, 30, "Mandal", "memberMessage")
 			&& emptyCheck(district, "District", "memberMessage")
+			&& allLetter(district, "District", "memberMessage")
+			&& minLenCheck(district, 5, "District", "memberMessage")
+			&& maxLenCheck(district, 30, "District", "memberMessage")
 			&& emptyCheck(pincode, "Pin Code", "memberMessage")
 			&& allNumber(pincode, "Pin Code", "memberMessage")
 			&& minLenCheck(pincode, 6, "Pin Code", "memberMessage")
 			&& maxLenCheck(pincode, 6, "Pin Code", "memberMessage")
 			&& emptyCheck(farmName, "Farm Name", "memberMessage")
+			&& allLetter(farmName, "Farm Name", "memberMessage")
+			&& minLenCheck(farmName, 5, "Farm Name", "memberMessage")
+			&& maxLenCheck(farmName, 30, "Farm Name", "memberMessage")
 			&& emptyCheck(farmPlace, "Farm Place/City", "memberMessage")
+			&& allLetter(farmPlace, "Farm Place/City", "memberMessage")
+			&& minLenCheck(farmPlace, 5, "Farm Place/City", "memberMessage")
+			&& maxLenCheck(farmPlace, 30, "Farm Place/City", "memberMessage")
 			&& emptyCheck(farmAddress, "Farm Address", "memberMessage")
+			&& minLenCheck(farmAddress, 5, "Farm Address", "memberMessage")
+			&& maxLenCheck(farmAddress, 30, "Farm Address", "memberMessage")
 			&& emptyCheck(farmMandal, "Mandal", "memberMessage")
+			&& allLetter(farmMandal, "Mandal", "memberMessage")
+			&& minLenCheck(farmMandal, 5, "Mandal", "memberMessage")
+			&& maxLenCheck(farmMandal, 30, "Mandal", "memberMessage")
 			&& emptyCheck(farmDistrict, "District", "memberMessage")
+			&& allLetter(farmDistrict, "District", "memberMessage")
+			&& minLenCheck(farmDistrict, 5, "District", "memberMessage")
+			&& maxLenCheck(farmDistrict, 30, "District", "memberMessage")
 			&& emptyCheck(aboutFarm, "About You/Farm", "memberMessage")
+			&& minLenCheck(aboutFarm, 5, "About You/Farm", "memberMessage")
+			&& maxLenCheck(aboutFarm, 30, "About You/Farm", "memberMessage")
 			&& emptyCheck(farmPincode, "Farm Pin Code", "memberMessage")
 			&& allNumber(farmPincode, "Farm Pin Code", "memberMessage")
 			&& minLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
@@ -204,14 +225,14 @@ function memberUpdate1(){
 	 ////alert("--------farmName----------"+memberObject.farmName);
 	 
 	
-	alert("in to farm update")
+	//alert("in to farm update")
 $
 	.ajax({
 		data : memberObject,
 		url : "emp/memberService/memberUpdate",
 		success : function(data) {
 			if (data.Msg = "success") {
-				alert("...........b4............");
+				//alert("...........b4............");
 				
 				
 				window.location.href = "memberList.jsp";
@@ -288,6 +309,9 @@ $
 			<div class="col-md-12">
 				<div class="member_registration">
 					<h2>Personal Info</h2>
+				</div>
+				<div class="form-group">
+					<label for="event_name"><h4>* These fields are required</h4></label>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
@@ -445,6 +469,9 @@ $
 
 			</div>
 			<div class="clearfix"></div>
+			
+			
+			
 
 			<!-------------------------Farm Info--------------------------------------->
 			<div class="farm_info">
@@ -508,7 +535,7 @@ $
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<div id="">
+	<div id="farmFields">
 		<div class="col-md-12">
 			<div class="member_registration">
 				<h2>Farm Info</h2>
@@ -672,14 +699,14 @@ $
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -712,14 +739,14 @@ $
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -772,14 +799,14 @@ $
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -812,14 +839,14 @@ $
 																as Public
 															</label>
 															<div class="suceee_msg">
-																<h4>Updated successfully</h4>
+																<!-- <h4>Updated successfully</h4> -->
 															</div>
 														</div>
 														<div class="delete_box">
 															<a href="#"><i class="fa fa-trash-o"
 																aria-hidden="true"></i> Delete</a>
 															<div class="suceee_msg">
-																<h4>Delete Message</h4>
+																<!-- <h4>Delete Message</h4> -->
 															</div>
 														</div>
 													</div>
@@ -864,6 +891,23 @@ $
 	<!----------------------footer start ------------------------------->
 	<jsp:include page="footer.jsp" />
 	<!----------------------footer end --------------------------------->
+		<script> 
+$(function(){
+	if($('[name="yesno"]:checked').val() == 'no'){
+		$('#moreFields').html('');
+	}
+	$(document).on('change','[name="yesno"]',function(){
+					var html = '';
+		if($(this).val() == 'yes' ){
+			html = $('#farmFields').html();			
+		}
+		$('#moreFields').html(html);
+	})
+	
+})
+
+
+</script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

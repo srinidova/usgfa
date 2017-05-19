@@ -7,6 +7,16 @@
 		uploadfile(fileId,filePath,showPublic,updatedBy,updatedOn)
 		values(#fileId#,#filePath#,#showPublic#,#updatedBy#,#updatedOn#)
 	</insert>
+	 <delete id="deleteImage" parameterClass="java.lang.String">
+		delete from uploadfile where fileId = #fileId#
+	</delete>
+	
+	<!-- <select id="getImageDetailsById" parameterClass="java.lang.String"
+		resultClass="com.dto.UploadFileDTO">
+		select
+		fileId,filePath,showPublic,updatedBy,updatedOn from
+		uploadfile where fileId = #value#
+	</select> -->
 	<select id="getNewsImages"  parameterClass="java.lang.String"
 	resultClass="com.dto.UploadFileDTO">
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from newsfile where newsId = #value#)
@@ -27,4 +37,12 @@
 	resultClass="com.dto.UploadFileDTO">
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from memberfile where memberId = #value#)
 	</select>
+	<select id="getUploadFleByNewsId"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from newsfile where newsId = #value#)
+	</select>
+	<update id="updateShowAsPublic" parameterClass="com.dto.UploadFileDTO">
+		update uploadfile set showPublic = #showPublic#  where fileId = #fileId#
+	</update>
+	
 </sqlMap>

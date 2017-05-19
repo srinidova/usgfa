@@ -24,16 +24,7 @@
         <%-- <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end----------------------------------> 
         <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 function eventEditFarmValidation() {
 	//alert("==Entered==");
@@ -53,21 +44,43 @@ function eventEditFarmValidation() {
 	//alert("==2==");
 	if (emptyCheck(eventName, "Event Name", "eventMessage")
 			&& minLenCheck(eventName, 5, "Event Name", "eventMessage")
-			&& maxLenCheck(eventName, 10, "Event Name", "eventMessage")
+			&& maxLenCheck(eventName, 30, "Event Name", "eventMessage")
 			&& allLetter(eventName, "Event Name", "eventMessage")
 			&& emptyCheck(noOfDays, "No.of days", "eventMessage")
+			&& allNumber(noOfDays, "No.of days", "eventMessage")
+			&& minLenCheck(noOfDays, 1, "No.of days", "eventMessage")
+			&& maxLenCheck(noOfDays, 3, "No.of days", "eventMessage")
 			&& emptyCheck(timeFrom, "Time From", "eventMessage")
+			&& minLenCheck(timeFrom, 5, "Time From", "eventMessage")
+			&& maxLenCheck(timeFrom, 30, "Time From", "eventMessage")
 			&& emptyCheck(timeEnd, "Time End", "eventMessage")
+			&& minLenCheck(timeEnd, 5, "Time End", "eventMessage")
+			&& maxLenCheck(timeEnd, 30, "Time End", "eventMessage")
 			&& emptyCheck(address, "Address", "eventMessage")
+			&& minLenCheck(address, 5, "Address", "eventMessage")
+			&& maxLenCheck(address, 250, "Address", "eventMessage")
 			&& emptyCheck(place, "Place/City", "eventMessage")
+			&& allLetter(place, "Place/City", "eventMessage")
+			&& minLenCheck(place, 5, "Place/City", "eventMessage")
+			&& maxLenCheck(place, 30, "Place/City", "eventMessage")
 			&& emptyCheck(mandal, "Mandal", "eventMessage")
+			&& allLetter(mandal, "Mandal", "eventMessage")
+			&& minLenCheck(mandal, 5, "Mandal", "eventMessage")
+			&& maxLenCheck(mandal, 30, "Mandal", "eventMessage")
 			&& emptyCheck(moreInfo, "More Info", "eventMessage")
+			&& minLenCheck(moreInfo, 5, "More Info", "eventMessage")
+			&& maxLenCheck(moreInfo, 30, "More Info", "eventMessage")
 			&& emptyCheck(district, "District", "eventMessage")
+			&& allLetter(district, "District", "eventMessage")
+			&& minLenCheck(district, 5, "District", "eventMessage")
+			&& maxLenCheck(district, 30, "District", "eventMessage")
 			&& emptyCheck(landMark, "Land Mark", "eventMessage")
+			&& minLenCheck(landMark, 5, "Land Mark", "eventMessage")
+			&& maxLenCheck(landMark, 30, "Land Mark", "eventMessage")
 			&& emptyCheck(pincode, "Pin Code", "eventMessage")
+			&& allNumber(pincode, "Pin Code", "eventMessage")
 			&& minLenCheck(pincode, 6, "Pin Code", "eventMessage")
 			&& maxLenCheck(pincode, 6, "Pin Code", "eventMessage")
-			&& allNumber(pincode, 6, "Pin Code", "eventMessage")
 			) {
 
 		eventUpdate();
@@ -95,8 +108,8 @@ $(document).ready(function() {
 						$('#eventEditDistrict').val(data.EditEvent[key].district);
 						$('#eventEditstate').val(data.EditEvent[key].state);
 						$('#eventEditLandMark').val(data.EditEvent[key].landMark);
-						$('#eventEditPincode').val(data.EditEvent[key].pincode);
-						alert("-------in editEvent--Jsp---pincode=="+data.EditEvent[key].pincode);
+						$('#eventEditPincode').val(data.EditEvent[key].pinCode);
+						//alert("-------in editEvent--Jsp---pincode=="+data.EditEvent[key].pincode);
 						$('#eventEditMoreInfo').val(data.EditEvent[key].moreInfo);
 						
 						
@@ -151,7 +164,7 @@ function eventUpdate(){
 	eventObject.landMark = landMark;
 	eventObject.pincode = pincode; 
 	//alert("eventId----------------"+eventId);
-	alert("pincode----------------"+pincode);
+	//alert("pincode----------------"+pincode);
 	 $
 	.ajax({
 		data : eventObject,
@@ -163,7 +176,7 @@ function eventUpdate(){
 				//alert("a4...........");
 			}
 			else{
-				alert('in to error');
+				//alert('in to error');
 			}
 		}
 	}); 
@@ -191,23 +204,26 @@ function eventUpdate(){
 				<div class="from">
 					<!-- <form name="myForm" method="post" id="contact-form"
 						class="form-horizontal" action="" onsubmit=""> -->
-						<div class="col-md-5">
+				<div class="form-group">
+					<label for="event_name"><h4>* These fields are required</h4></label>
+				</div>
+				<div class="col-md-5">
 							<div class="form-group">
-								<label for="event_name">Event Name</label> 
+								<label for="event_name">Event Name*</label> 
 								<input type="text" class="form-control" id="eventEditEventName" name="eventEditEventName">
 									 <input type="hidden" class="form-control" id="eventId"name="eventId"> 
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="no_of_days">No.of days</label> <input type="text"
+								<label for="no_of_days">No.of days *</label> <input type="text"
 									class="form-control" id="eventEditNoOfDays" name="eventEditNoOfDays">
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="time_from">Time From </label>
-								<div class='input-group date' id='TimeFrom'>
+								<label for="time_from">Date & Time From *</label>
+								<div class='input-group date' id="eventEditTimeFrom1">
 									<input type='text' class="form-control" id="eventEditTimeFrom"
 										name="timeFrom" /> <span class="input-group-addon">
 										<span class="glyphicon glyphicon-calendar"></span>
@@ -217,8 +233,8 @@ function eventUpdate(){
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="time_end">Time End </label>
-								<div class='input-group date' id='TimeEnd'>
+								<label for="time_end">Date & Time End *</label>
+								<div class='input-group date' id="eventEditTimeEnd1">
 									<input type='text' class="form-control" id="eventEditTimeEnd"
 										name="eventEditTimeEnd" /> <span class="input-group-addon">
 										<span class="glyphicon glyphicon-calendar"></span>
@@ -228,21 +244,21 @@ function eventUpdate(){
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="event_address">Address</label>
+								<label for="event_address">Address *</label>
 								<textarea class="form-control" rows="5" id="eventEditAddress"
 									name="eventEditAddress"></textarea>
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="land_mark"> Place/City</label> <input type="text"
+								<label for="land_mark"> Place/City *</label> <input type="text"
 									class="form-control" id="eventEditPlace"
 									name="eventEditPlace">
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="Place_city">Mandal</label> <input type="text"
+								<label for="Place_city">Mandal *</label> <input type="text"
 									class="form-control" id="eventEditMandal"
 									name=" eventEditMandal">
 							</div>
@@ -256,14 +272,14 @@ function eventUpdate(){
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="district">District</label> <input type="text"
+								<label for="district">District *</label> <input type="text"
 									class="form-control" id="eventEditDistrict"
 									name="eventEditDistrict">
 							</div>
 						</div>
 						<div class="col-md-5">
 							<div class="form-group">
-								<label for="state"> State</label>
+								<label for="state"> State *</label>
 								 <select class="form-control" id = "eventEditstate">
 									<option value="Telangana">Telangana</option>
 									<option value="AndhraPradesh">AndhraPradesh</option>
@@ -298,6 +314,245 @@ function eventUpdate(){
 					<!-- </form> -->
 				</div>
 				<div class="clearfix"></div>
+				
+				<!----------------------photo_gallery------------------------------>
+
+							<div class="row">
+								<div class="modal fade" id="image-gallery" tabindex="-1"
+									role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+									style="display: none;">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">
+													<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+												</button>
+												<h4 class="modal-title" id="image-gallery-title"></h4>
+											</div>
+											<div class="modal-body">
+												<img id="image-gallery-image" class="img-responsive"
+													src="images/g2.jpg">
+											</div>
+											<div class="modal-footer">
+												<div class="col-md-2">
+													<button type="button" class="btn btn-primary"
+														id="show-previous-image" style="display: none;">Previous</button>
+												</div>
+												<div class="col-md-8 text-justify"
+													id="image-gallery-caption"></div>
+												<div class="col-md-2">
+													<button type="button" id="show-next-image"
+														class="btn btn-default">Next</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="row">
+
+									<div class="col-md-12" style="margin-bottom: 10px;">
+										<!-- Controls -->
+										<div class="controls pull-right ">
+											<a class="left fa fa-angle-left btn btn-default button-arrow"
+												href="#carousel-example" data-slide="prev"></a> <a
+												class="right fa fa-angle-right btn btn-default button-arrow"
+												href="#carousel-example" data-slide="next"></a>
+										</div>
+									</div>
+								</div>
+								<div id="carousel-example" class="carousel slide"
+									data-ride="carousel">
+									Wrapper for slides
+									<div class="carousel-inner">
+										<div class="item active left">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="col-item">
+														<div class="photo">
+															<a class="g-image" href="#" data-image-id="1"
+																data-toggle="modal" data-title="" data-caption=""
+																data-image="images/g2.jpg" data-target="#image-gallery">
+																<img class="img-responsive" src="images/g2.jpg"
+																alt="Short alt text">
+															</a>
+														</div>
+
+														<div class="img_tiltle" style="margin-top: 7px;">
+															<h2>Image 1</h2>
+														</div>
+
+														<div class="caption" style="margin-top: 0px;">
+															<div class="checkbox">
+																<label> <input id="login-remember"
+																	type="checkbox" name="remember" value="1"> Show
+																	as Public
+																</label>
+																<div class="suceee_msg">
+																	<!-- <h4>Updated successfully</h4> -->
+																</div>
+															</div>
+															<div class="delete_box">
+																<a href="#"><i class="fa fa-trash-o"
+																	aria-hidden="true"></i> Delete</a>
+																<div class="suceee_msg">
+																	<h4>Delete Message</h4>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="item next left">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="col-item">
+														<div class="photo">
+															<a class="g-image" href="#" data-image-id="2"
+																data-toggle="modal" data-title="" data-caption=""
+																data-image="images/g1.jpeg" data-target="#image-gallery">
+																<img class="img-responsive" src="images/g1.jpeg"
+																alt="Short alt text">
+															</a>
+														</div>
+
+
+														<div class="img_tiltle" style="margin-top: 7px;">
+															<h2>Image 2</h2>
+														</div>
+
+														<div class="caption" style="margin-top: 0px;">
+															<div class="checkbox">
+																<label> <input id="login-remember"
+																	type="checkbox" name="remember" value="1"> Show
+																	as Public
+																</label>
+																<div class="suceee_msg">
+																	<h4>Updated successfully</h4>
+																</div>
+															</div>
+															<div class="delete_box">
+																<a href="#"><i class="fa fa-trash-o"
+																	aria-hidden="true"></i> Delete</a>
+																<div class="suceee_msg">
+																	<h4>Delete Message</h4>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> 
+							<!----------------------photo_gallery end------------------------------>
+
+							<!----------------------video_gallery------------------------------>
+							 <div class="col-md-5">
+								<div class="row">
+
+									<div class="col-md-12 " style="margin-bottom: 10px;">
+										<!-- Controls -->
+										<div class="controls pull-right">
+											<a class="left fa fa-angle-left btn btn-default button-arrow"
+												href="#carousel-example1" data-slide="prev"></a> <a
+												class="right fa fa-angle-right btn btn-default button-arrow"
+												href="#carousel-example1" data-slide="next"></a>
+										</div>
+									</div>
+								</div>
+								<div id="carousel-example1" class="carousel slide "
+									data-ride="carousel">
+									Wrapper for slides
+									<div class="carousel-inner">
+										<div class="item">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="col-item">
+														<div class="photo">
+															<iframe src="https://player.vimeo.com/video/73051736"
+																width="100%" height="275" frameborder="0"
+																webkitallowfullscreen="" mozallowfullscreen=""
+																allowfullscreen=""></iframe>
+														</div>
+
+														<div class="img_tiltle" style="margin-top: 7px;">
+															<h2>Video 1</h2>
+														</div>
+
+														<div class="caption" style="margin-top: 0px;">
+															<div class="checkbox">
+																<label> <input id="login-remember"
+																	type="checkbox" name="remember" value="1"> Show
+																	as Public
+																</label>
+																<div class="suceee_msg">
+																	<!-- <h4>Updated successfully</h4> -->
+																</div>
+															</div>
+															<div class="delete_box">
+																<a href="#"><i class="fa fa-trash-o"
+																	aria-hidden="true"></i> Delete</a>
+																<div class="suceee_msg">
+																	<!-- <h4>Delete Message</h4> -->
+																</div>
+															</div>
+														</div>
+
+
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="item active">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="col-item">
+														<div class="photo">
+															<iframe src="https://player.vimeo.com/video/73051736"
+																width="100%" height="275" frameborder="0"
+																webkitallowfullscreen="" mozallowfullscreen=""
+																allowfullscreen=""></iframe>
+														</div>
+													</div>
+
+													<div class="img_tiltle" style="margin-top: 7px;">
+														<h2>Video 1</h2>
+													</div>
+
+													<div class="caption" style="margin-top: 0px;">
+														<div class="checkbox">
+															<label> <input id="login-remember"
+																type="checkbox" name="remember" value="1"> Show
+																as Public
+															</label>
+															<div class="suceee_msg">
+																<!-- <h4>Updated successfully</h4> -->
+															</div>
+														</div>
+														<div class="delete_box">
+															<a href="#"><i class="fa fa-trash-o"
+																aria-hidden="true"></i> Delete</a>
+															<div class="suceee_msg">
+																<h4>Delete Message</h4>
+															</div>
+														</div>
+													</div>
+
+
+
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> 
+							<!----------------------video_gallery end------------------------------>
+				
 
 				<!------------------------------guests form--------------------------------------->
 				<div class="input_fields_wrap">
@@ -306,8 +561,87 @@ function eventUpdate(){
 							<div class="member_registration">
 								<h2>Guests</h2>
 							</div>
+							
+							
+										<div class="card-block p-0"
+									style="overflow-y: scroll; height: 250px; width: 100%;">
+									<table class="table table-bordered table-responsive ">
+										<thead class="">
+											<tr>
+												<th>Title</th>
+												<th>Name</th>
+												<th>Designation</th>
+												<th>Delete</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Mr</td>
+												<td>September 14, 2013</td>
+												<td>jhlilk22@yahoo.com</td>
+												<td><div class="add_button" style="margin-top:0px;">
+										<button class="btn btn-primary btn-sm add_field_button">
+											<i class="fa fa-minus" aria-hidden="true"></i>
+										</button>
+									</div></td>
+											</tr>
+											<tr>
+												<td>Mr</td>
+												<td>September 14, 2013</td>
+												<td>jhlilk22@yahoo.com</td>
+												<td><div class="add_button" style="margin-top:0px;">
+										<button class="btn btn-primary btn-sm add_field_button">
+											<i class="fa fa-minus" aria-hidden="true"></i>
+										</button>
+									</div></td>
+											</tr>
+											<tr>
+												<td>Mr</td>
+												<td>September 14, 2013</td>
+												<td>jhlilk22@yahoo.com</td>
+												<td><div class="add_button" style="margin-top:0px;">
+										<button class="btn btn-primary btn-sm add_field_button">
+											<i class="fa fa-minus" aria-hidden="true"></i>
+										</button>
+									</div></td>
+											</tr>
+											
+										</tbody>
+									</table>
+								</div>
 						</div>
-						<div class="col-md-12">
+						
+					</div>
+				</div>
+				
+				<div class="row">
+							<div class="col-md-10">
+								<!-- <div class="member_registration" style="margin-left: 0px;">
+									<h2>Guests</h2>
+								</div> -->
+					
+								<div class="card-footer p-0  hidden">
+									<nav aria-label="...">
+										<ul class="pagination justify-content-end mt-3 mr-3">
+											<li class="page-item disabled"><span class="page-link">Previous</span>
+											</li>
+											<li class="page-item"><a class="page-link" href="#">1</a></li>
+											<li class="page-item active"><span class="page-link">2<span
+													class="sr-only">(current)</span>
+											</span></li>
+											<li class="page-item"><a class="page-link" href="#">3</a></li>
+											<li class="page-item"><a class="page-link" href="#">Next</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+								
+								
+							</div>
+						</div>
+						
+						<div class="row">
+						<div class="col-md-10">
 							<div class="from">
 								<div class="col-md-3">
 									<div class="form-group">
@@ -347,8 +681,7 @@ function eventUpdate(){
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
+						</div>
 
 				<!------------------------------guests form end--------------------------------------->
 
@@ -365,13 +698,109 @@ function eventUpdate(){
 				<!-------------------------submit button end--------------------------------------->
 				<div class="clearfix"></div>
 			</div>
+			
+			
 		</div>
 	</div>
+
+<div id="guests_block" style="display:none;">
+  <div class="row">
+    <div class="col-md-10">
+      <div class="from">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <select class="form-control">
+              <option selected="selected" id="title" name="title[]">--select--</option>
+              <option>Mr</option>
+              <option>Ms</option>
+              <option>Dr</option>
+              <option>Prof</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name[]">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="designation">Designation</label>
+            <input type="text" class="form-control" id="designation" name="designation[]">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="add_button">
+            <button class="btn btn-primary btn-sm remove_field"> <i class="fa fa-minus" aria-hidden="true"></i> </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
 	<!----------------------body_content end---------------------------->
 
 	<!----------------------footer start ------------------------------->
 	 <jsp:include page="footer.jsp"/>
+	 
+	 
 	<!----------------------footer end --------------------------------->
+	<script type="text/javascript">
+    $(function () {
+	
+        $('#eventEditTimeFrom1,#eventEditTimeEnd1').datetimepicker({
+			 useCurrent: false
+			});
+
+		$('.cross_icon').click(function(){
+			alert('asdfasdf')
+			$(this).parent().remove()
+			});
+    });
+	
+	function addItem(e){
+		var html = $('.addOne').html();
+		$('#content_block').append(html);
+		//$(e).append(html);
+		
+		
+				
+	}
+</script> 
+<script type="text/javascript">
+  
+  
+  $(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+			var html = $('#guests_block').html();
+            $(wrapper).append(html); //add input box
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+	
+        e.preventDefault(); $(this).closest('div.row').remove(); x--;
+    })
+});
+  
+  
+  
+  
+           
+        </script> 
 </body>
 </html>
 <jsp:include page="login.jsp" />

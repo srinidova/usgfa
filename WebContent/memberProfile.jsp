@@ -21,16 +21,7 @@
        <%--  <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end----------------------------------> 
         <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 	$(document)
 			.ready(
@@ -82,7 +73,7 @@
 										$.each(
 												data.MEMBERFILES,
 												function(key, val) {
-													alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
+													//alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
 													html = html
 													+'<li>'
 													+'<div class="fff">'
@@ -95,12 +86,12 @@
 														+'<div class="caption" style="margin-top: 0px;">'
 															+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
 																+'<div class="suceee_msg">'
-																	+'<h4>Updated successfully</h4>'
+																	+'/* <h4>Updated successfully</h4> */'
 																+'</div>'
 															+'</div>'
 															+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
 																+'<div class="suceee_msg">'
-																	+'<h4>Delete Message</h4>'
+																	+'/* <h4>Delete Message</h4> */'
 																+'</div>'
 															+'</div>'
 														+'</div>'
@@ -275,7 +266,7 @@
                   <div class="carousel-inner">
                     <div class="item active">
                       <ul style="padding-left:0px;">
-                       <!--  <li>
+                        <li>
                           <div class="fff">
                             <div class="photo"> <a class="g-image" href="#" data-image-id="1" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a> </div>
                             <div class="img_tiltle" style="margin-top: 7px;">
@@ -287,17 +278,17 @@
                                   <input id="login-remember" type="checkbox" name="remember" value="1">
                                   Show as Public </label>
                                 <div class="suceee_msg">
-                                  <h4>Updated successfully</h4>
+                                  <!-- <h4>Updated successfully</h4> -->
                                 </div>
                               </div>
                               <div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                                 <div class="suceee_msg">
-                                  <h4>Delete Message</h4>
+                                  <!-- <h4>Delete Message</h4> -->
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </li> -->
+                        </li>
                       </ul>
                     </div>
                     <div class="item ">
@@ -314,12 +305,12 @@
                                   <input id="login-remember" type="checkbox" name="remember" value="1">
                                   Show as Public </label>
                                 <div class="suceee_msg">
-                                  <h4>Updated successfully</h4>
+                                  <!-- <h4>Updated successfully</h4> -->
                                 </div>
                               </div>
                               <div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                                 <div class="suceee_msg">
-                                  <h4>Delete Message</h4>
+                                 <!--  <h4>Delete Message</h4> -->
                                 </div>
                               </div>
                             </div>
@@ -356,12 +347,12 @@
                                   <input id="login-remember" type="checkbox" name="remember" value="1">
                                   Show as Public </label>
                                 <div class="suceee_msg">
-                                  <h4>Updated successfully</h4>
+                                  <!-- <h4>Updated successfully</h4> -->
                                 </div>
                               </div>
                               <div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                                 <div class="suceee_msg">
-                                  <h4>Delete Message</h4>
+                                  <!-- <h4>Delete Message</h4> -->
                                 </div>
                               </div>
                             </div>
@@ -388,12 +379,12 @@
                                   <input id="login-remember" type="checkbox" name="remember" value="1">
                                   Show as Public </label>
                                 <div class="suceee_msg">
-                                  <h4>Updated successfully</h4>
+                                  <!-- <h4>Updated successfully</h4> -->
                                 </div>
                               </div>
                               <div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                                 <div class="suceee_msg">
-                                  <h4>Delete Message</h4>
+                                  <!-- <h4>Delete Message</h4> -->
                                 </div>
                               </div>
                             </div>

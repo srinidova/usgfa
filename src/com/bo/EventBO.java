@@ -46,7 +46,7 @@ public class EventBO {
 		//return dao.newsUpdate(newsDto);
 	}
 	public String deleteEvent(EventDTO eventDto){
-	     //System.out.println("2. In EventBO----------- getEventDelete====");
+	     System.out.println("2. In EventBO----------- getEventDelete====");
 	     EventDAO  dao = new EventDAO();
 	     return dao.deleteEvent(eventDto);
 	     //return dao.addEvent(eventDto);

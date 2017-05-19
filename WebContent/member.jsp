@@ -136,6 +136,21 @@
 									<!----------------------footer start ------------------------------->
 	 <jsp:include page="footer.jsp"/> 
 	<!----------------------footer end --------------------------------->
+	<script>
+$(document).ready(function() {
+     	
+	$('.showmore_one').showMore({
+		speedDown: 100,
+	        speedUp: 100,
+	        height: '190px',
+	        showText: 'Show more',
+	        hideText: 'Show less'
+	});
+
+	
+	      
+});
+</script> 
 
 								</body>
 </html>

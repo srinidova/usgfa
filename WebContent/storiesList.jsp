@@ -21,17 +21,34 @@
       <%--   <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end----------------------------------> 
         
+	                 <style>
+        
+        #storiesListData{
+    width: 100%;
+    float: left;
+    margin: auto;
+    display: inline-table;
+}
+
+
+  
+    tr td.e_mn{width:285px;}
+    tr td.e_mn_1{width:120px;}
+     tr td.e_mn_2{width:130px;}
+     tr td.e_mn_3{width:120px;}
+     tr td.e_mn_4{width:130px;}
+     tr td.e_mn_5{width:215px;}
+
+         
+    
+
+td ul.actions li {
+    /* display: inline-block; */
+    display: block;
+}
+
+        </style>
         <head>        
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -41,7 +58,7 @@ $(document).ready(function(){
 
 function getStoriesDetails() {
 	//alert("-------2-----");
-	var html = '';
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/storiesService/getStoriesDetails",
 				success : function(data) {
@@ -52,13 +69,13 @@ function getStoriesDetails() {
 								//alert(data.ProgramDetails[key].dateAndTimeFrom);
 									html = html
 									     + '<tr>'
-										     + '<td>'+data.StoriesDetails[key].name+'</td>'
-										     +  '<td>'+data.StoriesDetails[key].farmName+'</td>'
-											 +  '<td>'+data.StoriesDetails[key].farmState+'</td>'
-											 +  '<td>'+data.StoriesDetails[key].district+'</td>'
-											 +  '<td>'+data.StoriesDetails[key].mandal+'</td>'
-											 +  '<td>'+data.StoriesDetails[key].place+'</td>'
-											 +  '<td style ="width:50px;">'
+										     + '<td class="e_mn">'+data.StoriesDetails[key].name+'</td>'
+										     +  '<td class="e_mn_1">'+data.StoriesDetails[key].farmName+'</td>'
+											 +  '<td class="e_mn_2">'+data.StoriesDetails[key].farmState+'</td>'
+											 +  '<td class="e_mn_3">'+data.StoriesDetails[key].district+'</td>'
+											 +  '<td class="e_mn_4">'+data.StoriesDetails[key].mandal+'</td>'
+											 +  '<td class="e_mn_5">'+data.StoriesDetails[key].place+'</td>'
+											 +  '<td class="e_mn_6">'
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
 											 			+ '<a href="storiesProfile.jsp"> '
@@ -87,6 +104,7 @@ function getStoriesDetails() {
 							}
 					)
 					$(html).appendTo("#storiesListData");
+					$(html).appendTo("</table></div></div>");
 				}
 					
 	});
@@ -163,7 +181,7 @@ function deleteStories(storiesId){
         <div class="row">
           
           <div class="col-md-10">
-            <div class="table-responsive" >
+            <div class="" >
               <table class="table  table-bordered">
                 <tr>
                   <th>Name</th>
@@ -227,13 +245,15 @@ function deleteStories(storiesId){
                     </ul></td>
                 </tr> -->
               </table>
-              <div class="col-md-10">
-				<div class="table-responsive">
+              <div class="row">
+              <div class="col-md-12">
+			
 					<table class="table  table-bordered">
 						<div id="storiesListData"></div>
 					</table>
  				</div>
-			</div>
+ 				</div>
+	
             </div>
           </div>
         </div>

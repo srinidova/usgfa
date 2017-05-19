@@ -20,18 +20,33 @@
        <%--  <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end----------------------------------> 
         
+                   <style>
+        
+        #programListData{
+    width: 100%;
+    float: left;
+    margin: auto;
+    display: inline-table;
+}
+
+
+  
+    tr td.e_mn{width:320px;}
+    tr td.e_mn_1{width:110px;}
+     tr td.e_mn_2{width:200px;}
+      tr td.e_mn_3{width:150px;}
+    
+
+td ul.actions li {
+    /* display: inline-block; */
+    display: block;
+}
+
+        </style>
+        
         
 <head>        
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	//alert("-------1-----");
@@ -40,7 +55,7 @@ $(document).ready(function() {
 
 function getProgramDetails() {
 	//alert("-------2-----");
-	var html = '';
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/programService/getProgramDetails",
 				success : function(data) {
@@ -51,12 +66,12 @@ function getProgramDetails() {
 								//alert(data.ProgramDetails[key].dateAndTimeFrom);
 									html = html
 									     + '<tr>'
-										     + '<td>'+data.ProgramDetails[key].programName+'</td>'
-										     +  '<td>'+data.ProgramDetails[key].duration+'</td>'
-											 +  '<td>'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
-											 +  '<td>'+data.ProgramDetails[key].channel+'</td>'
-											 +  '<td>'+data.ProgramDetails[key].guest+'</td>'
-											 +  '<td style ="width:50px;">'
+										     + '<td class="e_mn">'+data.ProgramDetails[key].programName+'</td>'
+										     +  '<td class="e_mn_1">'+data.ProgramDetails[key].duration+'</td>'
+											 +  '<td class="e_mn_2">'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
+											 +  '<td class="e_mn_3">'+data.ProgramDetails[key].channel+'</td>'
+											 +  '<td class="e_mn_4">'+data.ProgramDetails[key].guest+'</td>'
+											 +  '<td class="e_mn_5">'
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
 											 			+ '<a href="programProfile.jsp"> '
@@ -85,6 +100,7 @@ function getProgramDetails() {
 							}
 					)
 					$(html).appendTo("#programListData");
+					$(html).appendTo("</table></div></div>");
 				}
 					
 	});
@@ -166,7 +182,7 @@ function deleteProgram(programId){
         <div class="row">
           
           <div class="col-md-10">
-            <div class="table-responsive" >
+            <div class="" >
               <table class="table  table-bordered">
                 <tr>
                   <th>Program Name</th>
@@ -225,8 +241,9 @@ function deleteProgram(programId){
                     </ul></td>
                 </tr> -->
               </table>
-              <div class="col-md-10">
-				<div class="table-responsive">
+              <div class="row">
+              <div class="col-md-12">
+				
 					<table class="table  table-bordered">
 						<div id="programListData"></div>
 					</table>

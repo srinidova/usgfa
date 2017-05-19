@@ -21,17 +21,25 @@
         <%-- <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end----------------------------------> 
         
+        <style>
+        
+        #eventListData{
+    width: 100%;
+    float: left;
+    margin: auto;
+    display: inline-table;
+}
+
+        tr td.e_name{width:40%;}
+          tr td.e_days{width:12%;}
+            tr td.e_date{width:17%;}
+              tr td.e_details{width:40%;}
+            
+        
+        </style>
+        
          <head>        
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
         $(document).ready(function(){
 	//alert("-------1-----");
@@ -40,7 +48,7 @@
 
 function getEventDetails() {
 	//alert("-------2-----");
-	var html = '';
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/eventService/getEventDetails",
 				success : function(data) {
@@ -52,11 +60,11 @@ function getEventDetails() {
 								//alert(data.EventDetails[key].timeFrom);
 									html = html
 									     + '<tr>'
-										     + '<td>'+data.EventDetails[key].eventName+'</td>'
-										     +  '<td>'+data.EventDetails[key].noOfDays+'</td>'
-											  +  '<td>'+data.EventDetails[key].timeFrom+'</td>' 
-											 +  '<td>'+data.EventDetails[key].address+'</td>'
-											 +  '<td style ="width:50px;">'
+										     + '<td class="e_name">'+data.EventDetails[key].eventName+'</td>'
+										     +  '<td class="e_days">'+data.EventDetails[key].noOfDays+'</td>'
+											  +  '<td class="e_date">'+data.EventDetails[key].timeFrom+'</td>' 
+											 +  '<td class="e_details">'+data.EventDetails[key].address+'</td>'
+											 +  '<td>'
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
 											 			+ '<a href="eventProfile.jsp"> '
@@ -85,6 +93,7 @@ function getEventDetails() {
 							}
 					)
 					$(html).appendTo("#eventListData");
+					$(html).appendTo("</table></div></div>");
 				}
 					
 	});
@@ -119,7 +128,7 @@ function editEvent(eventId){
 	
 }
 function deleteEvent(eventId){
-	//alert("eventId=="+eventId);
+	alert("eventId=="+eventId);
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	$.ajax({
@@ -194,17 +203,27 @@ function deleteEvent(eventId){
 											</div></td>
 										<td></td>
 									</tr>
+								
 								</table>
-								 <div class="col-md-10">
-								<div class="table-responsive">
-									<table class="table  table-bordered">
-										<div id="eventListData"></div>
-									</table>
-								</div>
-							</div>
+							
+						
+									
+			
 								
 							</div>
 						</div>
+						
+						
+						
+						
+						
+						<div class="col-md-10">
+	
+								
+										<div id="eventListData"></div>
+										
+										</div>
+					
 					</div>
 				</div>
 				<div class="clearfix"></div>

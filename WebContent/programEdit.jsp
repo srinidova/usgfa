@@ -24,16 +24,6 @@
         
         
          <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 
 function programEditFarmValidation() {
@@ -51,15 +41,29 @@ function programEditFarmValidation() {
 	//alert("==2==");
 	if (emptyCheck(programName, "Program Name", "programMessage")
 			&& minLenCheck(programName, 5, "Program Name", "programMessage")
-			&& maxLenCheck(programName, 10, "Program Name", "programMessage")
+			&& maxLenCheck(programName, 30, "Program Name", "programMessage")
 			&& allLetter(programName, "Program Name", "programMessage")
 			&& emptyCheck(duration, "Duration", "programMessage")
+			&& minLenCheck(duration, 5, "Duration", "programMessage")
+			&& maxLenCheck(duration, 30, "Duration", "programMessage")
 			&& emptyCheck(dateAndTimeFrom, "Date & TimeFrom", "programMessage")
+			&& minLenCheck(dateAndTimeFrom, 5, "Date & TimeFrom", "programMessage")
+			&& maxLenCheck(dateAndTimeFrom, 30, "Date & TimeFrom", "programMessage")
 			&& emptyCheck(dateAndTimeTo, "Date & Time To", "programMessage")
+			&& minLenCheck(dateAndTimeTo, 5, "Date & Time To", "programMessage")
+			&& maxLenCheck(dateAndTimeTo, 30, "Date & Time To", "programMessage")
 			&& emptyCheck(channel, "Channel", "programMessage")
+			&& minLenCheck(channel, 5, "Channel", "programMessage")
+			&& maxLenCheck(channel, 30, "Channel", "programMessage")
 			&& emptyCheck(guest, "Guest", "programMessage")
+			&& minLenCheck(guest, 5, "Guest", "programMessage")
+			&& maxLenCheck(guest, 30, "Guest", "programMessage")
 			&& emptyCheck(youtube, "Youtube", "programMessage")
+			&& minLenCheck(youtube, 5, "Youtube", "programMessage")
+			&& maxLenCheck(youtube, 30, "Youtube", "programMessage")
 			&& emptyCheck(moreInfo, "More Info", "programMessage")
+			&& minLenCheck(moreInfo, 5, "More Info", "programMessage")
+			&& maxLenCheck(moreInfo, 250, "More Info", "programMessage")
 			) {
 
 		programUpdate();
@@ -84,7 +88,7 @@ $(document).ready(function() {
 							$('#programEditChannel').val(data.EditProgram[key].channel);
 							$('#programEditGuest').val(data.EditProgram[key].guest);
 							$('#programEditYoutube').val(data.EditProgram[key].youtube);
-							alert("-------in editProgram--Jsp---programEditYoutube=="+data.EditProgram[key].youtube);
+							//alert("-------in editProgram--Jsp---programEditYoutube=="+data.EditProgram[key].youtube);
 							$('#programEditMoreInfo').val(data.EditProgram[key].moreInfo);
 						}
 				)
@@ -151,9 +155,12 @@ function programUpdate(){
 <div class="col-md-12">
 
 <div class="from">
+	<div class="form-group">
+		<label for="event_name"><h4>* These fields are required</h4></label>
+	</div>
       <div class="col-md-5">
         <div class="form-group">
-          <label for="program_name">Program Name</label>
+          <label for="program_name">Program Name *</label>
           <input type="text" class="form-control" id="programEditName" name="programEditName">
           <input type="hidden" class="form-control" id="programId"
 							name="programId">
@@ -161,22 +168,22 @@ function programUpdate(){
       </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="duration"> Duration</label>
+            <label for="duration"> Duration *</label>
             <input type="text" class="form-control" id="programEditDuration"  name="programEditDuration">
           </div>
         </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="date & TimeFrom">Date & TimeFrom </label>
-            <div class='input-group date' id='datetimepicker8'>
+            <label for="date & TimeFrom">Date & TimeFrom *</label>
+            <div class='input-group date' id ="programEditTimeFrom">
               <input type='text' class="form-control"  id="programEditDateAndTimeFrom" name="programEditDateAndTimeFrom"/>
               <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
           </div>
         </div>
       <div class="col-md-5">
           <div class="form-group">
-            <label for="date&Time To">Date & Time To </label>
-            <div class='input-group date' id='datetimepicker8'>
+            <label for="date&Time To">Date & Time To *</label>
+            <div class='input-group date' id ="programEditTimeTo">
               <input type='text' class="form-control"  id="programEditDateAndTimeTo" name ="programEditDateAndTimeTo"/>
               <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
           </div>
@@ -230,6 +237,239 @@ function programUpdate(){
      
       <div class="clearfix"></div>
       
+      <!----------------------photo_gallery------------------------------>
+
+			<div class="row">
+				<div class="modal fade" id="image-gallery" tabindex="-1"
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+					style="display: none;">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="image-gallery-title"></h4>
+							</div>
+							<div class="modal-body">
+								<img id="image-gallery-image" class="img-responsive"
+									src="images/g2.jpg">
+							</div>
+							<div class="modal-footer">
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary"
+										id="show-previous-image" style="display: none;">Previous</button>
+								</div>
+								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+								<div class="col-md-2">
+									<button type="button" id="show-next-image"
+										class="btn btn-default">Next</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+
+					<div class="col-md-12" style="margin-bottom: 10px;">
+						<!-- Controls -->
+						<div class="controls pull-right ">
+							<a class="left fa fa-angle-left btn btn-default button-arrow"
+								href="#carousel-example" data-slide="prev"></a> <a
+								class="right fa fa-angle-right btn btn-default button-arrow"
+								href="#carousel-example" data-slide="next"></a>
+						</div>
+					</div>
+				</div>
+				<div id="carousel-example" class="carousel slide"
+					data-ride="carousel">
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner">
+						<div class="item active left">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="col-item">
+										<div class="photo">
+											<a class="g-image" href="#" data-image-id="1"
+												data-toggle="modal" data-title="" data-caption=""
+												data-image="images/g2.jpg" data-target="#image-gallery">
+												<img class="img-responsive" src="images/g2.jpg"
+												alt="Short alt text">
+											</a>
+										</div>
+
+										<div class="img_tiltle" style="margin-top: 7px;">
+											<h2>Image 1</h2>
+										</div>
+
+										<div class="caption" style="margin-top: 0px;">
+											<div class="checkbox">
+												<label> <input id="login-remember" type="checkbox"
+													name="remember" value="1"> Show as Public
+												</label>
+												<div class="suceee_msg">
+													<!-- <h4>Updated successfully</h4> -->
+												</div>
+											</div>
+											<div class="delete_box">
+												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+													Delete</a>
+												<div class="suceee_msg">
+													<!-- <h4>Delete Message</h4> -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="item next left">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-item">
+										<div class="photo">
+											<a class="g-image" href="#" data-image-id="2"
+												data-toggle="modal" data-title="" data-caption=""
+												data-image="images/g1.jpeg" data-target="#image-gallery">
+												<img class="img-responsive" src="images/g1.jpeg"
+												alt="Short alt text">
+											</a>
+										</div>
+
+
+										<div class="img_tiltle" style="margin-top: 7px;">
+											<h2>Image 2</h2>
+										</div>
+
+										<div class="caption" style="margin-top: 0px;">
+											<div class="checkbox">
+												<label> <input id="login-remember" type="checkbox"
+													name="remember" value="1"> Show as Public
+												</label>
+												<div class="suceee_msg">
+													<!-- <h4>Updated successfully</h4> -->
+												</div>
+											</div>
+											<div class="delete_box">
+												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+													Delete</a>
+												<div class="suceee_msg">
+													<!-- <h4>Delete Message</h4> -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!----------------------photo_gallery end------------------------------>
+
+<!----------------------video_gallery------------------------------>
+			<div class="col-md-6">
+				<div class="row">
+
+					<div class="col-md-12 " style="margin-bottom: 10px;">
+						<!-- Controls -->
+						<div class="controls pull-right">
+							<a class="left fa fa-angle-left btn btn-default button-arrow"
+								href="#carousel-example1" data-slide="prev"></a> <a
+								class="right fa fa-angle-right btn btn-default button-arrow"
+								href="#carousel-example1" data-slide="next"></a>
+						</div>
+					</div>
+				</div>
+				<div id="carousel-example1" class="carousel slide "
+					data-ride="carousel">
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner">
+						<div class="item">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="col-item">
+										<div class="photo">
+											<iframe src="https://player.vimeo.com/video/73051736"
+												width="100%" height="347" frameborder="0"
+												webkitallowfullscreen="" mozallowfullscreen=""
+												allowfullscreen=""></iframe>
+										</div>
+
+										<div class="img_tiltle" style="margin-top: 7px;">
+											<h2>Video 1</h2>
+										</div>
+
+										<div class="caption" style="margin-top: 0px;">
+											<div class="checkbox">
+												<label> <input id="login-remember" type="checkbox"
+													name="remember" value="1"> Show as Public
+												</label>
+												<div class="suceee_msg">
+													<!-- <h4>Updated successfully</h4> -->
+												</div>
+											</div>
+											<div class="delete_box">
+												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+													Delete</a>
+												<div class="suceee_msg">
+													<!-- <h4>Delete Message</h4> -->
+												</div>
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="item active">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-item">
+										<div class="photo">
+											<iframe src="https://player.vimeo.com/video/73051736"
+												width="100%" height="347" frameborder="0"
+												webkitallowfullscreen="" mozallowfullscreen=""
+												allowfullscreen=""></iframe>
+										</div>
+									</div>
+
+									<div class="img_tiltle" style="margin-top: 7px;">
+										<h2>Video 1</h2>
+									</div>
+
+									<div class="caption" style="margin-top: 0px;">
+										<div class="checkbox">
+											<label> <input id="login-remember" type="checkbox"
+												name="remember" value="1"> Show as Public
+											</label>
+											<div class="suceee_msg">
+												<!-- <h4>Updated successfully</h4> -->
+											</div>
+										</div>
+										<div class="delete_box">
+											<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+												Delete</a>
+											<div class="suceee_msg">
+												<!-- <h4>Delete Message</h4> -->
+											</div>
+										</div>
+									</div>
+
+
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!----------------------video_gallery end------------------------------>
+      
       <!------------------------------guests form--------------------------------------->
      
       
@@ -243,7 +483,6 @@ function programUpdate(){
         </div>
         <div class="message">
             <h3><aside class=" " id="programMessage" style="display: none">Save Sucessfully</aside></h3>
-            <h4>* These fields are required</h4>
           </div>
       </div>
       
@@ -262,6 +501,58 @@ function programUpdate(){
 	<!----------------------footer start ------------------------------->
 	 <jsp:include page="footer.jsp"/>
 	<!----------------------footer end --------------------------------->
+	
+	<script type="text/javascript">
+    $(function () {
+	
+        $('#programEditTimeFrom,#programEditTimeTo').datetimepicker({
+			 useCurrent: false
+			});
+
+		$('.cross_icon').click(function(){
+			alert('asdfasdf')
+			$(this).parent().remove()
+			});
+    });
+	
+	function addItem(e){
+		var html = $('.addOne').html();
+		$('#content_block').append(html);
+		//$(e).append(html);
+		
+		
+				
+	}
+</script> 
+<script type="text/javascript">
+  
+  
+  $(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+			var html = $('#guests_block').html();
+            $(wrapper).append(html); //add input box
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+	
+        e.preventDefault(); $(this).closest('div.row').remove(); x--;
+    })
+});
+  
+  
+  
+  
+           
+        </script> 
 </body>
 </html>
 <jsp:include page="login.jsp" />

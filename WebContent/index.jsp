@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="css/chosen.min.css">
+<!-- <link rel="stylesheet" href="css/chosen.min.css">
 <link rel="stylesheet" href="css/jquery-ui.css">
 <link rel="stylesheet" href="css/jquery-ui.min.css">
 
@@ -10,7 +10,7 @@
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/chosen.jquery.js"></script>
 <script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script> -->
 
 <meta charset="UTF-8">
 <title>USGFA</title>
@@ -288,6 +288,41 @@
 																					</div>
 																				</div>
 																			</div>
+																			<div class="row">
+																				<div class="modal fade" id="image-gallery"
+																					tabindex="-1" role="dialog"
+																					aria-labelledby="myModalLabel" aria-hidden="true">
+																					<div class="modal-dialog">
+																						<div class="modal-content">
+																							<div class="modal-header">
+																								<button type="button" class="close"
+																									data-dismiss="modal">
+																									<span aria-hidden="true">×</span><span
+																										class="sr-only">Close</span>
+																								</button>
+																								<h4 class="modal-title" id="image-gallery-title"></h4>
+																							</div>
+																							<div class="modal-body">
+																								<img id="image-gallery-image"
+																									class="img-responsive" src="">
+																							</div>
+																							<div class="modal-footer">
+																								<div class="col-md-2">
+																									<button type="button" class="btn btn-primary"
+																										id="show-previous-image">Previous</button>
+																								</div>
+																								<div class="col-md-8 text-justify"
+																									id="image-gallery-caption">This text will
+																									be overwritten by jQuery</div>
+																								<div class="col-md-2">
+																									<button type="button" id="show-next-image"
+																										class="btn btn-default">Next</button>
+																								</div>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
 																			<div id="carousel-example2" class="carousel slide"
 																				data-ride="carousel">
 																				<!-- Wrapper for slides -->
@@ -297,8 +332,15 @@
 																							<div class="col-sm-12">
 																								<div class="col-item">
 																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
+
+
+																										<a class="g-image" href="#" data-image-id=""
+																											data-toggle="modal" data-title=""
+																											data-caption="" data-image="images/g1.jpeg"
+																											data-target="#image-gallery"> <img
+																											class="img-responsive" src="images/g1.jpeg"
+																											alt="Short alt text">
+																										</a>
 																									</div>
 																								</div>
 																							</div>
@@ -309,8 +351,13 @@
 																							<div class="col-md-12">
 																								<div class="col-item">
 																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
+																										<a class="g-image" href="#" data-image-id=""
+																											data-toggle="modal" data-title=""
+																											data-caption="" data-image="images/g2.jpg"
+																											data-target="#image-gallery"> <img
+																											class="img-responsive" src="images/g2.jpg"
+																											alt="Short alt text">
+																										</a>
 																									</div>
 																								</div>
 																							</div>

@@ -120,7 +120,7 @@ public class EventDAO {
 	public String deleteEvent(EventDTO eventDto) {
 		String result = "fail";
 		try {
-			//System.out.println("3. In EventDAO getdeleteEvent----------");
+			System.out.println("3. In EventDAO getdeleteEvent----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("Event.deleteEvent", eventDto);
 			result = "success";

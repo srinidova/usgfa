@@ -20,17 +20,44 @@
         <!----------------------banner start-------------------------------->
         <%-- <jsp:include page="banner.jsp"/>  --%>
         <!----------------------banner end---------------------------------->
+        
+           <style>
+        
+        #memberListData{
+    width: 100%;
+    float: left;
+    margin: auto;
+    display: inline-table;
+}
+
+       
+            
+         tr td img {
+    width: 50px;
+    height: 50px;
+    float: left;
+    border: 1px #ccc solid;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+  tr td.e_img{width: 50px;}
+    tr td.e_mn{width: 125px;}
+      tr td.e_mn_1{width: 140px;}
+            tr td.e_mn_2{width: 130px;}
+                   tr td.e_mn_3{width: 100px;}
+                    tr td.e_mn_4{width: 190px;}
+                      tr td.e_mn_5{width: 150px;}
+
+td ul.actions li {
+    /* display: inline-block; */
+    display: block;
+}
+
+        </style>
+        
         <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -41,7 +68,7 @@ $(document).ready(function() {
 });
 function getMemberDetails() {
 	//alert("-------2-----");
-	var html = '';
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/memberService/getMemberDetails",
 				success : function(data) {
@@ -54,13 +81,15 @@ function getMemberDetails() {
 								//alert(data.MemberDetails[key].firstName)
 									html = html
 									     + '<tr>'
-										     + '<td style="width: 100px;">'+data.MemberDetails[key].title+'</td>'
-										     +  '<td style="width: 60px;">'+data.MemberDetails[key].firstName+'</td>'
-										     +  '<td style="width: 60px;">'+data.MemberDetails[key].middleName+'</td>'
-											 +  '<td style="width: 60px;">'+data.MemberDetails[key].mobile+'</td>'
-											 +  '<td style="width: 60px;">'+data.MemberDetails[key].address+'</td>'
+									     + '<td class="e_img"><img src="images/5326574-a-sheep-wallpapers.jpg"></td>'
+										     + '<td class="e_mn">'+data.MemberDetails[key].title+'</td>'
+										     +  '<td class="e_mn_1" >'+data.MemberDetails[key].firstName+'</td>'
+										     +  '<td class="e_mn_2">'+data.MemberDetails[key].middleName+'</td>'
+											 +  '<td class="e_mn_3">'+data.MemberDetails[key].mobile+'</td>'
+											 +  '<td class="e_mn_4">'+data.MemberDetails[key].address+'</td>'
+											 +  '<td class="e_mn_5">'+data.MemberDetails[key].address+'</td>'
 											 +  '<td>'+data.MemberDetails[key].email+'</td>'
-											 +  '<td style ="width:50px;">'
+											 +  '<td class="e_mn">' 
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
 											 			+ '<a href="memberProfile.jsp"> '
@@ -89,6 +118,7 @@ function getMemberDetails() {
 							}
 					)
 					$(html).appendTo("#memberListData");
+					$(html).appendTo("</table></div></div>");
 				}
 					
 	});
@@ -292,12 +322,12 @@ function deleteMember(memberId){
 							<div class="member_list">
 									<div class="row">
 
-										<div class="col-md-10">
-											<div class="table-responsive">
+										<div class="col-md-12">
+											
 												<table class="table  table-bordered">
 													<div id="memberListData"></div>
 												</table>
-											</div>
+										
 										</div>
 									</div>
 								</div>

@@ -193,6 +193,19 @@ public class NewsService {
 					jobj.put("NEWSFILES", lstUploadFileDTO);
 					//session.setAttribute("NEWSFILES", lstUploadFileDTO);
 				}
+				
+				/*UploadFileDTO uploadFileDto = new UploadFileDTO();
+				uploadFileDto.setShowPublic("o");
+				System.out.println("****ShowPublic==" + uploadFileDto.getShowPublic());
+				UploadFileBO uploadBo = new UploadFileBO();
+				//uploadFileDto = 
+				if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+					System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+					jobj.put("NEWSFILES", lstUploadFileDTO);
+					//session.setAttribute("NEWSFILES", lstUploadFileDTO);
+				}*/
+				
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -305,5 +318,26 @@ public class NewsService {
 		NewsFileBO newsFilebo = new NewsFileBO();
 		result = newsFilebo.getNewsImages(newsFileDto);
 		return jobj;
+	}*/
+	/*@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getImageDetailsById")
+	public JSONObject getImageDetailsById(@QueryParam("fileId") String fileId, @Context HttpServletRequest request) {
+		System.out.println("1. *****Called getImageDetailsById**********fileId==" + fileId);
+		JSONObject jobj = new JSONObject();
+		try {
+			HttpSession session = request.getSession();
+
+			if (!(fileId.length() < 0)) {
+				session.setAttribute("FILEID", fileId);
+			} else {
+				jobj.put("FileId", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("Profile jobj-->" + jobj);
+		return jobj;
+
 	}*/
 }

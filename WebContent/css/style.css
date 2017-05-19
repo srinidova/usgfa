@@ -1824,9 +1824,11 @@ td ul.actions li{display: inline-block;}
 	width: 35%;
 }
 
-
-
-
+.errMsg{
+	margin-left: 150px;
+    font-weight: bold;
+    color: red;
+}
 
 
 

@@ -21,16 +21,6 @@
         <jsp:include page="banner.jsp"/> 
         <!----------------------banner end----------------------------------> 
  <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 function contactUsFarmValidation() {
 	//alert("==Entered==");
@@ -40,18 +30,15 @@ function contactUsFarmValidation() {
 	var email = document.getElementById("email");
 	var subject = document.getElementById("subject");
 	var message = document.getElementById("message");
-	var channel = document.getElementById("channel");
-	var guest = document.getElementById("guest");
-	var youtube = document.getElementById("youtube");
-	var moreInfo = document.getElementById("moreInfo");
+	
 	//alert("==2==");
-	if (emptyCheck(programName, "name Name", "contactUsMessage")
-			&& minLenCheck(name, 5, "Program Name", "contactUsMessage")
-			&& maxLenCheck(name, 10, "Program Name", "contactUsMessage")
-			&& allLetter(name, "Program Name", "contactUsMessage")
+	if (emptyCheck(name, "name", "contactUsMessage")
+			&& minLenCheck(name, 5, "name", "contactUsMessage")
+			&& maxLenCheck(name, 10, "name", "contactUsMessage")
+			&& allLetter(name, "name", "contactUsMessage")
 			&& emptyCheck(email, "Duration", "contactUsMessage")
-			&& emptyCheck(message, "Date & TimeFrom", "contactUsMessage")
-			&& emptyCheck(subject, "Date & Time To", "contactUsMessage")
+			&& emptyCheck(subject, "Date & TimeFrom", "contactUsMessage")
+			&& emptyCheck(message, "Date & Time To", "contactUsMessage")
 			) {
 
 		saveContact();
@@ -124,8 +111,13 @@ function saveContact(){
           <div class="col-md-5">
             <div class="row col1">
               <div class="col-xs-5"><h4> <i class="fa fa-map-marker" style="font-size:16px;"></i>   Address </h4></div>
-              <div class="col-xs-7"> <p>One Gateway Center, Suite 25500+,<br>
-                Newark 23, NJ 10235 </p></div>
+              <div class="col-xs-7"> 
+              <p>Plot No: 78, Road No: 71,<br>
+                Navanirman Nagar Colony,<br>
+                Besides Jublee Hills Public School,<br>
+                HYDERABAD -  500033,<br>
+                Telangana,India.
+                 </p></div>
             </div>
             <div class="row col1">
               <div class="col-xs-5"><h4> <i class="fa fa-phone" style="font-size:16px;"></i>   Phone </h4></div>
@@ -134,8 +126,8 @@ function saveContact(){
             
             <div class="row col1">
               <div class="col-xs-5"> <h4><i class="fa fa-envelope" style="font-size:16px;"></i>   Email </h4></div>
-              <div class="col-xs-7"> <a href="#">info@yourdomain.com</a> <br>
-                <a href="#">support@yourdomain.com</a> </div>
+              <div class="col-xs-7"> <a href="#">info@usgfa.com</a> <br>ss
+                <a href="#">support@usgfa.com</a> </div>
             </div>
 
           </div>
@@ -144,6 +136,9 @@ function saveContact(){
             <form id="ajax-contact"  method="post" action="#" role="form"> 
               <div class="messages" id="form-messages"></div>
               <div class="controls">
+              				<div class="form-group">
+					<label for="event_name"><h4>* These fields are required</h4></label>
+				</div>
                 <div class="row">
                   <div class="col-md-4">
                     <div class="form-group">
@@ -153,7 +148,7 @@ function saveContact(){
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
-                      <input id="email" type="text" name="name" class="form-control contact_page_form" placeholder="Email *" required data-error="Firstname is required.">
+                      <input id="email" type="text" name="email" class="form-control contact_page_form" placeholder="Email *" required data-error="Firstname is required.">
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
@@ -180,10 +175,6 @@ function saveContact(){
           </div>
                     <!-- </a> -->
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12"> <br>
-                    <small class="text-muted " style="text-align:right; float:right;"><strong>*</strong> These fields are required.</small> </div>
                 </div>
               </div>
             </form>

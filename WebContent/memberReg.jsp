@@ -2,39 +2,6 @@
 <html>
 <head>
 <script type="text/javascript" src="js/member.js"></script>
-</head>
-<body>
-	<!----------------------top_header start-------------------------------->
-	<jsp:include page="includes.jsp" />
-	<!----------------------top_header end---------------------------------->
-<body>
-	<!----------------------top_header start---------------------------->
-	<jsp:include page="topheader.jsp" />
-	<!----------------------top_header end------------------------------>
-
-	<!----------------------header  start------------------------------->
-	<jsp:include page="header.jsp" />
-	<!----------------------header end---------------------------------->
-
-	<!----------------------menus start--------------------------------->
-	<jsp:include page="menu.jsp" />
-	<!----------------------menus end----------------------------------->
-
-	<!----------------------banner start-------------------------------->
-	<%-- <jsp:include page="banner.jsp" /> --%>
-	<!----------------------banner end---------------------------------->
-	
-	  <head>
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
 <script type="text/javascript">
 function memberFarmValidation() {
 	//alert("==Entered==");
@@ -60,30 +27,60 @@ function memberFarmValidation() {
 	//alert("==2==");
 	if (emptyCheck(firstName, "First Name", "memberMessage")
 			&& minLenCheck(firstName, 5, "First Name", "memberMessage")
-			&& maxLenCheck(firstName, 10, "First Name", "memberMessage")
+			&& maxLenCheck(firstName, 30, "First Name", "memberMessage")
 			&& allLetter(firstName, "First Name", "memberMessage")
 			&& emptyCheck(middleName, "Middle Name", "memberMessage")
+			&& allLetter(middleName, "Middle Name", "memberMessage")
 			&& emptyCheck(lastName, "Surname/Last Name", "memberMessage")
+			&& allLetter(lastName, "Surname/Last Name", "memberMessage")
 			&& emptyCheck(mobile, "Mobile/Contact No ", "memberMessage")
 			&& allNumber(mobile, "Mobile/Contact No ", "memberMessage")
 			&& minLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
 			&& maxLenCheck(mobile, 10, "Mobile/Contact No", "memberMessage")
 			/* && allNumber(email, "Email", "memberMessage") */
 			&& emptyCheck(email, "Email ", "memberMessage")
+			&& eMail(email, "Email ", "memberMessage")
 			&& emptyCheck(address, "Address", "memberMessage")
+			&& minLenCheck(address, 5, "Address", "memberMessage")
+			&& maxLenCheck(address, 30, "Address", "memberMessage")
 			&& emptyCheck(place, "Place/City", "memberMessage")
+			&& allLetter(place, "Place/City", "memberMessage")
+			&& minLenCheck(place, 5, "Place/City", "memberMessage")
+			&& maxLenCheck(place, 30, "Place/City", "memberMessage")
 			&& emptyCheck(mandal, "Mandal", "memberMessage")
+			&& allLetter(mandal, "Mandal", "memberMessage")
+			&& minLenCheck(mandal, 5, "Mandal", "memberMessage")
+			&& maxLenCheck(mandal, 30, "Mandal", "memberMessage")
 			&& emptyCheck(district, "District", "memberMessage")
+			&& allLetter(district, "District", "memberMessage")
+			&& minLenCheck(district, 5, "District", "memberMessage")
+			&& maxLenCheck(district, 30, "District", "memberMessage")
 			&& emptyCheck(pincode, "Pin Code", "memberMessage")
 			&& allNumber(pincode, "Pin Code", "memberMessage")
 			&& minLenCheck(pincode, 6, "Pin Code", "memberMessage")
 			&& maxLenCheck(pincode, 6, "Pin Code", "memberMessage")
 			&& emptyCheck(farmName, "Farm Name", "memberMessage")
+			&& allLetter(farmName, "Farm Name", "memberMessage")
+			&& minLenCheck(farmName, 5, "Farm Name", "memberMessage")
+			&& maxLenCheck(farmName, 30, "Farm Name", "memberMessage")
 			&& emptyCheck(farmPlace, "Farm Place/City", "memberMessage")
+			&& allLetter(farmPlace, "Farm Place/City", "memberMessage")
+			&& minLenCheck(farmPlace, 5, "Farm Place/City", "memberMessage")
+			&& maxLenCheck(farmPlace, 30, "Farm Place/City", "memberMessage")
 			&& emptyCheck(farmAddress, "Farm Address", "memberMessage")
+			&& minLenCheck(farmAddress, 5, "Farm Address", "memberMessage")
+			&& maxLenCheck(farmAddress, 30, "Farm Address", "memberMessage")
 			&& emptyCheck(farmMandal, "Mandal", "memberMessage")
+			&& allLetter(farmMandal, "Mandal", "memberMessage")
+			&& minLenCheck(farmMandal, 5, "Mandal", "memberMessage")
+			&& maxLenCheck(farmMandal, 30, "Mandal", "memberMessage")
 			&& emptyCheck(farmDistrict, "District", "memberMessage")
+			&& allLetter(farmDistrict, "District", "memberMessage")
+			&& minLenCheck(farmDistrict, 5, "District", "memberMessage")
+			&& maxLenCheck(farmDistrict, 30, "District", "memberMessage")
 			&& emptyCheck(aboutFarm, "About You/Farm", "memberMessage")
+			&& minLenCheck(aboutFarm, 5, "About You/Farm", "memberMessage")
+			&& maxLenCheck(aboutFarm, 30, "About You/Farm", "memberMessage")
 			&& emptyCheck(farmPincode, "Farm Pin Code", "memberMessage")
 			&& allNumber(farmPincode, "Farm Pin Code", "memberMessage")
 			&& minLenCheck(farmPincode, 6, "Farm Pin Code", "memberMessage")
@@ -97,7 +94,7 @@ function memberFarmValidation() {
 
 
 	function saveMember(){
-	alert(" in to js page----------------");
+	//alert(" in to js page----------------");
 	var title = $("#title").val();
 	var firstName =$("#firstName").val();
 	var middleName = $("#middleName").val();
@@ -128,7 +125,7 @@ function memberFarmValidation() {
 	////alert("title----------------"+title);
 	////alert("firstName----------------"+firstName);
 	////alert("profession----------------"+profession);
-	alert("farmName----------------"+farmName);
+	//alert("farmName----------------"+farmName);
 	
 	
 	
@@ -172,7 +169,7 @@ function memberFarmValidation() {
 		url : "emp/memberService/addMember",
 		success : function(data) {
 			if (data.Msg = "success") {
-				alert("b4...........");
+				//alert("b4...........");
 				window.location.href = "memberList.jsp";
 				//alert("a4...........");
 			}
@@ -194,6 +191,31 @@ function memberFarmValidation() {
 
 </script>
 </head>
+<body>
+	<!----------------------top_header start-------------------------------->
+	<jsp:include page="includes.jsp" />
+	<!----------------------top_header end---------------------------------->
+<body>
+	<!----------------------top_header start---------------------------->
+	<jsp:include page="topheader.jsp" />
+	<!----------------------top_header end------------------------------>
+
+	<!----------------------header  start------------------------------->
+	<jsp:include page="header.jsp" />
+	<!----------------------header end---------------------------------->
+
+	<!----------------------menus start--------------------------------->
+	<jsp:include page="menu.jsp" />
+	<!----------------------menus end----------------------------------->
+
+	<!----------------------banner start-------------------------------->
+	<%-- <jsp:include page="banner.jsp" /> --%>
+	<!----------------------banner end---------------------------------->
+	
+	  <head>
+
+
+</head>
 	<!----------------------body_content start-------------------------->
 
 	<div class="clearfix"></div>
@@ -207,6 +229,7 @@ function memberFarmValidation() {
 			</div>
 		</div>
 	</div>
+	
 	<div class="clearfix"></div>
 
 	<div class="clearfix"></div>
@@ -215,6 +238,9 @@ function memberFarmValidation() {
 			<div class="col-md-12">
 				<div class="member_registration">
 					<h2>Personal Info</h2>
+				</div>
+				<div class="form-group">
+					<label for="event_name"><h4>* These fields are required</h4></label>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
@@ -296,7 +322,7 @@ function memberFarmValidation() {
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label for="pin_code">Pin Code *</label> <input type="text"
+							<label for="pin_code">Pin Code</label> <input type="text"
 								class="form-control" id="pincode" name="pincode">
 						</div>
 					</div>
@@ -378,7 +404,8 @@ function memberFarmValidation() {
 						<h2>Do you have Farm</h2>
 						<label class="radio-inline"> <input type="radio"
 							name="yesno" value="yes"> Yes
-						</label> <label class="radio-inline"> <input type="radio"
+						</label> <label class="radio-inline">
+						 <input type="radio"
 							name="yesno" checked value="no"> No
 						</label>
 					</div>
@@ -425,7 +452,6 @@ function memberFarmValidation() {
 				<div class="message">
 					<h3><aside class=" " id="memberMessage" style="display: none">Save Sucessfully</aside></h3>
 				</div>
-				<h4>* These fields are required</h4>
 			</div>
 
 			<!-------------------------submit button end--------------------------------------->
@@ -434,7 +460,7 @@ function memberFarmValidation() {
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<div id="">
+	<div id="farmFields">
 		<div class="col-md-12">
 			<div class="member_registration">
 				<h2>Farm Info</h2>
@@ -492,7 +518,7 @@ function memberFarmValidation() {
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="farm_pin_code">Farm Pin Code *</label> <input
+						<label for="farm_pin_code">Farm Pin Code</label> <input
 							type="text" class="form-control" id="farmPincode"
 							name="farmPincode">
 					</div>
@@ -526,7 +552,7 @@ function memberFarmValidation() {
 
 							<!----------------------photo_gallery------------------------------>
 
-							<div class="row">
+							<!-- <div class="row">
 								<div class="modal fade" id="image-gallery" tabindex="-1"
 									role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
 									style="display: none;">
@@ -562,7 +588,7 @@ function memberFarmValidation() {
 								<div class="row">
 
 									<div class="col-md-12" style="margin-bottom: 10px;">
-										<!-- Controls -->
+										Controls
 										<div class="controls pull-right ">
 											<a class="left fa fa-angle-left btn btn-default button-arrow"
 												href="#carousel-example" data-slide="prev"></a> <a
@@ -573,7 +599,7 @@ function memberFarmValidation() {
 								</div>
 								<div id="carousel-example" class="carousel slide"
 									data-ride="carousel">
-									<!-- Wrapper for slides -->
+									Wrapper for slides
 									<div class="carousel-inner">
 										<div class="item active left">
 											<div class="row">
@@ -656,15 +682,15 @@ function memberFarmValidation() {
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 							<!----------------------photo_gallery end------------------------------>
 
 							<!----------------------video_gallery------------------------------>
-							<div class="col-md-6">
+							<!-- <div class="col-md-6">
 								<div class="row">
 
 									<div class="col-md-12 " style="margin-bottom: 10px;">
-										<!-- Controls -->
+										Controls
 										<div class="controls pull-right">
 											<a class="left fa fa-angle-left btn btn-default button-arrow"
 												href="#carousel-example1" data-slide="prev"></a> <a
@@ -675,7 +701,7 @@ function memberFarmValidation() {
 								</div>
 								<div id="carousel-example1" class="carousel slide "
 									data-ride="carousel">
-									<!-- Wrapper for slides -->
+									Wrapper for slides
 									<div class="carousel-inner">
 										<div class="item">
 											<div class="row">
@@ -759,7 +785,7 @@ function memberFarmValidation() {
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 							<!----------------------video_gallery end------------------------------>
 
 						</div>
@@ -791,6 +817,23 @@ function memberFarmValidation() {
 	<!----------------------footer start ------------------------------->
 	<jsp:include page="footer.jsp" />
 	<!----------------------footer end --------------------------------->
+	<script> 
+$(function(){
+	if($('[name="yesno"]:checked').val() == 'no'){
+		$('#moreFields').html('');
+	}
+	$(document).on('change','[name="yesno"]',function(){
+					var html = '';
+		if($(this).val() == 'yes' ){
+			html = $('#farmFields').html();			
+		}
+		$('#moreFields').html(html);
+	})
+	
+})
+
+
+</script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

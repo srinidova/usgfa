@@ -32,16 +32,7 @@
         
         
          <head>        
-<link rel="stylesheet" href="css/chosen.min.css">
-<link rel="stylesheet" href="css/jquery-ui.css">
-<link rel="stylesheet" href="css/jquery-ui.min.css">
-<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-<!-- <script  src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
-<script src="js/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="js/chosen.jquery.js"></script>
-<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="js/vendor-date.js"></script>
+
 <script type="text/javascript">
 $(document)
 .ready(
@@ -57,7 +48,7 @@ $(document)
 											data.EventProfile,
 											function(key, val) {
 												//alert("getEventProfile---*****123*****-------eventId=="+data.EventProfile[key].eventId);
-												alert("getEventProfile---*****123*****-------eventProfDateTimeFrom=="+data.EventProfile[key].timeFrom);
+												//alert("getEventProfile---*****123*****-------eventProfDateTimeFrom=="+data.EventProfile[key].timeFrom);
 											    $('#eventProfEventName').text(data.EventProfile[key].eventName);
 												 
 												$('#eventProfNoOfDays').text(data.EventProfile[key].noOfDays); 
@@ -70,7 +61,7 @@ $(document)
 											$.each(
 													data.EVENTFILES,
 													function(key, val) {
-														alert("EVENTFILES---*****99999999999*****-------filePath=="+data.EVENTFILES[key].filePath);
+														//alert("EVENTFILES---*****99999999999*****-------filePath=="+data.EVENTFILES[key].filePath);
 														html = html
 														+'<li>'
 														+'<div class="fff">'
@@ -83,12 +74,12 @@ $(document)
 															+'<div class="caption" style="margin-top: 0px;">'
 																+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
 																	+'<div class="suceee_msg">'
-																		+'<h4>Updated successfully</h4>'
+																		+'/* <h4>Updated successfully</h4> */'
 																	+'</div>'
 																+'</div>'
 																+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
 																	+'<div class="suceee_msg">'
-																		+'<h4>Delete Message</h4>'
+																		+'/* <h4>Delete Message</h4> */'
 																	+'</div>'
 																+'</div>'
 															+'</div>'
@@ -102,7 +93,7 @@ $(document)
 		});
 function editProfEvent() {
 	//alert("editProfEvent---**********-------eventProfEventId=="+ $("#eventProfEventId").val());
-	alert("editProfEvent---**********-------eventProfDateTimeFrom=="+ $('#eventProfDateTimeFrom ').val());
+	//alert("editProfEvent---**********-------eventProfDateTimeFrom=="+ $('#eventProfDateTimeFrom ').val());
 	var eventId = $("#eventProfEventId").val();
 	//alert("editProfEvent---**********-------eventId=="+eventId);
 	var eventObject = new Object();
@@ -229,7 +220,7 @@ function editProfEvent() {
 										<div class="item active">
 											<ul style="padding-left: 0px;">
 											<div id="programImages"></div>
-												<!-- <li>
+												<li>
 													<div class="fff">
 														<div class="photo">
 															<a class="g-image" href="#" data-image-id=""
@@ -249,19 +240,19 @@ function editProfEvent() {
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
 													</div>
-												</li> -->
+												</li>
 											</ul>
 										</div>
 										<div class="item ">
@@ -286,14 +277,14 @@ function editProfEvent() {
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -339,14 +330,14 @@ function editProfEvent() {
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -377,14 +368,14 @@ function editProfEvent() {
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>

@@ -19,8 +19,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -44,6 +47,8 @@ import com.dto.StoriesFileDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+
+import net.sf.json.JSONObject;
 
 @Path("/commonUtils")
 public class CommonUtils {
@@ -280,6 +285,7 @@ public class CommonUtils {
 			UploadFileDTO uploadFileDto = new UploadFileDTO();
 			uploadFileDto.setFileId(sFileId);
 			uploadFileDto.setFilePath(sFilePath);
+			uploadFileDto.setShowPublic("0");
 		    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
 		    
 		    UploadFileBO filebo = new UploadFileBO();
@@ -404,5 +410,40 @@ public class CommonUtils {
 		}
 		return emailDTO;
 	}
-	
+	/*public static void showPublic(HttpServletRequest request,String upId){
+		HttpSession session = request.getSession();
+		UploadFileDTO uploadFileDto = new UploadFileDTO();
+		uploadFileDto.setShowPublic("0");
+		if(upId.equals("0")){
+			
+			
+		}
+		
+		
+	}*/
+	public static void deleteImage()
+	{
+		
+	}
+	/*@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getNewsId")*/
+	public static void getFileId(@QueryParam("fileId") String fileId, @Context HttpServletRequest request) {
+		//System.out.println("1. *****Called getNewsId**********newsId==" + newsId);
+		JSONObject jobj = new JSONObject();
+		try {
+			HttpSession session = request.getSession();
+
+			if (!(fileId.length() < 0)) {
+				session.setAttribute("FILEID", fileId);
+			} else {
+				jobj.put("FileId", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("Profile jobj-->" + jobj);
+		return;
+
+	}
 }
