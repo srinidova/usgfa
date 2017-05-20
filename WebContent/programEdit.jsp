@@ -506,7 +506,8 @@ function programUpdate(){
     $(function () {
 	
         $('#programEditTimeFrom,#programEditTimeTo').datetimepicker({
-			 useCurrent: false
+			 useCurrent: false,
+			 format: 'DD/MM/YYYY LT'
 			});
 
 		$('.cross_icon').click(function(){

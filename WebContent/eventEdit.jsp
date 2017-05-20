@@ -397,7 +397,7 @@ function eventUpdate(){
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -430,14 +430,14 @@ function eventUpdate(){
 																	as Public
 																</label>
 																<div class="suceee_msg">
-																	<h4>Updated successfully</h4>
+																	<!-- <h4>Updated successfully</h4> -->
 																</div>
 															</div>
 															<div class="delete_box">
 																<a href="#"><i class="fa fa-trash-o"
 																	aria-hidden="true"></i> Delete</a>
 																<div class="suceee_msg">
-																	<h4>Delete Message</h4>
+																	<!-- <h4>Delete Message</h4> -->
 																</div>
 															</div>
 														</div>
@@ -537,7 +537,7 @@ function eventUpdate(){
 															<a href="#"><i class="fa fa-trash-o"
 																aria-hidden="true"></i> Delete</a>
 															<div class="suceee_msg">
-																<h4>Delete Message</h4>
+																<!-- <h4>Delete Message</h4> -->
 															</div>
 														</div>
 													</div>
@@ -754,7 +754,8 @@ function eventUpdate(){
     $(function () {
 	
         $('#eventEditTimeFrom1,#eventEditTimeEnd1').datetimepicker({
-			 useCurrent: false
+			 useCurrent: false,
+			 format: 'DD/MM/YYYY LT'
 			});
 
 		$('.cross_icon').click(function(){

@@ -145,7 +145,7 @@ $(document).ready(function() {
 				$.each(
 											data.MemberFarmEdit,
 											function(key, val) {
-												//alert("memberFarmEditFarmName --------- farmName=="+data.MemberFarmEdit[key].farmState);
+												//alert("memberFarmEditFarmName --------- farmName=="+data.MemberFarmEdit[key].farmName);
 												$('#memberFarmEditFarmName').val(data.MemberFarmEdit[key].farmName);
 												$('#memberFarmEditFarmPlace').val(data.MemberFarmEdit[key].farmPlace);
 												$('#memberFarmEditFarmAddress').val(data.MemberFarmEdit[key].farmAddress);

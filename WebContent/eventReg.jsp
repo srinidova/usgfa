@@ -432,6 +432,7 @@ function saveEvent(){
 	
         $('#eventTimeFrom,#eventTimeEnd').datetimepicker({
 			 useCurrent: false,
+			 format: 'DD/MM/YYYY LT'
 			});
 
 		$('.cross_icon').click(function(){

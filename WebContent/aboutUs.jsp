@@ -85,7 +85,7 @@
 				<div class="team-1">
 					<div class="col-md-2">
 						<div class="aboutus_img">
-							<img src="images/placeholder.png" class="img-responsive ">
+							<img src="uploads/images/bbbc0199-7a7d-47fa-9f9a-0bf6f66aa46d.jpg" class="img-responsive ">
 						</div>
 					</div>
 					<div class="col-md-10">
@@ -118,7 +118,7 @@
 
 					<div class=" col-md-2 col-sm-2 col-md-push-10">
 						<div class="aboutus_img">
-							<img src="images/placeholder.png" class="img-responsive">
+							<img src="uploads/images/7a76d25e-9038-4c73-b5c4-95baa7b50a91s1.jpg" class="img-responsive">
 						</div>
 					</div>
 					<div class="col-md-10 col-sm-10 col-md-pull-2">

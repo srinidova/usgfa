@@ -271,7 +271,8 @@ function saveProgram(){
     $(function () {
 	
         $('#programTimeFrom,#programTimeTo').datetimepicker({
-			 useCurrent: false
+			 useCurrent: false,
+			 format: 'DD/MM/YYYY LT'
 			});
 
 		$('.cross_icon').click(function(){
