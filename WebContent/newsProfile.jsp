@@ -25,11 +25,11 @@
 <head>
 
 <script type="text/javascript">
+var dispImages = '';
 	$(document)
 			.ready(
 					function() {
 						//alert("-------in News Profile--Jsp---");
-						var html = '';
 						$
 								.ajax({
 									url : "emp/newsService/getNewsProfile",
@@ -64,35 +64,44 @@
 																data.NEWSFILES,
 																function(key, val) {
 																	//alert("NEWSFILES---*****99999999999*****-------filePath=="+data.NEWSFILES[key].filePath);
-																	html = html
-																	+'<li class="col-md-12">'
-																		+'<div class="fff">'
-																			+'<div class="thumbnail">'
-																				+'<a href="#"> <img src='+data.NEWSFILES[key].filePath+' class="img-responsive" alt=""></a>'
-																			+'</div>'
-																			+'<div class="img_tiltle">'
-																				+'<h2>Image 1</h2>'
-																			+'</div>'
-																			+'<div class="caption">'
-																				+'<div class="checkbox">'
-																					+'<label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
-																					+'<div class="suceee_msg">/* <h4>Updated successfully</h4> */</div>'
+																	dispImages = dispImages
+																	+'<div class="item next left">'
+																	+'<div class="row">'
+																		+'<div class="col-md-12">'
+																			+'<div class="col-item">'
+																				+'<div class="photo">'
+																					+'<a class="g-image" href="#" data-image-id="2" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
+																						+'<img class="img-responsive" src="'+data.NEWSFILES[key].filePath+'" alt="Short alt text">'
+																					+'</a>'
 																				+'</div>'
-																				+'<div class="delete_box">'
-																					+'<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																					+'<div class="suceee_msg">/* <h4>Delete Message</h4> */</div>'
+																				+'<div class="img_tiltle" style="margin-top: 7px;">'
+																					+'<h2>Image 222</h2>'
+																				+'</div>'
+																				+'<div class="caption" style="margin-top: 0px;">'
+																					+'<div class="checkbox">'
+																						+'<label>'
+																							+'<a href="#" onclick="updateShowAsPublic();">'
+																								+'<input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public'
+																							+'</a>'
+																						+'</label>'
+																						+'<div class="suceee_msg">'
+																							+'<!-- <h4>Updated successfully</h4> -->'
+																						+'</div>'
+																					+'</div>'
+																					+'<div class="delete_box">'
+																						+'<a href="#" onclick="deleteFile();"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																						+'<div class="suceee_msg">'
+																							+'<!-- <h4>Delete Message</h4> -->'
+																						+'</div>'
+																					+'</div>'
 																				+'</div>'
 																			+'</div>'
 																		+'</div>'
-																	+'</li>'
-
+																	+'</div>'
+																+'</div>'
 																})
-																
-																
-																$(html).appendTo("#newsImages");
+																document.getElementById("newsImages").innerHTML = dispImages;
 									}
-								
-								
 								});
 						
 
@@ -256,86 +265,8 @@
 						<div id="carousel-example" class="carousel slide"
 							data-ride="carousel">
 							<!-- Wrapper for slides -->
-							<div class="carousel-inner">
-								<div class="item active left">
-									<div class="row">
-										<div class="col-sm-12" id="imageId">
-											<div class="col-item">
-												<div class="photo">
-													<a class="g-image" href="#" data-image-id="1"
-														data-toggle="modal" data-title="" data-caption=""
-														data-image="images/g2.jpg" data-target="#image-gallery">
-														<img class="img-responsive" src="images/g2.jpg"
-														alt="Short alt text">
-													</a>
-												</div>
-
-												<div class="img_tiltle" style="margin-top: 7px;">
-													<h2>Image 1</h2>
-												</div>
-
-												<div class="caption" style="margin-top: 0px;">
-													<div class="checkbox">
-														<label> <input id="login-remember" type="checkbox"
-															name="remember" value="1"> Show as Public
-														</label>
-														<div class="suceee_msg">
-															<!-- <h4>Updated successfully</h4> -->
-														</div>
-													</div>
-													<div class="delete_box" id="imageId">
-														<a href="#" onclick=""><i class="fa fa-trash-o"
-															aria-hidden="true"></i> Delete</a>
-														<div class="suceee_msg">
-															<!-- <h4>Delete Message</h4> -->
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="item next left">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-item">
-												<div class="photo">
-													<a class="g-image" href="#" data-image-id="2"
-														data-toggle="modal" data-title="" data-caption=""
-														data-image="images/g1.jpeg" data-target="#image-gallery">
-														<img class="img-responsive" src="images/g1.jpeg"
-														alt="Short alt text">
-													</a>
-												</div>
-
-
-												<div class="img_tiltle" style="margin-top: 7px;">
-													<h2>Image 2</h2>
-												</div>
-
-												<div class="caption" style="margin-top: 0px;">
-													<div class="checkbox">
-														<label> <a href="#"
-															onclick="updateShowAsPublic();"><input
-																id="login-remember" type="checkbox" name="remember"
-																value="1"> Show as Public</a>
-														</label>
-														<div class="suceee_msg">
-															<!-- <h4>Updated successfully</h4> -->
-														</div>
-													</div>
-													<div class="delete_box">
-														<a href="#" onclick="deleteFile();"><i
-															class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
-														<div class="suceee_msg">
-															<!-- <h4>Delete Message</h4> -->
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+							<div class="carousel-inner" id="newsImages">
+								
 							</div>
 						</div>
 					</div>

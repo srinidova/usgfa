@@ -86,7 +86,7 @@ public class CommonUtils {
 			@FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
 		System.out.println("in to commonUtils upload");
 		String sFileExtn = null;
-		String destination = "D:/currentworking/usgfa/WebContent/uploads/";
+		String destination = "D:/currentworking/usgfa/WebContent/images/uploads/";
 		HashMap<String, String> hm = null;
 		HttpSession session = request.getSession();
 		
@@ -165,7 +165,7 @@ public class CommonUtils {
 						+ FilenameUtils.getExtension(fileDetail.getFileName());
 				saveToFile(uploadedInputStream, uploadedFileLocation);
 				if (StringUtils.isNotEmpty(uploadedFileLocation)) {
-					hm.put(imageId, uploadedFileLocation);
+					hm.put(imageId, uploadedFileLocation.substring(35));
 
 				}
 			} catch (IOException e) {
@@ -195,7 +195,7 @@ public class CommonUtils {
 				String sFileName = zipentry.getName();
 				String sFileExtn = sFileName.substring(sFileName.lastIndexOf(".") + 1);
 				String sImageId = UUID.randomUUID().toString();
-				System.out.println("b. sImageId===" + sImageId);
+				//System.out.println("b. sImageId===" + sImageId);
 				File newFile = new File(sImageId + "." + sFileExtn);
 				if (zipentry.isDirectory()) {
 					newFile.mkdirs();
@@ -204,14 +204,14 @@ public class CommonUtils {
 				}
 
 				if (newFile.exists() && overwrite) {
-					System.out.println("Overwriting " + newFile);
+					//System.out.println("Overwriting " + newFile);
 					newFile.delete();
 				}
 
 				String sOutFile = destination + sImageId + "." + sFileExtn;
-				System.out.println("d. sOutFile===" + sOutFile);
+				//System.out.println("d. sOutFile===" + sOutFile);
 				if (StringUtils.isNotEmpty(sOutFile)) {
-					hm.put(sImageId, sOutFile);
+					hm.put(sImageId, sOutFile.substring(35));
 				}
 
 				fileoutputstream = new FileOutputStream(new File(sOutFile));
