@@ -1,9 +1,6 @@
 package com.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,21 +16,11 @@ import org.apache.commons.lang.StringUtils;
 import com.bo.EventBO;
 import com.bo.EventFileBO;
 import com.bo.EventGuestBO;
-import com.bo.FarmBO;
 import com.bo.GuestBO;
-import com.bo.MemberBO;
-import com.bo.NewsBO;
-import com.bo.ProgramFileBO;
-import com.bo.UploadFileBO;
-import com.dao.EventDAO;
 import com.dto.EventDTO;
 import com.dto.EventFileDTO;
 import com.dto.EventGuestDTO;
-import com.dto.FarmDTO;
 import com.dto.GuestDTO;
-import com.dto.MemberFarmDTO;
-import com.dto.NewsDTO;
-import com.dto.ProgramFileDTO;
 import com.dto.UploadFileDTO;
 import com.util.CommonUtils;
 
@@ -60,19 +47,21 @@ public class EventService {
 			@QueryParam("pincode") String pinCode,
 			@QueryParam("moreInfo") String moreInfo,
 			@QueryParam("guestId") String guestId,
-			@QueryParam("title") String title,
-			@QueryParam("name") String name,
-			@QueryParam("designation") String designation) {
+			@QueryParam("guestTitle") String guestTitle,
+			@QueryParam("guestName") String guestName,
+			@QueryParam("guestDesi") String guestDesi) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
 		String resultGuest = "fail";
 		String resultEventGuest = "fail";
+		String delims = "~";
 
-
-		//System.out.println("1.a In addEvent---------- eventName===" + eventName);
-		//System.out.println("1.b In addEvent---------- timeFrom===" + timeFrom);
-		//System.out.println("1.d In addEvent---------- noOfDays===" + noOfDays);
+		//System.out.println("1.a In addEvent---------- guestTitle===" + guestTitle);
+		//System.out.println("1.b In addEvent---------- guestName===" + guestName);
+		//System.out.println("1.d In addEvent---------- guestDesi===" + guestDesi);
+		
+		
 
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
@@ -97,31 +86,51 @@ public class EventService {
 				
 				EventBO bo = new EventBO();
 				result = bo.addEvent(eventDto);
+				//System.out.println("y. In EventDAO addEvent---------- result===" + result);
 				
-				GuestDTO guestDto = new GuestDTO();
-				String sGuestId = CommonUtils.getAutoGenId();
-				guestDto.setGuestId(sGuestId);
-				guestDto.setTitle(title);
-				guestDto.setName(name);
-				guestDto.setDesignation(designation);
 				
 				GuestBO guestBo = new GuestBO();
-				resultGuest = guestBo.addGuest(guestDto);
-				
-				EventGuestDTO eventGuestDto = new EventGuestDTO();
-				eventGuestDto.setEventId(sId);
-				eventGuestDto.setGuestId(sGuestId);
 				EventGuestBO eventGuestBo = new EventGuestBO();
-				resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
-					
-				System.out.println("resultEventGuest"+resultEventGuest);
+				
+				String[] tokensTitle = guestTitle.split(delims);
+				String[] tokensName = guestName.split(delims);
+				String[] tokensDesi = guestDesi.split(delims);
+
+				int tokenCountTitle = tokensTitle.length;
+				if(StringUtils.isNotEmpty(guestTitle) &&tokenCountTitle > 0){
+					for (int j = 0; j < tokenCountTitle; j++) {
+						
+						String sTitle =  tokensTitle[j];
+						String sName = tokensName[j];
+						String sDesi = tokensDesi[j];
+						//System.out.println("sName=="+ sName+"-----sTitle=="+ sTitle+"---------sDesi=="+ sDesi);
+						
+						GuestDTO guestDto = new GuestDTO();
+						String sGuestId = CommonUtils.getAutoGenId();
+						guestDto.setGuestId(sGuestId);
+						guestDto.setTitle(sTitle);
+						guestDto.setName(sName);
+						guestDto.setDesignation(sDesi);
+						
+						resultGuest = guestBo.addGuest(guestDto);
+						
+						EventGuestDTO eventGuestDto = new EventGuestDTO();
+						eventGuestDto.setEventId(sId);
+						eventGuestDto.setGuestId(sGuestId);
+
+						resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
+					}
+				}
+				//System.out.println("resultEventGuest"+resultEventGuest);
 				CommonUtils.saveFileData(request, sId, "EVENT");
 			}
 			
-			//System.out.println("result........." + result);
+			System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
+				System.out.println("--success--->");
 				jObj.put("Msg", result);
 			} else {
+				System.out.println("--fail--->");
 				jObj.put("Msg", result);
 			}
 		} catch (Exception e) {
@@ -136,8 +145,6 @@ public class EventService {
 	public JSONObject getEventDetails() {
 		
 		JSONObject jobj1 = new JSONObject();
-		//JSONObject jobj2 = new JSONObject();
-		
 		EventBO bo= new EventBO();
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
 		
@@ -226,11 +233,11 @@ public class EventService {
 		// get program image
 		EventFileDTO eventFileDto = new EventFileDTO();
 		eventFileDto.setEventId(eventId);
-		System.out.println("****eventImages==" + eventFileDto.getEventId());
+		//System.out.println("****eventImages==" + eventFileDto.getEventId());
 		EventFileBO eventFileBo = new EventFileBO();
 		lstUploadFileDTO = eventFileBo.getEventImages(eventFileDto);
 		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
-			System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 			jobj.put("EVENTFILES", lstUploadFileDTO);
 		}
 		//System.out.println("Profile jobj-->" + jobj);
@@ -265,17 +272,17 @@ public class EventService {
 				}
 				EventGuestDTO eventGuestDto = new EventGuestDTO();
 				eventGuestDto.setEventId(eventId);
-				//memberFarmDto.setMemberId(memberId);
 				GuestBO gbo = new GuestBO();
-				//guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
+				guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
 				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
-				//FarmBO fbo  = new FarmBO();
 				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
 				
-				//System.out.println("****farmList.size==" + farmList.size());
+				//System.out.println("****guestList.size==" + guestList.size());
 				if (!(guestList.size() < 0)) {
 					jobj.put("EventGuestEdit", guestList);
 				}
+				
+				
 				//System.out.println("****guestList.size==" + guestList.size());
 			}
 		} catch (Exception e) {
@@ -331,8 +338,7 @@ public class EventService {
 				
 				EventBO bo = new EventBO();
 				result = bo.eventUpdate(eventDto);
-				//result = bo.addEvent(eventDto);
-				//result = bo.addNewsDetails(eventDto);
+				
 				CommonUtils.saveFileData(request, eventId, "EVENT");
 			}
 			
@@ -352,18 +358,16 @@ public class EventService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteEvent")
 	public JSONObject deleteEvent(@QueryParam("eventId") String eventId) {
-		System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
+		//System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
 		JSONObject jobj1 = new JSONObject();
 		EventBO bo =new EventBO();
 		EventDTO dto = new EventDTO();
 		dto.setEventId(eventId);
-		/*NewsBO bo = new NewsBO();
-		NewsDTO dto = new NewsDTO();
-		dto.setNewsId(newsId);*/
+		
 		String result = "fail";
 		try {
 			result = bo.deleteEvent(dto);
-			//result = bo.deleteNews(dto);
+			
 			jobj1.put("EventDelete", result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -372,20 +376,75 @@ public class EventService {
 		return jobj1;
 
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/deleteGuest")
+	public JSONObject deleteGuest(@QueryParam("guestId") String guestId) {
+		//System.out.println("1. *****Called deleteGuest**********guestId=="+guestId);
+		JSONObject jobj1 = null;
+		String guestDelete ="fail";
+		String eventGuestDelete = "fail";
+		String sEventId = null;
+		ArrayList<EventGuestDTO> lstEventGuestDTO = null;
+		EventGuestBO eventGuestBo = new EventGuestBO();
+		
+		EventGuestDTO eventGuestDTO = new EventGuestDTO();
+		eventGuestDTO.setGuestId(guestId);
+		
+		lstEventGuestDTO =  eventGuestBo.getEventGuestByGuestId(eventGuestDTO);
+		
+        if(lstEventGuestDTO != null && lstEventGuestDTO.size() > 0){
+        	for(int i=0; i < lstEventGuestDTO.size(); i++){
+        		EventGuestDTO eventGuestDto = lstEventGuestDTO.get(i);
+        		sEventId = eventGuestDto.getEventId();
+        	}
+        }
+       // System.out.println("1. *****Called deleteGuest**********sEventId=="+sEventId);
+        
+        // delete guest 
+		GuestDTO guestDto = new GuestDTO();
+		guestDto.setGuestId(guestId);
+		GuestBO guestBo = new GuestBO();
+		guestDelete = guestBo.deleteGuest(guestDto);
+		
+		//System.out.println("1. *****Called deleteGuest**********guestDelete=="+guestDelete);
+
+		// delete eventGuest
+		eventGuestDTO.setEventId(sEventId);
+		eventGuestDelete = eventGuestBo.deleteEventGuest(eventGuestDTO);
+		//System.out.println("1. *****Called deleteGuest**********eventGuestDelete=="+eventGuestDelete);
+
+		if(guestDelete.equals("success") && eventGuestDelete.equals("success")  ){
+			jobj1 =  getGuests(sEventId);
+					
+		}
+		//System.out.println("delete jobj1-->" + jobj1);
+		
+		return jobj1;
+
+	}
 	/*@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getEventImages")
-    public JSONObject getEventImages(@Context HttpServletRequest request,@QueryParam("eventId") String newsId,@QueryParam("fileId") String fileId){
-		
+	@Path("/getGuests")*/
+	public JSONObject getGuests(String eventId){
 		JSONObject jobj = new JSONObject();
+		String resultGetGuests = "fail";
+		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
+		/*HttpSession session = request.getSession();
+		String eventId = (String) session.getAttribute("EVENTID");*/
+		EventGuestDTO eventGuestDto = new EventGuestDTO();
+		eventGuestDto.setEventId(eventId);
+		GuestBO gbo = new GuestBO();
+		guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
+
 		
-		String result ="fail";
-		
-		UploadFileDTO uploadFileDto = new UploadFileDTO();
-		uploadFileDto.setFileId(fileId);
-		
-		EventBO bo = new EventBO();
-		result = bo.getEventImage(uploadFileDto);
+		//System.out.println("****guestList.size==" + guestList.size());
+		if (!(guestList.size() < 0)) {
+			jobj.put("EventGuestEdit", guestList);
+		}else {
+			jobj.put("EventGuestEdit", "failed");
+		}
 		return jobj;
-	}*/
+	}
 }

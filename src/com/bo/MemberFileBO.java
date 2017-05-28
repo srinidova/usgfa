@@ -17,16 +17,13 @@ import com.dto.UploadFileDTO;
 public class MemberFileBO {
 
 	public String memberFile(MemberFileDTO memberFileDto) {
-		System.out.println("2. In memberFile---------- memberFile===" + memberFileDto.getFileId());
+		//System.out.println("2. In memberFile---------- memberFile===" + memberFileDto.getFileId());
 		MemberFileDAO dao = new MemberFileDAO();
 		return dao.memberFile(memberFileDto);
 	}
 	public ArrayList<UploadFileDTO> getMemberImages(MemberFileDTO memberFileDto){
-		System.out.println("2. In memberFile---------- memberFile===" + memberFileDto.getMemberId());
-		//System.out.println("2. In newsFile---------- newsFile===" + uploadFileDto.);
+		//System.out.println("2. In memberFile---------- memberFile===" + memberFileDto.getMemberId());
 		MemberFileDAO memberFileDao = new MemberFileDAO();
 		return memberFileDao.getMemberImages(memberFileDto);
-			//NewsFileDAO newsFileDao = new NewsFileDAO();
-			//return newsFileDao.getNewsImages(newsFileDto);
 		}
 }

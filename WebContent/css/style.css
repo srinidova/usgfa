@@ -1825,13 +1825,16 @@ td ul.actions li{display: inline-block;}
 }
 
 .errMsg{
-	margin-left: 150px;
-    font-weight: bold;
-    color: red;
+	margin-left: 60px;
+	font-weight: bold;
+	color: red;
+    font-size: smaller;
 }
-
-
-
+.formFailMsg{
+	margin-top: 40px;
+    margin-right: 150px;
+    font-weight: bold;
+}
 
 
 

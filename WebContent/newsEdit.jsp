@@ -32,23 +32,39 @@ function newsEditFarmValidation() {
 	var paper = document.getElementById("newsEditPaper");
 	var link = document.getElementById("newsEditLink");
 	var moreInfo = document.getElementById("newsEditMoreInfo");
+	var msg = "";
+    var title = "";
 	//alert("==2==");
-	if (emptyCheck(newsTitle, "Name Title", "newsMessage")
-			&& minLenCheck(newsTitle, 5, "newsTitle", "newsMessage")
-			&& maxLenCheck(newsTitle, 30, "Name Title", "newsMessage")
-			&& allLetter(newsTitle, "Name Title", "newsMessage")
-			&& emptyCheck(date, "Date", "newsMessage")
-			&& minLenCheck(date, 5, "newsTitle", "newsMessage")
-			&& maxLenCheck(date, 30, "Name Title", "newsMessage")
-			&& twoFieldsCheck(paper, link, "Paper or Link/Url","newsMessage")
-		   /*  && minLenCheck(paper, 5, "Paper", "newsMessage")
-			&& maxLenCheck(paper, 30, "Paper", "newsMessage")
-			&& minLenCheck(link, 5, "Link/Url", "newsMessage")
-			&& maxLenCheck(link, 30, "Link/Url", "newsMessage") */
-			&& (emptyCheck(moreInfo, "More Info", "newsMessage")
-			&& minLenCheck(moreInfo, 5, "More Info", "newsMessage")
-			&& maxLenCheck(moreInfo, 30, "More Info", "newsMessage"))) {
+	if(newsTitle.value.length == 0){
+		msg = "errEditNewsNameTitle";
+		title = "Name Title";
 
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		newsTitle.focus();
+		return false;
+	} else if (date.value.length == 0) {
+		//alert("----date zero-------");
+		msg = "errDate";
+		title = "Date";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		date.focus();
+		return false;
+	}else if (paper.value.length == 0 && link.value.length == 0) {
+		//alert("----paper /link  zero-------");
+		msg = "errEditNewsPaper";
+		title = "Paper or Link/Url";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		//date.focus();
+		return false;
+	}else{
+		$("#errEditNewsNameTitle").text("");
+		$("#errEditNewsDate").text("");
+		$("#errEditNewsPaper").text("");
 		newsUpdate();
 	}
 
@@ -133,16 +149,18 @@ $
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="event_name">Name Title *</label> 
-						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle">
+						<label for="event_name">Name Title *</label> <span class="errMsg" id="errEditNewsNameTitle"></span>
+						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle" maxlength=30
+						onkeyup="validateTitle(id,'Name Title','errEditNewsNameTitle',5,30);">
 						<input type="hidden" class="form-control" id="newsId" name="newsId">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="time_from">Date *</label>
+						<label for="time_from">Date *</label> <span class="errMsg" id="errEditNewsDate"></span>
 						<div class='input-group date' id="newsEditDate1">
-							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" /> 
+							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" maxlength=30
+							onkeyup="validateTitle(id,'Date','errEditNewsDate',5,30);"/> 
 							<span class="input-group-addon">
 							 <span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -152,19 +170,22 @@ $
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="land_mark"> Paper</label> 
-						<input type="text" class="form-control" id="newsEditPaper" name="newsEditPaper">
+						<span class="errMsg" id="errEditNewsPaper"></span> 
+						<input type="text" class="form-control" id="newsEditPaper" name="newsEditPaper" maxlength=30
+						onkeyup="emptyCheckTwoFields(id,'link', 'Paper or Link/Url','errEditNewsPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="land_mark">Link/Url</label> 
-						<input type="text" class="form-control" id="newsEditLink" name="newsEditLink">
+						<input type="text" class="form-control" id="newsEditLink" name="newsEditLink" maxlength=30
+						onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errEditNewsPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">More Info *</label>
-						<textarea class="form-control" rows="5" id="newsEditMoreInfo" name="newsEditMoreInfo"></textarea>
+						<textarea class="form-control" rows="5" id="newsEditMoreInfo" name="newsEditMoreInfo" maxlength=250></textarea>
 					</div>
 				</div>
 				<!-------------------------Upload Photo--------------------------------------->
@@ -194,241 +215,233 @@ $
 
 				<!----------------------photo_gallery------------------------------>
 
- <div class="row">
-<div class="modal fade" id="image-gallery" tabindex="-1"
-role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-style="display: none;">
-<div class="modal-dialog">
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal">
-	<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-</button>
-<h4 class="modal-title" id="image-gallery-title"></h4>
-</div>
-<div class="modal-body">
-<img id="image-gallery-image" class="img-responsive"
-	src="images/g2.jpg">
-</div>
-<div class="modal-footer">
-<div class="col-md-2">
-	<button type="button" class="btn btn-primary"
-		id="show-previous-image" style="display: none;">Previous</button>
-</div>
-<div class="col-md-8 text-justify"
-	id="image-gallery-caption"></div>
-<div class="col-md-2">
-	<button type="button" id="show-next-image"
-		class="btn btn-default">Next</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-md-6">
-<div class="row">
-
-<div class="col-md-12" style="margin-bottom: 10px;">
-<!-- Controls -->
-<div class="controls pull-right ">
-<a class="left fa fa-angle-left btn btn-default button-arrow"
-href="#carousel-example" data-slide="prev"></a> <a
-class="right fa fa-angle-right btn btn-default button-arrow"
-href="#carousel-example" data-slide="next"></a>
-</div>
-</div>
-</div>
-<div id="carousel-example" class="carousel slide"
-data-ride="carousel">
-<!-- Wrapper for slides -->
-<div class="carousel-inner">
-<div class="item active left">
-<div class="row">
-<div class="col-sm-12">
-	<div class="col-item">
-		<div class="photo">
-			<a class="g-image" href="#" data-image-id="1"
-				data-toggle="modal" data-title="" data-caption=""
-				data-image="images/g2.jpg" data-target="#image-gallery">
-				<img class="img-responsive" src="images/g2.jpg"
-				alt="Short alt text">
-			</a>
-		</div>
-
-		<div class="img_tiltle" style="margin-top: 7px;">
-			<h2>Image 1</h2>
-		</div>
-
-		<div class="caption" style="margin-top: 0px;">
-			<div class="checkbox">
-				<label> <input id="login-remember"
-					type="checkbox" name="remember" value="1"> Show
-					as Public
-				</label>
-				<div class="suceee_msg">
-					<!-- <h4>Updated successfully</h4> -->
+				<div class="row">
+					<div class="modal fade" id="image-gallery" tabindex="-1"
+						role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+						style="display: none;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+									</button>
+									<h4 class="modal-title" id="image-gallery-title"></h4>
+								</div>
+								<div class="modal-body">
+									<img id="image-gallery-image" class="img-responsive"
+										src="images/g2.jpg">
+								</div>
+								<div class="modal-footer">
+									<div class="col-md-2">
+										<button type="button" class="btn btn-primary"
+											id="show-previous-image" style="display: none;">Previous</button>
+									</div>
+									<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+									<div class="col-md-2">
+										<button type="button" id="show-next-image"
+											class="btn btn-default">Next</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="delete_box">
-				<a href="#"><i class="fa fa-trash-o"
-					aria-hidden="true"></i> Delete</a>
-				<div class="suceee_msg">
-					<!-- <h4>Delete Message</h4> -->
+				<div class="col-md-6">
+					<div class="row">
+
+						<div class="col-md-12" style="margin-bottom: 10px;">
+							<!-- Controls -->
+							<div class="controls pull-right ">
+								<a class="left fa fa-angle-left btn btn-default button-arrow"
+									href="#carousel-example" data-slide="prev"></a> <a
+									class="right fa fa-angle-right btn btn-default button-arrow"
+									href="#carousel-example" data-slide="next"></a>
+							</div>
+						</div>
+					</div>
+					<div id="carousel-example" class="carousel slide"
+						data-ride="carousel">
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner">
+							<div class="item active left">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="col-item">
+											<div class="photo">
+												<a class="g-image" href="#" data-image-id="1"
+													data-toggle="modal" data-title="" data-caption=""
+													data-image="images/g2.jpg" data-target="#image-gallery">
+													<img class="img-responsive" src="images/g2.jpg"
+													alt="Short alt text">
+												</a>
+											</div>
+
+											<div class="img_tiltle" style="margin-top: 7px;">
+												<h2>Image 1</h2>
+											</div>
+
+											<div class="caption" style="margin-top: 0px;">
+												<div class="checkbox">
+													<label> <input id="login-remember" type="checkbox"
+														name="remember" value="1"> Show as Public
+													</label>
+													<div class="suceee_msg">
+														<!-- <h4>Updated successfully</h4> -->
+													</div>
+												</div>
+												<div class="delete_box">
+													<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+														Delete</a>
+													<div class="suceee_msg">
+														<!-- <h4>Delete Message</h4> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item next left">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-item">
+											<div class="photo">
+												<a class="g-image" href="#" data-image-id="2"
+													data-toggle="modal" data-title="" data-caption=""
+													data-image="images/g1.jpeg" data-target="#image-gallery">
+													<img class="img-responsive" src="images/g1.jpeg"
+													alt="Short alt text">
+												</a>
+											</div>
+
+
+											<div class="img_tiltle" style="margin-top: 7px;">
+												<h2>Image 2</h2>
+											</div>
+
+											<div class="caption" style="margin-top: 0px;">
+												<div class="checkbox">
+													<label> <input id="login-remember" type="checkbox"
+														name="remember" value="1"> Show as Public
+													</label>
+													<div class="suceee_msg">
+														<!-- <h4>Updated successfully</h4> -->
+													</div>
+												</div>
+												<div class="delete_box">
+													<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+														Delete</a>
+													<div class="suceee_msg">
+														<!-- <h4>Delete Message</h4> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-</div>
-<div class="item next left">
-<div class="row">
-<div class="col-md-12">
-	<div class="col-item">
-		<div class="photo">
-			<a class="g-image" href="#" data-image-id="2"
-				data-toggle="modal" data-title="" data-caption=""
-				data-image="images/g1.jpeg" data-target="#image-gallery">
-				<img class="img-responsive" src="images/g1.jpeg"
-				alt="Short alt text">
-			</a>
-		</div>
+				<!----------------------photo_gallery end------------------------------>
+
+				<!----------------------video_gallery------------------------------>
+				<div class="col-md-6">
+					<div class="row">
+
+						<div class="col-md-12 " style="margin-bottom: 10px;">
+							<!-- Controls -->
+							<div class="controls pull-right">
+								<a class="left fa fa-angle-left btn btn-default button-arrow"
+									href="#carousel-example1" data-slide="prev"></a> <a
+									class="right fa fa-angle-right btn btn-default button-arrow"
+									href="#carousel-example1" data-slide="next"></a>
+							</div>
+						</div>
+					</div>
+					<div id="carousel-example1" class="carousel slide "
+						data-ride="carousel">
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner">
+							<div class="item">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="col-item">
+											<div class="photo">
+												<iframe src="https://player.vimeo.com/video/73051736"
+													width="100%" height="347" frameborder="0"
+													webkitallowfullscreen="" mozallowfullscreen=""
+													allowfullscreen=""></iframe>
+											</div>
+
+											<div class="img_tiltle" style="margin-top: 7px;">
+												<h2>Video 1</h2>
+											</div>
+
+											<div class="caption" style="margin-top: 0px;">
+												<div class="checkbox">
+													<label> <input id="login-remember" type="checkbox"
+														name="remember" value="1"> Show as Public
+													</label>
+													<div class="suceee_msg">
+														<!-- <h4>Updated successfully</h4> -->
+													</div>
+												</div>
+												<div class="delete_box">
+													<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+														Delete</a>
+													<div class="suceee_msg">
+														<!-- <h4>Delete Message</h4> -->
+													</div>
+												</div>
+											</div>
 
 
-		<div class="img_tiltle" style="margin-top: 7px;">
-			<h2>Image 2</h2>
-		</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item active">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-item">
+											<div class="photo">
+												<iframe src="https://player.vimeo.com/video/73051736"
+													width="100%" height="347" frameborder="0"
+													webkitallowfullscreen="" mozallowfullscreen=""
+													allowfullscreen=""></iframe>
+											</div>
+										</div>
 
-		<div class="caption" style="margin-top: 0px;">
-			<div class="checkbox">
-				<label> <input id="login-remember"
-					type="checkbox" name="remember" value="1"> Show
-					as Public
-				</label>
-				<div class="suceee_msg">
-					<!-- <h4>Updated successfully</h4> -->
+										<div class="img_tiltle" style="margin-top: 7px;">
+											<h2>Video 1</h2>
+										</div>
+
+										<div class="caption" style="margin-top: 0px;">
+											<div class="checkbox">
+												<label> <input id="login-remember" type="checkbox"
+													name="remember" value="1"> Show as Public
+												</label>
+												<div class="suceee_msg">
+													<!-- <h4>Updated successfully</h4> -->
+												</div>
+											</div>
+											<div class="delete_box">
+												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
+													Delete</a>
+												<div class="suceee_msg">
+													<
+													<!-- h4>Delete Message</h4> -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="delete_box">
-				<a href="#"><i class="fa fa-trash-o"
-					aria-hidden="true"></i> Delete</a>
-				<div class="suceee_msg">
-					<!-- <h4>Delete Message</h4> -->
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div> 
-<!----------------------photo_gallery end------------------------------>
-
-<!----------------------video_gallery------------------------------>
- <div class="col-md-6">
-<div class="row">
-
-<div class="col-md-12 " style="margin-bottom: 10px;">
-<!-- Controls -->
-<div class="controls pull-right">
-<a class="left fa fa-angle-left btn btn-default button-arrow"
-href="#carousel-example1" data-slide="prev"></a> <a
-class="right fa fa-angle-right btn btn-default button-arrow"
-href="#carousel-example1" data-slide="next"></a>
-</div>
-</div>
-</div>
-<div id="carousel-example1" class="carousel slide "
-data-ride="carousel">
-<!-- Wrapper for slides -->
-<div class="carousel-inner">
-<div class="item">
-<div class="row">
-<div class="col-sm-12">
-	<div class="col-item">
-		<div class="photo">
-			<iframe src="https://player.vimeo.com/video/73051736"
-				width="100%" height="347" frameborder="0"
-				webkitallowfullscreen="" mozallowfullscreen=""
-				allowfullscreen=""></iframe>
-		</div>
-
-		<div class="img_tiltle" style="margin-top: 7px;">
-			<h2>Video 1</h2>
-		</div>
-
-		<div class="caption" style="margin-top: 0px;">
-			<div class="checkbox">
-				<label> <input id="login-remember"
-					type="checkbox" name="remember" value="1"> Show
-					as Public
-				</label>
-				<div class="suceee_msg">
-					<!-- <h4>Updated successfully</h4> -->
-				</div>
-			</div>
-			<div class="delete_box">
-				<a href="#"><i class="fa fa-trash-o"
-					aria-hidden="true"></i> Delete</a>
-				<div class="suceee_msg">
-					<!-- <h4>Delete Message</h4> -->
-				</div>
-			</div>
-		</div>
-
-
-	</div>
-</div>
-</div>
-</div>
-<div class="item active">
-<div class="row">
-<div class="col-md-12">
-	<div class="col-item">
-		<div class="photo">
-			<iframe src="https://player.vimeo.com/video/73051736"
-				width="100%" height="347" frameborder="0"
-				webkitallowfullscreen="" mozallowfullscreen=""
-				allowfullscreen=""></iframe>
-		</div>
-	</div>
-
-	<div class="img_tiltle" style="margin-top: 7px;">
-		<h2>Video 1</h2>
-	</div>
-
-	<div class="caption" style="margin-top: 0px;">
-		<div class="checkbox">
-			<label> <input id="login-remember"
-				type="checkbox" name="remember" value="1"> Show
-				as Public
-			</label>
-			<div class="suceee_msg">
-				<!-- <h4>Updated successfully</h4> -->
-			</div>
-		</div>
-		<div class="delete_box">
-			<a href="#"><i class="fa fa-trash-o"
-				aria-hidden="true"></i> Delete</a>
-			<div class="suceee_msg">
-				<<!-- h4>Delete Message</h4> -->
-			</div>
-		</div>
-	</div>
-
-
-
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</div> 
-<!----------------------video_gallery end------------------------------>
+				<!----------------------video_gallery end------------------------------>
 
 				<!-------------------------submit button--------------------------------------->
 				<div class="col-md-10">

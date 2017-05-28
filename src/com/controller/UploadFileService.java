@@ -33,7 +33,7 @@ public class UploadFileService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteImage")
 	public JSONObject deleteImage(@QueryParam("newsId") String newsId, @Context HttpServletRequest request) {
-		System.out.println("1. *****Called deleteImage**********newsId==" + newsId);
+		//System.out.println("1. *****Called deleteImage**********newsId==" + newsId);
 		String result = "fail";
 		String deleteFilePath = null;
 		String fileId = null;
@@ -44,7 +44,7 @@ public class UploadFileService {
 			newsFileDTO.setNewsId(newsId);
 			NewsFileBO boNewsFile = new NewsFileBO();
 			ArrayList<UploadFileDTO> lstUploadFileDTO = boNewsFile.getUploadFleByNewsId(newsFileDTO);
-			System.out.println("1.a. In NewsFileBO ---------- lstUploadFileDTO.size===" + lstUploadFileDTO.size());
+			//System.out.println("1.a. In NewsFileBO ---------- lstUploadFileDTO.size===" + lstUploadFileDTO.size());
 			if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 				for (int i = 0; i < lstUploadFileDTO.size(); i++) {
 					UploadFileDTO uploadFileDTO = lstUploadFileDTO.get(i);
@@ -54,15 +54,15 @@ public class UploadFileService {
 				}
 			}
 			if (StringUtils.isNotEmpty(deleteFilePath)) {
-				System.out.println("1.b *****Called deleteImage**********getFilePath==" + deleteFilePath);
-				System.out.println("1.c *****Called deleteImage**********fileId==" + fileId);
+				//System.out.println("1.b *****Called deleteImage**********getFilePath==" + deleteFilePath);
+				//System.out.println("1.c *****Called deleteImage**********fileId==" + fileId);
 				UploadFileBO fileBo = new UploadFileBO();
 				fileBo.deleteImage(fileId);
-				System.out.println("1.d *****Called deleted fileUpload*********");
+				//System.out.println("1.d *****Called deleted fileUpload*********");
 
 				newsFileDTO.setFileId(fileId);
 				boNewsFile.deleteNewsFile(newsFileDTO);
-				System.out.println("1.e *****Called deleted newsFile*********");
+				//System.out.println("1.e *****Called deleted newsFile*********");
 
 				result = "success";
 			}
@@ -71,7 +71,7 @@ public class UploadFileService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("deleteImage jobj-->" + jobj1);
+		//System.out.println("deleteImage jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -82,8 +82,8 @@ public class UploadFileService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/updateShowAsPublic")
 	public JSONObject updateShowAsPublic(@QueryParam("fileId") String fileId, @QueryParam("showAsPublic") String showAsPublic, @Context HttpServletRequest request) {
-		System.out.println("1. *****Called deleteImage**********fileId==" + fileId);
-		System.out.println("1. *****Called deleteImage**********showAsPublic==" + showAsPublic);
+		//System.out.println("1. *****Called deleteImage**********fileId==" + fileId);
+		//System.out.println("1. *****Called deleteImage**********showAsPublic==" + showAsPublic);
 		String result = "fail";
 		String deleteFilePath = null;
 		//String fileId = null;
@@ -103,7 +103,7 @@ public class UploadFileService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("updateShowAsPublic jobj-->" + jobj1);
+		//System.out.println("updateShowAsPublic jobj-->" + jobj1);
 		return jobj1;
 
 	}

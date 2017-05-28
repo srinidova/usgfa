@@ -13,6 +13,7 @@ import com.dto.MemberFarmDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.SkillsDTO;
+import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 public class EventGuestDAO {
@@ -20,11 +21,8 @@ public class EventGuestDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			/*
-			 * bgdto = (ArrayList<BloodGroupDTO>)
-			 * session.queryForList("getBloodGroup");
-			 */
-			//System.out.println("3. In MemberFarmDAO addMemberFarm---------- getMemberName===" +memberfarmDto.getMemberId());
+			
+			//System.out.println("3. In EventGuestDAO addEventGuest---------- getGuestName===" +guestDto.getMemberId());
 			session.insert("EventGuest.addEventGuest", eventGuestDto);
 
 
@@ -35,5 +33,32 @@ public class EventGuestDAO {
 		return result;
 	}
 	
+	public String deleteEventGuest(EventGuestDTO eventGuestDTO) {
+		String result = "fail";
+		try {
+			//System.out.println("3. In GuestDAO deleteGuest----------");
+			SqlMapClient session = new IbatisFactory().getSession();
+			session.delete("EventGuest.deleteGuest", eventGuestDTO);
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
+	@SuppressWarnings("unchecked")
+	public ArrayList<EventGuestDTO> getEventGuestByGuestId(EventGuestDTO eventGuestDTO) {
+		String result = "fail";
+		ArrayList<EventGuestDTO> lstEventGuestDTO = new ArrayList<EventGuestDTO>();
+		try {
+			//System.out.println("3. In GuestDAO getEventGuestByGuestId----------");
+			SqlMapClient session = new IbatisFactory().getSession();
+			lstEventGuestDTO = (ArrayList<EventGuestDTO>)session.queryForList("EventGuest.getEventGuestByGuestId", eventGuestDTO.getGuestId());
+			
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lstEventGuestDTO;
+	}
 }

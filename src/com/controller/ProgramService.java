@@ -92,38 +92,7 @@ public class ProgramService {
 				ProgramBO bo = new ProgramBO();
 				result = bo.addProgram(programDto);
 				
-				/*HttpSession session = request.getSession();
-				HashMap<String,String> hmImages = (HashMap<String,String>)session.getAttribute("UPLOADED_FILELIST");
-				if(hmImages != null && hmImages.size() > 0){
-					for(Map.Entry m:hmImages.entrySet()){
-						String sFileId  = (String) m.getKey();
-						String sFilePath  = (String) m.getValue();
-						System.out.println("--------------sFileId---------"+sFileId);
-						System.out.println("--------------sFilePath---------"+sFilePath);
-						//System.out.println(m.getKey()+" "+m.getValue());
-					
-					// saving in to uploadFile Table
-					UploadFileDTO uploadFileDto = new UploadFileDTO();
-					uploadFileDto.setFileId(sFileId);
-					uploadFileDto.setFilePath(sFilePath);
-				    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
-				    
-				    UploadFileBO filebo = new UploadFileBO();
-				    resultFile = filebo.addUploadFileDetails(uploadFileDto);
-				    System.out.println("resultFile===="+resultFile);
-				    
-				 // saving in to programFile Table
-				    
-				    ProgramFileDTO  programFileDto = new ProgramFileDTO();
-				    programFileDto.setFileId(sFileId);
-				    programFileDto.setProgramId(sId);
-				    System.out.println("programFile---------"+sId);
-				    ProgramFileBO programFileBo = new ProgramFileBO();
-				    resultFile = programFileBo.programFile(programFileDto);
-				    
-				    System.out.println("resultFile===="+resultFile);
-					}
-				}*/
+				
 				CommonUtils.saveFileData(request, sId, "PROGRAM");
 			}
 			//System.out.println("result........." + result);
@@ -145,7 +114,6 @@ public class ProgramService {
 	public JSONObject getProgramDetails() {
 		
 		JSONObject jobj1 = new JSONObject();
-		//JSONObject jobj2 = new JSONObject();
 		
 		ProgramBO bo= new ProgramBO();
 		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
@@ -213,9 +181,6 @@ public class ProgramService {
 
 				ProgramBO bo = new ProgramBO();
 				programList = bo.getProgramProfile(dto);
-				//NewsBO bo = new NewsBO();
-				//newsList = bo.getNewsProfile(dto);
-
 				//System.out.println("****programList.size==" + programList.size());
 				//System.out.println("arraylist--->" + programList.toString());
 				if (!(programList.size() < 0)) {
@@ -231,12 +196,11 @@ public class ProgramService {
 		
 		ProgramFileDTO programFileDto = new ProgramFileDTO();
 		programFileDto.setProgramId(programId);
-		System.out.println("****programImages==" + programFileDto.getProgramId());
+		//System.out.println("****programImages==" + programFileDto.getProgramId());
 		ProgramFileBO programFileBo = new ProgramFileBO();
 		lstUploadFileDTO = programFileBo.getProgramImages(programFileDto);
 		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
-			System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
-			//jobj.put("PROGRAMFILE",lstUploadFileDTO);
+			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 			jobj.put("PROGRAMFILES", lstUploadFileDTO);
 		}
 		//System.out.println("Profile jobj-->" + jobj);
@@ -264,12 +228,10 @@ public class ProgramService {
 
 				ProgramDTO dto = new ProgramDTO();
 				dto.setProgramId(programId);
-				//dto.setProgramId(newsId);
+				
 				ProgramBO bo = new ProgramBO();
 				programList = bo.getProgramProfile(dto);
 
-				/*NewsBO bo = new NewsBO();
-				programList = bo.getNewsProfile(dto);*/
 
 				//System.out.println("****programList.size==" + programList.size());
 				//System.out.println("arraylist--->" + programList.toString());
@@ -330,15 +292,8 @@ public class ProgramService {
 		dto.setProgramId(programId);
 		
 		String result = "fail";
-		/*JSONObject jobj2 = new JSONObject();
-		EmployeeBO bo = new EmployeeBO();
-		EmployeeDTO dto = new EmployeeDTO();
-		dto.setEmpId(empId);
-		String result = "fail";*/
 		try {
 			result = bo.deleteProgram(dto);
-			//result = bo.deleteNews(dto);
-			//result = bo.deleteEmpDetails(dto);
 			jobj1.put("ProgramDelete", result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -371,12 +326,9 @@ public class ProgramService {
 				ProgramDTO programDto = new ProgramDTO();
 				String sUpdatedOn = CommonUtils.getDate();
 
-				NewsDTO newsDto = new NewsDTO();
-				// String sId = CommonUtils.getAutoGenId();
-				//String sUpdtedOn = CommonUtils.getDate();
 
-				// //System.out.println("1.e In addNews---------- sId===" + sId);
-				////System.out.println("1.f In addNews---------- sUpdtedOn===" + sUpdtedOn);
+			 //System.out.println("1.e In addNews---------- sId===" + sId);
+			//System.out.println("1.f In addNews---------- sUpdtedOn===" + sUpdtedOn);
 				programDto.setProgramId(programId);
 				programDto.setProgramName(programName);
 				programDto.setDuration(duration);
@@ -387,18 +339,8 @@ public class ProgramService {
 				programDto.setMoreInfo(moreInfo);
 				programDto.setUpdatedOn(sUpdatedOn);
 				
-				/*newsDto.setNewsId(newsId);
-				newsDto.setNewsTitle(newsTitle);
-				newsDto.setDate(date);
-				newsDto.setPaper(paper);
-				newsDto.setLink(link);
-				newsDto.setMoreInfo(moreInfo);
-				newsDto.setUpdatedOn(sUpdtedOn);
-				*/
-				
 				ProgramBO bo = new ProgramBO();
-				//NewsBO bo = new NewsBO();
-				//result = bo.newsUpdate(newsDto);
+				
 				result = bo .programUpdate(programDto);
 				CommonUtils.saveFileData(request, programId, "PROGRAM");
 			}
@@ -414,16 +356,6 @@ public class ProgramService {
 		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
-/*public JSONObject getProgramImages(@Context HttpServletRequest request,@QueryParam("programId") String programId,@QueryParam("fileId") String fileId){
-		
-		JSONObject jobj = new JSONObject();
-		String result = "fail";
-		UploadFileDTO uploadFileDto = new UploadFileDTO();
-		uploadFileDto.setFileId(fileId);
-		
-		ProgramBO bo = new ProgramBO();
-		result = bo.getProgramImage(uploadFileDto);
-		return jobj;
-	}*/
+
 }
 

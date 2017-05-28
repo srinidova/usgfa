@@ -61,11 +61,8 @@ public class StoriesDAO {
 			SqlMapClient session = new IbatisFactory().getSession();
 			String sStoriesId = storiesDto.getStoriesId();
 
-			//String sStoriesId = newsDto.getNewsId();
 			//System.out.println("3b. In StoriesDAO getStoriesProfile----------sStoriesId==" + sStoriesId);
 			storiesdto = (ArrayList<StoriesDTO>) session.queryForList("Stories.getStoriesById", sStoriesId);
-
-			//System.out.println("3c. In StoriesDAO getStoriesProfile----------storiesdto size==" + storiesdto.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,27 +70,12 @@ public class StoriesDAO {
 		return storiesdto;
 	}
 
-	/*public String newsUpdate(NewsDTO newsDto) {
-		String result = "fail";
-		try {
-			SqlMapClient session = new IbatisFactory().getSession();
-
-			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
-			session.insert("News.newsUpdate", newsDto);
-
-			result = "success";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}*/
 	public String storiesUpdate(StoriesDTO storiesDto){
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			//System.out.println("3. In StoriesDAO storiesUpdate---------- getStoriesTitle===" + storiesDto.getTitle());
-			//System.out.println("3. In StoriesDAO storiesUpdate---------- getStoriesId===" + storiesDto.getStoriesId());
 			session.insert("Stories.storiesUpdate", storiesDto);
 
 			result = "success";
@@ -102,18 +84,5 @@ public class StoriesDAO {
 		}
 		return result;
 	}
-	public String getStoriesImage(UploadFileDTO uploadFileDto) {
-		String result = "fail";
-		try {
-			SqlMapClient session = new IbatisFactory().getSession();
-
-			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
-			session.insert("News.newsUpdate", uploadFileDto);
-
-			result = "success";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+	
 }

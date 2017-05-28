@@ -26,14 +26,10 @@
 	<script type="text/javascript" src="js/moment-with-locales.js"></script>
 	<script type="text/javascript" src="js/datetimepicker.js"></script>
     <script type="text/javascript" src="js/popup.js"></script> 
-<!--     <script type="text/javascript" src="js/vendor-datepicker.js"></script>
-    <script type="text/javascript" src="js/vendor-date.js"></script> 
-    <script type="text/javascript" src="js/vendor-readmore.js"></script> -->
     <script type="text/javascript" src="js/validator.min.js"></script>
     <script type="text/javascript" src="js/fileinput.js"></script>
-    <script type="text/javascript" src="js/scriptUtils.js"></script>
     <script type="text/javascript" src="js/main.js"></script> 
-
+    <script type="text/javascript" src="js/scriptUtils.js"></script>
     
 
     <!----------------------menus script------------------------------>

@@ -30,16 +30,14 @@ public class GuestDAO {
 		}
 		return result;
 	}
-	/*public ArrayList<GuestDTO> getGuestDetailsByEventId(EventGuestDTO eventGuestDto) {
+	public ArrayList<GuestDTO> getGuestDetailsByEventId(EventGuestDTO eventGuestDto) {
 		ArrayList<GuestDTO> guestdto = new ArrayList<GuestDTO>();
 		try {
-			System.out.println("3. In GuestDAO getGuestDetailsByEventId----------");
+			//System.out.println("3. In GuestDAO getGuestDetailsByEventId----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			String sEventId = eventGuestDto.getEventId();
-            //String sMemberId = memberFarmDto.getMemberId();
-            System.out.println("3.1 In GuestDAO getGuestDetailsByEventId----------sEventId==="+sEventId);
+            //System.out.println("3.1 In GuestDAO getGuestDetailsByEventId----------sEventId==="+sEventId);
 			guestdto = (ArrayList<GuestDTO>) session.queryForList("Guest.getGuestDetailsByEventId", sEventId);
-			//System.out.println("3.2 In FarmDAO getFarmDetailsByMemberId----------farmdto size==" + farmdto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +46,7 @@ public class GuestDAO {
 		} else {
 			return guestdto;
 		}
-	}*/
+	}
 	/*public ArrayList<GuestDTO> getGuestDetails() {
 		ArrayList<GuestDTO> guestdto = new ArrayList<GuestDTO>();
 		try {
@@ -100,4 +98,17 @@ public class GuestDAO {
 		}
 		return result;
 	}*/
+	public String deleteGuest(GuestDTO guestDTO) {
+		String result = "fail";
+		try {
+			//System.out.println("3. In GuestDAO deleteGuest----------");
+			SqlMapClient session = new IbatisFactory().getSession();
+			session.delete("Guest.deleteGuest", guestDTO);
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

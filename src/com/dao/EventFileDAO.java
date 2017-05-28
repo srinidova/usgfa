@@ -29,7 +29,7 @@ public class EventFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			System.out.println("3. In EventDAO getEventImage---------- fileId===" + eventFileDto.getEventId());
+			//System.out.println("3. In EventDAO getEventImage---------- fileId===" + eventFileDto.getEventId());
 			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getEventImages", eventFileDto.getEventId());
 
 			result = "success";

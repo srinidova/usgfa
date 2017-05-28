@@ -1,34 +1,68 @@
 <!doctype html>
 <html>
 <head>
+<script type="text/javascript" src="js/news.js"></script>
 <script type="text/javascript">
 	function newsFarmValidation() {
-		//alert("==Entered==");
-		$("#newsMessage").text("");
-		//alert("==1==");
+		//alert("----in newsFarmValidation-------");
+
 		var newsTitle = document.getElementById("newsTitle");
 		var date = document.getElementById("date");
+		//alert("date.value.length ==="+date.value.length );
+		if (date.value.length > 0) {
+			$("#errDate").text("");
+		}
+		var moreInfo = document.getElementById("moreInfo");
+		//alert("moreInfo.value.length ==="+moreInfo.value );
 		var paper = document.getElementById("paper");
 		var link = document.getElementById("link");
-		var moreInfo = document.getElementById("moreInfo");
-		//alert("==2==");
-		if (emptyCheck(newsTitle, "Name Title", "newsMessage")
-				&& minLenCheck(newsTitle, 5, "newsTitle", "newsMessage")
-				&& maxLenCheck(newsTitle, 30, "Name Title", "newsMessage")
-				&& allLetter(newsTitle, "Name Title", "newsMessage")
-				&& emptyCheck(date, "Date", "newsMessage")
-				&& minLenCheck(date, 5, "newsTitle", "newsMessage")
-				&& maxLenCheck(date, 30, "Name Title", "newsMessage")
-				&& twoFieldsCheck(paper, link, "Paper or Link/Url","newsMessage")
-			   /*  && minLenCheck(paper, 5, "Paper", "newsMessage")
-				&& maxLenCheck(paper, 30, "Paper", "newsMessage")
-				&& minLenCheck(link, 5, "Link/Url", "newsMessage")
-				&& maxLenCheck(link, 30, "Link/Url", "newsMessage") */
-				&& (emptyCheck(moreInfo, "More Info", "newsMessage")
-				&& minLenCheck(moreInfo, 5, "More Info", "newsMessage")
-				&& maxLenCheck(moreInfo, 30, "More Info", "newsMessage"))) {
+		var msg = "";
+		var title = "";
+		$("#newsRegFailMsg").text("");
+        
+		if (newsTitle.value.length == 0) {
+			//alert("----newsTitle zero-------");
+			msg = "errNewsTitle";
+			title = "Name Title ";
 
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			newsTitle.focus();
+			return false;
+		} else if (date.value.length == 0) {
+			//alert("----date zero-------");
+			msg = "errDate";
+			title = "Date";
+
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			date.focus();
+			return false;
+		} else if (paper.value.length == 0 && link.value.length == 0) {
+			//alert("----paper /link  zero-------");
+			msg = "errPaper";
+			title = "Paper or Link/Url";
+
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			//date.focus();
+			return false;
+		} else if (moreInfo.value.length == 0) {
+			//alert("----moreInfo zero-------");
+			msg = "errMoreInfo";
+			title = "MoreInfo";
+
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			moreInfo.focus();
+			return false;
+		} else {
+			$("#errNewsTitle").text("");
+			$("#errDate").text("");
+			$("#errPaper").text("");
+			$("#errMoreInfo").text("");
 			newsSave();
+			//alert("------OK-------");
 		}
 
 	}
@@ -47,29 +81,24 @@
 		newsObject.link = link;
 		newsObject.moreInfo = moreInfo;
 
-		//alert("-----b4 ajax-------");
-
 		$.ajax({
 			data : newsObject,
 			url : "emp/newsService/addNews",
 			success : function(data) {
 
-				if (data.Msg = "success") {
-					//window.location.href = "newsList.jsp";
+				/* if (data.Msg = "success") {
 					window.location.href = "newsList.jsp";
-					//alert("in to newsSave");
-				}
+				} */
+				if (data.Msg == 'success') {
+					alert(".....success......");
+					window.location.href = "newsList.jsp";
+					//alert("a4...........");
+				}else{
+					alert(".....error......");
+					$("#newsRegFailMsg").text("News Registration Failed");
+				}  
 			}
 		});
-		 /* $.ajax({
-			data : newsObject,
-			url : "emp/newsService/getNewsImages",
-			success : function(data) {
-				if (data.Msg = "success") {
-					alert("in to newsSave");
-				}
-			}
-		});  */
 
 	}
 </script>
@@ -103,6 +132,10 @@
 .default-class::-webkit-input-placeholder {
 	color: red;
 }
+
+function test2 (){alert ("**************");
+	
+}
 </style>
 
 </head>
@@ -128,43 +161,54 @@
 
 			<div class="from">
 				<div class="form-group">
-					<label for="event_name"><h4>* These fields are required</h4></label>
+					<label for="event_name">
+						<h4>* These fields are required</h4>
+					</label>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="event_name">Name Title *</label> <input type="text"
-							class="form-control" id="newsTitle" name="newsTitle" tabindex="1"  required data-error="">
-                      <div class="help-block with-errors"></div>
+						<label for="news_name">Name Title *</label> <span class="errMsg"
+							id="errNewsTitle"></span> <input type="text" class="form-control"
+							id="newsTitle" name="newsTitle" tabindex="1" maxlength="30"
+							onkeyup="validateTitle(id,'Name Title','errNewsTitle',5,30);">
+						<div class="help-block with-errors"></div>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="time_from">Date *</label>
+						<label for="time_from">Date *</label> 
+						<span class="errMsg" id="errDate"></span>
 						<div class='input-group date' id="newsDate">
-							<input type='text' class="form-control" id="date" name="date"
-								tabindex="2" /> <span class="input-group-addon"> <span
-								class="glyphicon glyphicon-calendar"></span>
+						   <input type='text' class="form-control" id="date" name="date"  maxlength=30 tabindex="2" /> 
+						   <span class="input-group-addon"> 
+								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Paper</label> <input type="text"
-							class="form-control" id="paper" name="paper" tabindex="3">
+						<label for="land_mark">Paper</label> 
+						<span class="errMsg" id="errPaper"></span> 
+						<input type="text" class="form-control" id="paper" name="paper" tabindex="3" maxlength="30"
+							onkeyup="emptyCheckTwoFields(id,'link', 'Paper or Link/Url','errPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Link/Url</label> <input type="text"
-							class="form-control" id="link" name="link" tabindex="4">
+						<label for="land_mark">Link/Url</label> 
+						<input type="text" class="form-control" id="link" name="link" maxlength=30 tabindex="4"
+							onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="more_info">More Info *</label>
+						<label for="more_info">More Info *</label> <span class="errMsg"
+							id="errMoreInfo"></span>
 						<textarea class="form-control" rows="5" id="moreInfo"
-							name="moreInfo" tabindex="5"></textarea>
+							name="moreInfo" tabindex="5" maxlength="250"
+							onkeyup="emptyCheck(id,'More Info','errMoreInfo');">
+						</textarea>
 					</div>
 				</div>
 				<!-------------------------Upload Photo--------------------------------------->
@@ -208,12 +252,11 @@
 						<!-- </a> -->
 
 					</div>
-					<div class="message" id="">
+					<div class="message" id="newsfrm_message">
 
 						<h3>
-							<aside class=" " id="newsMessage" style="display: none">
-							</aside>
-						</h3>
+				<aside class="formFailMsg" id="newsRegFailMsg"></aside>
+			</h3>
 					</div>
 					<!-- <div class="col-md-12"> <br>
                     <small class="text-muted " style="text-align:right; float:right;"><strong>*</strong> These fields are required.</small> </div> -->
@@ -234,29 +277,24 @@
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
 <script type="text/javascript">
-    $(function () {
-	
-        $('#newsDate').datetimepicker({
-			 useCurrent: false,
-        	 format: 'DD/MM/YYYY'
-			});
+	$(function() {
 
-		$('.cross_icon').click(function(){
-			alert('asdfasdf')
-			$(this).parent().remove()
-			});
-    });
+		$('#newsDate').datetimepicker({
+			useCurrent : false,
+			format : 'DD/MM/YYYY'
+		});
+	});
 	
-	function addItem(e){
-		var html = $('.addOne').html();
-		$('#content_block').append(html);
-		//$(e).append(html);
-		
-		
-				
-	}
-	
-</script> 
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var moreInfo = document.getElementById("moreInfo");
+		if (moreInfo.value.length > 0) {
+			$("#moreInfo").text("");
+		}
+	});
+</script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

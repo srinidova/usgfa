@@ -1,44 +1,51 @@
 <!doctype html>
 <html>
 
-    <!----------------------top_header start-------------------------------->
-    <jsp:include page="includes.jsp"/> 
-    <!----------------------top_header end----------------------------------> 
-    <body>
-        <!----------------------top_header start---------------------------->
-        <jsp:include page="topheader.jsp"/> 
-        <!----------------------top_header end------------------------------> 
+<!----------------------top_header start-------------------------------->
+<jsp:include page="includes.jsp" />
+<!----------------------top_header end---------------------------------->
+<body>
+	<!----------------------top_header start---------------------------->
+	<jsp:include page="topheader.jsp" />
+	<!----------------------top_header end------------------------------>
 
-        <!----------------------header  start------------------------------->
-        <jsp:include page="header.jsp"/> 
-        <!----------------------header end----------------------------------> 
+	<!----------------------header  start------------------------------->
+	<jsp:include page="header.jsp" />
+	<!----------------------header end---------------------------------->
 
-        <!----------------------menus start--------------------------------->
-        <jsp:include page="menu.jsp"/> 
-        <!----------------------menus end-----------------------------------> 
+	<!----------------------menus start--------------------------------->
+	<jsp:include page="menu.jsp" />
+	<!----------------------menus end----------------------------------->
 
-        <!----------------------banner start-------------------------------->
-        <%-- <jsp:include page="banner.jsp"/>  --%>
-        <!----------------------banner end----------------------------------> 
-        
-        <style>
-        
-        #eventListData{
-    width: 100%;
-    float: left;
-    margin: auto;
-    display: inline-table;
+	<!----------------------banner start-------------------------------->
+	<%-- <jsp:include page="banner.jsp"/>  --%>
+	<!----------------------banner end---------------------------------->
+
+	<style>
+#eventListData {
+	width: 100%;
+	float: left;
+	margin: auto;
+	display: inline-table;
 }
 
-        tr td.e_name{width:40%;}
-          tr td.e_days{width:12%;}
-            tr td.e_date{width:17%;}
-              tr td.e_details{width:40%;}
-            
-        
-        </style>
-        
-         <head>        
+tr td.e_name {
+	width: 40%;
+}
+
+tr td.e_days {
+	width: 12%;
+}
+
+tr td.e_date {
+	width: 17%;
+}
+
+tr td.e_details {
+	width: 40%;
+}
+</style>
+<head>
 
 <script type="text/javascript">
         $(document).ready(function(){
@@ -203,27 +210,13 @@ function deleteEvent(eventId){
 											</div></td>
 										<td></td>
 									</tr>
-								
 								</table>
-							
-						
-									
-			
-								
 							</div>
 						</div>
-						
-						
-						
-						
-						
 						<div class="col-md-10">
-	
-								
-										<div id="eventListData"></div>
-										
-										</div>
-					
+							<div id="eventListData"></div>
+						</div>
+
 					</div>
 				</div>
 				<div class="clearfix"></div>
@@ -234,7 +227,7 @@ function deleteEvent(eventId){
 	<!----------------------body_content end---------------------------->
 
 	<!----------------------footer start ------------------------------->
-	 <jsp:include page="footer.jsp"/>
+	<jsp:include page="footer.jsp" />
 	<!----------------------footer end --------------------------------->
 </body>
 </html>

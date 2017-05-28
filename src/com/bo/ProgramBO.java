@@ -28,16 +28,10 @@ public class ProgramBO {
 	public ArrayList<ProgramDTO> getProgramProfile(ProgramDTO programDto){
 	     //System.out.println("2. In ProgramBO----------- getProgramProfile====");
 	     ProgramDAO dao = new ProgramDAO();
-		//NewsDAO dao = new NewsDAO();
 	     return dao.getProgramProfile(programDto);
-		//return dao.getNewsProfile(newsDto);
-		//return dao.getNewsProfile(newsDto);
 	}
-	
-	
 	public String deleteProgram(ProgramDTO programDto)
 	{
-		
 		//System.out.println("2. In ProgramBO --------------- deleteProgram=== ");
 		ProgramDAO dao = new ProgramDAO();
 		return dao.deleteProgram(programDto);
@@ -46,14 +40,8 @@ public class ProgramBO {
 	public String programUpdate(ProgramDTO programDto) {
 		//System.out.println("2. In ProgramBO---------- programUpdate===" + programDto.getProgramName());
 		ProgramDAO dao = new ProgramDAO();
-		//NewsDAO dao = new NewsDAO();
 		return dao.programUpdate(programDto);
-		//return dao.programUpdate(newsDto);
 	}
-    public String getProgramImage(UploadFileDTO uploadFileDto){
-		
-		ProgramDAO dao = new ProgramDAO();
-		return dao.getProgramImage(uploadFileDto);
-	}
+    
 }
 

@@ -211,25 +211,7 @@ function editNews(newsId){
 											</div></td>
 										<td></td>
 									</tr>
-									<!--tr>
-                  <td>Abcdef</td>
-                  <td>10 days</td>
-                  <td>10-02-2016</td>
-                  <td>H.No: 8-2-608/27, Mastan Mansion,<br>
-                    Gaffer Khan Colony, Road No. 10,<br>
-                    Banjarahills, Hyderabad, TS, India -500034</td>
-                  <td style ="width:50px;"><ul class="actions">
-                      <li> <a href="event-profile.html">
-                       <a href="newsProfile.html"> <button class="btn btn-success btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                        </a> </li>
-                      <li> <a href="#">
-                        <a href="newsEdit.html"><button class="btn  btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
-                        </a> </li>
-                      <li> <a href="#">
-                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                        </a> </li>
-                    </ul></td>
-                </tr-->
+									
 								</table>
 								<div class="member_list">
 									<div class="row">

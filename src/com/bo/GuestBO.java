@@ -20,20 +20,24 @@ import com.dto.NewsDTO;
 public class GuestBO {
 
 	public String addGuest(GuestDTO guestDto) {
-		System.out.println("2. In GuestBO---------- addGuest===" + guestDto.getName());
+		//System.out.println("2. In GuestBO---------- addGuest===" + guestDto.getName());
 		GuestDAO dao = new GuestDAO();
 		//FarmDAO dao = new FarmDAO();
 		return dao.addGuest(guestDto);
 	}
-	/*public ArrayList<GuestDTO> getGuestDetailsByEventId(EventGuestDTO eventGuestDto) {
-		//System.out.println("2. In FarmBO---------- getFarmDetailsByMemberId===");
+	public ArrayList<GuestDTO> getGuestDetailsByEventId(EventGuestDTO eventGuestDto) {
+		//System.out.println("2. In GuestBO---------- getGuestDetailsByEventId===");
 		GuestDAO dao = new GuestDAO();
-		//FarmDAO dao = new FarmDAO();
 		ArrayList<GuestDTO> guestdto = new ArrayList<GuestDTO>();
 		return dao.getGuestDetailsByEventId(eventGuestDto);
-		}*/
+		}
+	public String deleteGuest(GuestDTO guestDTO){
+	     //System.out.println("2. In GuestBO----------- deleteGuest====");
+	     GuestDAO  dao = new GuestDAO();
+	     return dao.deleteGuest(guestDTO);
+	}
 	/*public ArrayList<GuestDTO> getGuestDetails() {
-		System.out.println("2. In GuestBO---------- getGuestDetails===");
+		//System.out.println("2. In GuestBO---------- getGuestDetails===");
 		GuestDAO dao = new GuestDAO();
 		//FarmDAO dao = new FarmDAO();
 		ArrayList<GuestDTO> guestdto = new ArrayList<GuestDTO>();

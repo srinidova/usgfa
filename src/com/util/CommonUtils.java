@@ -8,21 +8,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -83,25 +83,29 @@ public class CommonUtils {
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public void uploadFile(@Context HttpServletRequest request, @FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+			@FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
 		System.out.println("in to commonUtils upload");
 		String sFileExtn = null;
-
+		String destination = "D:/currentworking/usgfa/WebContent/uploads/";
+		HashMap<String, String> hm = null;
+		HttpSession session = request.getSession();
+		
 		if (uploadedInputStream != null && fileDetail != null) {
 			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
 			System.out.println("1. sFileExtn===" + sFileExtn);
 
 			if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
 				System.out.println("2. sFileExtn====zip====" + sFileExtn);
-				//unZipIt(uploadedInputStream);
+				hm = unZipIt(uploadedInputStream, destination);
 			} else {
 				System.out.println("3. sFileExtn====non zip====" + sFileExtn);
-				try {
-					fileSave(request, uploadedInputStream, fileDetail);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				hm = fileSave(request, uploadedInputStream, fileDetail, destination);
 			}
+		}
+		System.out.println("4. hm.size====" + hm.size());
+		if (hm != null && hm.size() > 0) {
+			session.setAttribute("UPLOADED_FILELIST", hm);
+			System.out.println("5. HashMap-----" + hm);
 		}
 
 	}
@@ -144,130 +148,90 @@ public class CommonUtils {
 	}
 	
 	
-	private void fileSave(HttpServletRequest request, InputStream uploadedInputStream,
-			FormDataContentDisposition fileDetail) throws IOException {
+	private HashMap<String, String> fileSave(HttpServletRequest request, InputStream uploadedInputStream,
+			FormDataContentDisposition fileDetail, String destination) throws IOException {
 
 		String uploadedFileLocation = null;
-		String sFileExtn = null;
-		String sFileDir = null;
 		HashMap<String, String> hm = new HashMap<String, String>();
-		final String UPLOAD_IMAGE_FOLDER = "D:/currentworking/usgfa/WebContent/uploads/images/";
-		final String UPLOAD_VIDEO_FOLDER = "D:/currentworking/usgfa/WebContent/uploads/video/";
-
 		if (uploadedInputStream != null && fileDetail != null) {
-			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
-			System.out.println("sFileExtn===" + sFileExtn);
-
-			if (sFileExtn != null && (sFileExtn.equalsIgnoreCase("jpg") || sFileExtn.equalsIgnoreCase("png")
-					|| sFileExtn.equalsIgnoreCase("jpeg"))) {
-				sFileDir = UPLOAD_IMAGE_FOLDER;
-			} else {
-				sFileDir = UPLOAD_VIDEO_FOLDER;
-			}
 			try {
-				createFolderIfNotExists(sFileDir);
+				createFolderIfNotExists(destination);
 			} catch (SecurityException se) {
 			}
 			try {
-				UUID uuid = UUID.randomUUID();
-				String imageId = uuid.toString();
 
-				uploadedFileLocation = sFileDir + imageId + "." + FilenameUtils.getExtension(fileDetail.getFileName());
-
+				String imageId = UUID.randomUUID().toString();
+				uploadedFileLocation = destination + imageId + "."
+						+ FilenameUtils.getExtension(fileDetail.getFileName());
 				saveToFile(uploadedInputStream, uploadedFileLocation);
-				HttpSession session = request.getSession();
-				System.out.println("uploc -->" + uploadedFileLocation);
-				session.setAttribute("uploadPath", uploadedFileLocation);
-				session.setAttribute("empId", imageId);
-
 				if (StringUtils.isNotEmpty(uploadedFileLocation)) {
 					hm.put(imageId, uploadedFileLocation);
 
-				}
-				if (hm != null && hm.size() > 0) {
-					session.setAttribute("UPLOADED_FILELIST", hm);
-					System.out.println("in to HashMap-----" + hm);
 				}
 			} catch (IOException e) {
 				// return Response.status(500).entity("Can not save
 				// file").build();
 			}
 		}
+		return hm;
 	}
 	
-	public void unZipIt(InputStream uploadedInputStream){
+	public HashMap<String, String> unZipIt(InputStream inputStream, String destination) {
+		HashMap<String, String> hm = new HashMap<String, String>();
+		boolean overwrite = false;
 
-	     byte[] buffer = new byte[1024];
-	     String outputFolder = "D:/currentworking/usgfa/WebContent/uploads/outputzip/";
-	     System.out.println("outputFolder===" + outputFolder);
-	     try{
-	    	 
-	    	 byte[] buf = new byte[1024];
-	    	    ZipInputStream zinstream = new ZipInputStream(uploadedInputStream);
-	    	    ZipEntry zentry = zinstream.getNextEntry();
-	    	    System.out.println("Name of current Zip Entry : " + zentry + "\n");
-	    	    while (zentry != null) {
-	    	      String entryName = zentry.getName();
-	    	      System.out.println("Name of  Zip Entry : " + entryName);
-	    	      FileOutputStream outstream = new FileOutputStream(entryName);
-	    	      int n;
+		try {
+			byte[] buf = new byte[1024];
+			ZipInputStream zipinputstream = null;
+			ZipEntry zipentry;
+			zipinputstream = new ZipInputStream(inputStream);
 
-	    	      while ((n = zinstream.read(buf, 0, 1024)) > -1) {
-	    	        outstream.write(buf, 0, n);
+			zipentry = zipinputstream.getNextEntry();
 
-	    	      }
-	    	      System.out.println("Successfully Extracted File Name : "
-	    	          + entryName);
-	    	      outstream.close();
+			while (zipentry != null) {
+				int n;
+				FileOutputStream fileoutputstream;
 
-	    	      zinstream.closeEntry();
-	    	      zentry = zinstream.getNextEntry();
-	    	    }
-	    	    zinstream.close();
+				String sFileName = zipentry.getName();
+				String sFileExtn = sFileName.substring(sFileName.lastIndexOf(".") + 1);
+				String sImageId = UUID.randomUUID().toString();
+				System.out.println("b. sImageId===" + sImageId);
+				File newFile = new File(sImageId + "." + sFileExtn);
+				if (zipentry.isDirectory()) {
+					newFile.mkdirs();
+					zipentry = zipinputstream.getNextEntry();
+					continue;
+				}
 
-	    	/*//create output directory is not exists
-	    	File folder = new File(outputFolder);
-	    	if(!folder.exists()){
-	    		folder.mkdir();
-	    	}
+				if (newFile.exists() && overwrite) {
+					System.out.println("Overwriting " + newFile);
+					newFile.delete();
+				}
 
-	    	//get the zip file content
-	    	ZipInputStream zis =
-	    		new ZipInputStream(uploadedInputStream);
-	    	//get the zipped file list entry
-	    	ZipEntry ze = zis.getNextEntry();
+				String sOutFile = destination + sImageId + "." + sFileExtn;
+				System.out.println("d. sOutFile===" + sOutFile);
+				if (StringUtils.isNotEmpty(sOutFile)) {
+					hm.put(sImageId, sOutFile);
+				}
 
-	    	while(ze!=null){
+				fileoutputstream = new FileOutputStream(new File(sOutFile));
 
-	    	   String fileName = ze.getName();
-	           File newFile = new File(outputFolder + File.separator + fileName);
+				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+					fileoutputstream.write(buf, 0, n);
+				}
 
-	           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+				fileoutputstream.close();
+				zipinputstream.closeEntry();
+				zipentry = zipinputstream.getNextEntry();
 
-	            //create all non exists folders
-	            //else you will hit FileNotFoundException for compressed folder
-	            new File(newFile.getParent()).mkdirs();
+			}
 
-	            FileOutputStream fos = new FileOutputStream(newFile);
-
-	            int len;
-	            while ((len = zis.read(buffer)) > 0) {
-	       		fos.write(buffer, 0, len);
-	            }
-
-	            fos.close();
-	            ze = zis.getNextEntry();
-	    	}
-
-	        zis.closeEntry();
-	    	zis.close();*/
-
-	    	System.out.println("Done");
-
-	    }catch(IOException ex){
-	       ex.printStackTrace();
-	    }
-	   }
+			zipinputstream.close();
+		} catch (Exception e) {
+			throw new IllegalStateException("Can't unzip input stream", e);
+		}
+		return hm;
+	}
 	public static void saveFileData(HttpServletRequest request, String sId, String sType){
 		HttpSession session = request.getSession();
 		String resultFile = "fail";
@@ -279,14 +243,15 @@ public class CommonUtils {
 				String sFilePath  = (String) m.getValue();
 				System.out.println("--------------sFileId---------"+sFileId);
 				System.out.println("--------------sFilePath---------"+sFilePath);
-				//System.out.println(m.getKey()+" "+m.getValue());
+				System.out.println(m.getKey()+" "+m.getValue());
 			
 			// saving in to uploadFile Table
 			UploadFileDTO uploadFileDto = new UploadFileDTO();
 			uploadFileDto.setFileId(sFileId);
 			uploadFileDto.setFilePath(sFilePath);
 			uploadFileDto.setShowPublic("0");
-		    uploadFileDto.setUpdatedBy(CommonUtils.getDate());
+		   // uploadFileDto.setUpdatedBy(CommonUtils.getDate());
+		    uploadFileDto.setUpdatedOn(CommonUtils.getDate());
 		    
 		    UploadFileBO filebo = new UploadFileBO();
 		    resultFile = filebo.addUploadFileDetails(uploadFileDto);
@@ -304,35 +269,35 @@ public class CommonUtils {
 		    	ProgramFileDTO  programFileDto = new ProgramFileDTO();
 			    programFileDto.setFileId(sFileId);
 			    programFileDto.setProgramId(sId);
-			    System.out.println("programFile---------"+sId);
+			    //System.out.println("programFile---------"+sId);
 			    ProgramFileBO programFileBo = new ProgramFileBO();
 			    sResult = programFileBo.programFile(programFileDto);
 		    }else if(sType.equals("EVENT")){
 		    	EventFileDTO eventFileDto = new EventFileDTO();
 		    	eventFileDto.setFileId(sFileId);
 		    	eventFileDto.setEventId(sId);
-		    	 System.out.println("eventFile---------"+sId);
+		    	// System.out.println("eventFile---------"+sId);
 		    	 EventFileBO eventFileBo = new EventFileBO();
 		    	 sResult = eventFileBo.eventFile(eventFileDto);
 		    }else if(sType.equals("MEMBER")){
 		    	MemberFileDTO memberFileDto = new MemberFileDTO();
 		    	memberFileDto.setFileId(sFileId);
 		    	memberFileDto.setMemberId(sId);
-		    	 System.out.println("memberFile---------"+sId);
+		    	// System.out.println("memberFile---------"+sId);
 		    	 MemberFileBO memberFileBo = new MemberFileBO();
 		    	 sResult = memberFileBo.memberFile(memberFileDto);
 		    }else if(sType.equals("STORIES")){
 		    	StoriesFileDTO storiesFileDto = new StoriesFileDTO();
 		    	storiesFileDto.setFileId(sFileId);
 		    	storiesFileDto.setStoriesId(sId);
-		    	 System.out.println("storiesFile---------"+sId);
+		    	// System.out.println("storiesFile---------"+sId);
 		    	StoriesFileBO storiesFileBo = new StoriesFileBO();
 		    	sResult = storiesFileBo.storiesFile(storiesFileDto);
 		    }else if(sType.equals("FARM")){
 		    	FarmFileDTO farmFileDto = new FarmFileDTO();
 		    	farmFileDto.setFileId(sFileId);
 		    	farmFileDto.setFarmId(sId);
-		    	System.out.println("farmFile---------"+sId);
+		    	//System.out.println("farmFile---------"+sId);
 		    	FarmFileBO farmFileBo = new FarmFileBO();
 		    	sResult = farmFileBo.farmFile(farmFileDto);
 		    }
@@ -340,37 +305,10 @@ public class CommonUtils {
 		    session.setAttribute("UPLOADED_FILELIST", null);
 
 		    
-		    System.out.println("sResult===="+sResult);
+		   // System.out.println("sResult===="+sResult);
 			}
 		}
 	}
-	@POST
-	@Path("/uploadFarm")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void uploadFarmFile(@Context HttpServletRequest request, @FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail) {
-		System.out.println("in to commonUtils upload");
-		String sFileExtn = null;
-
-		if (uploadedInputStream != null && fileDetail != null) {
-			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
-			System.out.println("1. sFileExtn===" + sFileExtn);
-
-			if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
-				System.out.println("2. sFileExtn====zip====" + sFileExtn);
-				//unZipIt(uploadedInputStream);
-			} else {
-				System.out.println("3. sFileExtn====non zip====" + sFileExtn);
-				try {
-					fileSave(request, uploadedInputStream, fileDetail);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-	}
-	
 	public static EmailDTO getMailProperties(ServletContext objContext) throws IOException {
 
 		Properties prop = null;
@@ -383,7 +321,7 @@ public class CommonUtils {
 		String mailPassword = null;
 
 		propertiespath = objContext.getRealPath("Resources" + File.separator + "USGFA.properties");
-		System.out.println("1. path of propertiespath Page" + propertiespath);
+		//System.out.println("1. path of propertiespath Page" + propertiespath);
 		if (StringUtils.isNotEmpty(propertiespath)) {
 
 			prop = new Properties();
@@ -397,10 +335,10 @@ public class CommonUtils {
 			mailUserName = prop.getProperty("mailUserName");
 			mailPassword = prop.getProperty("mailPassword");
 
-			System.out.println("2. mailHost===" + mailHost);
-			System.out.println("3. mailPort===" + mailPort);
-			System.out.println("4. mailUserName===" + mailUserName);
-			System.out.println("5. mailPassword===" + mailPassword);
+			//System.out.println("2. mailHost===" + mailHost);
+			//System.out.println("3. mailPort===" + mailPort);
+			//System.out.println("4. mailUserName===" + mailUserName);
+			//System.out.println("5. mailPassword===" + mailPassword);
 
 			emailDTO.setHost(mailHost);
 			emailDTO.setPort(mailPort);
@@ -410,21 +348,7 @@ public class CommonUtils {
 		}
 		return emailDTO;
 	}
-	/*public static void showPublic(HttpServletRequest request,String upId){
-		HttpSession session = request.getSession();
-		UploadFileDTO uploadFileDto = new UploadFileDTO();
-		uploadFileDto.setShowPublic("0");
-		if(upId.equals("0")){
-			
-			
-		}
-		
-		
-	}*/
-	public static void deleteImage()
-	{
-		
-	}
+
 	/*@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getNewsId")*/

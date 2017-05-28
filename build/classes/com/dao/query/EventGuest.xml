@@ -7,11 +7,11 @@
 		eventguest(eventId,guestId)
 		values(#eventId#,#guestId#)
 	</insert>
-	<!-- <update id="memberFarmUpdate" parameterClass="com.dto.MemberFarmDTO">
-		update farm set farmName
-		= #farmName#, farmPlace = #farmPlace#, farmAddress = #farmAddress#, farmMandal = #farmMandal#, farmDistrict
-		= #farmDistrict#, aboutFarm = #aboutFarm#, farmState = #farmState#, farmPincode = #farmPincode# 
-		where
-		farmId = #farmId#
-	</update> -->
+
+	<delete id="deleteGuest" parameterClass="com.dto.EventGuestDTO">
+		delete from eventguest  where eventId = #eventId# and  guestId = #guestId#
+	</delete>
+	<select id="getEventGuestByGuestId" parameterClass="java.lang.String" resultClass="com.dto.EventGuestDTO">
+		select eventId,guestId from eventguest where guestId = #guestId# 
+	</select>
 </sqlMap>

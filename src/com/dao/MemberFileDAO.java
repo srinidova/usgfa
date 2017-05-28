@@ -16,7 +16,7 @@ public class MemberFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In NewsDAO setNewsDetails---------- getNewsTitle===" + newsDto.getNewsTitle());
+			//System.out.println("3. In MemberFileDAO memberFile---------- getNewsTitle===" + newsDto.getNewsTitle());
 			session.insert("MemberFile.memberFile", memberFileDto);
 			result = "success";
 		} catch (Exception e) {
@@ -31,7 +31,7 @@ public class MemberFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			System.out.println("3. In MemberDAO getMemberImage---------- fileId===" + memberFileDto.getMemberId());
+			//System.out.println("3. In MemberDAO getMemberImage---------- fileId===" + memberFileDto.getMemberId());
 			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getMemberImages", memberFileDto.getMemberId());
 
 			result = "success";

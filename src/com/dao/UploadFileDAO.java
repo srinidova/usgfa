@@ -14,7 +14,7 @@ public class UploadFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In NewsDAO setNewsDetails---------- getNewsTitle===" + newsDto.getNewsTitle());
+			System.out.println("3. In addUploadFileDetails ---------- addUploadFileDetails===" + uploadFileDto.getFileId());
 			session.insert("UploadFile.addUploadFileDetails", uploadFileDto);
 			result = "success";
 		} catch (Exception e) {
@@ -27,7 +27,7 @@ public class UploadFileDAO {
 	public String deleteImage(String fileId) {
 		String result = "fail";
 		try {
-			System.out.println("3. In uploadFileDao deleteImage----------fileId========"+fileId);
+			//System.out.println("3. In uploadFileDao deleteImage----------fileId========"+fileId);
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("UploadFile.deleteImage", fileId);
 			result = "success";
@@ -42,7 +42,7 @@ public class UploadFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			System.out.println("3. In uploadFileDAO updateShowAsPublic----------"+uploadFileDTO.getFileId()+"---getShowPublic---"+uploadFileDTO.getShowPublic());
+			//System.out.println("3. In uploadFileDAO updateShowAsPublic----------"+uploadFileDTO.getFileId()+"---getShowPublic---"+uploadFileDTO.getShowPublic());
 			session.insert("UploadFile.updateShowAsPublic", uploadFileDTO);
 
 			result = "success";

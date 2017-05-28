@@ -27,8 +27,6 @@ public class StoriesBO {
 	     //System.out.println("2. In StoriesBO----------- getStoriesDelete====");
 	     StoriesDAO dao = new StoriesDAO();
 	     return dao.deleteStories(storiesDto);
-		/*NewsDAO dao = new NewsDAO();
-		return dao.deleteNews(newsDto);*/
 	}
 	public ArrayList<StoriesDTO> getStoriesProfile(StoriesDTO storiesDto){
 	     //System.out.println("2. In StoriesBO----------- getStoriesProfile====");
@@ -40,10 +38,5 @@ public class StoriesBO {
 		StoriesDAO  dao = new StoriesDAO();
 		return dao.storiesUpdate(storiesDto);
 	}
-public String getStoriesImage(UploadFileDTO uploadFileDto){
-		
-		StoriesDAO dao = new StoriesDAO();
-		return dao.getStoriesImage(uploadFileDto);
-        //return dao.getEventImage(uploadFileDto);
-}
+    
 }

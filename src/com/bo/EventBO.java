@@ -18,7 +18,6 @@ public class EventBO {
 	public String addEvent(EventDTO eventDto) {
 		//System.out.println("2. In EventBO---------- addNewsDetails===" + eventDto.getEventName());
 		EventDAO dao = new EventDAO();
-		//NewsDAO dao = new NewsDAO();
 		return dao.addEvent(eventDto);
 	}
 	public ArrayList<EventDTO> getEventDetails() {
@@ -32,30 +31,17 @@ public class EventBO {
 	public ArrayList<EventDTO> getEventProfile(EventDTO eventDto){
 	     //System.out.println("2. In EventBO----------- getEventProfile====");
 	     EventDAO dao = new EventDAO();
-		//NewsDAO dao = new NewsDAO();
 	     return dao.getEventProfile(eventDto);
-		//return dao.getNewsProfile(newsDto);
 	}
-	
 	
 	public String eventUpdate(EventDTO eventDto) {
 		//System.out.println("2. In EventBO---------- eventUpdate===" + eventDto.getEventName());
 		EventDAO dao = new EventDAO();
 		return dao.eventUpdate(eventDto);
-		//NewsDAO dao = new NewsDAO();
-		//return dao.newsUpdate(newsDto);
 	}
 	public String deleteEvent(EventDTO eventDto){
-	     System.out.println("2. In EventBO----------- getEventDelete====");
+	     //System.out.println("2. In EventBO----------- getEventDelete====");
 	     EventDAO  dao = new EventDAO();
 	     return dao.deleteEvent(eventDto);
-	     //return dao.addEvent(eventDto);
-		/*NewsDAO dao = new NewsDAO();
-		return dao.deleteNews(newsDto);*/
 	}
-public String getEventImage(UploadFileDTO uploadFileDto){
-		
-		EventDAO dao = new EventDAO();
-        return dao.getEventImage(uploadFileDto);
-}
 }

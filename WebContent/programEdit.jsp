@@ -2,28 +2,26 @@
 <html>
 <body>
 
-    <!----------------------top_header start-------------------------------->
-    <jsp:include page="includes.jsp"/> 
-    <!----------------------top_header end----------------------------------> 
-    <body>
-        <!----------------------top_header start---------------------------->
-        <jsp:include page="topheader.jsp"/> 
-        <!----------------------top_header end------------------------------> 
+	<!----------------------top_header start-------------------------------->
+	<jsp:include page="includes.jsp" />
+	<!----------------------top_header end---------------------------------->
+<body>
+	<!----------------------top_header start---------------------------->
+	<jsp:include page="topheader.jsp" />
+	<!----------------------top_header end------------------------------>
 
-        <!----------------------header  start------------------------------->
-        <jsp:include page="header.jsp"/> 
-        <!----------------------header end----------------------------------> 
+	<!----------------------header  start------------------------------->
+	<jsp:include page="header.jsp" />
+	<!----------------------header end---------------------------------->
 
-        <!----------------------menus start--------------------------------->
-        <jsp:include page="menu.jsp"/> 
-        <!----------------------menus end-----------------------------------> 
+	<!----------------------menus start--------------------------------->
+	<jsp:include page="menu.jsp" />
+	<!----------------------menus end----------------------------------->
 
-        <!----------------------banner start-------------------------------->
-      <%--   <jsp:include page="banner.jsp"/>  --%>
-        <!----------------------banner end----------------------------------> 
-        
-        
-         <head>
+	<!----------------------banner start-------------------------------->
+	<%--   <jsp:include page="banner.jsp"/>  --%>
+	<!----------------------banner end---------------------------------->
+<head>
 <script type="text/javascript">
 
 function programEditFarmValidation() {
@@ -39,33 +37,47 @@ function programEditFarmValidation() {
 	var youtube = document.getElementById("programEditYoutube");
 	var moreInfo = document.getElementById("programEditMoreInfo");
 	//alert("==2==");
-	if (emptyCheck(programName, "Program Name", "programMessage")
-			&& minLenCheck(programName, 5, "Program Name", "programMessage")
-			&& maxLenCheck(programName, 30, "Program Name", "programMessage")
-			&& allLetter(programName, "Program Name", "programMessage")
-			&& emptyCheck(duration, "Duration", "programMessage")
-			&& minLenCheck(duration, 5, "Duration", "programMessage")
-			&& maxLenCheck(duration, 30, "Duration", "programMessage")
-			&& emptyCheck(dateAndTimeFrom, "Date & TimeFrom", "programMessage")
-			&& minLenCheck(dateAndTimeFrom, 5, "Date & TimeFrom", "programMessage")
-			&& maxLenCheck(dateAndTimeFrom, 30, "Date & TimeFrom", "programMessage")
-			&& emptyCheck(dateAndTimeTo, "Date & Time To", "programMessage")
-			&& minLenCheck(dateAndTimeTo, 5, "Date & Time To", "programMessage")
-			&& maxLenCheck(dateAndTimeTo, 30, "Date & Time To", "programMessage")
-			&& emptyCheck(channel, "Channel", "programMessage")
-			&& minLenCheck(channel, 5, "Channel", "programMessage")
-			&& maxLenCheck(channel, 30, "Channel", "programMessage")
-			&& emptyCheck(guest, "Guest", "programMessage")
-			&& minLenCheck(guest, 5, "Guest", "programMessage")
-			&& maxLenCheck(guest, 30, "Guest", "programMessage")
-			&& emptyCheck(youtube, "Youtube", "programMessage")
-			&& minLenCheck(youtube, 5, "Youtube", "programMessage")
-			&& maxLenCheck(youtube, 30, "Youtube", "programMessage")
-			&& emptyCheck(moreInfo, "More Info", "programMessage")
-			&& minLenCheck(moreInfo, 5, "More Info", "programMessage")
-			&& maxLenCheck(moreInfo, 250, "More Info", "programMessage")
-			) {
+	if (programName.value.length == 0) {
+		//alert("----newsTitle zero-------");
+		msg = "errEventName";
+		title = "Event Name ";
 
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		programName.focus();
+		return false;
+	}else if (dateAndTimeFrom.value.length == 0) {
+		//alert("----date zero-------");
+		msg = "errEditProDateAndTimeFrom";
+		title = "Date & TimeFrom";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		dateAndTimeFrom.focus();
+		return false;
+	}else if (dateAndTimeTo.value.length == 0) {
+		//alert("----date zero-------");
+		msg = "errEditProDateAndTimeTo";
+		title = "Date & Time To";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		errEditProDateAndTimeTo.focus();
+		return false;
+	}else if (channel.value.length == 0 && youtube.value.length == 0) {
+		alert("----channel /youtube  zero-------");
+		msg = "errEditProChannel";
+		title = "Channel or Youtube";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		//date.focus();
+		return false;
+	}else{
+		$("#errEditProgramName").text("");
+		$("#errEditProDateAndTimeFrom").text("");
+		$("#errEditProDateAndTimeTo").text("");
+		$("#errMoreInfo").text("");
 		programUpdate();
 	}
 
@@ -134,110 +146,134 @@ function programUpdate(){
 
 </script>
 </head>
-	<!----------------------body_content start-------------------------->
-	
-      <div class="clearfix"></div>
+<!----------------------body_content start-------------------------->
+
+<div class="clearfix"></div>
 <div id="aboutus">
-  <div class="container" >
-    <div class="row">
-      <div class="aboutus">
-        <h2>Program Edit</h2>
-        <div class="line3"></div>
-      </div>
-    </div>
-  </div>
+	<div class="container">
+		<div class="row">
+			<div class="aboutus">
+				<h2>Program Edit</h2>
+				<div class="line3"></div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="clearfix"></div>
 
 <!-- <div class="container" style="margin-top: 30px;"> -->
 <div class="container" style="margin-top: 30px;">
-<div class="row">
-<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12">
 
-<div class="from">
-	<div class="form-group">
-		<label for="event_name"><h4>* These fields are required</h4></label>
-	</div>
-      <div class="col-md-5">
-        <div class="form-group">
-          <label for="program_name">Program Name *</label>
-          <input type="text" class="form-control" id="programEditName" name="programEditName">
-          <input type="hidden" class="form-control" id="programId"
-							name="programId">
-        </div>
-      </div>
-      <div class="col-md-5">
-          <div class="form-group">
-            <label for="duration"> Duration *</label>
-            <input type="text" class="form-control" id="programEditDuration"  name="programEditDuration">
-          </div>
-        </div>
-      <div class="col-md-5">
-          <div class="form-group">
-            <label for="date & TimeFrom">Date & TimeFrom *</label>
-            <div class='input-group date' id ="programEditTimeFrom">
-              <input type='text' class="form-control"  id="programEditDateAndTimeFrom" name="programEditDateAndTimeFrom"/>
-              <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
-          </div>
-        </div>
-      <div class="col-md-5">
-          <div class="form-group">
-            <label for="date&Time To">Date & Time To *</label>
-            <div class='input-group date' id ="programEditTimeTo">
-              <input type='text' class="form-control"  id="programEditDateAndTimeTo" name ="programEditDateAndTimeTo"/>
-              <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span> </span> </div>
-          </div>
-        </div>
-      <div class="col-md-5">
-          <div class="form-group">
-            <label for="channel"> Channel</label>
-            <input type="text" class="form-control" id="programEditChannel"  name="programEditChannel">
-          </div>
-        </div>
-		        <div class="col-md-5">
-          <div class="form-group">
-            <label for="guest"> Guest</label>
-            <input type="text" class="form-control" id="programEditGuest"  name="programEditGuest">
-          </div>
-        </div>
-        </div>
-        <div class="col-md-5">
-          <div class="form-group">
-            <label for="youtube">Youtube</label>
-            <input type="text" class="form-control" id="programEditYoutube" name="programEditYoutube">
-          </div>
-        </div>
-        
-        <div class="col-md-5">
-          <div class="form-group">
-            <label for="more_info">More Info</label>
-            <textarea class="form-control" rows="5" id="programEditMoreInfo" name="programEditMoreInfo"></textarea>
-          </div>
-        </div>
-     <!-------------------------Upload Photo--------------------------------------->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="col-md-2">
-            <div class="image"> <img src="images/img.png" class="img-responsive img-thumbnail" > </div>
-          </div>
-          <div class="upload_img">
-          <form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
-            <div class="form-group col-md-6">
-              <label for="Upload Photo">Select Photo(s)</label>
-               <input id="file"  name ="file" class="file form-control" type="file">
-              <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a>
+			<div class="from">
+				<div class="form-group">
+					<label for="event_name"><h4>* These fields are
+							required</h4></label>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="program_name">Program Name *</label> <span class="errMsg" id="errEditProgramName"></span>
+						<input
+							type="text" class="form-control" id="programEditName"
+							name="programEditName" maxlength=30 onkeyup="validateTitle(id,'Program Name','errEditProgramName',5,30);"> <input type="hidden"
+							class="form-control" id="programId" name="programId">
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="duration"> Duration *</label> <input type="text"
+							class="form-control" id="programEditDuration"
+							name="programEditDuration" maxlength=30>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="date & TimeFrom">Date & TimeFrom *</label> <span class="errMsg" id="errEditProDateAndTimeFrom"></span>
+						<div class='input-group date' id="programEditTimeFrom">
+							<input type='text' class="form-control"
+								id="programEditDateAndTimeFrom"
+								name="programEditDateAndTimeFrom" maxlength=30
+								onkeyup="validateTitle(id,'Date & TimeFrom','errEditProDateAndTimeFrom',5,30);"/> <span
+								class="input-group-addon"> <span
+								class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="date&Time To">Date & Time To *</label> <span class="errMsg" id="errEditProDateAndTimeTo"></span>
+						<div class='input-group date' id="programEditTimeTo">
+							<input type='text' class="form-control"
+								id="programEditDateAndTimeTo" name="programEditDateAndTimeTo" maxlength=30
+								onkeyup="validateTitle(id,'Date & Time To','errEditProDateAndTimeTo',5,30);" />
+							<span class="input-group-addon"> <span
+								class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<div class="form-group">
+						<label for="channel">Channel</label> <span class="errMsg" id="errEditProChannel"></span>
+						<input type="text"
+							class="form-control" id="programEditChannel" name="programEditChannel" maxlength=30 
+							onkeyup="emptyCheckTwoFields(id,'youtube','Channel or Youtube','errEditProChannel');">
+					</div>
+				</div>
+				
+			
+			<div class="col-md-5">
+				<div class="form-group">
+					<label for="youtube">Youtube</label> 
+					<input type="text" class="form-control" id="programEditYoutube" name="programEditYoutube" maxlength=30 
+						onkeyup="emptyCheckTwoFields(id,'youtube','Channel or Youtube','errEditProChannel');">
+				</div>
+			</div>
             </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      
-      <!-------------------------Upload Photo end--------------------------------------->
-      <div class="clearfix"></div>
-     
-      <div class="clearfix"></div>
-      
-      <!----------------------photo_gallery------------------------------>
+            <div class="col-md-5">
+					<div class="form-group">
+						<label for="guest"> Guest</label> <input type="text"
+							class="form-control" id="programEditGuest"
+							name="programEditGuest" maxlength=30>
+					</div>
+				</div>
+			<div class="col-md-5">
+				<div class="form-group">
+					<label for="more_info">More Info</label>
+					<textarea class="form-control" rows="5" id="programEditMoreInfo"
+						name="programEditMoreInfo" maxlength=250></textarea>
+				</div>
+			</div>
+			<!-------------------------Upload Photo--------------------------------------->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-2">
+						<div class="image">
+							<img src="images/img.png" class="img-responsive img-thumbnail">
+						</div>
+					</div>
+					<div class="upload_img">
+						<form method="post" action="emp/commonUtils/upload"
+							enctype="multipart/form-data">
+							<div class="form-group col-md-6">
+								<label for="Upload Photo">Select Photo(s)</label> <input
+									id="file" name="file" class="file form-control" type="file">
+								<a href="#"><button
+										class="btn btn-success btn-sm text-right">Upload</button></a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-------------------------Upload Photo end--------------------------------------->
+			<div class="clearfix"></div>
+
+			<div class="clearfix"></div>
+
+			<!----------------------photo_gallery------------------------------>
 
 			<div class="row">
 				<div class="modal fade" id="image-gallery" tabindex="-1"
@@ -369,7 +405,7 @@ function programUpdate(){
 			</div>
 			<!----------------------photo_gallery end------------------------------>
 
-<!----------------------video_gallery------------------------------>
+			<!----------------------video_gallery------------------------------>
 			<div class="col-md-6">
 				<div class="row">
 
@@ -469,40 +505,44 @@ function programUpdate(){
 				</div>
 			</div>
 			<!----------------------video_gallery end------------------------------>
-      
-      <!------------------------------guests form--------------------------------------->
-     
-      
-      <!------------------------------guests form end---------------------------------------> 
-      
-      <!-------------------------submit button--------------------------------------->
-      <div class="col-md-10">
-        <div class="submit_button text-right">
-          <a href='#'><button class="btn btn-success btn-sm text-right " onclick="programEditFarmValidation();">Submit</button></a>
-          
-        </div>
-        <div class="message">
-            <h3><aside class=" " id="programMessage" style="display: none">Save Sucessfully</aside></h3>
-          </div>
-      </div>
-      
-      <!-------------------------submit button end--------------------------------------->
-      
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
+
+			<!------------------------------guests form--------------------------------------->
+
+
+			<!------------------------------guests form end--------------------------------------->
+
+			<!-------------------------submit button--------------------------------------->
+			<div class="col-md-10">
+				<div class="submit_button text-right">
+					<a href='#'><button class="btn btn-success btn-sm text-right "
+							onclick="programEditFarmValidation();">Submit</button></a>
+
+				</div>
+				<div class="message">
+					<h3>
+						<aside class=" " id="programMessage" style="display: none">Save
+							Sucessfully</aside>
+					</h3>
+				</div>
+			</div>
+
+			<!-------------------------submit button end--------------------------------------->
+
+
+			<div class="clearfix"></div>
+		</div>
+	</div>
 
 </div>
 <!-- </div> -->
-	
-	<!----------------------body_content end---------------------------->
 
-	<!----------------------footer start ------------------------------->
-	 <jsp:include page="footer.jsp"/>
-	<!----------------------footer end --------------------------------->
-	
-	<script type="text/javascript">
+<!----------------------body_content end---------------------------->
+
+<!----------------------footer start ------------------------------->
+<jsp:include page="footer.jsp" />
+<!----------------------footer end --------------------------------->
+
+<script type="text/javascript">
     $(function () {
 	
         $('#programEditTimeFrom,#programEditTimeTo').datetimepicker({
@@ -524,7 +564,7 @@ function programUpdate(){
 		
 				
 	}
-</script> 
+</script>
 <script type="text/javascript">
   
   
@@ -548,12 +588,7 @@ function programUpdate(){
         e.preventDefault(); $(this).closest('div.row').remove(); x--;
     })
 });
-  
-  
-  
-  
-           
-        </script> 
+        </script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

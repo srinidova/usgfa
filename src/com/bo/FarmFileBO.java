@@ -9,7 +9,6 @@ public class FarmFileBO {
 		System.out.println("2. In farmFile---------- farmFile===" + farmFileDto.getFarmId());
 		FarmFileDAO dao = new FarmFileDAO();
 		return dao.farmFile(farmFileDto);
-		//return dao.addUploadFileDetails(uploadFileDto);
 	}
 	
 }

@@ -14,27 +14,26 @@ public class NewsFileBO {
 	public String newsFile(NewsFileDTO newsFileDto) {
 		System.out.println("2. In newsFile---------- newsFile===" + newsFileDto.getFileId());
 		NewsFileDAO dao = new NewsFileDAO();
-		//UploadFileDAO dao = new UploadFileDAO();
 		return dao.newsFile(newsFileDto);
-		//return dao.addUploadFileDetails(uploadFileDto);
 	}
-    public ArrayList<UploadFileDTO> getNewsImages(NewsFileDTO newsFileDto){
-	System.out.println("2. In newsFile---------- newsFile===" + newsFileDto.getNewsId());
-	//System.out.println("2. In newsFile---------- newsFile===" + uploadFileDto.);
+
+	public ArrayList<UploadFileDTO> getNewsImages(NewsFileDTO newsFileDto) {
+		System.out.println("2. In newsFile---------- newsFile===" + newsFileDto.getNewsId());
 		NewsFileDAO newsFileDao = new NewsFileDAO();
 		return newsFileDao.getNewsImages(newsFileDto);
 	}
-    
-    public ArrayList<UploadFileDTO> getUploadFleByNewsId(NewsFileDTO newsFileDTO){
-	System.out.println("2. In NewsFileBO---------- getUploadFleByNewsId ===" + newsFileDTO.getNewsId());
+
+	public ArrayList<UploadFileDTO> getUploadFleByNewsId(NewsFileDTO newsFileDTO) {
+		//System.out.println("2. In NewsFileBO---------- getUploadFleByNewsId ===" + newsFileDTO.getNewsId());
 		NewsFileDAO newsFileDao = new NewsFileDAO();
 		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
-		uploadFiledto =  newsFileDao.getUploadFleByNewsId(newsFileDTO);
-		System.out.println("2.a. In NewsFileBO ---------- uploadFiledto.size===" + uploadFiledto.size());
+		uploadFiledto = newsFileDao.getUploadFleByNewsId(newsFileDTO);
+		//System.out.println("2.a. In NewsFileBO ---------- uploadFiledto.size===" + uploadFiledto.size());
 		return uploadFiledto;
 	}
-    public String deleteNewsFile(NewsFileDTO newsFileDto){
-	     System.out.println("2. In NewsFileBO----------- deleteNewsFile====");
+
+	public String deleteNewsFile(NewsFileDTO newsFileDto) {
+		//System.out.println("2. In NewsFileBO----------- deleteNewsFile====");
 		NewsFileDAO dao = new NewsFileDAO();
 		return dao.deleteNewsFile(newsFileDto);
 	}

@@ -89,18 +89,4 @@ public class MemberDAO {
 		}
 		return result;
 	}
-	public String getMemberImage(UploadFileDTO uploadFileDto) {
-		String result = "fail";
-		try {
-			SqlMapClient session = new IbatisFactory().getSession();
-
-			//System.out.println("3. In NewsDAO newsUpdate---------- getNewsTitle===" + newsDto.getNewsTitle());
-			session.insert("News.newsUpdate", uploadFileDto);
-
-			result = "success";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 }

@@ -30,7 +30,7 @@ public class ProgramFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			System.out.println("3. In ProgramDAO getProgramImage---------- fileId===" + programFileDto.getProgramId());
+			//System.out.println("3. In ProgramDAO getProgramImage---------- fileId===" + programFileDto.getProgramId());
 			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getProgramImages", programFileDto.getProgramId());
 
 			result = "success";
