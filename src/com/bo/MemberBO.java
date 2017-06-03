@@ -41,4 +41,9 @@ public class MemberBO {
 		MemberDAO dao = new MemberDAO();
 		return dao.deleteMember(memberDto);
 	}
+	public ArrayList<MemberDTO> getMemberByMobile(MemberDTO memberDto){
+	     System.out.println("2. In MemberBO----------- getMemberProfile====");
+	     MemberDAO dao= new MemberDAO();
+	     return dao.getMemberByMobile(memberDto);
+	}
 }

@@ -69,7 +69,7 @@ public class ProgramService {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
-
+		String sId = null;
 		//System.out.println("1.a In addProgram---------- programName===" + programName);
 		//System.out.println("1.b In addProgram---------- duration===" + duration);
 		//System.out.println("1.d In addProgram---------- dateAndTimeFrom===" + dateAndTimeFrom);
@@ -77,7 +77,7 @@ public class ProgramService {
 		try {
 			if (StringUtils.isNotEmpty(programName)) {
 				ProgramDTO programDto = new ProgramDTO();
-				String sId = CommonUtils.getAutoGenId();
+				sId = CommonUtils.getAutoGenId();
 				programDto.setProgramId(sId);
 				programDto.setProgramName(programName);
 				programDto.setDuration(duration);
@@ -93,10 +93,11 @@ public class ProgramService {
 				result = bo.addProgram(programDto);
 				
 				
-				CommonUtils.saveFileData(request, sId, "PROGRAM");
+				
 			}
 			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
+				CommonUtils.saveFileData(request, sId, "PROGRAM");
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -311,6 +312,7 @@ public class ProgramService {
 			@QueryParam("dateAndTimeFrom") String dateAndTimeFrom, @QueryParam("dateAndTimeTo") String dateAndTimeTo,
 			 @QueryParam("channel") String channel,
 			 @QueryParam("guest") String guest,
+			 @QueryParam("youtube") String youtube,
 			@QueryParam("moreInfo") String moreInfo) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
@@ -335,6 +337,7 @@ public class ProgramService {
 				programDto.setDateAndTimeFrom(dateAndTimeFrom);
 				programDto.setDateAndTimeTo(dateAndTimeTo);
 				programDto.setChannel(channel);
+				programDto.setYoutube(youtube);
 				programDto.setGuest(guest);
 				programDto.setMoreInfo(moreInfo);
 				programDto.setUpdatedOn(sUpdatedOn);

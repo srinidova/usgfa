@@ -26,10 +26,10 @@
 <head>
 
 <script type="text/javascript">
-	$(document)
-			.ready(
+	var dispImages = "";
+	$(document).ready(
 					function() {
-						//////alert("-------in Stories Profile--Jsp---");
+						//alert("-------in Stories Profile--Jsp---");
 						$
 								.ajax({
 									url : "emp/storiesService/getStoriesProfile",
@@ -38,7 +38,7 @@
 												.each(
 														data.StoriesProfile,
 														function(key, val) {
-															////alert("getStoriesProfile---*****123*****-------storiesId=="+data.StoriesProfile[key].storiesId);
+															//alert("getStoriesProfile---*****123*****-------storiesId=="+data.StoriesProfile[key].storiesId);
 															$('#storiesProfName')
 																	.text(
 																			data.StoriesProfile[key].name);
@@ -65,31 +65,40 @@
 																data.STORIESFILES,
 																function(key, val) {
 																	//alert("STORIESFILES---*****99999999999*****-------filePath=="+data.STORIESFILES[key].filePath);
-																	html = html
-																	+'<li class="col-md-12">'
-																	+'<div class="fff">'
-																	  +'<div class="thumbnail"> <a href="#"> <img src="images/5326574-a-sheep-wallpapers.jpg" class="img-responsive" alt=""> </a> </div>'
-																	  +'<div class="img_tiltle">'
-																	    +'<h2>Image 1</h2>'
-																	  +'</div>'
-																	  +'<div class="caption">'
-																	    +'<div class="checkbox">'
-																	      +'<label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
-																	      +'<div class="suceee_msg">'
-																		+'/* <h4>Updated successfully</h4> */'
-																	      +'</div>'
-																	    +'</div>'
-																	    +'<div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																	      +'<div class="suceee_msg">'
-																		+'/* <h4>Delete Message</h4> */'
-																	      +'</div>'
-																	    +'</div>'
-																	  +'</div>'
-																	+'</div>'
-																      +'</li>'
+																	dispImages = dispImages
+																	+'<div class="item active">'
+																	+'<ul class="thumbnails">'
+																		+'<li class="col-md-12">'
+																			+'<div class="fff">'
+																				+'<div class="thumbnail">'
+																					+'<a href="#"> '
+																					+'<img src="images/5326574-a-sheep-wallpapers.jpg" class="img-responsive" alt="">'
+																					+'</a>'
+																				+'</div>'
+																				+'<div class="img_tiltle">'
+																					+'<h2>Image 1</h2>'
+																				+'</div>'
+																				+'<div class="caption">'
+																					+'<div class="checkbox">'
+																						+'<label>'
+																						+'<input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public'
+																						+'</label>'
+																						+'<div class="suceee_msg">'
+																						+'</div>'
+																					+'</div>'
+																					+'<div class="delete_box">'
+																						+'<a href="#"> <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+																						+'<div class="suceee_msg">'
+																						+'</div>'
+																					+'</div>'
+																				+'</div>'
+																			+'</div>'
+																		+'</li>'
+																	+'</ul>'
+																+'</div>'
 
 																})
-																$(html).appendTo("#storiesImages");
+																//document.getElementById("storiesImages").innerHTML = dispImages;
 									}
 								});
 					});
@@ -141,9 +150,11 @@
 								<tbody>
 									<tr>
 										<td class="text-nowrap"><b>Name:</b></td>
-										<td><div id="storiesProfName"></div> <input type="hidden"
+										<td>
+											<div id="storiesProfName"></div> <input type="hidden"
 											class="form-control" id="storiesProfStoriesId"
-											name="storiesProfStoriesId"></td>
+											name="storiesProfStoriesId">
+										</td>
 									</tr>
 									<tr>
 										<td><b>Farm Name</b></td>
@@ -212,6 +223,11 @@
 												</div>
 											</li>
 										</ul>
+									</div>
+									<div id="carousel-example" class="carousel slide"
+										data-ride="carousel">
+										<!-- Wrapper for slides -->
+										<div class="carousel-inner" id="storiesImages"></div>
 									</div>
 									<div class="item ">
 										<ul class="thumbnails">
@@ -361,9 +377,9 @@
 					</div>
 				</div>
 				<div class="panel-footer">
-					<span> <a href="storiesEdit.jsp"
-						onClick="editProfStories()" data-original-title="Edit this user"
-						data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i
+					<span> <a href="storiesEdit.jsp" onClick="editProfStories()"
+						data-original-title="Edit this user" data-toggle="tooltip"
+						type="button" class="btn btn-sm btn-warning"><i
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>

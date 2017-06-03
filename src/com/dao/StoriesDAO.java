@@ -57,7 +57,7 @@ public class StoriesDAO {
 	public ArrayList<StoriesDTO> getStoriesProfile(StoriesDTO storiesDto) {
 		ArrayList<StoriesDTO> storiesdto = new ArrayList<StoriesDTO>();
 		try {
-			//System.out.println("3. In StoriesDAO getStoriesProfile----------");
+			System.out.println("3. In StoriesDAO getStoriesProfile----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			String sStoriesId = storiesDto.getStoriesId();
 

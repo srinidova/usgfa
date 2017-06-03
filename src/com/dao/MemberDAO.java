@@ -89,4 +89,21 @@ public class MemberDAO {
 		}
 		return result;
 	}
+	public ArrayList<MemberDTO> getMemberByMobile(MemberDTO memberDto) {
+		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
+		try {
+			//System.out.println("3. In MemberDAO getMemberProfile----------");
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			String sMobile = memberDto.getMobile();
+			System.out.println("3b. In MemberDAO getMemberProfile----------sMobile==" + sMobile);
+			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.getMemberByMobile", sMobile);
+
+			//System.out.println("3c. In MemberDAO getMemberProfile----------memberdto size==" + memberdto.size());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memberdto;
+	}
 }

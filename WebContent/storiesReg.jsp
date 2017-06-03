@@ -16,7 +16,7 @@ function storiesFarmValidation() {
 	var msg = "";
 	var title = "";
 	$("#storiesRegFailMsg").text("");
-	alert("name.value.length ==="+name.value.length );
+	//alert("name.value.length ==="+name.value.length );
 	if (name.value.length == 0) {
 		//alert("----name zero-------");
 		msg = "errName";
@@ -36,7 +36,7 @@ function storiesFarmValidation() {
 		farmName.focus();
 		return false;
 	} else if (farmAddress.value.length == 0) {
-		alert("----farmAddress zero-------");
+		//alert("----farmAddress zero-------");
 		msg = "errStoFarmAddress";
 		title = "Farm Address";
 
@@ -45,7 +45,7 @@ function storiesFarmValidation() {
 		farmAddress.focus();
 		return false;
 	} else if (place.value.length == 0) {
-		alert("----place zero-------");
+		//alert("----place zero-------");
 		msg = "errStoFarmPlace";
 		title = "Farm Place/City";
 
@@ -54,7 +54,7 @@ function storiesFarmValidation() {
 		place.focus();
 		return false;
 	}else if (mandal.value.length == 0) {
-		alert("----mandal zero-------");
+		//alert("----mandal zero-------");
 		msg = "errStoMandal";
 		title = "Mandal";
 
@@ -70,6 +70,15 @@ function storiesFarmValidation() {
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		district.focus();
+		return false;
+	}else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
+		//alert("----place zero-------");
+		msg = "errFarmPinCode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		farmPinCode.focus();
 		return false;
 	}else if (aboutFarm.value.length == 0) {
 		//alert("----place zero-------");
@@ -132,17 +141,12 @@ function storiesFarmValidation() {
 			data : storiesObject,
 			url : "emp/storiesService/addStories",
 			success : function(data) {
-				/* if (data.Msg = "success") {
-					//alert("b4...........");
-					window.location.href = "storiesList.jsp";
-					//alert("a4...........");
-				} */
 				if (data.Msg == 'success') {
-					alert(".....success......");
+					//alert(".....success......");
 					window.location.href = "storiesList.jsp";
 					//alert("a4...........");
 				}else{
-					alert(".....error......");
+					//alert(".....error......");
 					$("#storiesRegFailMsg").text("Stories Registration Failed");
 				} 
 
@@ -160,7 +164,29 @@ function storiesFarmValidation() {
 				}			}
 		});
    }     
-        
+       
+   function pincodeCheck(fName, title, msg) {
+		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
+		//alert("== allNumber ==");
+		var fieldName = document.getElementById(fName);
+		//alert("== fieldName =="+fieldName);
+		var number = /^[0-9]+$/;
+		if (!fieldName.value.match(number)) {			
+			$("#" + msg).text(title + " must have numbers only");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		}else if(fieldName.value.length != 6){
+			$("#" + msg).text(title + " must have six numbers");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		} else {
+			$("#" + msg).text("");
+			return true;
+		}
+	}   
+   
 </script>
 </head>
 <!----------------------top_header start-------------------------------->
@@ -228,20 +254,20 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="first_name">Name *</label> <span class="errMsg" id="errName"></span>
 						<input type="text"
-							class="form-control" id="name" name="name" maxlength =30
+							class="form-control" id="name" name="name" maxlength ="30"
 							onkeyup="validateTitle(id,'Name ','errName',5,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="profession">Profession</label> 
-						<input type="text" class="form-control" id="profession" name="profession" maxlength=30>
+						<input type="text" class="form-control" id="profession" name="profession" maxlength="30">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="farm_name">Farm Name *</label> <span class="errMsg" id="errFarmName"></span>
-						<input type="text" class="form-control" id="farmName" name="farmName"  maxlength=30 
+						<input type="text" class="form-control" id="farmName" name="farmName"  maxlength="30" 
 						onkeyup="validateTitle(id,'FarmName ','errFarmName',5,30);">
 					</div>
 				</div>
@@ -250,13 +276,13 @@ function storiesFarmValidation() {
 						<label for="farm_address">Farm Address *</label> 
 						<span class="errMsg" id="errStoFarmAddress"></span>
 						<textarea class="form-control" rows="5" id="farmAddress"
-							name="farmAddress" maxlength=250 onkeyup="emptyCheck(id,'Farm Address','errStoFarmAddress');"></textarea>
+							name="farmAddress" maxlength="250" onkeyup="emptyCheck(id,'Farm Address','errStoFarmAddress');"></textarea>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="farm_place_city">Farm Place/City *</label> <span class="errMsg" id="errStoFarmPlace"></span>
-						<input type="text" class="form-control" id="place" name="place" maxlength=30
+						<input type="text" class="form-control" id="place" name="place" maxlength="30"
 						onkeyup="validateTitle(id,'Farm Place/City','errStoFarmPlace',5,30);">
 					</div>
 				</div>
@@ -265,7 +291,7 @@ function storiesFarmValidation() {
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="mandal">Mandal *</label> <span class="errMsg" id="errStoMandal"></span>
-						<input type="text" class="form-control" id="mandal" name="mandal" maxlength = 30 
+						<input type="text" class="form-control" id="mandal" name="mandal" maxlength ="30" 
 							onkeyup="validateTitle(id,'Mandal','errStoMandal',5,30);">
 					</div>
 				</div>
@@ -273,7 +299,7 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="district">District *</label> <span class="errMsg" id="errStoDistrict"></span>
 						<input type="text" class="form-control" id="district" name="district" 
-						maxlength = 30 onkeyup="validateTitle(id,'District ','errStoDistrict',5,30);">
+						maxlength ="30" onkeyup="validateTitle(id,'District ','errStoDistrict',5,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -288,16 +314,16 @@ function storiesFarmValidation() {
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="farm_pin_code">Farm Pin Code</label> <span class="errMsg" id="errFarmPinCode "></span>
+						<label for="farm_pin_code">Farm Pin Code</label> <span class="errMsg" id="errFarmPinCode"></span>
 						<input type="text" class="form-control" id="farmPinCode"
-							name="farmPinCode"  maxlength = 6>
+							name="farmPinCode"  maxlength ="6" onkeyup="pincodeCheck(id,'Farm Pin Code','errFarmPinCode')">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="about_your_farm">About You/Farm *</label> <span class="errMsg" id="errStoAboutYou"></span>
 						<textarea class="form-control" rows="5" id="aboutFarm"
-							name="aboutFarm" maxlength = 250 onkeyup="emptyCheck(id,'About You/Farm','errStoAboutYou');"></textarea>
+							name="aboutFarm" maxlength ="250" onkeyup="emptyCheck(id,'About You/Farm','errStoAboutYou');"></textarea>
 					</div>
 				</div>
 				<div class="clearfix"></div>

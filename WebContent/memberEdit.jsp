@@ -4,7 +4,7 @@
 <head>
 <script type="text/javascript" src="js/member.js"></script>
 </head>
-<body>
+<body onload="test2();">
 	<!----------------------top_header start-------------------------------->
 	<jsp:include page="includes.jsp" />
 	<!----------------------top_header end---------------------------------->
@@ -41,6 +41,10 @@
 		var mandal = document.getElementById("memberEditMandal");
 		var district = document.getElementById("memberEditDistrict");
 		var pincode = document.getElementById("memberEditPincode");
+		
+		var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
+		alert("haveFarm=="+haveFarm);
+		
 		var farmName = document.getElementById("memberFarmEditFarmName");
 		var farmPlace = document.getElementById("memberFarmEditFarmPlace");
 		var farmAddress = document.getElementById("memberFarmEditFarmAddress");
@@ -51,7 +55,7 @@
 		//alert("==2==");
 		$("#memberEditFailMsg").text("");
 	if (firstName.value.length == 0) {
-		alert("----firstName zero-------");
+		//alert("----firstName zero-------");
 		msg = "errFirstName";
 		title = "First Name ";
 
@@ -67,6 +71,24 @@
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		mobile.focus();
+		return false;
+	}else if (mobile.value.length > 0 && mobile.value.length != 10) {
+		//alert("----date zero-------");
+		msg = "errEditMemMobile";
+		title = "Mobile/Contact No";
+
+		$("#" + msg).text(title + " must have ten numbers");
+		$("#" + msg).show();
+		mobile.focus();
+		return false;
+	}else if (email.value.length == 0) {
+		//alert("----date zero-------");
+		msg = "errEditMemEmail";
+		title = "Email";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		email.focus();
 		return false;
 	}else if (place.value.length == 0) {
 		//alert("----date zero-------");
@@ -95,16 +117,16 @@
 		$("#" + msg).show();
 		district.focus();
 		return false;
-	}else if (pincode.value.length == 0) {
+	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
 		//alert("----date zero-------");
 		msg = "errEditMemPincode";
 		title = "Pin Code";
 
-		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).text(title + " must have six numbers");
 		$("#" + msg).show();
 		pincode.focus();
 		return false;
-	}else if (farmName.value.length == 0) {
+	}else if (haveFarm == 'yes' && farmName.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errEditMemFarmName";
 		title = "Farm Name";
@@ -113,7 +135,7 @@
 		$("#" + msg).show();
 		farmName.focus();
 		return false;
-	}else if (farmPlace.value.length == 0) {
+	}else if (haveFarm == 'yes' && farmPlace.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errEditMemFarmPlace";
 		title = "Farm Place/City";
@@ -122,7 +144,7 @@
 		$("#" + msg).show();
 		farmPlace.focus();
 		return false;
-	}else if (farmMandal.value.length == 0) {
+	}else if (haveFarm == 'yes' && farmMandal.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errEditMemFarmMandal";
 		title = "Mandal";
@@ -131,7 +153,7 @@
 		$("#" + msg).show();
 		farmMandal.focus();
 		return false;
-	}else if (farmDistrict.value.length == 0) {
+	}else if (haveFarm == 'yes' && farmDistrict.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errEditMemFarmDistrict";
 		title = "District";
@@ -140,6 +162,22 @@
 		$("#" + msg).show();
 		farmDistrict.focus();
 		return false;
+	}else if (haveFarm == 'yes' && farmPincode.value.length > 0 && farmPincode.value.length != 6) {
+		//alert("----date zero-------");
+		msg = "errMemberFarmEditFarmPincode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " must have six numbers");
+		$("#" + msg).show();
+		farmPincode.focus();
+		return false;
+	}else{
+		$("#memberFarmEditFarmName").text("");
+		$("#memberFarmEditFarmPlace").text("");
+		$("#memberFarmEditFarmMandal").text("");
+		$("#memberFarmEditFarmDistrict").text("");
+		$("#errMemberFarmEditFarmPincode").text("");
+		memberUpdate1();
 	}
 		
 
@@ -152,7 +190,7 @@
 					url : "emp/memberService/editMember",
 					success : function(data) {
 						$.each(data.EditMember, function(key, val) {
-							//alert("-------in editMember--Jsp---memberTitle=="+data.EditMember[key].title);
+							//alert("-------in editMember--Jsp---haveFarm=="+data.EditMember[key].haveFarm);
 							$('#memberId').val(data.EditMember[key].memberId);
 							$('#memberEditTitle').val(
 									data.EditMember[key].title);
@@ -180,6 +218,7 @@
 									data.EditMember[key].pincode);
 							$('#memberEditProfession').val(
 									data.EditMember[key].profession);
+							$('#memberFarmEditHaveFarm').val(data.EditMember[key].haveFarm);
 						})
 					}
 				});
@@ -200,7 +239,7 @@
 		var state = $("#memberEditState").val();
 		var pincode = $("#memberEditPincode").val();
 		var profession = $("#memberEditProfession").val();
-
+		var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
 		//alert ("--------------a------------------ ");
 
 		var farmId = $("#memberFarmEditFarmId").val();
@@ -228,6 +267,7 @@
 		memberObject.state = state;
 		memberObject.pincode = pincode;
 		memberObject.profession = profession;
+		memberObject.haveFarm = haveFarm;
 		//alert ("after memberUpdate ");
 
 		////alert("--------firstName----------"+memberObject.firstName);
@@ -251,14 +291,14 @@
 			data : memberObject,
 			url : "emp/memberService/memberUpdate",
 			success : function(data) {
-				if (data.Msg = "success") {
-					alert(".....success......");
-
+				if (data.Msg == 'success') {
+					//alert(".....success......");
 					window.location.href = "memberList.jsp";
+					//alert("a4...........");
 				}else{
-					alert(".....error......");
-					$("#memberEditFailMsg").text("Member Registration Failed");
-				}
+					//alert(".....error......");
+					$("#memberEditFailMsg").text("Member Edit Failed");
+				} 
 			}
 		});
 
@@ -288,13 +328,55 @@
 							data.MemberFarmEdit[key].farmState);
 					$('#memberFarmEditFarmPincode').val(
 							data.MemberFarmEdit[key].farmPincode);
-					$('#memberFarmEditFarmId').val(
-							data.MemberFarmEdit[key].farmId);
-
+					$('#memberFarmEditFarmId').val(data.MemberFarmEdit[key].farmId);
 				})
 			}
 		});
 
+	}
+	
+	function pincodeCheck(fName, title, msg) {
+		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
+		//alert("== allNumber ==");
+		var fieldName = document.getElementById(fName);
+		//alert("== fieldName =="+fieldName);
+		var number = /^[0-9]+$/;
+		if (!fieldName.value.match(number)) {			
+			$("#" + msg).text(title + " must have numbers only");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		}else if(fieldName.value.length != 6){
+			$("#" + msg).text(title + " must have six numbers");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		} else {
+			$("#" + msg).text("");
+			return true;
+		}
+	}
+	
+	function mobileCheck(fName, title, msg) {
+		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
+		//alert("== allNumber ==");
+		var fieldName = document.getElementById(fName);
+		//alert("== fieldName =="+fieldName);
+		var number = /^[0-9]+$/;
+		if (!fieldName.value.match(number)) {			
+			$("#" + msg).text(title + " must have numbers only");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		}else if(fieldName.value.length != 10){
+			$("#" + msg).text(title + " must have ten numbers");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		} else {
+			$("#" + msg).text("");
+			return true;
+		}
 	}
 </script>
 </head>
@@ -341,46 +423,47 @@
 					<div class="form-group">
 						<label for="first_name">First Name *</label> <span class="errMsg" id="errEditMemFirstName"></span>
 						<input type="text" class="form-control" id="memberEditFirstName"
-							name="memberEditFirstName" maxlength=30 onkeyup="validateTitle(id,'First Name','errEditMemFirstName',5,30);">
+							name="memberEditFirstName" maxlength="30" onkeyup="validateTitle(id,'First Name','errEditMemFirstName',5,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="middle_name">Middle Name</label> 
-						<input type="text" class="form-control" id="memberEditMiddleName" name="memberEditMiddleName" maxlength=30 >
+						<input type="text" class="form-control" id="memberEditMiddleName" name="memberEditMiddleName" maxlength="30" >
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="surname_last_name">Surname/Last Name</label> <input
 							type="text" class="form-control" id="memberEditLastName"
-							name="memberEditLastName" maxlength=30>
+							name="memberEditLastName" maxlength="30">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="mobile_contact_no">Mobile/Contact No *</label> <span class="errMsg" id="errEditMemMobile"></span>
 						<input type="text" class="form-control" id="memberEditMobile"
-							name="memberEditMobile" maxlength=10 onkeyup="allNumber(id,'Mobile/Contact No','errEditMemMobile')">
+							name="memberEditMobile" maxlength="10" onkeyup="mobileCheck(id,'Mobile/Contact No','errEditMemMobile')">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="email">Email</label> <input type="text"
-							class="form-control" id="memberEditEmail" name="memberEditEmail">
+						<label for="email">Email</label> <span class="errMsg" id="errEditMemEmail"></span>
+						<input type="text"
+							class="form-control" id="memberEditEmail" name="memberEditEmail" maxlength="30" onkeyup="eMail(id,'Email','errEditMemEmail');">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="address">Address</label>
 						<textarea class="form-control" rows="4" id="memberEditAddress"
-							name="memberEditAddress" maxlength=250 ></textarea>
+							name="memberEditAddress" maxlength="250" ></textarea>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="place_city">Place/City *</label> <span class="errMsg" id="errEditMemPlace"></span>
-						<input type="text" class="form-control" id="memberEditPlace" name="memberEditPlace" maxlength=30
+						<input type="text" class="form-control" id="memberEditPlace" name="memberEditPlace" maxlength="30"
 							 onkeyup="validateTitle(id,'Place/City','errEditMemPlace',5,30);">
 					</div>
 				</div>
@@ -389,7 +472,7 @@
 						<label for="mandal">Mandal *</label> <span class="errMsg" id="errEditMemMandal"></span>
 						<input type="text"
 							class="form-control" id="memberEditMandal"
-							name="memberEditMandal" maxlength=30 onkeyup="validateTitle(id,'Mandal','errEditMemMandal',5,30);">
+							name="memberEditMandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errEditMemMandal',5,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -397,7 +480,7 @@
 						<label for="district">District *</label> <span class="errMsg" id="errEditMemDistrict"></span>
 						<input type="text"
 							class="form-control" id="memberEditDistrict"
-							name="memberEditDistrict" maxlength=30 onkeyup="validateTitle(id,'District','errEditMemDistrict',5,30)">
+							name="memberEditDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errEditMemDistrict',5,30)">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -412,10 +495,10 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="pin_code">Pin Code *</label> <span class="errMsg" id="errEditMemPincode"></span>
+						<label for="pin_code">Pin Code</label> <span class="errMsg" id="errEditMemPincode"></span>
 						<input type="text"
 							class="form-control" id="memberEditPincode"
-							name="memberEditPincode" maxlength=6 onkeyup="allNumber(id,'Pin Code','errEditMemPincode');">
+							name="memberEditPincode" maxlength="6" onkeyup="pincodeCheck(id,'Pin Code','errEditMemPincode');">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -502,10 +585,11 @@
 			<div class="col-md-12">
 				<div id="haveFarm" class="form-group">
 					<h2>Do you have Farm</h2>
-					<label class="radio-inline"> <input type="radio"
-						name="yesno" value="yes" onclick="test()"> Yes
-					</label> <label class="radio-inline"> <input type="radio"
-						name="yesno" checked value="no"> No
+					<label class="radio-inline"> 
+						<input type="radio" name="yesno" id="yesno" value="yes" onclick="test()"> Yes
+					</label> 
+					<label class="radio-inline"> 
+						<input type="radio" name="yesno" id="yesno" checked value="no"> No
 					</label>
 				</div>
 			</div>
@@ -571,10 +655,9 @@
 					<label for="farm_name">Farm Name *</label> <span class="errMsg" id="errEditMemFarmName"></span>
 					<input type="text"
 						class="form-control" id="memberFarmEditFarmName"
-						name="memberFarmEditFarmName" maxlength=30 onkeyup="validateTitle(id,'Farm Name','errEditMemFarmName',5,30);"> 
-						<input type="hidden"
-						class="form-control" id="memberFarmEditFarmId"
-						name="memberFarmEditFarmId">
+						name="memberFarmEditFarmName" maxlength="30" onkeyup="validateTitle(id,'Farm Name','errEditMemFarmName',5,30);"> 
+						<input type="hidden" class="form-control" id="memberFarmEditFarmId" name="memberFarmEditFarmId">
+						<input type="hidden" class="form-control" id="memberFarmEditHaveFarm" name="memberFarmEditHaveFarm">
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -582,37 +665,36 @@
 					<label for="farm_place_city">Farm Place/City *</label> <span class="errMsg" id="errEditMemFarmPlace"></span>
 					<input
 						type="text" class="form-control" id="memberFarmEditFarmPlace"
-						name="memberFarmEditFarmPlace" maxlength=30 onkeyup="validateTitle(id,'Farm Place/City','errEditMemFarmPlace',5,30);">
+						name="memberFarmEditFarmPlace" maxlength="30" onkeyup="validateTitle(id,'Farm Place/City','errEditMemFarmPlace',5,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="farm_address">Farm Address *</label> <span class="errMsg" id="errEditMemFarmAddress"></span>
-					<textarea class="form-control" rows="5" id="memberFarmEditFarmAddress" name="memberFarmEditFarmAddress" maxlength=250
-					onkeyup="validateTitle(id,'Farm Address','errEditMemFarmAddress',5,30);"></textarea>
+					<label for="farm_address">Farm Address</label> <span class="errMsg" id="errEditMemFarmAddress"></span>
+					<textarea class="form-control" rows="5" id="memberFarmEditFarmAddress" name="memberFarmEditFarmAddress" maxlength="250"></textarea>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="mandal">Mandal *</label> <span class="errMsg" id="errEditMemFarmMandal"></span>
+					<label for="mandal">Farm Mandal *</label> <span class="errMsg" id="errEditMemFarmMandal"></span>
 					<input type="text"
 						class="form-control" id="memberFarmEditFarmMandal"
-						name="memberFarmEditFarmMandal" maxlength=30 onkeyup="validateTitle(id,'Mandal','errEditMemFarmMandal',5,30);">
+						name="memberFarmEditFarmMandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errEditMemFarmMandal',5,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="district">District *</label> <span class="errmsg" id="errEditMemFarmDistrict"></span>
+					<label for="district">Farm District *</label> <span class="errMsg" id="errEditMemFarmDistrict"></span>
 					<input type="text"
 						class="form-control" id="memberFarmEditFarmDistrict"
-						name="memberFarmEditFarmDistrict" maxlength=30 onkeyup="validateTitle(id,'District','errEditMemFarmDistrict',5,30);">
+						name="memberFarmEditFarmDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errEditMemFarmDistrict',5,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="about_you_farm">About You/Farm</label>
 					<textarea class="form-control" rows="5"
-						id="memberFarmEditAboutFarm" name="memberFarmEditAboutFarm" maxlength=250></textarea>
+						id="memberFarmEditAboutFarm" name="memberFarmEditAboutFarm" maxlength="250"></textarea>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -630,9 +712,10 @@
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
-					<label for="farm_pin_code">Farm Pin Code </label> <input
+					<label for="farm_pin_code">Farm Pin Code </label> <span class="errmsg" id="errMemberFarmEditFarmPincode"></span>
+					<input
 						type="text" class="form-control" id="memberFarmEditFarmPincode"
-						name="memberFarmEditFarmPincode" maxlength=6>
+						name="memberFarmEditFarmPincode" maxlength="6" onkeyup="pincodeCheck(id,'Farm Pin Code','errMemberFarmEditFarmPincode');">
 				</div>
 			</div>
 
@@ -919,6 +1002,33 @@
 		})
 
 	})
+	
+function setRadioCheckedValue(radio_name, val) {
+	alert("gets here");
+	//var oRadio = document.forms[0].elements[radio_name];
+	var oRadio = document.getElementById("yesno");
+	alert("oRadio=="+oRadio.length);
+	for(var i = 0; i < oRadio.length; i++) { 
+		if(oRadio[i].value == val) {
+			oRadio[i].checked;
+		}
+	}
+} 
+
+	
+
+			function test2 () {
+			//alert("memberFarmEditHaveFarm=="+$("#memberFarmEditHaveFarm").val());
+			if($("#memberFarmEditHaveFarm").val() == 'yes'){
+				document.getElementById("yesno").checked = 'true';
+				test();
+				var html = '';
+				html = $('#farmFields').html();
+				$('#moreFields').html(html);
+			}
+
+			}
+
 </script>
 </body>
 </html>

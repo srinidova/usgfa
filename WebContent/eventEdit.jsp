@@ -116,17 +116,17 @@ function eventEditFarmValidation() {
 		$("#" + msg).show();
 		district.focus();
 		return false;
-	}else if(pincode.value.length == 0){
+	}else if(pincode.value.length > 0 && pincode.value.length != 6){
 		msg ="errEditPinCode";
 		title = "Pin Code";
 		
-		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).text(title + " must have six numbers");
 		$("#" + msg).show();
 		pincode.focus();
 		return false;
-	}
-	else{
+	}else{
 		$("#errEditEventName").text("");
+		$("#errEditPinCode").text("");
 		
 		eventUpdate();
 		return true;
@@ -207,6 +207,37 @@ function eventUpdate(){
 	//alert("eventName----------------"+eventName);
 	//alert("noOfDays----------------"+noOfDays);
 	
+	alert("------in test-----------");
+	//var eventRegGuests = document.getElementById("guestName");
+	    var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
+		var elmsGstName = document.querySelectorAll("[id='guestName']")
+		var elmsGstDesi = document.querySelectorAll("[id='guestDesi']")
+	alert("------elmsGstTitle length-----------"+elmsGstTitle.length+"------elmsGstName length-----------"+elmsGstName.length+"------elmsGstDesi length-----------"+elmsGstDesi.length);
+		var guestTitle = "";
+		var guestName = "";
+		var guestDesi = "";
+		for (var i = 0; i < elmsGstName.length - 1; i++) {
+			if (guestTitle.length > 0)
+				guestTitle = guestTitle + "~" + elmsGstTitle[i].value;
+			else
+				guestTitle = guestTitle + elmsGstTitle[i].value;
+
+			if (guestName.length > 0)
+				guestName = guestName + "~" + elmsGstName[i].value;
+			else
+				guestName = guestName + elmsGstName[i].value;
+
+			if (guestDesi.length > 0)
+				guestDesi = guestDesi + "~" + elmsGstDesi[i].value;
+			else
+				guestDesi = guestDesi + elmsGstDesi[i].value;
+
+			alert(i+"--------elmsGstTitle=="+elmsGstTitle[i].value+"--------elmsGstName=="+elmsGstName[i].value+"--------elmsGstDesi=="+elmsGstDesi[i].value);
+		}
+		//alert("guestTitle==" + guestTitle);
+		//alert("guestName==" + guestName);
+		//alert("guestDesi==" + guestDesi);
+		
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	eventObject.eventName = eventName;
@@ -228,22 +259,13 @@ function eventUpdate(){
 		data : eventObject,
 		url : "emp/eventService/eventUpdate",
 		success : function(data) {
-			/* if (data.Msg = "success") {
-				//alert("b4...........");
-				window.location.href = "eventList.jsp";
-				//alert("a4...........");
-			}
-			else{
-				alert(".....error......");
-				$("#eventRegFailMsg").text("Event Registration Failed");
-			} */
 			if (data.Msg == 'success') {
-				alert(".....success......");
+				//alert(".....success......");
 				window.location.href = "eventList.jsp";
 				//alert("a4...........");
 			}else{
-				alert(".....error......");
-				$("#eventEditFailMsg").text("Event Registration Failed");
+				//alert(".....error......");
+				$("#eventEditFailMsg").text("Event Edit Failed");
 			} 
 		}
 	}); 
@@ -264,7 +286,7 @@ function deleteGuest(guestId){
 			$.each(
 					data.EventGuestEdit,
 					function(key, val) {
-						alert("eventGuest --------- guestName=="+data.EventGuestEdit[key].name);
+						//alert("eventGuest --------- guestName=="+data.EventGuestEdit[key].name);
 						content = content
 						+'<tr>'
 						+'<td>'+data.EventGuestEdit[key].title+'</td>'
@@ -284,6 +306,28 @@ function deleteGuest(guestId){
 		}
 	});
 	
+}
+
+function pincodeCheck(fName, title, msg) {
+	 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
+	//alert("== allNumber ==");
+	var fieldName = document.getElementById(fName);
+	//alert("== fieldName =="+fieldName);
+	var number = /^[0-9]+$/;
+	if (!fieldName.value.match(number)) {			
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		fieldName.focus();
+		return false;
+	}else if(fieldName.value.length != 6){
+		$("#" + msg).text(title + " must have six numbers");
+		$("#" + msg).show();
+		fieldName.focus();
+		return false;
+	} else {
+		$("#" + msg).text("");
+		return true;
+	}
 }
 </script>
 </head>
@@ -316,7 +360,7 @@ function deleteGuest(guestId){
 						<label for="event_name">Event Name*</label> <span class ="errMsg" id=errEditEventName></span>
 						<input type="text"
 							class="form-control" id="eventEditEventName"
-							name="eventEditEventName" maxlength=30 onkeyup="validateTitle(id,'Event Name','errEditEventName',5,30);"> <input type="hidden"
+							name="eventEditEventName" maxlength="30" onkeyup="validateTitle(id,'Event Name','errEditEventName',5,30);"> <input type="hidden"
 							class="form-control" id="eventId" name="eventId">
 					</div>
 				</div>
@@ -325,7 +369,7 @@ function deleteGuest(guestId){
 						<label for="no_of_days">No.of days *</label> <span class ="errMsg" id=errEditNoOfDays></span>
 						<input type="text"
 							class="form-control" id="eventEditNoOfDays"
-							name="eventEditNoOfDays" maxlength=3 onkeyup="allNumber(id,'No.of days','errEditNoOfDays')">
+							name="eventEditNoOfDays" maxlength="3" onkeyup="allNumber(id,'No.of days','errEditNoOfDays')">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -333,7 +377,7 @@ function deleteGuest(guestId){
 						<label for="time_from">Date & Time From *</label> <span class="errMsg" id="errEditTimeFrom"></span>
 						<div class='input-group date' id="eventEditTimeFrom1">
 							<input type='text' class="form-control" id="eventEditTimeFrom"
-								name="timeFrom" maxlength=30 onkeyup="validateTitle(id,'Date & Time From','errEditTimeFrom',5,30);"/> <span class="input-group-addon"> <span
+								name="timeFrom" maxlength="30" onkeyup="validateTitle(id,'Date & Time From','errEditTimeFrom',5,30);"/> <span class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
@@ -344,7 +388,7 @@ function deleteGuest(guestId){
 						<label for="time_end">Date & Time End *</label> <span class="errMsg" id ="errEditTimeEnd"></span>
 						<div class='input-group date' id="eventEditTimeEnd1">
 							<input type='text' class="form-control" id="eventEditTimeEnd"
-								name="eventEditTimeEnd" maxlength=30 onkeyup="validateTitle(id,'Date & Time End','errEditTimeEnd',5,30);"/> <span class="input-group-addon">
+								name="eventEditTimeEnd" maxlength="30" onkeyup="validateTitle(id,'Date & Time End','errEditTimeEnd',5,30);"/> <span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
@@ -354,13 +398,13 @@ function deleteGuest(guestId){
 					<div class="form-group">
 						<label for="event_address">Address *</label> <span class="errMsg" id="errEditAddress"></span>
 						<textarea class="form-control" rows="5" id="eventEditAddress"
-							name="eventEditAddress" maxlength=250 onkeyup="emptyCheck(id,'Address','errEditAddress');"></textarea>
+							name="eventEditAddress" maxlength="250" onkeyup="emptyCheck(id,'Address','errEditAddress');"></textarea>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="land_mark"> Place/City *</label> <span class="errMsg" id="errEditPlace"></span>
-						<input type="text" class="form-control" id="eventEditPlace" name="eventEditPlace" maxlength=30
+						<input type="text" class="form-control" id="eventEditPlace" name="eventEditPlace" maxlength="30"
 						onkeyup="validateTitle(id,'Place/City ','errEditPlace',5,30);">
 					</div>
 				</div>
@@ -368,14 +412,14 @@ function deleteGuest(guestId){
 					<div class="form-group">
 						<label for="Place_city">Mandal *</label> <span class="errMsg" id ="errEditMandal"></span>
 						<input type="text"
-							class="form-control" id="eventEditMandal" name=" eventEditMandal" maxlength=30 onkeyup="validateTitle(id,'Mandal','errEditMandal',5,30);">
+							class="form-control" id="eventEditMandal" name=" eventEditMandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errEditMandal',5,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">More Info</label>
 						<textarea class="form-control" rows="5" id="eventEditMoreInfo"
-							name="eventEditMoreInfo" maxlength=250></textarea>
+							name="eventEditMoreInfo" maxlength="250"></textarea>
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -383,7 +427,7 @@ function deleteGuest(guestId){
 						<label for="district">District *</label> <span class="errMsg" id="errEditDistrict"></span>
 						<input type="text"
 							class="form-control" id="eventEditDistrict"
-							name="eventEditDistrict" maxlength=30 onkeyup="validateTitle(id,'District','errEditDistrict',5,30);">
+							name="eventEditDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errEditDistrict',5,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -399,7 +443,7 @@ function deleteGuest(guestId){
 					<div class="form-group">
 						<label for="state">Land Mark</label> <input type="text"
 							class="form-control" id="eventEditLandMark"
-							name="eventEditLandMark" maxlength=250>
+							name="eventEditLandMark" maxlength="250">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -407,7 +451,7 @@ function deleteGuest(guestId){
 						<label for="pin_code">Pin Code</label> <span class="errMsg" id="errEditPincode"></span>
 						<input type="text"
 							class="form-control" id="eventEditPincode"
-							name="eventEditPincode" maxlength=6 onkeyup="allNumber(id,'Pin Code','errEditPincode')">
+							name="eventEditPincode" maxlength="6" onkeyup="pincodeCheck(id,'Pin Code','errEditPincode')">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -756,26 +800,26 @@ function deleteGuest(guestId){
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="title">Title</label> 
-								<select class="form-control" id="eventEditguestTitle" name="eventEditguestTitle">
+								<select class="form-control" id="guestTitle" name="guestTitle">
 									<option>Mr</option>
 									<option>Ms</option>
 									<option>Dr</option>
 									<option>Prof</option>
-								</select> <input type="hidden" class="form-control" id="guestEditguestId"
-									name="guestEditguestId">
+								</select> <!-- <input type="hidden" class="form-control" id="guestEditguestId"
+									name="guestEditguestId"> -->
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="name">Name</label> <input type="text"
-									class="form-control" id="eventEditguestName" name="eventEditguestName">
+									class="form-control" id="guestName" name="guestName">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="designation">Designation</label> <input type="text"
-									class="form-control" id="eventEditguestDesi"
-									name="eventEditguestDesi">
+									class="form-control" id="guestDesi"
+									name="guestDesi">
 							</div>
 						</div>
 						<div class="col-md-2">
@@ -813,7 +857,7 @@ function deleteGuest(guestId){
 	</div>
 </div>
 
-<div id="guests_block" style="display: none;">
+<!-- <div id="guests_block" style="display: none;">
 	<div class="row">
 		<div class="col-md-10">
 			<div class="from">
@@ -850,10 +894,10 @@ function deleteGuest(guestId){
 			</div>
 		</div>
 	</div>
+</div> -->
+<!-- </div>
 </div>
-</div>
-</div>
-</div>
+</div> -->
 <!----------------------body_content end---------------------------->
 
 <!----------------------footer start ------------------------------->

@@ -19,6 +19,8 @@ private String updatedBy;
 private String updatedOn;
 private String haveFarm;
 private String memberType;
+private String amountPaid;
+private String password;
 
 public String getMemberId() {
 	return memberId;
@@ -127,6 +129,18 @@ public String getMemberType() {
 }
 public void setMemberType(String memberType) {
 	this.memberType = memberType;
+}
+public String getAmountPaid() {
+	return amountPaid;
+}
+public void setAmountPaid(String amountPaid) {
+	this.amountPaid = amountPaid;
+}
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
 }
 
 }

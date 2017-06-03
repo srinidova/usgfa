@@ -33,44 +33,33 @@ public class MemberService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addMember")
-	public JSONObject addMember(@Context HttpServletRequest request, 
-			@QueryParam("memberId") String memberId,
-			@QueryParam("title") String title, 
-			@QueryParam("firstName") String firstName,
-			@QueryParam("middleName") String middleName, 
-			@QueryParam("lastName") String lastName, 
-			@QueryParam("mobile") String mobile,
-			@QueryParam("email") String email,
-			@QueryParam("address") String address,
-			@QueryParam("place") String place,
-			@QueryParam("mandal") String mandal,
-			@QueryParam("district")String district,
-			@QueryParam("state") String state,
-			@QueryParam("pincode") String pincode,
-			@QueryParam("profession") String profession,
-			@QueryParam("haveFarm") String haveFarm,
-			@QueryParam("memberType") String memberType,
+	public JSONObject addMember(@Context HttpServletRequest request, @QueryParam("memberId") String memberId,
+			@QueryParam("title") String title, @QueryParam("firstName") String firstName,
+			@QueryParam("middleName") String middleName, @QueryParam("lastName") String lastName,
+			@QueryParam("mobile") String mobile, @QueryParam("email") String email,
+			@QueryParam("address") String address, @QueryParam("place") String place,
+			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
+			@QueryParam("state") String state, @QueryParam("pincode") String pincode,
+			@QueryParam("profession") String profession, @QueryParam("haveFarm") String haveFarm,
+			@QueryParam("memberType") String memberType,@QueryParam("amount") String amount, 
 			@QueryParam("farmId") String farmId,
-			@QueryParam("farmName") String farmName,
-			@QueryParam("farmPlace") String farmPlace,
-			@QueryParam("farmAddress") String farmAddress,
-			@QueryParam("farmMandal") String farmMandal,
-			@QueryParam("farmDistrict") String farmDistrict,
-			@QueryParam("aboutFarm") String aboutFarm,
-			@QueryParam("farmState") String farmState,
-			@QueryParam("farmPincode") String farmPincode) {
-		//System.out.println("in to controller");
+			@QueryParam("farmName") String farmName, @QueryParam("farmPlace") String farmPlace,
+			@QueryParam("farmAddress") String farmAddress, @QueryParam("farmMandal") String farmMandal,
+			@QueryParam("farmDistrict") String farmDistrict, @QueryParam("aboutFarm") String aboutFarm,
+			@QueryParam("farmState") String farmState, @QueryParam("farmPincode") String farmPincode) {
+		// System.out.println("in to controller");
 		JSONObject jObj = new JSONObject();
 		String memberResult = "fail";
 		String farmResult = "fail";
 		String memberfarmResult = "fail";
 		String resultFileBo = "fail";
 		String resultFile = "fail";
-
+		String sId = null;
 		try {
+			System.out.println("haveFarm........." + haveFarm);
 			if (StringUtils.isNotEmpty(title)) {
 				MemberDTO memberDto = new MemberDTO();
-				String sId = CommonUtils.getAutoGenId();
+				sId = CommonUtils.getAutoGenId();
 				memberDto.setMemberId(sId);
 				memberDto.setTitle(title);
 				memberDto.setFirstName(firstName);
@@ -88,39 +77,44 @@ public class MemberService {
 				memberDto.setUpdatedOn(CommonUtils.getDate());
 				memberDto.setHaveFarm(haveFarm);
 				memberDto.setMemberType(memberType);
-				
+				memberDto.setAmountPaid(amount);
+                System.out.println("amoutnt---"+amount);
 				MemberBO bo = new MemberBO();
 				memberResult = bo.addMember(memberDto);
+				
+				System.out.println("memberResult........." + memberResult);
+				if (memberResult.equals("success")) {
+
+					FarmDTO farmDto = new FarmDTO();
+					String sFarmId = CommonUtils.getAutoGenId();
+					farmDto.setFarmId(sFarmId);
+					farmDto.setFarmName(farmName);
+					farmDto.setFarmPlace(farmPlace);
+					farmDto.setFarmAddress(farmAddress);
+					farmDto.setFarmMandal(farmMandal);
+					farmDto.setFarmDistrict(farmDistrict);
+					farmDto.setAboutFarm(aboutFarm);
+					farmDto.setFarmState(farmState);
+					farmDto.setFarmPincode(farmPincode);
+
+					FarmBO farmBo = new FarmBO();
+					farmResult = farmBo.addFarm(farmDto);
+					// CommonUtils.saveFileData(request, sFarmId, "FARM");
+					System.out.println("farmResult........." + farmResult);
+					if (farmResult.equals("success")) {
+						MemberFarmDTO memberFarmDto = new MemberFarmDTO();
+						memberFarmDto.setFarmId(sFarmId);
+						memberFarmDto.setMemberId(sId);
+						MemberFarmBO memberfarmBo = new MemberFarmBO();
+						memberfarmResult = memberfarmBo.addMemberFarm(memberFarmDto);
+					}
+				}
+
+			}
+			System.out.println("memberfarmResult........." + memberfarmResult);
+			if (!"fail".equals(memberfarmResult)) {
 				CommonUtils.saveFileData(request, sId, "MEMBER");
-				
-				
-				FarmDTO farmDto = new FarmDTO();
-				String sFarmId = CommonUtils.getAutoGenId();
-				farmDto.setFarmId(sFarmId);
-				farmDto.setFarmName(farmName);
-				farmDto.setFarmPlace(farmPlace);
-				farmDto.setFarmAddress(farmAddress);
-				farmDto.setFarmMandal(farmMandal);
-				farmDto.setFarmDistrict(farmDistrict);
-				farmDto.setAboutFarm(aboutFarm);
-				farmDto.setFarmState(farmState);
-				farmDto.setFarmPincode(farmPincode);
-				
-				
-				FarmBO farmBo = new FarmBO();
-				farmResult = farmBo.addFarm(farmDto);
-				//CommonUtils.saveFileData(request, sFarmId, "FARM");
-				
-				
-				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
-				memberFarmDto.setFarmId(sFarmId);
-				memberFarmDto.setMemberId(sId);
-				MemberFarmBO memberfarmBo = new MemberFarmBO();
-				memberfarmResult = memberfarmBo.addMemberFarm(memberFarmDto);
-				
-		}
-			
-			if (!"fail".equals(memberResult)) {
+
 				jObj.put("Msg", memberResult);
 			} else {
 				jObj.put("Msg", memberResult);
@@ -128,12 +122,11 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
+		// System.out.println("jobj-->" + jObj);
 		return jObj;
-	
-		
-	
-}
+
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberDetails")
@@ -142,10 +135,10 @@ public class MemberService {
 		MemberBO bo = new MemberBO();
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		try {
-			//System.out.println("1. *****Called getMemberDetails**********");
+			// System.out.println("1. *****Called getMemberDetails**********");
 			memberList = bo.getMemberDetails();
-			//System.out.println("****memberList.size==" + memberList.size());
-			//System.out.println("arraylist--->" + memberList.toString());
+			// System.out.println("****memberList.size==" + memberList.size());
+			// System.out.println("arraylist--->" + memberList.toString());
 			if (!(memberList.size() < 0)) {
 				jobj1.put("MemberDetails", memberList);
 			} else {
@@ -154,16 +147,17 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jobj1);
+		// System.out.println("jobj-->" + jobj1);
 		return jobj1;
 
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberId")
 	public JSONObject getMemberId(@QueryParam("memberId") String memberId, @Context HttpServletRequest request) {
-		//System.out.println("1. *****Called getMemberId**********memberId==" + memberId);
+		// System.out.println("1. *****Called getMemberId**********memberId==" +
+		// memberId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -176,10 +170,11 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("Profile jobj-->" + jobj);
+		// System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberProfile")
@@ -188,7 +183,8 @@ public class MemberService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String memberId = (String) session.getAttribute("MEMBERID");
-		//System.out.println("1a. *****Called getMemberProfile**********memberId==" + memberId);
+		// System.out.println("1a. *****Called
+		// getMemberProfile**********memberId==" + memberId);
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
@@ -197,29 +193,30 @@ public class MemberService {
 			if (StringUtils.isNotEmpty(memberId)) {
 				MemberDTO dto = new MemberDTO();
 				dto.setMemberId(memberId);
-				
+
 				MemberBO bo = new MemberBO();
 				memberList = bo.getMemberProfile(dto);
 
-				//System.out.println("****memberList.size==" + memberList.size());
-				//System.out.println("arraylist--->" + memberList.toString());
+				// System.out.println("****memberList.size==" +
+				// memberList.size());
+				// System.out.println("arraylist--->" + memberList.toString());
 				if (!(memberList.size() < 0)) {
 					jobj.put("MemberProfile", memberList);
 				} else {
 					jobj.put("MemberProfile", "failed");
 				}
-				
+
 				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
 				memberFarmDto.setMemberId(memberId);
-				
-				FarmBO fbo  = new FarmBO();
+
+				FarmBO fbo = new FarmBO();
 				farmList = fbo.getFarmDetailsByMemberId(memberFarmDto);
-				
-				//System.out.println("****farmList.size==" + farmList.size());
+
+				// System.out.println("****farmList.size==" + farmList.size());
 				if (!(farmList.size() < 0)) {
 					jobj.put("MemberFarmProfile", farmList);
 				}
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -227,17 +224,20 @@ public class MemberService {
 		// get member images
 		MemberFileDTO memberFileDto = new MemberFileDTO();
 		memberFileDto.setMemberId(memberId);
-		//System.out.println("****memberImages==" + memberFileDto.getMemberId());
+		// System.out.println("****memberImages==" +
+		// memberFileDto.getMemberId());
 		MemberFileBO memberFileBo = new MemberFileBO();
 		lstUploadFileDTO = memberFileBo.getMemberImages(memberFileDto);
-		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
-			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
+		if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
+			// System.out.println("****lstUploadFileDTO.size==" +
+			// lstUploadFileDTO.size());
 			jobj.put("MEMBERFILES", lstUploadFileDTO);
 		}
-		//System.out.println("Profile jobj-->" + jobj);
+		// System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/editMember")
@@ -246,34 +246,37 @@ public class MemberService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String memberId = (String) session.getAttribute("MEMBERID");
-		//System.out.println("1a. *****Called editMember**********memberId==" + memberId);
+		// System.out.println("1a. *****Called editMember**********memberId==" +
+		// memberId);
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
 
 		try {
 			if (StringUtils.isNotEmpty(memberId)) {
-                MemberDTO memberDto = new MemberDTO();
-                memberDto.setMemberId(memberId);
-                
-                MemberBO bo = new MemberBO();
-                //memberList = bo.getMemberDetails();
-                memberList = bo.getMemberProfile(memberDto);
-                
-				//System.out.println("****memberList.size==" + memberList.size());
-				//System.out.println("arraylist--->" + memberList.toString());
+				MemberDTO memberDto = new MemberDTO();
+				memberDto.setMemberId(memberId);
+
+				MemberBO bo = new MemberBO();
+				// memberList = bo.getMemberDetails();
+				memberList = bo.getMemberProfile(memberDto);
+
+				// System.out.println("****memberList.size==" +
+				// memberList.size());
+				 System.out.println("getHaveFarm--->" + memberList.get(0).getHaveFarm());
 				if (!(memberList.size() < 0)) {
 					jobj.put("EditMember", memberList);
 				} else {
 					jobj.put("EditMember", "failed");
 				}
-				//System.out.println("1b. *****Called MemberFarmEdit**********memberId==" + memberId);
+				// System.out.println("1b. *****Called
+				// MemberFarmEdit**********memberId==" + memberId);
 				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
 				memberFarmDto.setMemberId(memberId);
-				
-				FarmBO fbo  = new FarmBO();
+
+				FarmBO fbo = new FarmBO();
 				farmList = fbo.getFarmDetailsByMemberId(memberFarmDto);
-				
-				//System.out.println("****farmList.size==" + farmList.size());
+
+				// System.out.println("****farmList.size==" + farmList.size());
 				if (!(farmList.size() < 0)) {
 					jobj.put("MemberFarmEdit", farmList);
 				}
@@ -281,54 +284,47 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("editMember jobj-->" + jobj);
+		// System.out.println("editMember jobj-->" + jobj);
 		return jobj;
 
 	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/memberUpdate")
-	public JSONObject memberUpdate(@Context HttpServletRequest request, 
-			@QueryParam("memberId") String memberId,
-			@QueryParam("title") String title, 
-			@QueryParam("firstName") String firstName,
-			@QueryParam("middleName") String middleName, 
-			@QueryParam("lastName") String lastName, 
-			@QueryParam("mobile") String mobile,
-			@QueryParam("email") String email,
-			@QueryParam("address") String address,
-			@QueryParam("place") String place,
-			@QueryParam("mandal") String mandal,
-			@QueryParam("district")String district,
-			@QueryParam("state") String state,
-			@QueryParam("pincode") String pincode,
-			@QueryParam("profession") String profession,
-			@QueryParam("haveFarm") String haveFarm,
-			@QueryParam("memberType") String memberType,
-			@QueryParam("farmId") String farmId,
-			@QueryParam("farmName") String farmName,
-			@QueryParam("farmPlace") String farmPlace,
-			@QueryParam("farmAddress") String farmAddress,
-			@QueryParam("farmMandal") String farmMandal,
-			@QueryParam("farmDistrict") String farmDistrict,
-			@QueryParam("aboutFarm") String aboutFarm,
-			@QueryParam("farmState") String farmState,
-			@QueryParam("farmPincode") String farmPincode) {
-		//System.out.println("in to memberUpdate controller");
+	public JSONObject memberUpdate(@Context HttpServletRequest request, @QueryParam("memberId") String memberId,
+			@QueryParam("title") String title, @QueryParam("firstName") String firstName,
+			@QueryParam("middleName") String middleName, @QueryParam("lastName") String lastName,
+			@QueryParam("mobile") String mobile, @QueryParam("email") String email,
+			@QueryParam("address") String address, @QueryParam("place") String place,
+			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
+			@QueryParam("state") String state, @QueryParam("pincode") String pincode,
+			@QueryParam("profession") String profession, @QueryParam("haveFarm") String haveFarm,
+			@QueryParam("memberType") String memberType, @QueryParam("farmId") String farmId,
+			@QueryParam("farmName") String farmName, @QueryParam("farmPlace") String farmPlace,
+			@QueryParam("farmAddress") String farmAddress, @QueryParam("farmMandal") String farmMandal,
+			@QueryParam("farmDistrict") String farmDistrict, @QueryParam("aboutFarm") String aboutFarm,
+			@QueryParam("farmState") String farmState, @QueryParam("farmPincode") String farmPincode) {
+		// System.out.println("in to memberUpdate controller");
 		JSONObject jObj = new JSONObject();
 		String memberResult = "fail";
 		String farmResult = "fail";
-		//String memberfarmResult = "fail";
-		
+		// String memberfarmResult = "fail";
 
-		//System.out.println("1.a In memberUpdate---------- title===" + title);
-		//System.out.println("1.b In memberUpdate---------- firstName===" + firstName);
-		//System.out.println("1.d In memberUpdate---------- middleName===" + middleName);
-		//System.out.println("1.d In memberUpdate---------- profession===" + profession);
-		//System.out.println("1.d In memberUpdate---------- state===" + state);
-		//System.out.println("1.d In memberUpdate---------- farmName===" + farmName);
-		//System.out.println("1.d In memberUpdate---------- farmPlace===" + farmPlace);
-		//System.out.println("1.d In memberUpdate---------- farmAddress===" + farmAddress);
+		// System.out.println("1.a In memberUpdate---------- title===" + title);
+		// System.out.println("1.b In memberUpdate---------- firstName===" +
+		// firstName);
+		// System.out.println("1.d In memberUpdate---------- middleName===" +
+		// middleName);
+		// System.out.println("1.d In memberUpdate---------- profession===" +
+		// profession);
+		// System.out.println("1.d In memberUpdate---------- state===" + state);
+		// System.out.println("1.d In memberUpdate---------- farmName===" +
+		// farmName);
+		// System.out.println("1.d In memberUpdate---------- farmPlace===" +
+		// farmPlace);
+		// System.out.println("1.d In memberUpdate---------- farmAddress===" +
+		// farmAddress);
 
 		try {
 			if (StringUtils.isNotEmpty(title)) {
@@ -350,15 +346,14 @@ public class MemberService {
 				memberDto.setUpdatedOn(CommonUtils.getDate());
 				memberDto.setHaveFarm(haveFarm);
 				memberDto.setMemberType(memberType);
-				
+
 				MemberBO bo = new MemberBO();
 				memberResult = bo.memberUpdate(memberDto);
-				
-				
+
 				FarmDTO farmDto = new FarmDTO();
 				farmDto.setFarmId(farmId);
-				//String sId = CommonUtils.getAutoGenId();
-				//farmDto.setFarmId(sId);
+				// String sId = CommonUtils.getAutoGenId();
+				// farmDto.setFarmId(sId);
 				farmDto.setFarmName(farmName);
 				farmDto.setFarmPlace(farmPlace);
 				farmDto.setFarmAddress(farmAddress);
@@ -367,26 +362,21 @@ public class MemberService {
 				farmDto.setAboutFarm(aboutFarm);
 				farmDto.setFarmState(farmState);
 				farmDto.setFarmPincode(farmPincode);
-				
-				
+
 				FarmBO farmBo = new FarmBO();
 				farmResult = farmBo.farmUpdate(farmDto);
-				
-				
-				
-				
+
 				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
 				memberFarmDto.setFarmId(farmId);
 				memberFarmDto.setMemberId(memberId);
 				MemberFarmBO memberfarmBo = new MemberFarmBO();
-				//CommonUtils.saveFileData(request, memberId, "MEMBER");
-				//CommonUtils.saveFileData(request, farmId, "Farm");
-				
-				
-		}
-			//System.out.println("result........." + memberResult);
-			//System.out.println("result........." + farmResult);
-			//System.out.println("result........." + memberfarmResult);
+				// CommonUtils.saveFileData(request, memberId, "MEMBER");
+				// CommonUtils.saveFileData(request, farmId, "Farm");
+
+			}
+			// System.out.println("result........." + memberResult);
+			// System.out.println("result........." + farmResult);
+			// System.out.println("result........." + memberfarmResult);
 			if (!"fail".equals(memberResult)) {
 				jObj.put("Msg", memberResult);
 			} else {
@@ -395,18 +385,17 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
+		// System.out.println("jobj-->" + jObj);
 		return jObj;
-	
-		
-	
-}
-	
+
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteMember")
 	public JSONObject deleteMember(@QueryParam("memberId") String memberId) {
-		//System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
+		// System.out.println("1. *****Called deleteEvent**********eventId==" +
+		// eventId);
 		JSONObject jobj1 = new JSONObject();
 		MemberBO bo = new MemberBO();
 		MemberDTO dto = new MemberDTO();
@@ -418,9 +407,8 @@ public class MemberService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("delete jobj-->" + jobj1);
+		// System.out.println("delete jobj-->" + jobj1);
 		return jobj1;
 
 	}
 }
-

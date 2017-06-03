@@ -71,7 +71,7 @@
 										$.each(
 												data.MEMBERFILES,
 												function(key, val) {
-													//alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
+													alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
 													html = html
 													+'<li>'
 													+'<div class="fff">'

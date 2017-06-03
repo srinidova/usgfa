@@ -4,24 +4,24 @@
 <sqlMap namespace="Member">
 		<insert id="addMember" parameterClass="com.dto.MemberDTO">
 		insert into
-		member(memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn)
-		values(#memberId#,#title#,#firstName#,#middleName#,#lastName#,#mobile#,#email#,#address#,#place#,#mandal#,#district#,#state#,#pincode#,#profession#,#updatedBy#,#updatedOn#)
+		member(memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password)
+		values(#memberId#,#title#,#firstName#,#middleName#,#lastName#,#mobile#,#email#,#address#,#place#,#mandal#,#district#,#state#,#pincode#,#profession#,#updatedBy#,#updatedOn#,#haveFarm#,#memberType#,#amountPaid#,#password#)
 	</insert>
 	<select id="getMemberDetails" resultClass="com.dto.MemberDTO">
 		select
-		memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn from
+		memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
 		member
 	</select>
 	<select id="getMemberById" parameterClass="java.lang.String"
 		resultClass="com.dto.MemberDTO">
-		select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn from
+		select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
 		member where memberId = #value#
 	</select>
 	<update id="memberUpdate" parameterClass="com.dto.MemberDTO">
 		update member set title
 		= #title#, firstName = #firstName#, middleName = #middleName#, lastName = #lastName#, mobile
 		= #mobile#, email = #email#, address = #address#, place = #place#, mandal = #mandal#, district = #district#, state = #state#, pincode = #pincode#,
-		profession = #profession#, updatedBy = #updatedBy#, updatedOn = #updatedOn#
+		profession = #profession#, updatedBy = #updatedBy#, updatedOn = #updatedOn#, haveFarm = #haveFarm#, memberType=#memberType#,amountPaid=#amountPaid#,password=#password#
 		where
 		memberId = #memberId#
 	</update>
@@ -29,4 +29,9 @@
 		delete from member where
 		memberId = #memberId#
 	</delete>
+	<select id="getMemberByMobile" parameterClass="java.lang.String"
+		resultClass="com.dto.MemberDTO">
+		select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
+		member where mobile = #mobile#
+	</select>
 </sqlMap>

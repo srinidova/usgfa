@@ -90,16 +90,16 @@ function eventFarmValidation() {
 		$("#" + msg).show();
 		district.focus();
 		return false;
-	}else if (pincode.value.length == 0) {
+	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
 		//alert("----date zero-------");
-		msg = "errPinCode";
+		msg = "errEveRegPinCode";
 		title = "Pin Code";
 
-		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).text(title + " must have six numbers");
 		$("#" + msg).show();
 		pincode.focus();
 		return false;
-	}else {
+	} else {
 		$("#errEventName").text("");
 		$("#errTimeFrom").text("");
 		$("#errTimeEnd").text("");
@@ -109,9 +109,9 @@ function eventFarmValidation() {
 		$("#errMoreInfo").text("");
 		$("#errDistrict").text("");
 		$("#errLandMark").text("");
-		$("#errPinCode").text("");
+		$("#errEveRegPinCode").text("");
 		saveEvent();
-		alert("------OK-------");
+		//alert("------OK-------");
 	}
 
 }
@@ -135,7 +135,7 @@ function saveEvent(){
 	 var name = $("#name").val();
 	 var designation = $("#designation").val();
 	 
-		alert("------in test-----------");
+		//alert("------in test-----------");
 		//var eventRegGuests = document.getElementById("guestName");
 		var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
 		var elmsGstName = document.querySelectorAll("[id='guestName']")
@@ -162,9 +162,9 @@ function saveEvent(){
 
 			//alert(i+"--------elmsGstTitle=="+elmsGstTitle[i].value+"--------elmsGstName=="+elmsGstName[i].value+"--------elmsGstDesi=="+elmsGstDesi[i].value);
 		}
-		alert("guestTitle==" + guestTitle);
-		alert("guestName==" + guestName);
-		alert("guestDesi==" + guestDesi);
+		//alert("guestTitle==" + guestTitle);
+		//alert("guestName==" + guestName);
+		//alert("guestDesi==" + guestDesi);
 	 
 	var eventObject = new Object();
 	eventObject.eventName = eventName;
@@ -189,20 +189,12 @@ function saveEvent(){
 		data : eventObject,
 		url : "emp/eventService/addEvent",
 		success : function(data) {
-/* 			//alert("data.Msg====="+data.Msg);
-			var msgSave = data.Msg;
-			//alert(".....msgSave......"+msgSave);
-			if(msgSave == 'fail'){
-				alert(".....fail......");
-			}else{
-				alert(".....success......");
-			} */
 			if (data.Msg == 'success') {
-				alert(".....success......");
+				//alert(".....success......");
 				window.location.href = "eventList.jsp";
 				//alert("a4...........");
 			}else{
-				alert(".....error......");
+				//alert(".....error......");
 				$("#eventRegFailMsg").text("Event Registration Failed");
 			}  
 		}
@@ -219,6 +211,28 @@ function saveEvent(){
 			}
 		}
 	});
+}
+
+function pincodeCheck(fName, title, msg) {
+	 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
+	//alert("== allNumber ==");
+	var fieldName = document.getElementById(fName);
+	//alert("== fieldName =="+fieldName);
+	var number = /^[0-9]+$/;
+	if (!fieldName.value.match(number)) {			
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		fieldName.focus();
+		return false;
+	}else if(fieldName.value.length != 6){
+		$("#" + msg).text(title + " must have six numbers");
+		$("#" + msg).show();
+		fieldName.focus();
+		return false;
+	} else {
+		$("#" + msg).text("");
+		return true;
+	}
 }
 
 </script>
@@ -281,7 +295,7 @@ function saveEvent(){
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="no_of_days">No.of days *</label> <span class="errMsg" id="errNoofdays"></span>
-						<input type="text" class="form-control" id="noOfDays" name="noOfDays" maxlength=3
+						<input type="text" class="form-control" id="noOfDays" name="noOfDays" maxlength="3"
 						onkeyup="allNumber(id,'No.of days','errNoofdays');">
 					</div>
 				</div>
@@ -290,7 +304,7 @@ function saveEvent(){
 						<label for="time_from">Date & Time From *</label> <span class="errMsg" id="errTimeFrom"></span>
 						<div class='input-group date' id="eventTimeFrom">
 							<input type='text' class="form-control" id="timeFrom"
-								name="timeFrom" maxlength=30  onkeyup="validateTitle(id,'Date & Time From','errTimeFrom',5,30);"/> <span class="input-group-addon"> <span
+								name="timeFrom" maxlength="30" onkeyup="validateTitle(id,'Date & Time From','errTimeFrom',5,30);"/> <span class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
@@ -300,7 +314,7 @@ function saveEvent(){
 					<div class="form-group">
 						<label for="time_end">Date & Time End *</label> <span class="errMsg" id="errTimeEnd"></span>
 						<div class='input-group date' id="eventTimeEnd">
-							<input type='text' class="form-control" id="timeEnd" name="timeEnd" maxlength=30
+							<input type='text' class="form-control" id="timeEnd" name="timeEnd" maxlength="30"
 							onkeyup="validateTitle(id,'Date & Time End','errTimeEnd',5,30);"/> 
 								<span class="input-group-addon"> 
 								<span class="glyphicon glyphicon-calendar"></span>
@@ -312,13 +326,13 @@ function saveEvent(){
 					<div class="form-group">
 						<label for="event_address">Address *</label> <span class="errMsg" id="errAddress"></span>
 						<textarea class="form-control" rows="5" id="address"
-							name="address" maxlength=250 onkeyup="emptyCheck(id,'Address','errAddress');"></textarea>
+							name="address" maxlength="250" onkeyup="emptyCheck(id,'Address','errAddress');"></textarea>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="land_mark"> Place/City *</label> <span class="errMsg" id="errPlace"></span> 
-						<input type="text" class="form-control" id="place" name="place" maxlength=30 
+						<input type="text" class="form-control" id="place" name="place" maxlength="30" 
 						onkeyup="validateTitle(id,'Place/City','errPlace',5,30);">
 					</div>
 				</div>
@@ -326,20 +340,20 @@ function saveEvent(){
 					<div class="form-group">
 						<label for="Place_city">Mandal *</label> <span class="errMsg" id="errMandal"></span> 
 						<input type="text"
-							class="form-control" id="mandal" name=" mandal" maxlength=30 onkeyup="validateTitle(id,'Mandal','errMandal',5,30);">
+							class="form-control" id="mandal" name=" mandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMandal',5,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">More Info</label> <span class="errMsg" id="errMoreInfo"></span> 
-						<textarea class="form-control" rows="5" id="moreInfo" name="moreInfo" maxlength=250>
+						<textarea class="form-control" rows="5" id="moreInfo" name="moreInfo" maxlength="250">
 						</textarea>
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="district">District *</label> <span class="errMsg" id="errDistrict"></span> 
-						<input type="text" class="form-control" id="district" name="district" maxlength=250
+						<input type="text" class="form-control" id="district" name="district" maxlength="30"
 						 onkeyup="validateTitle(id,'District','errDistrict',5,30);">
 					</div>
 				</div>
@@ -355,14 +369,14 @@ function saveEvent(){
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="state">Land Mark</label> <span class="errMsg" id="errLandMark"></span> 
-						<input type="text" class="form-control" id="landMark" name="landMark" maxlength=250>
+						<input type="text" class="form-control" id="landMark" name="landMark" maxlength="250">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="pin_code">Pin Code *</label> <span class="errMsg" id="errEveRegPinCode"></span> 
-						<input type="text" class="form-control" id="pincode" name="pincode" maxlength=6 
-						onkeyup="allNumber(id,'Pin Code','errEveRegPinCode');">
+						<label for="pin_code">Pin Code </label> <span class="errMsg" id="errEveRegPinCode"></span> 
+						<input type="text" class="form-control" id="pincode" name="pincode" maxlength="6" 
+						onkeyup="pincodeCheck(id,'Pin Code','errEveRegPinCode');">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -400,8 +414,8 @@ function saveEvent(){
 				<div class="from">
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="title">Title</label> <select class="form-control"
-								id="guestTitle" name="guestTitle">
+							<label for="title">Title</label> 
+							<select class="form-control" id="guestTitle" name="guestTitle">
 								<option value="Mr">Mr</option>
 								<option value="Ms">Ms</option>
 								<option value="Dr">Dr</option>

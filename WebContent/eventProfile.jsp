@@ -59,7 +59,7 @@ $(document)
 											$.each(
 													data.EVENTFILES,
 													function(key, val) {
-														//alert("EVENTFILES---*****99999999999*****-------filePath=="+data.EVENTFILES[key].filePath);
+														alert("EVENTFILES---*****99999999999*****-------filePath=="+data.EVENTFILES[key].filePath);
 														html = html
 														+'<li>'
 														+'<div class="fff">'

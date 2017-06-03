@@ -36,6 +36,7 @@ function programEditFarmValidation() {
 	var guest = document.getElementById("programEditGuest");
 	var youtube = document.getElementById("programEditYoutube");
 	var moreInfo = document.getElementById("programEditMoreInfo");
+	$("#programEditFailMsg").text("");
 	//alert("==2==");
 	if (programName.value.length == 0) {
 		//alert("----newsTitle zero-------");
@@ -65,7 +66,7 @@ function programEditFarmValidation() {
 		errEditProDateAndTimeTo.focus();
 		return false;
 	}else if (channel.value.length == 0 && youtube.value.length == 0) {
-		alert("----channel /youtube  zero-------");
+		//alert("----channel /youtube  zero-------");
 		msg = "errEditProChannel";
 		title = "Channel or Youtube";
 
@@ -136,9 +137,17 @@ function programUpdate(){
 		data : programObject,
 		url : "emp/programService/programUpdate",
 		success : function(data) {
-			if (data.Msg = "success") {
+			/* if (data.Msg = "success") {
 				window.location.href = "programList.jsp";
-			}
+			} */
+			if (data.Msg == 'success') {
+				//alert(".....success......");
+				window.location.href = "programList.jsp";
+				//alert("a4...........");
+			}else{
+				//alert(".....error......");
+				$("#programEditFailMsg").text("Program Edit Failed");
+			} 
 		}
 	});
 	
@@ -176,7 +185,7 @@ function programUpdate(){
 						<label for="program_name">Program Name *</label> <span class="errMsg" id="errEditProgramName"></span>
 						<input
 							type="text" class="form-control" id="programEditName"
-							name="programEditName" maxlength=30 onkeyup="validateTitle(id,'Program Name','errEditProgramName',5,30);"> <input type="hidden"
+							name="programEditName" maxlength="30" onkeyup="validateTitle(id,'Program Name','errEditProgramName',5,30);"> <input type="hidden"
 							class="form-control" id="programId" name="programId">
 					</div>
 				</div>
@@ -184,7 +193,7 @@ function programUpdate(){
 					<div class="form-group">
 						<label for="duration"> Duration *</label> <input type="text"
 							class="form-control" id="programEditDuration"
-							name="programEditDuration" maxlength=30>
+							name="programEditDuration" maxlength="30">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -193,7 +202,7 @@ function programUpdate(){
 						<div class='input-group date' id="programEditTimeFrom">
 							<input type='text' class="form-control"
 								id="programEditDateAndTimeFrom"
-								name="programEditDateAndTimeFrom" maxlength=30
+								name="programEditDateAndTimeFrom" maxlength="30"
 								onkeyup="validateTitle(id,'Date & TimeFrom','errEditProDateAndTimeFrom',5,30);"/> <span
 								class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
@@ -206,7 +215,7 @@ function programUpdate(){
 						<label for="date&Time To">Date & Time To *</label> <span class="errMsg" id="errEditProDateAndTimeTo"></span>
 						<div class='input-group date' id="programEditTimeTo">
 							<input type='text' class="form-control"
-								id="programEditDateAndTimeTo" name="programEditDateAndTimeTo" maxlength=30
+								id="programEditDateAndTimeTo" name="programEditDateAndTimeTo" maxlength="30"
 								onkeyup="validateTitle(id,'Date & Time To','errEditProDateAndTimeTo',5,30);" />
 							<span class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
@@ -218,8 +227,8 @@ function programUpdate(){
 					<div class="form-group">
 						<label for="channel">Channel</label> <span class="errMsg" id="errEditProChannel"></span>
 						<input type="text"
-							class="form-control" id="programEditChannel" name="programEditChannel" maxlength=30 
-							onkeyup="emptyCheckTwoFields(id,'youtube','Channel or Youtube','errEditProChannel');">
+							class="form-control" id="programEditChannel" name="programEditChannel" maxlength="30"
+							onkeyup="emptyCheckTwoFields(id,'channel','Channel or Youtube','errEditProChannel');">
 					</div>
 				</div>
 				
@@ -227,7 +236,7 @@ function programUpdate(){
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="youtube">Youtube</label> 
-					<input type="text" class="form-control" id="programEditYoutube" name="programEditYoutube" maxlength=30 
+					<input type="text" class="form-control" id="programEditYoutube" name="programEditYoutube" maxlength="30" 
 						onkeyup="emptyCheckTwoFields(id,'youtube','Channel or Youtube','errEditProChannel');">
 				</div>
 			</div>
@@ -236,14 +245,14 @@ function programUpdate(){
 					<div class="form-group">
 						<label for="guest"> Guest</label> <input type="text"
 							class="form-control" id="programEditGuest"
-							name="programEditGuest" maxlength=30>
+							name="programEditGuest" maxlength="30">
 					</div>
 				</div>
 			<div class="col-md-5">
 				<div class="form-group">
 					<label for="more_info">More Info</label>
 					<textarea class="form-control" rows="5" id="programEditMoreInfo"
-						name="programEditMoreInfo" maxlength=250></textarea>
+						name="programEditMoreInfo" maxlength="250"></textarea>
 				</div>
 			</div>
 			<!-------------------------Upload Photo--------------------------------------->
@@ -518,11 +527,10 @@ function programUpdate(){
 							onclick="programEditFarmValidation();">Submit</button></a>
 
 				</div>
-				<div class="message">
+				<div class="message" id="programfrm_message">
 					<h3>
-						<aside class=" " id="programMessage" style="display: none">Save
-							Sucessfully</aside>
-					</h3>
+				         <aside class="formFailMsg" id="programEditFailMsg"></aside>
+			       </h3>
 				</div>
 			</div>
 
@@ -551,7 +559,7 @@ function programUpdate(){
 			});
 
 		$('.cross_icon').click(function(){
-			alert('asdfasdf')
+			//alert('asdfasdf')
 			$(this).parent().remove()
 			});
     });

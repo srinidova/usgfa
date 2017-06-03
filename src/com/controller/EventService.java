@@ -56,7 +56,7 @@ public class EventService {
 		String resultGuest = "fail";
 		String resultEventGuest = "fail";
 		String delims = "~";
-
+		String sId = null ;
 		//System.out.println("1.a In addEvent---------- guestTitle===" + guestTitle);
 		//System.out.println("1.b In addEvent---------- guestName===" + guestName);
 		//System.out.println("1.d In addEvent---------- guestDesi===" + guestDesi);
@@ -66,7 +66,7 @@ public class EventService {
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
 				EventDTO eventDto = new EventDTO();
-				String sId = CommonUtils.getAutoGenId();
+				sId = CommonUtils.getAutoGenId();
 				//eventDto.setEventId(CommonUtils.getAutoGenId());
 				eventDto.setEventId(sId);
 				eventDto.setEventName(eventName);
@@ -122,11 +122,12 @@ public class EventService {
 					}
 				}
 				//System.out.println("resultEventGuest"+resultEventGuest);
-				CommonUtils.saveFileData(request, sId, "EVENT");
+				
 			}
 			
 			System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
+				CommonUtils.saveFileData(request, sId, "EVENT");
 				System.out.println("--success--->");
 				jObj.put("Msg", result);
 			} else {
@@ -274,8 +275,6 @@ public class EventService {
 				eventGuestDto.setEventId(eventId);
 				GuestBO gbo = new GuestBO();
 				guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
-				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
-				//guestList = gbo.getGuestDetailsByeventId(eventGuestDto);
 				
 				//System.out.println("****guestList.size==" + guestList.size());
 				if (!(guestList.size() < 0)) {

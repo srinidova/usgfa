@@ -34,6 +34,7 @@ function newsEditFarmValidation() {
 	var moreInfo = document.getElementById("newsEditMoreInfo");
 	var msg = "";
     var title = "";
+    $("#newsEditFailMsg").text();
 	//alert("==2==");
 	if(newsTitle.value.length == 0){
 		msg = "errEditNewsNameTitle";
@@ -112,11 +113,23 @@ $
 		data : newsObject,
 		url : "emp/newsService/newsUpdate",
 		success : function(data) {
-			if (data.Msg = "success") {
+			 if (data.Msg == 'success') {
+				//alert("----succes------")
 				//alert("in to newsEdit");
 				window.location.href = "newsList.jsp";
 				//alert("a4...........newsEdit");
-			}
+			}else{
+				//alert("------error----------");
+				$("#newsEditFailMsg").text("News Edit Failed");
+			} 
+			/* if (data.Msg == 'success') {
+				alert(".....success......");
+				window.location.href = "newsList.jsp";
+				//alert("a4...........");
+			}else{
+				alert(".....error......");
+				$("#newsEditFailMsg").text("News Registration Failed");
+			}  */
 		}
 	});
 	
@@ -150,7 +163,7 @@ $
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="event_name">Name Title *</label> <span class="errMsg" id="errEditNewsNameTitle"></span>
-						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle" maxlength=30
+						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle" maxlength="30"
 						onkeyup="validateTitle(id,'Name Title','errEditNewsNameTitle',5,30);">
 						<input type="hidden" class="form-control" id="newsId" name="newsId">
 					</div>
@@ -159,7 +172,7 @@ $
 					<div class="form-group">
 						<label for="time_from">Date *</label> <span class="errMsg" id="errEditNewsDate"></span>
 						<div class='input-group date' id="newsEditDate1">
-							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" maxlength=30
+							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" maxlength="30"
 							onkeyup="validateTitle(id,'Date','errEditNewsDate',5,30);"/> 
 							<span class="input-group-addon">
 							 <span class="glyphicon glyphicon-calendar"></span>
@@ -169,23 +182,23 @@ $
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark"> Paper</label> 
+						<label for="land_mark">Paper *</label> 
 						<span class="errMsg" id="errEditNewsPaper"></span> 
-						<input type="text" class="form-control" id="newsEditPaper" name="newsEditPaper" maxlength=30
+						<input type="text" class="form-control" id="newsEditPaper" name="newsEditPaper" maxlength="30"
 						onkeyup="emptyCheckTwoFields(id,'link', 'Paper or Link/Url','errEditNewsPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Link/Url</label> 
-						<input type="text" class="form-control" id="newsEditLink" name="newsEditLink" maxlength=30
+						<label for="land_mark">Link/Url *</label> 
+						<input type="text" class="form-control" id="newsEditLink" name="newsEditLink" maxlength="30"
 						onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errEditNewsPaper');">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">More Info *</label>
-						<textarea class="form-control" rows="5" id="newsEditMoreInfo" name="newsEditMoreInfo" maxlength=250></textarea>
+						<textarea class="form-control" rows="5" id="newsEditMoreInfo" name="newsEditMoreInfo" maxlength="250"></textarea>
 					</div>
 				</div>
 				<!-------------------------Upload Photo--------------------------------------->
@@ -430,7 +443,6 @@ $
 												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
 													Delete</a>
 												<div class="suceee_msg">
-													<
 													<!-- h4>Delete Message</h4> -->
 												</div>
 											</div>
@@ -448,8 +460,10 @@ $
 					<div class="submit_button text-right">
 						<a href='#'><button class="btn btn-success btn-sm text-right " onclick="newsEditFarmValidation();">Submit</button></a>
 					</div>
-					<div class="message">
-						<h3><aside class=" " id="newsMessage" style="display: none">Save Sucessfully</aside></h3>
+					<div class="message" id="newsfrm_message">
+						<h3>
+				         <aside class="formFailMsg" id="newsEditFailMsg"></aside>
+			       </h3>
 					</div>
 				</div>
 
@@ -476,7 +490,7 @@ $
 			});
 
 		$('.cross_icon').click(function(){
-			alert('asdfasdf')
+			//alert('asdfasdf')
 			$(this).parent().remove()
 			});
     });

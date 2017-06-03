@@ -90,11 +90,11 @@
 					window.location.href = "newsList.jsp";
 				} */
 				if (data.Msg == 'success') {
-					alert(".....success......");
+					//alert(".....success......");
 					window.location.href = "newsList.jsp";
 					//alert("a4...........");
 				}else{
-					alert(".....error......");
+					//alert(".....error......");
 					$("#newsRegFailMsg").text("News Registration Failed");
 				}  
 			}
@@ -179,7 +179,7 @@ function test2 (){alert ("**************");
 						<label for="time_from">Date *</label> 
 						<span class="errMsg" id="errDate"></span>
 						<div class='input-group date' id="newsDate">
-						   <input type='text' class="form-control" id="date" name="date"  maxlength=30 tabindex="2" /> 
+						   <input type='text' class="form-control" id="date" name="date"  maxlength="30" tabindex="2" /> 
 						   <span class="input-group-addon"> 
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -188,7 +188,7 @@ function test2 (){alert ("**************");
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Paper</label> 
+						<label for="land_mark">Paper *</label> 
 						<span class="errMsg" id="errPaper"></span> 
 						<input type="text" class="form-control" id="paper" name="paper" tabindex="3" maxlength="30"
 							onkeyup="emptyCheckTwoFields(id,'link', 'Paper or Link/Url','errPaper');">
@@ -196,8 +196,8 @@ function test2 (){alert ("**************");
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Link/Url</label> 
-						<input type="text" class="form-control" id="link" name="link" maxlength=30 tabindex="4"
+						<label for="land_mark">Link/Url *</label> 
+						<input type="text" class="form-control" id="link" name="link" maxlength="30" tabindex="4"
 							onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errPaper');">
 					</div>
 				</div>

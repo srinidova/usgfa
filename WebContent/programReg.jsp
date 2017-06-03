@@ -7,15 +7,20 @@
 	 var programName = document.getElementById("programName");
 	 var duration    = document.getElementById("duration");
 	 var dateAndTimeFrom = document.getElementById("dateAndTimeFrom"); 
-	 if (dateAndTimeFrom.value.length > 0) {
-			$("#dateAndTimeFrom").text("");
-		}
 	 var dateAndTimeTo = document.getElementById("dateAndTimeTo");
+	 var channel = document.getElementById("channel");
 	 var msg = "";
 	 var title = "";
 	 $("#programRegFailMsg").text("");
+	 if (dateAndTimeFrom.value.length > 0) {
+			$("#errDateAndTimeFrom").text("");
+	 }
+	 if (dateAndTimeTo.value.length > 0) {
+			$("#errDateAndTimeTo").text("");
+	 }
+
 	 if (programName.value.length == 0) {
-			alert("----programName zero-------");
+			//alert("----programName zero-------");
 			msg = "errProgramName";
 			title = "Program Name ";
 
@@ -23,8 +28,17 @@
 			$("#" + msg).show();
 			programName.focus();
 			return false;
-		} else if (dateAndTimeFrom.value.length == 0) {
-			alert("----dateAndTimeFrom zero-------");
+		}/* else if (duration.value.length == 0) {
+			//alert("----moreInfo zero-------");
+			msg = "errDuration";
+			title = "Duration ";
+
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			duration.focus();
+			return false;
+		} */ else if (dateAndTimeFrom.value.length == 0) {
+			//alert("----dateAndTimeFrom zero-------");
 			msg = "errDateAndTimeFrom";
 			title = "Date & TimeFrom ";
 
@@ -33,7 +47,7 @@
 			dateAndTimeFrom.focus();
 			return false;
 		}else if (dateAndTimeTo.value.length == 0) {
-			alert("----dateAndTimeTo zero-------");
+			//alert("----dateAndTimeTo zero-------");
 			msg = "errDateAndTimeTo";
 			title = "Date & Time To ";
 
@@ -42,22 +56,12 @@
 			dateAndTimeTo.focus();
 			return false;
 		}else if (channel.value.length == 0 && youtube.value.length == 0) {
-			alert("----channel /youtube  zero-------");
+			//alert("----channel /youtube  zero-------");
 			msg = "errChannel";
 			title = "Channel or Youtube";
 
 			$("#" + msg).text(title + " should not be empty");
 			$("#" + msg).show();
-			//date.focus();
-			return false;
-		}else if (moreInfo.value.length == 0) {
-			//alert("----moreInfo zero-------");
-			msg = "errMoreInfo";
-			title = "MoreInfo";
-
-			$("#" + msg).text(title + " should not be empty");
-			$("#" + msg).show();
-			moreInfo.focus();
 			return false;
 		} else {
 			$("#errProgramName").text("");
@@ -102,17 +106,12 @@ function saveProgram(){
 		data : programObject,
 		url : "emp/programService/addProgram",
 		success : function(data) {
-			/* if (data.Msg = "success") {
-				//alert("b4...........");
-				window.location.href = "programList.jsp";
-				//alert("a4...........");
-			} */
 			if (data.Msg == 'success') {
-				alert(".....success......");
+				//alert(".....success......");
 				window.location.href = "programList.jsp";
 				//alert("a4...........");
 			}else{
-				alert(".....error......");
+				//alert(".....error......");
 				$("#programRegFailMsg").text("Program Registration Failed");
 			}  
 		}
@@ -129,6 +128,23 @@ function saveProgram(){
 			}
 		}
 	});
+}
+function checkTwoFields(fieldName1, fieldName2, title, msg) {
+	alert("----fieldName----");
+	alert("----fieldName----"+fieldName1);
+	var fieldName1_len = document.getElementById(fieldName1).value.length;
+
+	var fieldName2_len = document.getElementById(fieldName2).value.length;
+
+	if (fieldName1_len == 0 && fieldName2_len == 0) {
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		//fieldName.focus();
+		return false;
+	} else {
+		$("#" + msg).text("");
+		return true;
+	}
 }
 </script>
 
@@ -199,7 +215,7 @@ function saveProgram(){
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="duration">Duration </label>  <span class="errMsg" id="errDuration"></span>
+						<label for="duration">Duration</label>  <span class="errMsg" id="errDuration"></span>
 						<input type="text" class="form-control" id="duration" name="duration" maxlength="30"
 						onkeyup="validateTitle(id,'Duration ','errDuration',5,30);">
 					</div>
@@ -209,7 +225,7 @@ function saveProgram(){
 						<label for="date & TimeFrom">Date & TimeFrom *</label> <span class="errMsg" id="errDateAndTimeFrom"></span>
 						<div class='input-group date' id="programTimeFrom">
 							<input type='text' class="form-control" id="dateAndTimeFrom"
-								name="dateAndTimeFrom" maxlength=30 onkeyup="validateTitle(id,'Date & TimeFrom ','errDateAndTimeFrom',5,30);"/> 
+								name="dateAndTimeFrom" maxlength="30" onkeyup="validateTitle(id,'Date & TimeFrom ','errDateAndTimeFrom',5,30);"/> 
 								<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -221,7 +237,7 @@ function saveProgram(){
 						<label for="date&Time To">Date & Time To *</label> <span class="errMsg" id="errDateAndTimeTo"></span>
 						<div class='input-group date' id="programTimeTo">
 							<input type='text' class="form-control" id="dateAndTimeTo"
-								name="dateAndTimeTo" maxlength=30 onkeyup="validateTitle(id,'Date & Time To ','errDateAndTimeTo',5,30);" /> 
+								name="dateAndTimeTo" maxlength="30" onkeyup="validateTitle(id,'Date & Time To ','errDateAndTimeTo',5,30);" /> 
 								<span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
@@ -232,7 +248,7 @@ function saveProgram(){
 					<div class="form-group">
 						<label for="channel">Channel</label> <span class="errMsg" id="errChannel"></span>
 						<input type="text" class="form-control" id="channel" name="channel" maxlength="30"
-						 onkeyup="emptyCheckTwoFields(id,'youtube', 'Channel or Youtube','errChannel');">
+						 onkeyup="checkTwoFields(id,'youtube', 'Channel or Youtube','errChannel');">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -240,7 +256,7 @@ function saveProgram(){
 						<label for="youtube">Youtube</label> 
 						<input type="text"
 						class="form-control" id="youtube" name="youtube" maxlength="30" 
-						onkeyup="emptyCheckTwoFields(id,'youtube', 'Channel or Youtube','errChannel');">
+						onkeyup="checkTwoFields(id,'youtube', 'Channel or Youtube','errChannel');">
 					</div>
 				</div>
 			</div>
@@ -256,7 +272,7 @@ function saveProgram(){
 				<div class="form-group">
 					<label for="more_info">More Info</label> <span class="errMsg" id="errMoreInfo"></span> 
 					<textarea class="form-control" rows="5" id="moreInfo"
-						name="moreInfo" maxlength = 250  onkeyup="validateTitle(id,'More Info ','errMoreInfo',5,250);">
+						name="moreInfo" maxlength ="250"  onkeyup="validateTitle(id,'More Info ','errMoreInfo',5,250);">
 						</textarea>
 				</div>
 			</div>

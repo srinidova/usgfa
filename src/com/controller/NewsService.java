@@ -134,8 +134,7 @@ public class NewsService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getNewsId")
 	public JSONObject getNewsId(@QueryParam("newsId") String newsId, @Context HttpServletRequest request) {
-		// System.out.println("1. *****Called getNewsId**********newsId==" +
-		// newsId);
+		 System.out.println("1. *****Called getNewsId**********newsId==" + newsId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -148,7 +147,7 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("Profile jobj-->" + jobj);
+		 System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -161,8 +160,7 @@ public class NewsService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String newsId = (String) session.getAttribute("NEWSID");
-		// System.out.println("1a. *****Called getNewsProfile**********newsId=="
-		// + newsId);
+		System.out.println("1a. *****Called getNewsProfile**********newsId=="  + newsId);
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
 		String resultImage = "fail";
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
@@ -175,8 +173,8 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				newsList = bo.getNewsProfile(dto);
 
-				// System.out.println("****newsList.size==" + newsList.size());
-				// System.out.println("arraylist--->" + newsList.toString());
+				System.out.println("****newsList.size==" + newsList.size());
+				System.out.println("arraylist--->" + newsList.toString());
 				if (!(newsList.size() < 0)) {
 					jobj.put("NewsProfile", newsList);
 				} else {

@@ -135,7 +135,7 @@ function editEvent(eventId){
 	
 }
 function deleteEvent(eventId){
-	alert("eventId=="+eventId);
+	//alert("eventId=="+eventId);
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	$.ajax({

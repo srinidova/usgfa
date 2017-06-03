@@ -123,13 +123,12 @@ function getStoriesProfile(storiesId){
 	//alert("getStoriesProfile..........storiesId=="+storiesId);
 	var storiesObject = new Object();
 	storiesObject.storiesId = storiesId;
-	/* var newsObject = new Object();
-	newsObject.newsId = newsId; */
 	$.ajax({
 		data : storiesObject,
 		url : "emp/storiesService/getStoriesId",
 		success : function(data) {
 			if (data.Msg = "success") {
+				//alert("---------success----------")
 			}
 		}
 	});

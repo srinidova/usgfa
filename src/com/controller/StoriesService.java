@@ -48,6 +48,7 @@ public class StoriesService {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
+		String sId = null;
 
 		// System.out.println("1.a In addStories---------- name===" + name);
 		// System.out.println("1.b In addStories---------- profession===" +
@@ -59,7 +60,7 @@ public class StoriesService {
 		try {
 			if (StringUtils.isNotEmpty(title)) {
 				StoriesDTO storiesDto = new StoriesDTO();
-				String sId = CommonUtils.getAutoGenId();
+				sId = CommonUtils.getAutoGenId();
 				String sUpdatedOn = CommonUtils.getDate();
 
 				storiesDto.setStoriesId(sId);
@@ -84,42 +85,11 @@ public class StoriesService {
 				StoriesBO bo = new StoriesBO();
 				result = bo.addStories(storiesDto);
 
-				HttpSession session = request.getSession();
-
-				HashMap<String, String> hmImages = (HashMap<String, String>) session.getAttribute("UPLOADED_FILELIST");
-				if (hmImages != null && hmImages.size() > 0) {
-					for (Map.Entry m : hmImages.entrySet()) {
-						String sFileId = (String) m.getKey();
-						String sFilePath = (String) m.getValue();
-						//System.out.println("--------------sFileId---------" + sFileId);
-						//System.out.println("--------------sFilePath---------" + sFilePath);
-						// System.out.println(m.getKey()+" "+m.getValue());
-
-						// saving in to uploadFile Table
-						UploadFileDTO uploadFileDto = new UploadFileDTO();
-						uploadFileDto.setFileId(sFileId);
-						uploadFileDto.setFilePath(sFilePath);
-						uploadFileDto.setUpdatedBy(CommonUtils.getDate());
-
-						UploadFileBO filebo = new UploadFileBO();
-						resultFile = filebo.addUploadFileDetails(uploadFileDto);
-						//System.out.println("resultFile====" + resultFile);
-
-						// saving in to storiesFile Table
-
-						StoriesFileDTO storiesFileDto = new StoriesFileDTO();
-						storiesFileDto.setFileId(sFileId);
-						storiesFileDto.setStoriesId(sId);
-						//System.out.println("programFile---------" + sId);
-						StoriesFileBO storiesFileBo = new StoriesFileBO();
-						resultFile = storiesFileBo.storiesFile(storiesFileDto);
-
-						//System.out.println("resultFile====" + resultFile);
-					}
-				}
+				
 			}
 			// System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
+				CommonUtils.saveFileData(request, sId, "STORIES");
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -164,13 +134,13 @@ public class StoriesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getStoriesId")
 	public JSONObject getStoriesId(@QueryParam("storiesId") String storiesId, @Context HttpServletRequest request) {
-		// System.out.println("1. *****Called getStoriesId**********storiesId=="
-		// + storiesId);
+		System.out.println("1. *****Called getStoriesId**********storiesId==" + storiesId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
 
 			if (!(storiesId.length() < 0)) {
+				System.out.println("Profile44444444444 jobj-->" + jobj);
 				session.setAttribute("STORIESID", storiesId);
 			} else {
 				jobj.put("StoriesId", "failed");
@@ -178,7 +148,7 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("Profile jobj-->" + jobj);
+		 System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -191,22 +161,19 @@ public class StoriesService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String storiesId = (String) session.getAttribute("STORIESID");
-		// System.out.println("1a. *****Called
-		// getStoriesProfile**********storiesId==" + storiesId);
+	    System.out.println("1a. *****Called getStoriesProfile**********storiesId==" + storiesId);
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
-
 		try {
 			if (StringUtils.isNotEmpty(storiesId)) {
 				StoriesDTO dto = new StoriesDTO();
 				dto.setStoriesId(storiesId);
-
+				
 				StoriesBO bo = new StoriesBO();
 				storiesList = bo.getStoriesProfile(dto);
 
-				// System.out.println("****storiesList.size==" +
-				// storiesList.size());
-				// System.out.println("arraylist--->" + storiesList.toString());
+				 System.out.println("****storiesList.size==" + storiesList.size());
+				 System.out.println("arraylist--->" + storiesList.toString());
 				if (!(storiesList.size() < 0)) {
 					jobj.put("StoriesProfile", storiesList);
 				} else {

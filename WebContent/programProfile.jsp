@@ -49,13 +49,23 @@ $(document)
 												  $('#programProfDate ')
 														.text(
 																data.ProgramProfile[key].dateAndTimeFrom);
+												  $('#programProfDateTo')
+													.text(
+															data.ProgramProfile[key].dateAndTimeTo);
 												$('#programProfChannel')
 														.text(
 																data.ProgramProfile[key].channel);
+												$('#programProfYoutube')
+												.text(
+														data.ProgramProfile[key].youtube);
 												$(
 														'#programProfGuest')
 														.text(
 																data.ProgramProfile[key].guest);
+												$(
+												'#programProfMoreInfo')
+												.text(
+														data.ProgramProfile[key].moreInfo);
 												$('#programProfProgramId')
 														.val(
 																data.ProgramProfile[key].programId); 
@@ -66,7 +76,7 @@ $(document)
 													function(key, val) {
 														//alert("PROGRAMFILES---*****99999999999*****-------filePath=="+data.PROGRAMFILES[key].filePath);
 														html = html
-														+'<li class="col-md-12">'
+														/*  +'<li class="col-md-12">'
 														+'<div class="fff">'
 														  +'<div class="thumbnail">' 
 														+'<a href="#"><img src='+data.PROGRAMFILES[key].filePath+' alt="">'
@@ -87,7 +97,7 @@ $(document)
 														    +'</div>'
 														  +'</div>'
 														+'</div>'
-													      +'</li>'
+													      +'</li>'  */
 
 													})
 													
@@ -160,12 +170,24 @@ function editProfProgram() {
 										<td><div id="programProfDate"></div></td>
 									</tr>
 									<tr>
+										<td><b>Date & Time To:</b></td>
+										<td><div id="programProfDateTo"></div></td>
+									</tr>
+									<tr>
 										<td><b>Channel:</b></td>
 										<td><div id="programProfChannel"></td>
 									</tr>
 									<tr>
+										<td><b>Youtube:</b></td>
+										<td><div id="programProfYoutube"></td>
+									</tr>
+									<tr>
 										<td><b>Guest:</b></td>
 										<td><div id="programProfGuest"></td>
+									</tr>
+									<tr>
+										<td><b>More Info:</b></td>
+										<td><div id="programProfMoreInfo"></td>
 									</tr>
 
 								</tbody>

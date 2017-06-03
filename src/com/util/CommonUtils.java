@@ -43,6 +43,7 @@ import com.dto.FarmFileDTO;
 import com.dto.MemberFileDTO;
 import com.dto.NewsFileDTO;
 import com.dto.ProgramFileDTO;
+import com.dto.SmsDTO;
 import com.dto.StoriesFileDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -369,5 +370,56 @@ public class CommonUtils {
 		//System.out.println("Profile jobj-->" + jobj);
 		return;
 
+	}
+	public static SmsDTO getSmsProperties(ServletContext objContext,String sContentFor) throws IOException {
+		
+		SmsDTO smsDTO = null;
+		Properties prop = null;
+		InputStream input = null;
+		String propertiespath = null;
+		String smsUserName = null;
+		String smsPassword = null;
+		String smsUrl = null;
+		String smsSenderID = null;
+		String smsMessage = null;
+		
+		propertiespath = objContext.getRealPath("Resources" + File.separator + "USGFA.properties");
+		
+		if (StringUtils.isNotEmpty(propertiespath)) {
+			prop = new Properties();
+			smsDTO = new SmsDTO();
+			
+			input = new FileInputStream(propertiespath);
+			prop.load(input);
+			
+			smsUserName = prop.getProperty("smsUserName");
+			smsPassword = prop.getProperty("smsPassword");
+			smsUrl = prop.getProperty("smsUrl");
+			smsSenderID = prop.getProperty("smsSenderID");
+			smsMessage = prop.getProperty(sContentFor);
+			
+			System.out.println("1. smsUserName===" + smsUserName);
+			System.out.println("2. smsPassword===" + smsPassword);
+			System.out.println("3. smsUrl===" + smsUrl);
+			System.out.println("4. smsSenderID===" + smsSenderID);
+			
+			smsDTO.setUserName(smsUserName);
+			smsDTO.setPassword(smsPassword);
+			smsDTO.setUrl(smsUrl);
+			smsDTO.setSenderId(smsSenderID);
+			smsDTO.setMessage(smsMessage);
+		}
+		return smsDTO;
+	}
+	public static String getPin (){
+
+		int x = (int)(Math.random() * 9);
+	    x = x + 1;
+	    String randomPIN = (x + "") + ( ((int)(Math.random()*1000)) + "" );
+		if(randomPIN.length() < 4){
+			getPin ();
+		}
+
+		return randomPIN;
 	}
 }

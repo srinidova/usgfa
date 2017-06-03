@@ -29,7 +29,7 @@ public class StoriesBO {
 	     return dao.deleteStories(storiesDto);
 	}
 	public ArrayList<StoriesDTO> getStoriesProfile(StoriesDTO storiesDto){
-	     //System.out.println("2. In StoriesBO----------- getStoriesProfile====");
+	     System.out.println("2. In StoriesBO----------- getStoriesProfile====");
 		StoriesDAO dao = new StoriesDAO();
 		return dao.getStoriesProfile(storiesDto);
 	}
