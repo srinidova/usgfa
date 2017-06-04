@@ -28,10 +28,8 @@ if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
                         </li>
                         
                         <li><a href="#">Member</a>
-                        <ul>
-                           <% if(bShow){ %>
+                        	<ul>
                                 <li><a href='member.jsp'>Member New</a></li>
-                           <% } %>
                                 <li><a href='memberList.jsp'>Member List</a></li>
                             </ul>
                          </li>

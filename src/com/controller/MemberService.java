@@ -22,8 +22,10 @@ import com.dto.FarmDTO;
 import com.dto.MemberDTO;
 import com.dto.MemberFarmDTO;
 import com.dto.MemberFileDTO;
+import com.dto.SmsDTO;
 import com.dto.UploadFileDTO;
 import com.util.CommonUtils;
+import com.util.Sms;
 
 import net.sf.json.JSONObject;
 
@@ -55,9 +57,18 @@ public class MemberService {
 		String resultFileBo = "fail";
 		String resultFile = "fail";
 		String sId = null;
+		MemberBO bo = new MemberBO();
+		String sOtp = CommonUtils.getPin();
 		try {
 			System.out.println("haveFarm........." + haveFarm);
-			if (StringUtils.isNotEmpty(title)) {
+			if (StringUtils.isNotEmpty(mobile)) {
+				
+				boolean bMemberExists = bo.isMemberExists(mobile);
+				if(bMemberExists){
+					jObj.put("Msg", "Mobile No already exists.");
+					return jObj;
+				}
+				
 				MemberDTO memberDto = new MemberDTO();
 				sId = CommonUtils.getAutoGenId();
 				memberDto.setMemberId(sId);
@@ -78,12 +89,13 @@ public class MemberService {
 				memberDto.setHaveFarm(haveFarm);
 				memberDto.setMemberType(memberType);
 				memberDto.setAmountPaid(amount);
-                System.out.println("amoutnt---"+amount);
-				MemberBO bo = new MemberBO();
+				memberDto.setPassword(sOtp);
+                //System.out.println("amoutnt---"+amount);
+
 				memberResult = bo.addMember(memberDto);
 				
 				System.out.println("memberResult........." + memberResult);
-				if (memberResult.equals("success")) {
+				if (memberResult.equals("success") && haveFarm.equals("yes")) {
 
 					FarmDTO farmDto = new FarmDTO();
 					String sFarmId = CommonUtils.getAutoGenId();
@@ -112,8 +124,13 @@ public class MemberService {
 
 			}
 			System.out.println("memberfarmResult........." + memberfarmResult);
-			if (!"fail".equals(memberfarmResult)) {
+			if (!"fail".equals(memberResult)) {
 				CommonUtils.saveFileData(request, sId, "MEMBER");
+
+				//********** send SMS start ************//
+				boolean bNotifi = bo.sendNotifications(request, mobile, sOtp, memberType);
+				System.out.println("in to bNotifi=="+bNotifi);
+				//********** send SMS end ************//
 
 				jObj.put("Msg", memberResult);
 			} else {
@@ -121,6 +138,8 @@ public class MemberService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			jObj.put("Msg", "Member Registration Failed");
+			return jObj;
 		}
 		// System.out.println("jobj-->" + jObj);
 		return jObj;

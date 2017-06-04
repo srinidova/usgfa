@@ -6,16 +6,16 @@
 package com.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Properties;
-
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import com.dto.SmsDTO;
 
@@ -25,15 +25,14 @@ import com.dto.SmsDTO;
  * @author srinivasa.dova
  */
 public class Sms {
+	@SuppressWarnings("unused")
 	public static boolean sendMessage(ServletContext objContext,SmsDTO ObjsmsDto){
 		boolean bSentSms = false;
 		String postData="";
 		String retval = "";
 		String Username ="";
 		String Password = "";
-		//String MobileNo = "917411184869";
 		String MobileNo = ObjsmsDto.getSendTo();
-		//String Message = "Test message from Dova Soft Dova Soft Dova Soft123456 ";
 		String Message = ObjsmsDto.getMessage();
 		String SenderID = "";
 		InputStream input = null;
@@ -41,16 +40,6 @@ public class Sms {
 		String smsUrl = null;
 		String smsOtpText = null;
 		try{
-			/*Properties prop = new Properties();
-			String propertiespath = objContext.getRealPath("Resources"+ File.separator + "DataBase.properties");
-			input = new FileInputStream(propertiespath);
-			// load a properties file
-			prop.load(input);
-			Username =prop.getProperty("smsUserName");
-			Password =prop.getProperty("smsPassword");
-			SenderID =prop.getProperty("smsSenderID");
-			smsUrl =prop.getProperty("smsUrl");*/
-			
 			Username =ObjsmsDto.getUserName();
 			Password =ObjsmsDto.getPassword();
 			SenderID =ObjsmsDto.getSenderId();
@@ -65,7 +54,7 @@ public class Sms {
 			
 			postData += "user=" + Username + "&password=" + Password + "&GSM=" +
 					MobileNo +"&sender=" + SenderID + "&SMSText=" + Message;
-			System.out.println("postData============"+postData);
+			//System.out.println("postData============"+postData);
 			
 			URL url = new URL(smsUrl);
 			HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
@@ -83,7 +72,7 @@ public class Sms {
 				retval += decodedString;
 			}
 			in.close();
-			System.out.println("retval==="+retval);
+			//System.out.println("retval==="+retval);
 			
 			bSentSms = true;
 			
@@ -91,6 +80,20 @@ public class Sms {
 			e.printStackTrace();
 			//System.out.println("Error While sending............."+e);
 		}
+		return bSentSms;
+	}
+	
+	public boolean sendMessage(@Context HttpServletRequest request, @QueryParam("loginMobile") String loginMobile,
+			String sMessage) throws IOException {
+		boolean bSentSms = false;
+		//Sms sms = new Sms();
+
+		SmsDTO smsDTO = CommonUtils.getSmsProperties(request.getServletContext());
+		smsDTO.setSendTo("91" + loginMobile);
+		smsDTO.setMessage(sMessage);
+
+		bSentSms = sendMessage(request.getServletContext(), smsDTO);
+
 		return bSentSms;
 	}
     

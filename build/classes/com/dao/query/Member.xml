@@ -34,4 +34,9 @@
 		select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
 		member where mobile = #mobile#
 	</select>
+	
+	<update id="passwordUpdate" parameterClass="com.dto.MemberDTO">
+		update member set password = #password# where memberId = #memberId# and mobile = #mobile#
+	</update>
+	
 </sqlMap>

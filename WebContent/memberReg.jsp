@@ -47,7 +47,7 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		mobile.focus();
 		return false;
-	}else if (email.value.length == 0) {
+	}/* else if (email.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errEmail";
 		title = "Email";
@@ -56,7 +56,7 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		email.focus();
 		return false;
-	}else if (place.value.length == 0) {
+	} */else if (place.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errPlace";
 		title = "Place/City";
@@ -110,16 +110,7 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		farmPlace.focus();
 		return false;
-	}/* else if (haveFarm == 'yes' && farmAddress.value.length == 0) {
-		//alert("----date zero-------");
-		msg = "errMemFarmAddress";
-		title = "Farm Address";
-
-		$("#" + msg).text(title + " should not be empty");
-		$("#" + msg).show();
-		farmAddress.focus();
-		return false;
-	} */else if (haveFarm == 'yes' && farmMandal.value.length == 0) {
+	}else if (haveFarm == 'yes' && farmMandal.value.length == 0) {
 		//alert("----date zero-------");
 		msg = "errMemFarmMandal";
 		title = "Mandal";
@@ -230,23 +221,23 @@ function memberFarmValidation() {
 	
 	//alert("----------");
 	
-	$
-	.ajax({
+	$.ajax({
 		data : memberObject,
 		url : "emp/memberService/addMember",
 		success : function(data) {
+			//alert("From Server========="+data.Msg);
 			if (data.Msg == 'success') {
 				//alert(".....success......");
 				window.location.href = "memberList.jsp";
 				//alert("a4...........");
-			}else{
-				//alert(".....error......");
+			}else if (data.Msg == 'fail'){
 				$("#eventRegFailMsg").text("Member Registration Failed");
+			}else{
+				$("#eventRegFailMsg").text(data.Msg);
 			} 
 		}
 	});
-	$
-	.ajax({
+	$.ajax({
 		data : uploadFile,
 		url : "emp/memberService/getMemberImages",
 		success : function(data) {

@@ -106,4 +106,19 @@ public class MemberDAO {
 		}
 		return memberdto;
 	}
+	
+	public String passwordUpdate(MemberDTO memberDto) {
+		String result = "fail";
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			//System.out.println("3. In MemberDAO memberUpdate---------- getFirstName===" + memberDto.getFirstName());
+			session.insert("Member.passwordUpdate", memberDto);
+
+			result = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

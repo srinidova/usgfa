@@ -30,7 +30,7 @@ function login() {
 		loginObject.loginPassword = loginPassword;
  		$.ajax({
 			data : loginObject,
-			url : "emp/loginService/getUser",
+			url : "emp/LoginService/getUser",
 			success : function(data) {
 				if (data.Msg == 'success') {
 					//alert(".....success......");
@@ -63,7 +63,7 @@ function resetPassword(){
 		
 		$.ajax({
 			data : resetObject,
-			url : "emp/loginService/resetPassword",
+			url : "emp/LoginService/resetPassword",
 			success : function(data) {
 				if (data.Msg == 'success') {
 					$("#errLogin").text("OTP sent to your Mobile. Please Re Login.");
@@ -95,7 +95,7 @@ function forgotpassword(){
 		
 		$.ajax({
 			data : resetObject,
-			url : "emp/loginService/forgotPassword",
+			url : "emp/LoginService/forgotPassword",
 			success : function(data) {
 				if (data.Msg == 'success') {
 					$("#errLogin").text("Password sent to your Mobile. Please Re Login.");
@@ -173,7 +173,7 @@ function loginClear(){
 									<label for="">Mobile No</label>
 									<div class="input-group">
 										<input type="text" class="form-control" name="loginMobile"
-											id="loginMobile" maxlength="30" placeholder="Mobile No"
+											id="loginMobile" maxlength="10" placeholder="Mobile No"
 											onkeyup="mobileCheck(id,'Mobile No','errLogin');" />
 									</div>
 								</div>
