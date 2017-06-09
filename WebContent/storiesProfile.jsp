@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <script type="text/javascript" src="js/event.js"></script>
@@ -29,7 +37,6 @@
 	var dispImages = "";
 	$(document).ready(
 					function() {
-						//alert("-------in Stories Profile--Jsp---");
 						$
 								.ajax({
 									url : "emp/storiesService/getStoriesProfile",
@@ -38,7 +45,6 @@
 												.each(
 														data.StoriesProfile,
 														function(key, val) {
-															//alert("getStoriesProfile---*****123*****-------storiesId=="+data.StoriesProfile[key].storiesId);
 															$('#storiesProfName')
 																	.text(
 																			data.StoriesProfile[key].name);
@@ -64,7 +70,6 @@
 														$.each(
 																data.STORIESFILES,
 																function(key, val) {
-																	//alert("STORIESFILES---*****99999999999*****-------filePath=="+data.STORIESFILES[key].filePath);
 																	dispImages = dispImages
 																	+'<div class="item active">'
 																	+'<ul class="thumbnails">'
@@ -98,14 +103,11 @@
 																+'</div>'
 
 																})
-																//document.getElementById("storiesImages").innerHTML = dispImages;
 									}
 								});
 					});
 	function editProfStories() {
-		////alert("editProfStories---**********-------storiesProfStoriesId=="+ $("#storiesProfStoriesId").val());
 		var storiesId = $("#storiesProfStoriesId").val();
-		////alert("editProfProgram---**********-------programId=="+programId);
 		var storiesObject = new Object();
 		storiesObject.storiesId = storiesId;
 		$.ajax({
@@ -376,6 +378,7 @@
 						</div>
 					</div>
 				</div>
+				<%if(bAdmin){ %>
 				<div class="panel-footer">
 					<span> <a href="storiesEdit.jsp" onClick="editProfStories()"
 						data-original-title="Edit this user" data-toggle="tooltip"
@@ -383,6 +386,15 @@
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>
+				<%} else{%>
+				<div class="panel-footer">
+					<span> <a 
+						data-original-title="Edit this user" data-toggle="tooltip"
+						type="button" class="btn btn-sm btn-warning"><i
+							class="glyphicon glyphicon-edit"></i></a>
+					</span>
+				</div>
+				<%}%>
 			</div>
 		</div>
 	</div>

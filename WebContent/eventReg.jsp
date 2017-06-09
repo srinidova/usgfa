@@ -19,7 +19,6 @@ function eventFarmValidation() {
 	var title = "";
 	$("#eventRegFailMsg").text("");
 	if (eventName.value.length == 0) {
-		//alert("----newsTitle zero-------");
 		msg = "errEventName";
 		title = "Event Name ";
 
@@ -28,7 +27,6 @@ function eventFarmValidation() {
 		eventName.focus();
 		return false;
 	}else if (noOfDays.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errNoofdays";
 		title = "No.of days";
 
@@ -37,7 +35,6 @@ function eventFarmValidation() {
 		noOfDays.focus();
 		return false;
 	} else if (timeFrom.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errTimeFrom";
 		title = "Date & Time From";
 
@@ -46,7 +43,6 @@ function eventFarmValidation() {
 		timeFrom.focus();
 		return false;
 	}else if (timeEnd.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errTimeEnd";
 		title = "Date & Time From";
 
@@ -55,7 +51,6 @@ function eventFarmValidation() {
 		timeEnd.focus();
 		return false;
 	}else if (address.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errAddress";
 		title = "Address";
 
@@ -64,7 +59,6 @@ function eventFarmValidation() {
 		address.focus();
 		return false;
 	}else if (place.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errPlace";
 		title = "Place";
 
@@ -73,7 +67,6 @@ function eventFarmValidation() {
 		place.focus();
 		return false;
 	}else if (mandal.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMandal";
 		title = "Mandal";
 
@@ -82,7 +75,6 @@ function eventFarmValidation() {
 		mandal.focus();
 		return false;
 	}else if (district.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errDistrict";
 		title = "District";
 
@@ -91,7 +83,6 @@ function eventFarmValidation() {
 		district.focus();
 		return false;
 	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
-		//alert("----date zero-------");
 		msg = "errEveRegPinCode";
 		title = "Pin Code";
 
@@ -111,12 +102,10 @@ function eventFarmValidation() {
 		$("#errLandMark").text("");
 		$("#errEveRegPinCode").text("");
 		saveEvent();
-		//alert("------OK-------");
 	}
 
 }
 function saveEvent(){
-	//alert(" in to js page----------------");
 	var eventName = $("#eventName").val();
 	var noOfDays =$("#noOfDays").val();
 	var timeFrom = $("#timeFrom").val();
@@ -129,14 +118,10 @@ function saveEvent(){
 	var state = $("#state").val();
 	var landMark = $("#landMark").val();
 	var pincode = $("#pincode").val();
-	//alert("eventName----------------"+eventName);
-	//alert("timeFrom----------------"+timeFrom);
 	 var title = $("#title").val();
 	 var name = $("#name").val();
 	 var designation = $("#designation").val();
 	 
-		//alert("------in test-----------");
-		//var eventRegGuests = document.getElementById("guestName");
 		var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
 		var elmsGstName = document.querySelectorAll("[id='guestName']")
 		var elmsGstDesi = document.querySelectorAll("[id='guestDesi']")
@@ -160,11 +145,7 @@ function saveEvent(){
 			else
 				guestDesi = guestDesi + elmsGstDesi[i].value;
 
-			//alert(i+"--------elmsGstTitle=="+elmsGstTitle[i].value+"--------elmsGstName=="+elmsGstName[i].value+"--------elmsGstDesi=="+elmsGstDesi[i].value);
 		}
-		//alert("guestTitle==" + guestTitle);
-		//alert("guestName==" + guestName);
-		//alert("guestDesi==" + guestDesi);
 	 
 	var eventObject = new Object();
 	eventObject.eventName = eventName;
@@ -190,11 +171,8 @@ function saveEvent(){
 		url : "emp/eventService/addEvent",
 		success : function(data) {
 			if (data.Msg == 'success') {
-				//alert(".....success......");
 				window.location.href = "eventList.jsp";
-				//alert("a4...........");
 			}else{
-				//alert(".....error......");
 				$("#eventRegFailMsg").text("Event Registration Failed");
 			}  
 		}
@@ -205,19 +183,13 @@ function saveEvent(){
 		url : "emp/eventService/getEventImages",
 		success : function(data) {
 			if (data.Msg = "success") {
-				//alert("b4...........");
-				//window.location.href = "newsList.jsp";
-				//alert("a4...........");
 			}
 		}
 	});
 }
 
 function pincodeCheck(fName, title, msg) {
-	 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
-	//alert("== allNumber ==");
 	var fieldName = document.getElementById(fName);
-	//alert("== fieldName =="+fieldName);
 	var number = /^[0-9]+$/;
 	if (!fieldName.value.match(number)) {			
 		$("#" + msg).text(title + " must have numbers only");
@@ -289,7 +261,7 @@ function pincodeCheck(fName, title, msg) {
 					<div class="form-group">
 						<label for="event_name">Event Name *</label> <span class="errMsg" id="errEventName"></span>
 						<input type="text" pattern="^[_A-z0-9]{1,}$" class="form-control" id="eventName"
-							name="eventName" maxlength="30" onkeyup="validateTitle(id,'Event Name','errEventName',5,30);">
+							name="eventName" maxlength="30" onkeyup="validateTitle(id,'Event Name','errEventName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -340,7 +312,7 @@ function pincodeCheck(fName, title, msg) {
 					<div class="form-group">
 						<label for="Place_city">Mandal *</label> <span class="errMsg" id="errMandal"></span> 
 						<input type="text"
-							class="form-control" id="mandal" name=" mandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMandal',5,30);">
+							class="form-control" id="mandal" name=" mandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMandal',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -354,7 +326,7 @@ function pincodeCheck(fName, title, msg) {
 					<div class="form-group">
 						<label for="district">District *</label> <span class="errMsg" id="errDistrict"></span> 
 						<input type="text" class="form-control" id="district" name="district" maxlength="30"
-						 onkeyup="validateTitle(id,'District','errDistrict',5,30);">
+						 onkeyup="validateTitle(id,'District','errDistrict',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">

@@ -41,21 +41,20 @@ public class NewsService {
 		String resultNewsFile = "fail";
 		String sId = null;
 		String sUpdtedOn = null;
-		// System.out.println("1.a In addNews---------- newsTitle===" +
-		// newsTitle);
-		// System.out.println("1.b In addNews---------- paper===" + paper);
-		// System.out.println("1.d In addNews---------- date===" + date);
+		String sLoginId = "";
 
 		try {
 			if (StringUtils.isNotEmpty(newsTitle)) {
 
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+				
 				NewsDTO newsDto = new NewsDTO();
 				sId = CommonUtils.getAutoGenId();
 				sUpdtedOn = CommonUtils.getDate();
 
-				// System.out.println("1.e In addNews---------- sId===" + sId);
-				// System.out.println("1.f In addNews---------- sUpdtedOn===" +
-				// sUpdtedOn);
 
 				newsDto.setNewsId(sId);
 				newsDto.setNewsTitle(newsTitle);
@@ -64,11 +63,11 @@ public class NewsService {
 				newsDto.setLink(link);
 				newsDto.setMoreInfo(moreInfo);
 				newsDto.setUpdatedOn(sUpdtedOn);
+				newsDto.setUpdatedBy(sLoginId);
 
 				NewsBO bo = new NewsBO();
 				result = bo.addNewsDetails(newsDto);
 			}
-			// System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				CommonUtils.saveFileData(request, sId, "NEWS");
 				jObj.put("Msg", result);
@@ -78,7 +77,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 
@@ -91,10 +89,7 @@ public class NewsService {
 		NewsBO bo = new NewsBO();
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
 		try {
-			// System.out.println("1. *****Called getNewsDetails**********");
 			newsList = bo.getNewsDetails();
-			// System.out.println("****newsList.size==" + newsList.size());
-			// System.out.println("arraylist--->" + newsList.toString());
 			if (!(newsList.size() < 0)) {
 				jobj1.put("NewsDetails", newsList);
 			} else {
@@ -103,7 +98,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -112,8 +106,6 @@ public class NewsService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteNews")
 	public JSONObject deleteNews(@QueryParam("newsId") String newsId) {
-		// System.out.println("1. *****Called deleteNews**********newsId==" +
-		// newsId);
 		JSONObject jobj1 = new JSONObject();
 		NewsBO bo = new NewsBO();
 		NewsDTO dto = new NewsDTO();
@@ -125,7 +117,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("delete jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -134,7 +125,6 @@ public class NewsService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getNewsId")
 	public JSONObject getNewsId(@QueryParam("newsId") String newsId, @Context HttpServletRequest request) {
-		 System.out.println("1. *****Called getNewsId**********newsId==" + newsId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -147,7 +137,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -160,7 +149,6 @@ public class NewsService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String newsId = (String) session.getAttribute("NEWSID");
-		System.out.println("1a. *****Called getNewsProfile**********newsId=="  + newsId);
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
 		String resultImage = "fail";
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
@@ -173,8 +161,6 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				newsList = bo.getNewsProfile(dto);
 
-				System.out.println("****newsList.size==" + newsList.size());
-				System.out.println("arraylist--->" + newsList.toString());
 				if (!(newsList.size() < 0)) {
 					jobj.put("NewsProfile", newsList);
 				} else {
@@ -187,20 +173,16 @@ public class NewsService {
 
 				newsFileDto.setNewsId(newsId);
 
-				System.out.println("****newsImages==" + newsFileDto.getNewsId());
 				NewsFileBO newsFileBo = new NewsFileBO();
 				lstUploadFileDTO = newsFileBo.getNewsImages(newsFileDto);
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
-					System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 					jobj.put("NEWSFILES", lstUploadFileDTO);
-					// session.setAttribute("NEWSFILES", lstUploadFileDTO);
 				}
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -213,8 +195,6 @@ public class NewsService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String newsId = (String) session.getAttribute("NEWSID");
-		// System.out.println("1a. *****Called editNews**********newsId==" +
-		// newsId);
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
 		String resultFileEdit = "fail";
 		String resultNewsFileEdit = "fail";
@@ -228,8 +208,6 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				newsList = bo.getNewsProfile(dto);
 
-				// System.out.println("****newsList.size==" + newsList.size());
-				// System.out.println("arraylist--->" + newsList.toString());
 
 				if (!(newsList.size() < 0)) {
 					jobj.put("EditNews", newsList);
@@ -240,7 +218,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("editNews jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -254,22 +231,19 @@ public class NewsService {
 			@QueryParam("moreInfo") String moreInfo) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
+		String sLoginId = "";
 
-		// System.out.println("1.a In newsUpdate---------- newsTitle===" +
-		// newsTitle);
-		// System.out.println("1.b In newsUpdate---------- paper===" + paper);
-		// System.out.println("1.d In newsUpdate---------- date===" + date);
-		// System.out.println("1.d In newsUpdate---------- newsId===" + newsId);
 
 		try {
 			if (StringUtils.isNotEmpty(newsTitle)) {
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
 
 				NewsDTO newsDto = new NewsDTO();
 				String sUpdtedOn = CommonUtils.getDate();
 
-				// System.out.println("1.e In addNews---------- sId===" + sId);
-				// System.out.println("1.f In addNews---------- sUpdtedOn===" +
-				// sUpdtedOn);
 
 				newsDto.setNewsId(newsId);
 				newsDto.setNewsTitle(newsTitle);
@@ -278,13 +252,13 @@ public class NewsService {
 				newsDto.setLink(link);
 				newsDto.setMoreInfo(moreInfo);
 				newsDto.setUpdatedOn(sUpdtedOn);
+				newsDto.setUpdatedBy(sLoginId);
 
 				NewsBO bo = new NewsBO();
 				result = bo.newsUpdate(newsDto);
 
 				
 			}
-			// System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				CommonUtils.saveFileData(request, newsId, "NEWS");
 				jObj.put("Msg", result);
@@ -294,7 +268,6 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 	

@@ -1,4 +1,11 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+%>
 <html>
 <body>
 	<!----------------------top_header start-------------------------------->
@@ -62,12 +69,10 @@ td ul.actions li {
 <script type="text/javascript">
 
 $(document).ready(function(){
-	//alert("-------1-----");
 	getStoriesDetails();
 });
 
 function getStoriesDetails() {
-	//alert("-------2-----");
 	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/storiesService/getStoriesDetails",
@@ -75,8 +80,6 @@ function getStoriesDetails() {
 					$.each(
 							data.StoriesDetails,
 							function(key, val) {
-								//alert(data.StoriesDetails[key].name);
-								//alert(data.ProgramDetails[key].dateAndTimeFrom);
 									html = html
 									     + '<tr>'
 										     + '<td class="e_mn">'+data.StoriesDetails[key].name+'</td>'
@@ -94,6 +97,7 @@ function getStoriesDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%if(bAdmin){ %>
 											 		+ '<li>'
 											 			+ '<a href="storiesEdit.jsp"> '
 											 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-primary btn-sm" onclick="editStories(this.id)">'
@@ -108,6 +112,7 @@ function getStoriesDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%}%>
 											 	+ ' </ul>'
 											 +  '</td>'
 									     + '</tr>';
@@ -120,7 +125,6 @@ function getStoriesDetails() {
 	});
 }
 function getStoriesProfile(storiesId){
-	//alert("getStoriesProfile..........storiesId=="+storiesId);
 	var storiesObject = new Object();
 	storiesObject.storiesId = storiesId;
 	$.ajax({
@@ -128,16 +132,13 @@ function getStoriesProfile(storiesId){
 		url : "emp/storiesService/getStoriesId",
 		success : function(data) {
 			if (data.Msg = "success") {
-				//alert("---------success----------")
 			}
 		}
 	});
 }
 function editStories(storiesId){
-	//alert("editStories----------storiesId=="+storiesId);
 	var storiesObject = new Object();
 	storiesObject.storiesId = storiesId;
-	//newsObject.newsId = newsId;
 	$.ajax({
 		data : storiesObject,
 		url : "emp/storiesService/getStoriesId",
@@ -149,11 +150,8 @@ function editStories(storiesId){
 	
 }
 function deleteStories(storiesId){
-	//alert("storiesId=="+storiesId);
 	var storiesObject = new Object();
 	storiesObject.storiesId = storiesId;
-	/* var newsObject = new Object();
-	newsObject.newsId = newsId; */
 	$.ajax({
 		data : storiesObject,
 		url : "emp/storiesService/deleteStories",

@@ -38,5 +38,19 @@
 	<update id="passwordUpdate" parameterClass="com.dto.MemberDTO">
 		update member set password = #password# where memberId = #memberId# and mobile = #mobile#
 	</update>
-	
+	<select id="memberSearch" parameterClass="com.dto.MemberDTO" resultClass="com.dto.MemberDTO">
+		select
+		memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
+		member
+	   <dynamic prepend="WHERE ">
+	      <isNotEmpty prepend="AND" property="firstName">
+	         firstName like #firstName#
+	      </isNotEmpty>
+			
+	      <isNotEmpty prepend="AND" property="profession">
+	         profession like #profession#
+	      </isNotEmpty>
+	   </dynamic>
+      
+    </select>
 </sqlMap>

@@ -1,6 +1,5 @@
 
-<% 
-//System.out.println("--- LOGINROLE ------");
+<%
 String sRole=(String)session.getAttribute("LOGINROLE"); 
 %>
 <div id="header">
@@ -29,10 +28,10 @@ function logout() {
 	logoutObject.temp = ""+temp+"";
 	$.ajax({
 		data : logoutObject,
-		url : "emp/loginService/logout",
+		url : "emp/LoginService/logout",
 		success : function(data) {
 			//alert("---------in to success--------------"+location);
-			location.reload();
+			window.location.href = "/usgfa";
 		}
 	});
 }

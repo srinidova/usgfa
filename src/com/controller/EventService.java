@@ -17,10 +17,12 @@ import com.bo.EventBO;
 import com.bo.EventFileBO;
 import com.bo.EventGuestBO;
 import com.bo.GuestBO;
+import com.bo.MemberBO;
 import com.dto.EventDTO;
 import com.dto.EventFileDTO;
 import com.dto.EventGuestDTO;
 import com.dto.GuestDTO;
+import com.dto.MemberDTO;
 import com.dto.UploadFileDTO;
 import com.util.CommonUtils;
 
@@ -57,17 +59,23 @@ public class EventService {
 		String resultEventGuest = "fail";
 		String delims = "~";
 		String sId = null ;
-		//System.out.println("1.a In addEvent---------- guestTitle===" + guestTitle);
-		//System.out.println("1.b In addEvent---------- guestName===" + guestName);
-		//System.out.println("1.d In addEvent---------- guestDesi===" + guestDesi);
+		String sLoginId = "";
 		
 		
 
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
+				
+				
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+
+
+				
 				EventDTO eventDto = new EventDTO();
 				sId = CommonUtils.getAutoGenId();
-				//eventDto.setEventId(CommonUtils.getAutoGenId());
 				eventDto.setEventId(sId);
 				eventDto.setEventName(eventName);
 				eventDto.setNoOfDays(noOfDays);
@@ -82,11 +90,11 @@ public class EventService {
 				eventDto.setPinCode(pinCode);
 				eventDto.setMoreInfo(moreInfo);
 				eventDto.setUpdatedOn(CommonUtils.getDate());
+				eventDto.setUpdatedBy(sLoginId);
 				
 				
 				EventBO bo = new EventBO();
 				result = bo.addEvent(eventDto);
-				//System.out.println("y. In EventDAO addEvent---------- result===" + result);
 				
 				
 				GuestBO guestBo = new GuestBO();
@@ -103,7 +111,6 @@ public class EventService {
 						String sTitle =  tokensTitle[j];
 						String sName = tokensName[j];
 						String sDesi = tokensDesi[j];
-						//System.out.println("sName=="+ sName+"-----sTitle=="+ sTitle+"---------sDesi=="+ sDesi);
 						
 						GuestDTO guestDto = new GuestDTO();
 						String sGuestId = CommonUtils.getAutoGenId();
@@ -121,23 +128,18 @@ public class EventService {
 						resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
 					}
 				}
-				//System.out.println("resultEventGuest"+resultEventGuest);
 				
 			}
 			
-			System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				CommonUtils.saveFileData(request, sId, "EVENT");
-				System.out.println("--success--->");
 				jObj.put("Msg", result);
 			} else {
-				System.out.println("--fail--->");
 				jObj.put("Msg", result);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 	@GET
@@ -150,11 +152,8 @@ public class EventService {
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
 		
 		try {
-			//System.out.println("1. *****Called getEventDetails**********");
 			eventList = bo.getEventDetails();
 			
-			//System.out.println("****eventList.size=="+eventList.size());
-			//System.out.println("arraylist--->" + eventList.toString());
 			if (!(eventList.size() < 0)) {
 				jobj1.put("EventDetails", eventList);
 			} else {
@@ -163,7 +162,6 @@ public class EventService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -171,7 +169,6 @@ public class EventService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getEventId")
 	public JSONObject getEventId(@QueryParam("eventId") String eventId, @Context HttpServletRequest request) {
-		//System.out.println("1. *****Called getEventId**********eventId==" + eventId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -184,7 +181,6 @@ public class EventService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -197,7 +193,6 @@ public class EventService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String eventId = (String) session.getAttribute("EVENTID");
-		//System.out.println("1a. *****Called getEventProfile**********eventId==" + eventId);
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
 		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
@@ -211,21 +206,11 @@ public class EventService {
                 EventBO bo = new EventBO();
                 eventList = bo.getEventProfile(dto);
 				
-				//System.out.println("****eventList.size==" + eventList.size());
-				//System.out.println("arraylist--->" + eventList.toString());
 				if (!(eventList.size() < 0)) {
 					jobj.put("EventProfile", eventList);
 				} else {
 					jobj.put("EventProfile", "failed");
 				}
-				/*GuestDTO guestDto = new GuestDTO();
-				GuestBO guestBo = new GuestBO();
-				guestList = guestBo.getGuestDetails();
-				
-				//guestDto.setName(name);
-				if (!(guestList.size() < 0)) {
-					jobj.put("GuestProfile", guestList);
-				}*/
 				
 			}
 		} catch (Exception e) {
@@ -234,14 +219,11 @@ public class EventService {
 		// get program image
 		EventFileDTO eventFileDto = new EventFileDTO();
 		eventFileDto.setEventId(eventId);
-		//System.out.println("****eventImages==" + eventFileDto.getEventId());
 		EventFileBO eventFileBo = new EventFileBO();
 		lstUploadFileDTO = eventFileBo.getEventImages(eventFileDto);
 		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
-			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 			jobj.put("EVENTFILES", lstUploadFileDTO);
 		}
-		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -253,19 +235,18 @@ public class EventService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String eventId = (String) session.getAttribute("EVENTID");
-		//System.out.println("1a. *****Called editEvent**********eventId==" + eventId);
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
 		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
 
 		try {
 			if (StringUtils.isNotEmpty(eventId)) {
+				
+				
 				EventDTO dto = new EventDTO();
 				dto.setEventId(eventId);
 				EventBO bo = new EventBO();
 				eventList = bo.getEventProfile(dto);
 				
-				//System.out.println("****eventList.size==" + eventList.size());
-				//System.out.println("arraylist--->" + eventList.toString());
 				if (!(eventList.size() < 0)) {
 					jobj.put("EditEvent", eventList);
 				} else {
@@ -276,18 +257,15 @@ public class EventService {
 				GuestBO gbo = new GuestBO();
 				guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
 				
-				//System.out.println("****guestList.size==" + guestList.size());
 				if (!(guestList.size() < 0)) {
 					jobj.put("EventGuestEdit", guestList);
 				}
 				
 				
-				//System.out.println("****guestList.size==" + guestList.size());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("editNews jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -310,15 +288,15 @@ public class EventService {
 			@QueryParam("moreInfo") String moreInfo) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
-		//System.out.println("1.a In eventUpdate---------- eventId===" + eventId);
-		//System.out.println("1.a In eventUpdate---------- eventName===" + eventName);
-		//System.out.println("1.b In eventUpdate---------- timeFrom===" + timeFrom);
-		//System.out.println("1.d In eventUpdate---------- noOfDays===" + noOfDays);
+		String sLoginId = "";
 
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+				sLoginId = (String) request.getSession().getAttribute("LOGINID");
+			}
 				EventDTO eventDto = new EventDTO();
-				//eventDto.setEventId(CommonUtils.getAutoGenId());
 				eventDto.setEventId(eventId);
 				eventDto.setEventName(eventName);
 				eventDto.setNoOfDays(noOfDays);
@@ -333,6 +311,7 @@ public class EventService {
 				eventDto.setPinCode(pinCode);
 				eventDto.setMoreInfo(moreInfo);
 				eventDto.setUpdatedOn(CommonUtils.getDate());
+				eventDto.setUpdatedBy(sLoginId);
 				
 				
 				EventBO bo = new EventBO();
@@ -341,7 +320,6 @@ public class EventService {
 				CommonUtils.saveFileData(request, eventId, "EVENT");
 			}
 			
-			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
@@ -350,14 +328,12 @@ public class EventService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteEvent")
 	public JSONObject deleteEvent(@QueryParam("eventId") String eventId) {
-		//System.out.println("1. *****Called deleteEvent**********eventId==" + eventId);
 		JSONObject jobj1 = new JSONObject();
 		EventBO bo =new EventBO();
 		EventDTO dto = new EventDTO();
@@ -371,7 +347,6 @@ public class EventService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("delete jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -380,7 +355,6 @@ public class EventService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteGuest")
 	public JSONObject deleteGuest(@QueryParam("guestId") String guestId) {
-		//System.out.println("1. *****Called deleteGuest**********guestId=="+guestId);
 		JSONObject jobj1 = null;
 		String guestDelete ="fail";
 		String eventGuestDelete = "fail";
@@ -399,7 +373,6 @@ public class EventService {
         		sEventId = eventGuestDto.getEventId();
         	}
         }
-       // System.out.println("1. *****Called deleteGuest**********sEventId=="+sEventId);
         
         // delete guest 
 		GuestDTO guestDto = new GuestDTO();
@@ -407,43 +380,57 @@ public class EventService {
 		GuestBO guestBo = new GuestBO();
 		guestDelete = guestBo.deleteGuest(guestDto);
 		
-		//System.out.println("1. *****Called deleteGuest**********guestDelete=="+guestDelete);
 
 		// delete eventGuest
 		eventGuestDTO.setEventId(sEventId);
 		eventGuestDelete = eventGuestBo.deleteEventGuest(eventGuestDTO);
-		//System.out.println("1. *****Called deleteGuest**********eventGuestDelete=="+eventGuestDelete);
 
 		if(guestDelete.equals("success") && eventGuestDelete.equals("success")  ){
 			jobj1 =  getGuests(sEventId);
 					
 		}
-		//System.out.println("delete jobj1-->" + jobj1);
 		
 		return jobj1;
 
 	}
-	/*@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getGuests")*/
 	public JSONObject getGuests(String eventId){
 		JSONObject jobj = new JSONObject();
 		String resultGetGuests = "fail";
 		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
-		/*HttpSession session = request.getSession();
-		String eventId = (String) session.getAttribute("EVENTID");*/
 		EventGuestDTO eventGuestDto = new EventGuestDTO();
 		eventGuestDto.setEventId(eventId);
 		GuestBO gbo = new GuestBO();
 		guestList = gbo.getGuestDetailsByEventId(eventGuestDto);
 
-		
-		//System.out.println("****guestList.size==" + guestList.size());
 		if (!(guestList.size() < 0)) {
 			jobj.put("EventGuestEdit", guestList);
 		}else {
 			jobj.put("EventGuestEdit", "failed");
 		}
 		return jobj;
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/searchEvent")
+	public JSONObject searchEvent(@QueryParam("eventName") String sEventName, @QueryParam("days") String sDays) {
+		JSONObject jobj1 = new JSONObject();
+		EventBO bo = new EventBO();
+		EventDTO dto = new EventDTO();
+		dto.setEventName("'%"+sEventName+"'");
+		dto.setNoOfDays("'%"+sDays+"'");
+		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
+		try {
+			eventList = bo.searchEvent(dto);
+			if(eventList != null && eventList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("EventSearch", eventList);
+			}else {
+				jobj1.put("Msg", "fail");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jobj1;
+
 	}
 }

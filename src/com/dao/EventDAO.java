@@ -7,6 +7,7 @@ import com.connection.IbatisFactory;
 import com.dto.BloodGroupDTO;
 import com.dto.EmployeeDTO;
 import com.dto.EventDTO;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.SkillsDTO;
 import com.dto.StoriesDTO;
@@ -18,14 +19,12 @@ public class EventDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			//System.out.println("3. In EventDAO addEvent---------- getNewsTitle===" + eventDto.getEventName());
 			session.insert("Event.addEvent", eventDto);
 
 			result = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("z. In EventDAO addEvent---------- result===" + result);
 		return result;
 	}
 	
@@ -34,11 +33,9 @@ public class EventDAO {
 	public ArrayList<EventDTO> getEventDetails() {
 		ArrayList<EventDTO> eventdto = new ArrayList<EventDTO>();
 		try {
-			//System.out.println("3. In EvenetDAO getEventDetails----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.getEventDetails");
-			//System.out.println("3. In EventDAO getEventDetails----------eventdto==" + eventdto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,14 +48,11 @@ public class EventDAO {
 	public ArrayList<EventDTO> getEventProfile(EventDTO eventDto) {
 		ArrayList<EventDTO> eventdto = new ArrayList<EventDTO>();
 		try {
-			//System.out.println("3. In EventDAO getEventProfile----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			String sEventId = eventDto.getEventId();
-			//System.out.println("3b. In EventDAO getEventProfile----------sEventId==" + sEventId);
 			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.getEventById", sEventId);
 
-			//System.out.println("3c. In EventDAO getEventProfile----------eventdto1 size==" + eventdto.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,10 +64,8 @@ public class EventDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In EventDAO eventUpdate---------- getEventName===" + eventDto.getEventName());
 			session.insert("Event.eventUpdate", eventDto);
 			
-			//System.out.println("3. In EventDAO eventUpdate---------- getEventId===" + eventDto.getEventId());
             
 			result = "success";
 		} catch (Exception e) {
@@ -84,7 +76,6 @@ public class EventDAO {
 	public String deleteEvent(EventDTO eventDto) {
 		String result = "fail";
 		try {
-			//System.out.println("3. In EventDAO getdeleteEvent----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("Event.deleteEvent", eventDto);
 			result = "success";
@@ -92,6 +83,24 @@ public class EventDAO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public ArrayList<EventDTO> searchEvent(EventDTO eventDto) {
+		ArrayList<EventDTO> eventdto = new ArrayList<EventDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			String sEventName = eventDto.getEventName();
+			String sEventDays = eventDto.getNoOfDays();
+
+			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.eventSearch", eventDto);
+
+		}catch(Exception e){
+			
+		}
+		return eventdto;
 	}
 	
 }

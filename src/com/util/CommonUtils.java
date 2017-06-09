@@ -83,7 +83,6 @@ public class CommonUtils {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public void uploadFile(@Context HttpServletRequest request, @FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
-		System.out.println("in to commonUtils upload");
 		String sFileExtn = null;
 		String destination = "D:/currentworking/usgfa/WebContent/images/uploads/";
 		HashMap<String, String> hm = null;
@@ -91,20 +90,15 @@ public class CommonUtils {
 		
 		if (uploadedInputStream != null && fileDetail != null) {
 			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
-			System.out.println("1. sFileExtn===" + sFileExtn);
 
 			if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
-				System.out.println("2. sFileExtn====zip====" + sFileExtn);
 				hm = unZipIt(uploadedInputStream, destination);
 			} else {
-				System.out.println("3. sFileExtn====non zip====" + sFileExtn);
 				hm = fileSave(request, uploadedInputStream, fileDetail, destination);
 			}
 		}
-		System.out.println("4. hm.size====" + hm.size());
 		if (hm != null && hm.size() > 0) {
 			session.setAttribute("UPLOADED_FILELIST", hm);
-			System.out.println("5. HashMap-----" + hm);
 		}
 
 	}
@@ -194,7 +188,6 @@ public class CommonUtils {
 				String sFileName = zipentry.getName();
 				String sFileExtn = sFileName.substring(sFileName.lastIndexOf(".") + 1);
 				String sImageId = UUID.randomUUID().toString();
-				//System.out.println("b. sImageId===" + sImageId);
 				File newFile = new File(sImageId + "." + sFileExtn);
 				if (zipentry.isDirectory()) {
 					newFile.mkdirs();
@@ -203,12 +196,10 @@ public class CommonUtils {
 				}
 
 				if (newFile.exists() && overwrite) {
-					//System.out.println("Overwriting " + newFile);
 					newFile.delete();
 				}
 
 				String sOutFile = destination + sImageId + "." + sFileExtn;
-				//System.out.println("d. sOutFile===" + sOutFile);
 				if (StringUtils.isNotEmpty(sOutFile)) {
 					hm.put(sImageId, sOutFile.substring(35));
 				}
@@ -240,9 +231,6 @@ public class CommonUtils {
 			for(Map.Entry m:hmImages.entrySet()){
 				String sFileId  = (String) m.getKey();
 				String sFilePath  = (String) m.getValue();
-				System.out.println("--------------sFileId---------"+sFileId);
-				System.out.println("--------------sFilePath---------"+sFilePath);
-				System.out.println(m.getKey()+" "+m.getValue());
 			
 			// saving in to uploadFile Table
 			UploadFileDTO uploadFileDto = new UploadFileDTO();
@@ -254,49 +242,42 @@ public class CommonUtils {
 		    
 		    UploadFileBO filebo = new UploadFileBO();
 		    resultFile = filebo.addUploadFileDetails(uploadFileDto);
-		    System.out.println("resultFile===="+resultFile);
 		    
 			 // saving file data in to  Table
 		    if(sType.equals("NEWS")){
 			    NewsFileDTO  newsFileDto = new NewsFileDTO();
 			    newsFileDto.setFileId(sFileId);
 			    newsFileDto.setNewsId(sId);
-			    System.out.println("newsFile---------"+sId);
 			    NewsFileBO newsFileBo = new NewsFileBO();
 			    sResult = newsFileBo.newsFile(newsFileDto);
 		    }else if(sType.equals("PROGRAM")){
 		    	ProgramFileDTO  programFileDto = new ProgramFileDTO();
 			    programFileDto.setFileId(sFileId);
 			    programFileDto.setProgramId(sId);
-			    //System.out.println("programFile---------"+sId);
 			    ProgramFileBO programFileBo = new ProgramFileBO();
 			    sResult = programFileBo.programFile(programFileDto);
 		    }else if(sType.equals("EVENT")){
 		    	EventFileDTO eventFileDto = new EventFileDTO();
 		    	eventFileDto.setFileId(sFileId);
 		    	eventFileDto.setEventId(sId);
-		    	// System.out.println("eventFile---------"+sId);
 		    	 EventFileBO eventFileBo = new EventFileBO();
 		    	 sResult = eventFileBo.eventFile(eventFileDto);
 		    }else if(sType.equals("MEMBER")){
 		    	MemberFileDTO memberFileDto = new MemberFileDTO();
 		    	memberFileDto.setFileId(sFileId);
 		    	memberFileDto.setMemberId(sId);
-		    	// System.out.println("memberFile---------"+sId);
 		    	 MemberFileBO memberFileBo = new MemberFileBO();
 		    	 sResult = memberFileBo.memberFile(memberFileDto);
 		    }else if(sType.equals("STORIES")){
 		    	StoriesFileDTO storiesFileDto = new StoriesFileDTO();
 		    	storiesFileDto.setFileId(sFileId);
 		    	storiesFileDto.setStoriesId(sId);
-		    	// System.out.println("storiesFile---------"+sId);
 		    	StoriesFileBO storiesFileBo = new StoriesFileBO();
 		    	sResult = storiesFileBo.storiesFile(storiesFileDto);
 		    }else if(sType.equals("FARM")){
 		    	FarmFileDTO farmFileDto = new FarmFileDTO();
 		    	farmFileDto.setFileId(sFileId);
 		    	farmFileDto.setFarmId(sId);
-		    	//System.out.println("farmFile---------"+sId);
 		    	FarmFileBO farmFileBo = new FarmFileBO();
 		    	sResult = farmFileBo.farmFile(farmFileDto);
 		    }
@@ -304,7 +285,6 @@ public class CommonUtils {
 		    session.setAttribute("UPLOADED_FILELIST", null);
 
 		    
-		   // System.out.println("sResult===="+sResult);
 			}
 		}
 	}
@@ -320,7 +300,6 @@ public class CommonUtils {
 		String mailPassword = null;
 
 		propertiespath = objContext.getRealPath("Resources" + File.separator + "USGFA.properties");
-		//System.out.println("1. path of propertiespath Page" + propertiespath);
 		if (StringUtils.isNotEmpty(propertiespath)) {
 
 			prop = new Properties();
@@ -334,10 +313,6 @@ public class CommonUtils {
 			mailUserName = prop.getProperty("mailUserName");
 			mailPassword = prop.getProperty("mailPassword");
 
-			//System.out.println("2. mailHost===" + mailHost);
-			//System.out.println("3. mailPort===" + mailPort);
-			//System.out.println("4. mailUserName===" + mailUserName);
-			//System.out.println("5. mailPassword===" + mailPassword);
 
 			emailDTO.setHost(mailHost);
 			emailDTO.setPort(mailPort);
@@ -348,11 +323,7 @@ public class CommonUtils {
 		return emailDTO;
 	}
 
-	/*@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getNewsId")*/
 	public static void getFileId(@QueryParam("fileId") String fileId, @Context HttpServletRequest request) {
-		//System.out.println("1. *****Called getNewsId**********newsId==" + newsId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -365,50 +336,10 @@ public class CommonUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("Profile jobj-->" + jobj);
 		return;
 
 	}
-	/*public static SmsDTO getSmsProperties(ServletContext objContext,String sContentFor) throws IOException {
-		
-		SmsDTO smsDTO = null;
-		Properties prop = null;
-		InputStream input = null;
-		String propertiespath = null;
-		String smsUserName = null;
-		String smsPassword = null;
-		String smsUrl = null;
-		String smsSenderID = null;
-		String smsMessage = null;
-		
-		propertiespath = objContext.getRealPath("Resources" + File.separator + "USGFA.properties");
-		
-		if (StringUtils.isNotEmpty(propertiespath)) {
-			prop = new Properties();
-			smsDTO = new SmsDTO();
-			
-			input = new FileInputStream(propertiespath);
-			prop.load(input);
-			
-			smsUserName = prop.getProperty("smsUserName");
-			smsPassword = prop.getProperty("smsPassword");
-			smsUrl = prop.getProperty("smsUrl");
-			smsSenderID = prop.getProperty("smsSenderID");
-			smsMessage = prop.getProperty(sContentFor);
-			
-			System.out.println("1. smsUserName===" + smsUserName);
-			System.out.println("2. smsPassword===" + smsPassword);
-			System.out.println("3. smsUrl===" + smsUrl);
-			System.out.println("4. smsSenderID===" + smsSenderID);
-			
-			smsDTO.setUserName(smsUserName);
-			smsDTO.setPassword(smsPassword);
-			smsDTO.setUrl(smsUrl);
-			smsDTO.setSenderId(smsSenderID);
-			smsDTO.setMessage(smsMessage);
-		}
-		return smsDTO;
-	}*/
+	
 	
 public static SmsDTO getSmsProperties(ServletContext objContext) throws IOException {
 		
@@ -435,10 +366,6 @@ public static SmsDTO getSmsProperties(ServletContext objContext) throws IOExcept
 			smsUrl = prop.getProperty("smsUrl");
 			smsSenderID = prop.getProperty("smsSenderID");
 			
-			/*System.out.println("1. smsUserName===" + smsUserName);
-			System.out.println("2. smsPassword===" + smsPassword);
-			System.out.println("3. smsUrl===" + smsUrl);
-			System.out.println("4. smsSenderID===" + smsSenderID);*/
 			
 			smsDTO.setUserName(smsUserName);
 			smsDTO.setPassword(smsPassword);

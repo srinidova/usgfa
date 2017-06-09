@@ -18,7 +18,6 @@ import com.dto.NewsDTO;
 public class MemberFarmBO {
 
 	public String addMemberFarm(MemberFarmDTO memberfarmDto) {
-		//System.out.println("2. In MemberBO---------- addNewsDetails===" +memberfarmDto.getFarmId());
 		MemberFarmDAO dao = new MemberFarmDAO();
 		return dao.addMemberFarm(memberfarmDto);
 	}

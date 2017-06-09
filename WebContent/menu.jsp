@@ -2,10 +2,14 @@
 <% 
 //System.out.println("--- LOGINROLE ------");
 boolean bShow = false;
+boolean bAdmin = false;
 String sRole=(String)session.getAttribute("LOGINROLE"); 
 //System.out.println("In Menu jsp sRole=="+sRole);
 if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
 	bShow = true;
+}
+if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
+	 bAdmin = true;
 }
 %>
 <div id="menus">
@@ -18,6 +22,12 @@ if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
                     <ul>
                         <li class='active'><a href='/usgfa'>Home </a></li>
                         <li><a href='aboutUs.jsp'> About Us</a></li>
+                        <li><a href="#">Member</a>
+                        	<ul>
+                                <li><a href='member.jsp'>Member New</a></li>
+                                <li><a href='memberList.jsp'>Member List</a></li>
+                            </ul>
+                         </li>
                         <li><a href='#'>Events</a>
                             <ul>
                                <% if(bShow){ %>
@@ -26,13 +36,6 @@ if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
                                 <li><a href='eventList.jsp'>Event List</a></li>
                             </ul>
                         </li>
-                        
-                        <li><a href="#">Member</a>
-                        	<ul>
-                                <li><a href='member.jsp'>Member New</a></li>
-                                <li><a href='memberList.jsp'>Member List</a></li>
-                            </ul>
-                         </li>
                          <li><a href='#'>Programs</a>
                             <ul>
                              <% if(bShow){ %>

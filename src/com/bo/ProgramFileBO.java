@@ -14,12 +14,10 @@ import com.dto.UploadFileDTO;
 public class ProgramFileBO {
 
 	public String programFile(ProgramFileDTO programFileDto) {
-		//System.out.println("2. In programFile---------- programFile===" + programFileDto.getFileId());
 		ProgramFileDAO dao = new ProgramFileDAO();
 		return dao.programFile(programFileDto);
 	}
 	public ArrayList<UploadFileDTO> getProgramImages(ProgramFileDTO programFileDto){
-		//System.out.println("2. In programFile---------- programFile===" + programFileDto.getProgramId());
 		ProgramFileDAO programFileDao = new ProgramFileDAO();
 			NewsFileDAO newsFileDao = new NewsFileDAO();
 			return programFileDao.getProgramImages(programFileDto);

@@ -4,16 +4,13 @@
 <script type="text/javascript" src="js/news.js"></script>
 <script type="text/javascript">
 	function newsFarmValidation() {
-		//alert("----in newsFarmValidation-------");
 
 		var newsTitle = document.getElementById("newsTitle");
 		var date = document.getElementById("date");
-		//alert("date.value.length ==="+date.value.length );
 		if (date.value.length > 0) {
 			$("#errDate").text("");
 		}
 		var moreInfo = document.getElementById("moreInfo");
-		//alert("moreInfo.value.length ==="+moreInfo.value );
 		var paper = document.getElementById("paper");
 		var link = document.getElementById("link");
 		var msg = "";
@@ -21,7 +18,6 @@
 		$("#newsRegFailMsg").text("");
         
 		if (newsTitle.value.length == 0) {
-			//alert("----newsTitle zero-------");
 			msg = "errNewsTitle";
 			title = "Name Title ";
 
@@ -30,7 +26,6 @@
 			newsTitle.focus();
 			return false;
 		} else if (date.value.length == 0) {
-			//alert("----date zero-------");
 			msg = "errDate";
 			title = "Date";
 
@@ -39,7 +34,6 @@
 			date.focus();
 			return false;
 		} else if (paper.value.length == 0 && link.value.length == 0) {
-			//alert("----paper /link  zero-------");
 			msg = "errPaper";
 			title = "Paper or Link/Url";
 
@@ -48,7 +42,6 @@
 			//date.focus();
 			return false;
 		} else if (moreInfo.value.length == 0) {
-			//alert("----moreInfo zero-------");
 			msg = "errMoreInfo";
 			title = "MoreInfo";
 
@@ -62,7 +55,6 @@
 			$("#errPaper").text("");
 			$("#errMoreInfo").text("");
 			newsSave();
-			//alert("------OK-------");
 		}
 
 	}
@@ -86,15 +78,9 @@
 			url : "emp/newsService/addNews",
 			success : function(data) {
 
-				/* if (data.Msg = "success") {
-					window.location.href = "newsList.jsp";
-				} */
 				if (data.Msg == 'success') {
-					//alert(".....success......");
 					window.location.href = "newsList.jsp";
-					//alert("a4...........");
 				}else{
-					//alert(".....error......");
 					$("#newsRegFailMsg").text("News Registration Failed");
 				}  
 			}
@@ -170,7 +156,7 @@ function test2 (){alert ("**************");
 						<label for="news_name">Name Title *</label> <span class="errMsg"
 							id="errNewsTitle"></span> <input type="text" class="form-control"
 							id="newsTitle" name="newsTitle" tabindex="1" maxlength="30"
-							onkeyup="validateTitle(id,'Name Title','errNewsTitle',5,30);">
+							onkeyup="validateTitle(id,'Name Title','errNewsTitle',3,30);">
 						<div class="help-block with-errors"></div>
 					</div>
 				</div>

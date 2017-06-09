@@ -1,25 +1,19 @@
 package com.dao;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.connection.IbatisFactory;
-import com.dto.BloodGroupDTO;
-import com.dto.EmployeeDTO;
-import com.dto.EventDTO;
 import com.dto.MemberDTO;
-import com.dto.NewsDTO;
-import com.dto.ProgramDTO;
-import com.dto.SkillsDTO;
-import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
+
 
 public class MemberDAO {
 	public String addMember(MemberDTO memberDto) {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			//System.out.println("3. In MemberDAO addMember---------- getMemberName===" +memberDto.getFirstName());
 			session.insert("Member.addMember", memberDto);
 			result = "success";
 		} catch (Exception e) {
@@ -32,11 +26,9 @@ public class MemberDAO {
 	public ArrayList<MemberDTO> getMemberDetails() {
 		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
 		try {
-			//System.out.println("3. In MemberDAO getNewsDetails----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.getMemberDetails");
-			//System.out.println("3. In MemberDAO getMemberDetails----------memberdto==" + memberdto);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -49,14 +41,11 @@ public class MemberDAO {
 	public ArrayList<MemberDTO> getMemberProfile(MemberDTO memberDto) {
 		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
 		try {
-			//System.out.println("3. In MemberDAO getMemberProfile----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			String sMemberId = memberDto.getMemberId();
-			//System.out.println("3b. In MemberDAO getMemberProfile----------sMemberId==" + sMemberId);
 			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.getMemberById", sMemberId);
 
-			//System.out.println("3c. In MemberDAO getMemberProfile----------memberdto size==" + memberdto.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,7 +57,6 @@ public class MemberDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In MemberDAO memberUpdate---------- getFirstName===" + memberDto.getFirstName());
 			session.insert("Member.memberUpdate", memberDto);
 
 			result = "success";
@@ -80,7 +68,6 @@ public class MemberDAO {
 	public String deleteMember(MemberDTO memberDto) {
 		String result = "fail";
 		try {
-			//System.out.println("3. In EventDAO getdeleteEvent----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			session.delete("Member.deleteMember", memberDto);
 			result = "success";
@@ -92,14 +79,11 @@ public class MemberDAO {
 	public ArrayList<MemberDTO> getMemberByMobile(MemberDTO memberDto) {
 		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
 		try {
-			//System.out.println("3. In MemberDAO getMemberProfile----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 
 			String sMobile = memberDto.getMobile();
-			System.out.println("3b. In MemberDAO getMemberProfile----------sMobile==" + sMobile);
 			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.getMemberByMobile", sMobile);
 
-			//System.out.println("3c. In MemberDAO getMemberProfile----------memberdto size==" + memberdto.size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,7 +96,6 @@ public class MemberDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In MemberDAO memberUpdate---------- getFirstName===" + memberDto.getFirstName());
 			session.insert("Member.passwordUpdate", memberDto);
 
 			result = "success";
@@ -121,4 +104,44 @@ public class MemberDAO {
 		}
 		return result;
 	}	
+	public ArrayList<MemberDTO> searchMember(MemberDTO memberDto) {
+		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			String sMemName = memberDto.getFirstName();
+			String sMemPro = memberDto.getProfession();
+			//System.out.println("3.a In MemberDAO searchMember---------- sMemName===" + sMemName);
+			//System.out.println("3.b In MemberDAO searchMember---------- sMemPro===" + sMemPro);
+/*			StringBuffer objStringBuffer = new StringBuffer("select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from member ");
+			String sMemName = memberDto.getFirstName();
+			String sMemPro = memberDto.getProfession();
+			
+			if(StringUtils.isNotEmpty(sMemName)){
+				if (bAnd) {
+					objStringBuffer.append(" and firstName like '" + sMemName + "%'");
+				} else {
+					objStringBuffer.append(" where firstName like '" + sMemName + "%'");
+					bAnd = true;
+				}
+			}
+			if(StringUtils.isNotEmpty(sMemPro)){
+				if (bAnd) {
+					objStringBuffer.append(" and profession like '" + sMemPro + "%'");
+				} else {
+					objStringBuffer.append(" where profession like '" + sMemPro + "%'");
+					bAnd = true;
+				}
+			}
+			sQuery = objStringBuffer.toString();
+			System.out.println("3. In MemberDAO searchMember---------- sQuery===" + sQuery);*/
+			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.memberSearch", memberDto);
+
+		}catch(Exception e){
+			
+		}
+		return memberdto;
+	}
 }

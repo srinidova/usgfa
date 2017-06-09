@@ -11,12 +11,10 @@ import com.dto.UploadFileDTO;
 public class StoriesFileBO {
 
 	public String storiesFile(StoriesFileDTO storiesFileDto) {
-		//System.out.println("2. In storiesFile---------- storiesFile===" + storiesFileDto.getFileId());
 		StoriesFileDAO dao = new StoriesFileDAO();
 		return dao.storiesFile(storiesFileDto);
 	}
 	public ArrayList<UploadFileDTO> getStoriesImages(StoriesFileDTO storiesFileDto){
-		//System.out.println("2. In storiesFile---------- storiesFile===" + storiesFileDto.getStoriesId());
 		StoriesFileDAO storiesFileDao = new StoriesFileDAO();
 		return storiesFileDao.getStoriesImages(storiesFileDto);
 		}

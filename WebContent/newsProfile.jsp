@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 </head>
@@ -29,7 +37,6 @@ var dispImages = '';
 	$(document)
 			.ready(
 					function() {
-						//alert("-------in News Profile--Jsp---");
 						$
 								.ajax({
 									url : "emp/newsService/getNewsProfile",
@@ -38,7 +45,6 @@ var dispImages = '';
 												.each(
 														data.NewsProfile,
 														function(key, val) {
-															//alert("getNewsProfile---*****123*****-------newsId=="+data.NewsProfile[key].newsId);
 															$('#newsProfTitle')
 																	.text(
 																			data.NewsProfile[key].newsTitle);
@@ -63,7 +69,6 @@ var dispImages = '';
 														$.each(
 																data.NEWSFILES,
 																function(key, val) {
-																	//alert("NEWSFILES---*****99999999999*****-------filePath=="+data.NEWSFILES[key].filePath);
 																	dispImages = dispImages
 																	+'<div class="item next left">'
 																	+'<div class="row">'
@@ -107,9 +112,7 @@ var dispImages = '';
 
 					});
 	function editProfNews() {
-		//alert("editProfNews---**********-------newsProfNewsId=="+ $("#newsProfNewsId").val());
 		var newsId = $("#newsProfNewsId").val();
-		//alert("editProfNews---**********-------newsId=="+newsId);
 		var newsObject = new Object();
 		newsObject.newsId = newsId;
 		$.ajax({
@@ -123,35 +126,26 @@ var dispImages = '';
 
 	}
 	function updateShowAsPublic(fileId){
-		//alert("in to updateShowAsPublic File ");
 		var uploadFileObject = new Object();
-		//newsObject.newsId = newsId;
 		uploadFileObject.fileId = "7ec737d4-d179-4620-9c8e-3450ccd7ffdf"; 
 		uploadFileObject.showAsPublic = "0";
-		//alert("in to Image upload");
 		$.ajax({
 			data : uploadFileObject,
 			url : "emp/uploadService/updateShowAsPublic",
 			success : function(data) {
 				if (data.Msg = "success") {
-					//alert("in to updateShowAsPublic");
 				}
 			}
 		});
 	}
 	function deleteFile(fileId){
-		//alert("in to delete File ");
 		var newsObject = new Object();
-		//newsObject.newsId = newsId;
 		newsObject.newsId = "677b75af6f6143f38ad7b3045d15821a"; 
-		//var aa = $('#newsId').val();
-		//alert("in to Image upload");
 		$.ajax({
 			data : newsObject,
 			url : "emp/uploadService/deleteImage",
 			success : function(data) {
 				if (data.Msg = "success") {
-					//alert("in to deleteImage");
 				}
 			}
 		});
@@ -374,6 +368,7 @@ var dispImages = '';
 					<!----------------------video_gallery end------------------------------>
 
 				</div>
+				<%if(bAdmin){ %>
 				<div class="panel-footer">
 					<span> <a href="newsEdit.jsp" onclick="editProfNews()"
 						data-original-title="Edit this user" data-toggle="tooltip"
@@ -381,6 +376,14 @@ var dispImages = '';
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>
+				<%}else {%>
+				<div class="panel-footer">
+					<span> <a data-original-title="Edit this user" data-toggle="tooltip"
+						type="button" class="btn btn-sm btn-warning"><i
+							class="glyphicon glyphicon-edit"></i></a>
+					</span>
+				</div>
+				<% }%>
 			</div>
 		</div>
 	</div>

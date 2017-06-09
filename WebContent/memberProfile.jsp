@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <body>
 	<!----------------------top_header start-------------------------------->
@@ -27,7 +35,6 @@
 			.ready(
 					function() {
 						var html =' ';
-						//alert("-------in Member Profile--Jsp---");
 						$
 								.ajax({
 									url : "emp/memberService/getMemberProfile",
@@ -36,7 +43,6 @@
 												.each(
 														data.MemberProfile,
 														function(key, val) {
-															//alert("getMemberProfile---*****123*****-------memberId=="+data.MemberProfile[key].memberId);
 															$('#memberProfTitle')
 																	.text(
 																			data.MemberProfile[key].title);
@@ -58,11 +64,16 @@
 															$('#memberProfMemberId')
 																	.val(
 																			data.MemberProfile[key].memberId);
+															$('#memberProfMemberType')
+															.text(
+																	data.MemberProfile[key].memberType);
+															$('#memberProfAmount')
+															.text(
+																	data.MemberProfile[key].amountPaid);
 														})
 										$.each(
 											data.MemberFarmProfile,
 											function(key, val) {
-												//alert("MemberFarmProfile --------- farmName=="+data.MemberFarmProfile[key].farmName);
 												$('#memberFarmProfFarmName').text(data.MemberFarmProfile[key].farmName);
 												$('#memberFarmProfFarmAddress').text(data.MemberFarmProfile[key].farmAddress);
 												$('#memberFarmProfAboutFarm').text(data.MemberFarmProfile[key].aboutFarm);
@@ -71,7 +82,6 @@
 										$.each(
 												data.MEMBERFILES,
 												function(key, val) {
-													alert("MEMBERFILES---*****99999999999*****-------filePath=="+data.MEMBERFILE[key].filePath);
 													html = html
 													+'<li>'
 													+'<div class="fff">'
@@ -102,9 +112,7 @@
 								});
 					});
 	function editProfMember() {
-	    //alert("editProfMember---**********-------memberProfMemberId=="+ $("#memberProfMemberId").val());
 		var memberId = $("#memberProfMemberId").val();
-		//////alert("editProfNews---**********-------newsId=="+newsId);
 		var memberObject = new Object();
 		memberObject.memberId = memberId;
 		$.ajax({
@@ -433,12 +441,12 @@
 										<tbody>
 											<tr>
 												<td class="text-nowrap"><b>Membership Type :</b></td>
-												<td>Ordinary</td>
+												<td><div id="memberProfMemberType"></div>
+												</td>
 											</tr>
 											<tr>
 												<td><b>Amount :</b></td>
-												<td>50000/-</td>
-											</tr>
+												<td><div id="memberProfAmount"></div></td>
 											</tr>
 
 										</tbody>
@@ -449,6 +457,7 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
+				<%if(bAdmin){ %>
 				<div class="panel-footer">
 					<span> <a href="memberEdit.jsp" onClick="editProfMember()"
 						data-original-title="Edit this user" data-toggle="tooltip"
@@ -456,6 +465,15 @@
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>
+				<%} else{%>
+				<div class="panel-footer">
+					<span> <a 
+						data-original-title="Edit this user" data-toggle="tooltip"
+						type="button" class="btn btn-sm btn-warning"><i
+							class="glyphicon glyphicon-edit"></i></a>
+					</span>
+				</div>
+				<%}%>
 			</div>
 		</div>
 	</div>

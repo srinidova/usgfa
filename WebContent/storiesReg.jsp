@@ -16,9 +16,7 @@ function storiesFarmValidation() {
 	var msg = "";
 	var title = "";
 	$("#storiesRegFailMsg").text("");
-	//alert("name.value.length ==="+name.value.length );
 	if (name.value.length == 0) {
-		//alert("----name zero-------");
 		msg = "errName";
 		title = "Name ";
 
@@ -27,7 +25,6 @@ function storiesFarmValidation() {
 		name.focus();
 		return false;
 	} else if (farmName.value.length == 0) {
-		//alert("----farmName zero-------");
 		msg = "errFarmName";
 		title = "Farm Name";
 
@@ -36,7 +33,6 @@ function storiesFarmValidation() {
 		farmName.focus();
 		return false;
 	} else if (farmAddress.value.length == 0) {
-		//alert("----farmAddress zero-------");
 		msg = "errStoFarmAddress";
 		title = "Farm Address";
 
@@ -45,7 +41,6 @@ function storiesFarmValidation() {
 		farmAddress.focus();
 		return false;
 	} else if (place.value.length == 0) {
-		//alert("----place zero-------");
 		msg = "errStoFarmPlace";
 		title = "Farm Place/City";
 
@@ -54,7 +49,6 @@ function storiesFarmValidation() {
 		place.focus();
 		return false;
 	}else if (mandal.value.length == 0) {
-		//alert("----mandal zero-------");
 		msg = "errStoMandal";
 		title = "Mandal";
 
@@ -63,7 +57,6 @@ function storiesFarmValidation() {
 		mandal.focus();
 		return false;
 	}else if (district.value.length == 0) {
-		//alert("----place zero-------");
 		msg = "errStoDistrict";
 		title = "District";
 
@@ -72,7 +65,6 @@ function storiesFarmValidation() {
 		district.focus();
 		return false;
 	}else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
-		//alert("----place zero-------");
 		msg = "errFarmPinCode";
 		title = "Farm Pin Code";
 
@@ -81,7 +73,6 @@ function storiesFarmValidation() {
 		farmPinCode.focus();
 		return false;
 	}else if (aboutFarm.value.length == 0) {
-		//alert("----place zero-------");
 		msg = "errStoAboutYou";
 		title = "About You/Farm";
 
@@ -100,12 +91,10 @@ function storiesFarmValidation() {
 		saveStories();
 	}
 	
-	//alert("==Entered==");
 	
 }
      
    function saveStories(){
-	   //alert(" in to js stories page----------------");
 	   var title = $("#title").val();
 	   var name = $("#name").val();
 	   var profession = $("#profession").val();
@@ -118,8 +107,6 @@ function storiesFarmValidation() {
 	   var farmPinCode = $("#farmPinCode").val();
 	   var aboutFarm = $("#aboutFarm").val();
 	   
-	   //alert("title----------------"+title);
-	   //alert("name----------------"+name);
 	  
 	   var storiesObject = new Object();
 	   
@@ -142,11 +129,8 @@ function storiesFarmValidation() {
 			url : "emp/storiesService/addStories",
 			success : function(data) {
 				if (data.Msg == 'success') {
-					//alert(".....success......");
 					window.location.href = "storiesList.jsp";
-					//alert("a4...........");
 				}else{
-					//alert(".....error......");
 					$("#storiesRegFailMsg").text("Stories Registration Failed");
 				} 
 
@@ -158,18 +142,13 @@ function storiesFarmValidation() {
 			url : "emp/storiesService/getStoriesImages",
 			success : function(data) {
 				if (data.Msg = "success") {
-					//alert("b4...........");
 					window.location.href = "newsList.jsp";
-					//alert("a4...........");
 				}			}
 		});
    }     
        
    function pincodeCheck(fName, title, msg) {
-		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
-		//alert("== allNumber ==");
 		var fieldName = document.getElementById(fName);
-		//alert("== fieldName =="+fieldName);
 		var number = /^[0-9]+$/;
 		if (!fieldName.value.match(number)) {			
 			$("#" + msg).text(title + " must have numbers only");
@@ -242,7 +221,6 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="title">Title</label> <select class="form-control"
 							id="title" name="title">
-							<!--  <option selected="selected" id="frmSuccStory_Title" name="frmSuccStory_Title">--select--</option> -->
 							<option value="Mr">Mr</option>
 							<option value="Ms">Ms</option>
 							<option value="Dr">Dr</option>
@@ -255,7 +233,7 @@ function storiesFarmValidation() {
 						<label for="first_name">Name *</label> <span class="errMsg" id="errName"></span>
 						<input type="text"
 							class="form-control" id="name" name="name" maxlength ="30"
-							onkeyup="validateTitle(id,'Name ','errName',5,30);">
+							onkeyup="validateTitle(id,'Name ','errName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -268,7 +246,7 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="farm_name">Farm Name *</label> <span class="errMsg" id="errFarmName"></span>
 						<input type="text" class="form-control" id="farmName" name="farmName"  maxlength="30" 
-						onkeyup="validateTitle(id,'FarmName ','errFarmName',5,30);">
+						onkeyup="validateTitle(id,'FarmName ','errFarmName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -283,7 +261,7 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="farm_place_city">Farm Place/City *</label> <span class="errMsg" id="errStoFarmPlace"></span>
 						<input type="text" class="form-control" id="place" name="place" maxlength="30"
-						onkeyup="validateTitle(id,'Farm Place/City','errStoFarmPlace',5,30);">
+						onkeyup="validateTitle(id,'Farm Place/City','errStoFarmPlace',3,30);">
 					</div>
 				</div>
 
@@ -292,14 +270,14 @@ function storiesFarmValidation() {
 					<div class="form-group">
 						<label for="mandal">Mandal *</label> <span class="errMsg" id="errStoMandal"></span>
 						<input type="text" class="form-control" id="mandal" name="mandal" maxlength ="30" 
-							onkeyup="validateTitle(id,'Mandal','errStoMandal',5,30);">
+							onkeyup="validateTitle(id,'Mandal','errStoMandal',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="district">District *</label> <span class="errMsg" id="errStoDistrict"></span>
 						<input type="text" class="form-control" id="district" name="district" 
-						maxlength ="30" onkeyup="validateTitle(id,'District ','errStoDistrict',5,30);">
+						maxlength ="30" onkeyup="validateTitle(id,'District ','errStoDistrict',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">

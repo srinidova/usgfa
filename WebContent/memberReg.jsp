@@ -1,10 +1,17 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <script type="text/javascript" src="js/member.js"></script>
 <script type="text/javascript">
 function memberFarmValidation() {
-	//alert("---- 0-------");
 
 	$("#eventRegFailMsg").text("");
 	var firstName = document.getElementById("firstName");
@@ -19,7 +26,6 @@ function memberFarmValidation() {
 	var pincode = document.getElementById("pincode");
 	
 	var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
-	//alert("haveFarm=="+haveFarm);
 	
 	var farmName = document.getElementById("farmName");
 	var farmPlace = document.getElementById("farmPlace");
@@ -28,9 +34,7 @@ function memberFarmValidation() {
 	var farmDistrict = document.getElementById("farmDistrict");
 	var aboutFarm = document.getElementById("aboutFarm");
 	var farmPincode = document.getElementById("farmPincode");
-	//alert("---- 1-------");
 	if (firstName.value.length == 0) {
-		//alert("----firstName zero-------");
 		msg = "errFirstName";
 		title = "First Name ";
 
@@ -39,7 +43,6 @@ function memberFarmValidation() {
 		firstName.focus();
 		return false;
 	} else if (mobile.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMobile";
 		title = "Mobile/Contact No";
 
@@ -47,17 +50,7 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		mobile.focus();
 		return false;
-	}/* else if (email.value.length == 0) {
-		//alert("----date zero-------");
-		msg = "errEmail";
-		title = "Email";
-
-		$("#" + msg).text(title + " should not be empty");
-		$("#" + msg).show();
-		email.focus();
-		return false;
-	} */else if (place.value.length == 0) {
-		//alert("----date zero-------");
+	}else if (place.value.length == 0) {
 		msg = "errPlace";
 		title = "Place/City";
 
@@ -66,7 +59,6 @@ function memberFarmValidation() {
 		place.focus();
 		return false;
 	}else if (mandal.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMandal";
 		title = "Mobile/Contact No";
 
@@ -75,7 +67,6 @@ function memberFarmValidation() {
 		mandal.focus();
 		return false;
 	}else if (district.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errDistrict";
 		title = "District";
 
@@ -84,7 +75,6 @@ function memberFarmValidation() {
 		district.focus();
 		return false;
 	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
-		//alert("----date zero-------");
 		msg = "errMemRegPinCode";
 		title = "Pin Code";
 
@@ -93,7 +83,6 @@ function memberFarmValidation() {
 		pincode.focus();
 		return false;
 	}else if (haveFarm == 'yes' && farmName.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMemFarmName";
 		title = "Farm Name";
 
@@ -102,7 +91,6 @@ function memberFarmValidation() {
 		farmName.focus();
 		return false;
 	}else if (haveFarm == 'yes' && farmPlace.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMemFarmPlace";
 		title = "Farm Place/City";
 
@@ -111,7 +99,6 @@ function memberFarmValidation() {
 		farmPlace.focus();
 		return false;
 	}else if (haveFarm == 'yes' && farmMandal.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMemFarmMandal";
 		title = "Mandal";
 
@@ -120,7 +107,6 @@ function memberFarmValidation() {
 		farmMandal.focus();
 		return false;
 	}else if (haveFarm == 'yes' && farmDistrict.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errMemFarmDistrict";
 		title = "District";
 
@@ -129,7 +115,6 @@ function memberFarmValidation() {
 		farmDistrict.focus();
 		return false;
 	}else if (haveFarm == 'yes' && farmPincode.value.length > 0 && farmPincode.value.length != 6) {
-		//alert("----date zero-------");
 		msg = "errFarmPincode";
 		title = "Farm Pin Code";
 
@@ -138,7 +123,6 @@ function memberFarmValidation() {
 		farmPincode.focus();
 		return false;
 	}else{
-		//alert("------ form true ----------");
 		$("#eMail").text("");
 		$("#farmName").text("");
 		$("#farmPlace").text("");
@@ -151,7 +135,6 @@ function memberFarmValidation() {
 }
 
 	function saveMember(){
-	//alert(" in to js page----------------");
 	var title = $("#title").val();
 	var firstName =$("#firstName").val();
 	var middleName = $("#middleName").val();
@@ -167,9 +150,7 @@ function memberFarmValidation() {
 	var profession = $("#profession").val();
 	var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
 	
-	//alert("---------in to farm page---------haveFarm=="+haveFarm);
 	var memberType = $("#memberType").val();
-	//alert("memberType----------------"+memberType);
 	var farmName = $("#farmName").val();
 	var farmPlace = $("#farmPlace").val();
 	var farmAddress = $("#farmAddress").val();
@@ -180,17 +161,9 @@ function memberFarmValidation() {
 	var farmPincode = $("#farmPincode").val();
 	var amount = $("#amount").val();
 	
-	////alert("title----------------"+title);
-	////alert("firstName----------------"+firstName);
-	////alert("profession----------------"+profession);
-	//alert("farmName----------------"+farmName);
-	
-	
 	
 	var memberObject = new Object();
-	//alert("------------a-----------");
 	memberObject.title =title;
-	//alert("------------b-----------")
 	memberObject.firstName=firstName;
 	memberObject.middleName = middleName;
 	memberObject.lastName = lastName
@@ -210,26 +183,18 @@ function memberFarmValidation() {
 	memberObject.farmDistrict = farmDistrict;
 	memberObject.aboutFarm = aboutFarm;
 	memberObject.farmState = farmState;
-	//alert("------------c-----------");
 	memberObject.farmPincode = farmPincode;
-	//alert("------------d-----------");
 	memberObject.memberType = memberType;
-	//alert("------------e-----------");
 	memberObject.haveFarm = haveFarm;
 	memberObject.amount = amount;
-	//alert("------------f-----------");
 	
-	//alert("----------");
 	
 	$.ajax({
 		data : memberObject,
 		url : "emp/memberService/addMember",
 		success : function(data) {
-			//alert("From Server========="+data.Msg);
 			if (data.Msg == 'success') {
-				//alert(".....success......");
 				window.location.href = "memberList.jsp";
-				//alert("a4...........");
 			}else if (data.Msg == 'fail'){
 				$("#eventRegFailMsg").text("Member Registration Failed");
 			}else{
@@ -242,19 +207,13 @@ function memberFarmValidation() {
 		url : "emp/memberService/getMemberImages",
 		success : function(data) {
 			if (data.Msg = "success") {
-				//alert("b4...........");
-				//window.location.href = "newsList.jsp";
-				//alert("a4...........");
 			}
 		}
 	});
 }
 
 	function pincodeCheck(fName, title, msg) {
-		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
-		//alert("== allNumber ==");
 		var fieldName = document.getElementById(fName);
-		//alert("== fieldName =="+fieldName);
 		var number = /^[0-9]+$/;
 		if (!fieldName.value.match(number)) {			
 			$("#" + msg).text(title + " must have numbers only");
@@ -273,10 +232,7 @@ function memberFarmValidation() {
 	}
 	
 	function mobileCheck(fName, title, msg) {
-		 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
-		//alert("== allNumber ==");
 		var fieldName = document.getElementById(fName);
-		//alert("== fieldName =="+fieldName);
 		var number = /^[0-9]+$/;
 		if (!fieldName.value.match(number)) {			
 			$("#" + msg).text(title + " must have numbers only");
@@ -294,24 +250,9 @@ function memberFarmValidation() {
 		}
 		
 	}
-	/* function ValidateEmail(fName, title, msg)   
-	{  
-		var fieldName = document.getElementById(fName);
-        var emailval = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value);
-	 if (fieldName.value.match(emailval))  
-	  {  
-	    return (true)  
-	  }  else{
-		  alert("You have entered an invalid email address!")  
-		    return (false) 
-	  }
-	    
-	} */ 
 	function selectAmount(fName){
 		var fieldName = document.getElementById(fName);
-		//alert("----fieldName-------"+fieldName.value);
 		if(fieldName.value == 'Life'){
-			//alert("----fieldName222222222-------");
 			document.getElementById("amount").value = '15,000.00';
 		}else{
 			document.getElementById("amount").value = '500.00';
@@ -386,7 +327,7 @@ function memberFarmValidation() {
 					<div class="form-group">
 						<label for="first_name">First Name *</label> <span class="errMsg" id="errFirstName"></span>
 						<input type="text" class="form-control" id="firstName" name="firstName" maxlength="30"
-						onkeyup="validateTitle(id,'First Name','errFirstName',5,30);">
+						onkeyup="validateTitle(id,'First Name','errFirstName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -417,27 +358,26 @@ function memberFarmValidation() {
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="address">Address</label> <span class="errMsg" id="errAddress"></span>
-						<textarea class="form-control" rows="4" id="address"
-							name="address"  maxlength="250" onkeyup="validateTitle(id,'Address','errAddress',5,250);">
-						</textarea>
+						<textarea class="form-control" rows="5" id="address"
+						name="address" maxlength="250"></textarea>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="place_city">Place/City *</label> <span class="errMsg" id="errPlace"></span>
-						<input type="text" class="form-control" id="place" name="place" maxlength="30" onkeyup="validateTitle(id,'Place/City','errPlace',5,30);">
+						<input type="text" class="form-control" id="place" name="place" maxlength="30" onkeyup="validateTitle(id,'Place/City','errPlace',3,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="mandal">Mandal *</label> <span class="errMsg" id="errMandal"></span>
-						<input type="text" class="form-control" id="mandal" name="mandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMandal',5,30);">
+						<input type="text" class="form-control" id="mandal" name="mandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMandal',3,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label for="district">District *</label> <span class="errMsg" id="errDistrict"></span>
-						<input type="text" class="form-control" id="district" name="district" maxlength="30" onkeyup="validateTitle(id,'District','errDistrict',5,30);">
+						<input type="text" class="form-control" id="district" name="district" maxlength="30" onkeyup="validateTitle(id,'District','errDistrict',3,30);">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -460,7 +400,6 @@ function memberFarmValidation() {
 					<div class="form-group">
 						<label for="profession">Profession</label> <select
 							class="form-control" id="profession" name="profession">
-							<!-- <option selected="selected" >--select--</option> -->
 							<option value="Doctor">Doctor</option>
 							<option value="Professor">Professor</option>
 						</select>
@@ -561,6 +500,9 @@ function memberFarmValidation() {
 						<select class="form-control" id="memberType" name="memberType" onchange="selectAmount(id);">
 							<option selected="selected" value="Ordinary">Ordinary</option>
 							<option value="Life">Life</option>
+							<%if(bAdmin){ %>
+							<option value="Admin">Admin</option>
+							<%}%>
 						</select>
 					</div>
 				</div>
@@ -605,14 +547,14 @@ function memberFarmValidation() {
 					<label for="farm_name">Farm Name *</label> <span class="errMsg" id="errMemFarmName"></span>
 					<input type="text"
 						class="form-control" id="farmName" name="farmName" maxlength="30"
-						onkeyup="validateTitle(id,'Farm Name','errMemFarmName',5,30);">
+						onkeyup="validateTitle(id,'Farm Name','errMemFarmName',3,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="farm_place_city">Farm Place/City *</label> <span class="errMsg" id="errMemFarmPlace"></span>
 					<input type="text" class="form-control" id="farmPlace" name="farmPlace" maxlength="30"
-					onkeyup="validateTitle(id,'Farm Place/City','errMemFarmPlace',5,30);">
+					onkeyup="validateTitle(id,'Farm Place/City','errMemFarmPlace',3,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -626,14 +568,14 @@ function memberFarmValidation() {
 				<div class="form-group">
 					<label for="mandal">Mandal *</label> <span class="errMsg" id="errMemFarmMandal"></span>
 					<input type="text"
-						class="form-control" id="farmMandal" name="farmMandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMemFarmMandal',5,30);">
+						class="form-control" id="farmMandal" name="farmMandal" maxlength="30" onkeyup="validateTitle(id,'Mandal','errMemFarmMandal',3,30);">
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="district">District *</label> <span class="errMsg" id="errMemFarmDistrict"></span>
 					<input type="text"
-						class="form-control" id="farmDistrict" name="farmDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errMemFarmDistrict',5,30)">
+						class="form-control" id="farmDistrict" name="farmDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errMemFarmDistrict',3,30)">
 				</div>
 			</div>
 			<div class="col-md-6">

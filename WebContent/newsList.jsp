@@ -1,4 +1,11 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+%>
 <html>
 
 <!----------------------top_header start-------------------------------->
@@ -48,12 +55,10 @@ td ul.actions li {
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//alert("-------1-----");
 	getNewsDetails();
 });
 
 function getNewsDetails() {
-	//alert("-------2-----");
 	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/newsService/getNewsDetails",
@@ -61,7 +66,6 @@ function getNewsDetails() {
 					$.each(
 							data.NewsDetails,
 							function(key, val) {
-								//alert(data.NewsDetails[key].newsTitle);
 								
 									html = html
 									     + '<tr>'
@@ -78,6 +82,7 @@ function getNewsDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%if(bAdmin){ %>
 											 		+ '<li>'
 											 			+ '<a href="newsEdit.jsp"> '
 											 				+ '<button id='+data.NewsDetails[key].newsId+' class="btn btn-primary btn-sm" onclick="editNews(this.id)">'
@@ -92,6 +97,7 @@ function getNewsDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%}%>
 											 	+ ' </ul>'
 											 +  '</td>'
 									     + '</tr>';
@@ -105,7 +111,6 @@ function getNewsDetails() {
 }
 
 function deleteNews(newsId){
-	//alert("newsId=="+newsId);
 	var newsObject = new Object();
 	newsObject.newsId = newsId;
 	$.ajax({
@@ -119,7 +124,6 @@ function deleteNews(newsId){
 	
 }
 function getNewsProfile(newsId){
-	//alert("getNewsProfile..........newsId=="+newsId);
 	var newsObject = new Object();
 	newsObject.newsId = newsId;
 	$.ajax({
@@ -133,7 +137,6 @@ function getNewsProfile(newsId){
 }
 
 function editNews(newsId){
-	//alert("editNews----------newsId=="+newsId);
 	var newsObject = new Object();
 	newsObject.newsId = newsId;
 	$.ajax({

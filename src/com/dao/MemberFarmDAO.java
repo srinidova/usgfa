@@ -19,7 +19,6 @@ public class MemberFarmDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			//System.out.println("3. In MemberFarmDAO addMemberFarm---------- getMemberName===" +memberfarmDto.getMemberId());
 			session.insert("MemberFarm.addMemberFarm", memberfarmDto);
 			result = "success";
 		} catch (Exception e) {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -31,21 +32,17 @@ public class FarmService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String memberId = (String) session.getAttribute("MEMBERID");
-		//System.out.println("1a. *****Called editFarm**********farmId==" + memberId);
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
 
 		try {
 			if (StringUtils.isNotEmpty(memberId)) {
 
-				//System.out.println("1b. *****Called FarmEdit**********memberId==" + memberId);
 				MemberFarmDTO memberFarmDto = new MemberFarmDTO();
 				memberFarmDto.setMemberId(memberId);
 				
 				FarmBO fbo  = new FarmBO();
 				farmList = fbo.getFarmDetailsByMemberId(memberFarmDto);
-				
-				//System.out.println("****farmList.size==" + farmList.size());
 				if (!(farmList.size() < 0)) {
 					jobj.put("MemberFarmEdit", farmList);
 				}
@@ -53,7 +50,6 @@ public class FarmService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("editMember jobj-->" + jobj);
 		return jobj;
 
 	}

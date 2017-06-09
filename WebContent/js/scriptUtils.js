@@ -99,8 +99,8 @@ function emptyCheck(fieldName, title, msg) {
 
 
 function emptyCheckTwoFields(fieldName1, fieldName2, title, msg) {
-	alert("----fieldName----");
-	alert("----fieldName----"+fieldName1);
+	//alert("----fieldName----");
+	//alert("----fieldName----"+fieldName1);
 	var fieldName1_len = document.getElementById(fieldName1).value.length;
 
 	var fieldName2_len = document.getElementById(fieldName2).value.length;

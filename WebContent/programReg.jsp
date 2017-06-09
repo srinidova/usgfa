@@ -20,7 +20,6 @@
 	 }
 
 	 if (programName.value.length == 0) {
-			//alert("----programName zero-------");
 			msg = "errProgramName";
 			title = "Program Name ";
 
@@ -28,17 +27,7 @@
 			$("#" + msg).show();
 			programName.focus();
 			return false;
-		}/* else if (duration.value.length == 0) {
-			//alert("----moreInfo zero-------");
-			msg = "errDuration";
-			title = "Duration ";
-
-			$("#" + msg).text(title + " should not be empty");
-			$("#" + msg).show();
-			duration.focus();
-			return false;
-		} */ else if (dateAndTimeFrom.value.length == 0) {
-			//alert("----dateAndTimeFrom zero-------");
+		} else if (dateAndTimeFrom.value.length == 0) {
 			msg = "errDateAndTimeFrom";
 			title = "Date & TimeFrom ";
 
@@ -47,7 +36,6 @@
 			dateAndTimeFrom.focus();
 			return false;
 		}else if (dateAndTimeTo.value.length == 0) {
-			//alert("----dateAndTimeTo zero-------");
 			msg = "errDateAndTimeTo";
 			title = "Date & Time To ";
 
@@ -56,7 +44,6 @@
 			dateAndTimeTo.focus();
 			return false;
 		}else if (channel.value.length == 0 && youtube.value.length == 0) {
-			//alert("----channel /youtube  zero-------");
 			msg = "errChannel";
 			title = "Channel or Youtube";
 
@@ -69,16 +56,13 @@
 			$("#errDateAndTimeTo").text("");
 			$("#errMoreInfo").text("");
 			saveProgram();
-			//alert("------OK-------");
 		}
 	 
 	
-	 //alert("==Entered==");
 
 }
 
 function saveProgram(){
-	//alert(" in to js page----------------");
 	var programName = $("#programName").val();
 	var duration =$("#duration").val();
 	var dateAndTimeFrom = $("#dateAndTimeFrom").val();
@@ -87,8 +71,6 @@ function saveProgram(){
 	var guest = $("#guest").val();
 	var youtube = $("#youtube").val();
 	var moreInfo = $("#moreInfo").val();
-	//alert("programName----------------"+programName);
-	//alert("programName----------------"+moreInfo);
 	
 	
 	var programObject = new Object();
@@ -107,11 +89,8 @@ function saveProgram(){
 		url : "emp/programService/addProgram",
 		success : function(data) {
 			if (data.Msg == 'success') {
-				//alert(".....success......");
 				window.location.href = "programList.jsp";
-				//alert("a4...........");
 			}else{
-				//alert(".....error......");
 				$("#programRegFailMsg").text("Program Registration Failed");
 			}  
 		}
@@ -122,16 +101,11 @@ function saveProgram(){
 		url : "emp/programService/getProgramImages",
 		success : function(data) {
 			if (data.Msg = "success") {
-				//alert("b4...........");
-				//window.location.href = "newsList.jsp";
-				//alert("a4...........");
 			}
 		}
 	});
 }
 function checkTwoFields(fieldName1, fieldName2, title, msg) {
-	alert("----fieldName----");
-	alert("----fieldName----"+fieldName1);
 	var fieldName1_len = document.getElementById(fieldName1).value.length;
 
 	var fieldName2_len = document.getElementById(fieldName2).value.length;
@@ -210,14 +184,14 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 					<div class="form-group">
 						<label for="program_name">Program Name *</label> <span class="errMsg" id="errProgramName"></span>
 						<input type="text" class="form-control" id="programName" name="programName" tabindex="1" 
-						maxlength="30"  onkeyup="validateTitle(id,'Program Name','errProgramName',5,30);">
+						maxlength="30"  onkeyup="validateTitle(id,'Program Name','errProgramName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="duration">Duration</label>  <span class="errMsg" id="errDuration"></span>
 						<input type="text" class="form-control" id="duration" name="duration" maxlength="30"
-						onkeyup="validateTitle(id,'Duration ','errDuration',5,30);">
+						onkeyup="validateTitle(id,'Duration ','errDuration',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -264,7 +238,7 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 				<div class="form-group">
 					<label for="guest">Guest</label> <span class="errMsg" id="errGuest"></span>
 					<input type="text"
-				class="form-control" id="guest" name="guest"  maxlength="30" onkeyup="validateTitle(id,'Guest ','errGuest',5,30);">
+				class="form-control" id="guest" name="guest"  maxlength="30" onkeyup="validateTitle(id,'Guest ','errGuest',3,30);">
 				</div>
 			</div>
 
@@ -272,7 +246,7 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 				<div class="form-group">
 					<label for="more_info">More Info</label> <span class="errMsg" id="errMoreInfo"></span> 
 					<textarea class="form-control" rows="5" id="moreInfo"
-						name="moreInfo" maxlength ="250"  onkeyup="validateTitle(id,'More Info ','errMoreInfo',5,250);">
+						name="moreInfo" maxlength ="250"  onkeyup="validateTitle(id,'More Info ','errMoreInfo',3,250);">
 						</textarea>
 				</div>
 			</div>

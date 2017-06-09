@@ -1,4 +1,11 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+%>
 <html>
 <body>
 	<!----------------------top_header start-------------------------------->
@@ -76,34 +83,26 @@ td ul.actions li {
 <script type="text/javascript">
 
 $(document).ready(function() {
-	//alert("ohcouhwdj..........");
-	//getMemberDetails();
 	getMemberDetails();
-	//showNewsListData(JSON.parse(lstNews));
 });
 function getMemberDetails() {
-	//alert("-------2-----");
 	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/memberService/getMemberDetails",
 				success : function(data) {
 					$.each(
 							data.MemberDetails,
-							//data.FarmDetails,
 							function(key, val) {
-								//alert(data.MemberDetails[key].title);
-								//alert(data.FarmDetails[key].farmName);
-								//alert(data.MemberDetails[key].firstName)
 									html = html
 									     + '<tr>'
 									     + '<td class="e_img"><img src="images/5326574-a-sheep-wallpapers.jpg"></td>'
-										     + '<td class="e_mn">'+data.MemberDetails[key].title+'</td>'
-										     +  '<td class="e_mn_1" >'+data.MemberDetails[key].firstName+'</td>'
-										     +  '<td class="e_mn_2">'+data.MemberDetails[key].middleName+'</td>'
-											 +  '<td class="e_mn_3">'+data.MemberDetails[key].mobile+'</td>'
+										     + '<td class="e_mn">'+data.MemberDetails[key].firstName+' '+data.MemberDetails[key].middleName+'</td>'
+										     +  '<td class="e_mn_1" >'+data.MemberDetails[key].profession+'</td>'
+										     +  '<td class="e_mn_3">'+data.MemberDetails[key].memberType+'</td>'
+											 +  '<td class="e_mn_2">'+data.MemberDetails[key].amountPaid+'</td>'
 											 +  '<td class="e_mn_4">'+data.MemberDetails[key].address+'</td>'
-											 +  '<td class="e_mn_5">'+data.MemberDetails[key].address+'</td>'
-											 +  '<td>'+data.MemberDetails[key].email+'</td>'
+											 +  '<td class="e_mn_5">'+data.MemberDetails[key].updatedOn+'</td>'
+											 +  '<td>'+data.MemberDetails[key].haveFarm+'</td>'
 											 +  '<td class="e_mn">' 
 											 	+ '<ul class="actions">'
 											 		+ '<li>'
@@ -113,6 +112,7 @@ function getMemberDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%if(bAdmin){ %>
 											 		+ '<li>'
 											 			+ '<a href="memberEdit.jsp"> '
 											 				+ '<button id='+data.MemberDetails[key].memberId+' class="btn btn-primary btn-sm" onclick="editMember(this.id)">'
@@ -127,6 +127,7 @@ function getMemberDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%}%>
 											 	+ ' </ul>'
 											 +  '</td>'
 									     + '</tr>';
@@ -139,7 +140,6 @@ function getMemberDetails() {
 	});
 }
 function getMemberProfile(memberId){
-	//alert("getMemberProfile..........memberId=="+memberId);
 	var memberObject = new Object();
 	memberObject.memberId = memberId;
 	$.ajax({
@@ -152,7 +152,6 @@ function getMemberProfile(memberId){
 	});
 }
 function editMember(memberId){
-	//alert("editMember----------memberId=="+memberId);
 	var memberObject = new Object();
 	memberObject.memberId = memberId;
 	$.ajax({
@@ -166,7 +165,6 @@ function editMember(memberId){
 	
 }
 function deleteMember(memberId){
-	//alert("memberId=="+memberId);
 	var memberObject = new Object();
 	memberObject.memberId = memberId;
 	$.ajax({
@@ -178,6 +176,27 @@ function deleteMember(memberId){
 		}
 	});
 	
+}
+
+function searchMember(){
+	var firstName =$("#searchMemFirstName").val();
+	var profession = $("#searchMemProfession").val();
+	var memberObject = new Object();
+	memberObject.firstName = firstName;
+	memberObject.profession = profession;
+	$.ajax({
+		data : memberObject,
+		url : "emp/memberService/searchMember",
+		success : function(data) {
+			if (data.Msg = "success") {
+				$.each(
+						data.MemberSearch,
+						function(key, val) {
+						}
+				)
+			}
+		}
+	});
 }
 </script>
 </head>
@@ -209,13 +228,13 @@ function deleteMember(memberId){
 								<thead>
 									<tr>
 										<th></th>
-										<th class="text-nowrap">Member Name</th>
-										<th>Mobile No</th>
-										<th>FarmName</th>
+										<th class="text-nowrap">Name</th>
+										<th>Profession</th>
 										<th>Membership</th>
+										<th>Amount</th>
 										<th>Address</th>
-										<th>Event farm</th>
 										<th>Reg Date</th>
+										<th>Had Farm</th>
 										<th style="width: 125px;"></th>
 									</tr>
 								</thead>
@@ -224,31 +243,29 @@ function deleteMember(memberId){
 										<td>Image</td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Member Name'
-														class="form-control " style="width: 120px;" />
+													<input type="text" name="searchMemFirstName" id="searchMemFirstName" placeholder='Member Name'
+														class="form-control " style="width: 120px;" onkeyup="searchMember();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Mobile No'
-														class="form-control" style="width: 115px;" />
-												</div>
-											</div></td>
-										<td><div class="row">
-												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='FarmName'
-														class="form-control" style="width: 120px;" />
+													<input type="text" name="searchMemProfession" id="searchMemProfession" placeholder='Profession'
+														class="form-control" style="width: 115px;" onkeyup="searchMember();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<select class="form-control" style="width: 80px;">
 														<option selected="selected">--select--</option>
-														<option>Ordinary</option>
-														<option>Pernament</option>
-														<option>3</option>
-														<option>4</option>
+														<option selected="selected" value="Ordinary">Ordinary</option>
+														<option value="Life">Life</option>
 													</select>
+												</div>
+											</div></td>
+										<td><div class="row">
+												<div class="col-md-12">
+													<input type="text" name='name0' placeholder='FarmName'
+														class="form-control" style="width: 120px;" />
 												</div>
 											</div></td>
 										<td><div class="row">

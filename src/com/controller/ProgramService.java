@@ -65,17 +65,19 @@ public class ProgramService {
 			@QueryParam("guest") String guest,
 			@QueryParam("youtube") String youtube,
 			@QueryParam("moreInfo") String moreInfo) {
-		//System.out.println("in to controller");
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
 		String sId = null;
-		//System.out.println("1.a In addProgram---------- programName===" + programName);
-		//System.out.println("1.b In addProgram---------- duration===" + duration);
-		//System.out.println("1.d In addProgram---------- dateAndTimeFrom===" + dateAndTimeFrom);
+		String sLoginId = "";
 
 		try {
 			if (StringUtils.isNotEmpty(programName)) {
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+				
 				ProgramDTO programDto = new ProgramDTO();
 				sId = CommonUtils.getAutoGenId();
 				programDto.setProgramId(sId);
@@ -88,6 +90,7 @@ public class ProgramService {
 				programDto.setYoutube(youtube);
 				programDto.setMoreInfo(moreInfo);
 				programDto.setUpdatedOn(CommonUtils.getDate());
+				programDto.setUpdatedBy(sLoginId);
 				
 				ProgramBO bo = new ProgramBO();
 				result = bo.addProgram(programDto);
@@ -95,7 +98,6 @@ public class ProgramService {
 				
 				
 			}
-			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				CommonUtils.saveFileData(request, sId, "PROGRAM");
 				jObj.put("Msg", result);
@@ -105,7 +107,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 
@@ -121,12 +122,9 @@ public class ProgramService {
 		
 		
 		try {
-			//System.out.println("1. *****Called getProgramDetails**********");
 			programList = bo.getProgramDetails();
 			
 			
-			//System.out.println("****programList.size=="+programList.size());
-			//System.out.println("arraylist--->" + programList.toString());
 			if (!(programList.size() < 0)) {
 				jobj1.put("ProgramDetails", programList);
 			} else {
@@ -135,7 +133,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -143,7 +140,6 @@ public class ProgramService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getProgramId")
 	public JSONObject getProgramId(@QueryParam("programId") String programId, @Context HttpServletRequest request) {
-		//System.out.println("1. *****Called getProgramId**********programId==" + programId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
@@ -156,7 +152,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -170,7 +165,6 @@ public class ProgramService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String programId = (String) session.getAttribute("PROGRAMID");
-		//System.out.println("1a. *****Called getProgramProfile**********programId==" + programId);
 		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
@@ -182,8 +176,6 @@ public class ProgramService {
 
 				ProgramBO bo = new ProgramBO();
 				programList = bo.getProgramProfile(dto);
-				//System.out.println("****programList.size==" + programList.size());
-				//System.out.println("arraylist--->" + programList.toString());
 				if (!(programList.size() < 0)) {
 					jobj.put("ProgramProfile", programList);
 				} else {
@@ -197,14 +189,11 @@ public class ProgramService {
 		
 		ProgramFileDTO programFileDto = new ProgramFileDTO();
 		programFileDto.setProgramId(programId);
-		//System.out.println("****programImages==" + programFileDto.getProgramId());
 		ProgramFileBO programFileBo = new ProgramFileBO();
 		lstUploadFileDTO = programFileBo.getProgramImages(programFileDto);
 		if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
-			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 			jobj.put("PROGRAMFILES", lstUploadFileDTO);
 		}
-		//System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}	
@@ -218,7 +207,6 @@ public class ProgramService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String programId = (String) session.getAttribute("PROGRAMID");
-		//System.out.println("1a. *****Called editProgram**********ProgramId==" + programId);
 		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
 		String resultFile = "fail";
 		String resultFileProgram = "fail";
@@ -234,17 +222,12 @@ public class ProgramService {
 				programList = bo.getProgramProfile(dto);
 
 
-				//System.out.println("****programList.size==" + programList.size());
-				//System.out.println("arraylist--->" + programList.toString());
 				HttpSession session1 = request.getSession();
 				HashMap<String,String> hmImages = (HashMap<String,String>)session1.getAttribute("UPLOADED_FILELIST");
 				if(hmImages != null && hmImages.size() > 0){
 					for(Map.Entry m:hmImages.entrySet()){
 						String sFileId  = (String) m.getKey();
 						String sFilePath  = (String) m.getValue();
-						System.out.println("--------------sFileId---------"+sFileId);
-						System.out.println("--------------sFilePath---------"+sFilePath);
-						//System.out.println(m.getKey()+" "+m.getValue());
 					
 					// saving in to uploadFile Table
 					UploadFileDTO uploadFileDto = new UploadFileDTO();
@@ -254,18 +237,15 @@ public class ProgramService {
 				    
 				    UploadFileBO filebo = new UploadFileBO();
 				    resultFile = filebo.addUploadFileDetails(uploadFileDto);
-				    System.out.println("resultFile===="+resultFile);
 				    
 				 // saving in to programFile Table
 				    
 				    ProgramFileDTO  programFileDto = new ProgramFileDTO();
 				    programFileDto.setFileId(sFileId);
 				    programFileDto.setProgramId(programId);
-				    System.out.println("programFileEdit---------"+programId);
 				    ProgramFileBO programFileBo = new ProgramFileBO();
 				    resultFileEdit = programFileBo.programFile(programFileDto);
 				    
-				    System.out.println("resultFileProgramEdit===="+resultFileEdit);
 					}
 				}
 				if (!(programList.size() < 0)) {
@@ -277,7 +257,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("editProgram jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -286,7 +265,6 @@ public class ProgramService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteProgram")
 	public JSONObject deleteProgram(@QueryParam("programId") String programId) {
-		//System.out.println("1. *****Called deleteProgram**********programId=="+programId);
 		JSONObject jobj1 = new JSONObject();
 		ProgramBO bo = new ProgramBO();
 		ProgramDTO dto = new ProgramDTO();
@@ -299,7 +277,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("delete jobj-->" + jobj1);
 		return jobj1;
 
 	}	
@@ -316,21 +293,19 @@ public class ProgramService {
 			@QueryParam("moreInfo") String moreInfo) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
+		String sLoginId = "";
 
-		//System.out.println("1.a In programUpdate---------- programName===" + programName);
-		//System.out.println("1.b In programUpdate---------- duration===" + duration);
-		//System.out.println("1.d In programUpdate---------- channel===" + channel);
-		//System.out.println("1.d In programUpdate---------- programId===" + programId);
 
 		try {
 			if (StringUtils.isNotEmpty(programName)) {
 				
 				ProgramDTO programDto = new ProgramDTO();
 				String sUpdatedOn = CommonUtils.getDate();
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
 
 
-			 //System.out.println("1.e In addNews---------- sId===" + sId);
-			//System.out.println("1.f In addNews---------- sUpdtedOn===" + sUpdtedOn);
 				programDto.setProgramId(programId);
 				programDto.setProgramName(programName);
 				programDto.setDuration(duration);
@@ -341,13 +316,13 @@ public class ProgramService {
 				programDto.setGuest(guest);
 				programDto.setMoreInfo(moreInfo);
 				programDto.setUpdatedOn(sUpdatedOn);
+				programDto.setUpdatedBy(sLoginId);
 				
 				ProgramBO bo = new ProgramBO();
 				
 				result = bo .programUpdate(programDto);
 				CommonUtils.saveFileData(request, programId, "PROGRAM");
 			}
-			//System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
@@ -356,7 +331,6 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 

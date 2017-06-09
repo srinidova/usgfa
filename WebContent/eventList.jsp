@@ -1,6 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+%>
 <html>
-
 <!----------------------top_header start-------------------------------->
 <jsp:include page="includes.jsp" />
 <!----------------------top_header end---------------------------------->
@@ -49,12 +55,10 @@ tr td.e_details {
 
 <script type="text/javascript">
         $(document).ready(function(){
-	//alert("-------1-----");
 	getEventDetails();
 });
 
 function getEventDetails() {
-	//alert("-------2-----");
 	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/eventService/getEventDetails",
@@ -62,9 +66,6 @@ function getEventDetails() {
 					$.each(
 							data.EventDetails,
 							function(key, val) {
-								//alert(data.EventDetails[key].eventName);
-								//alert(data.EventDetails[key].noOfDays);
-								//alert(data.EventDetails[key].timeFrom);
 									html = html
 									     + '<tr>'
 										     + '<td class="e_name">'+data.EventDetails[key].eventName+'</td>'
@@ -80,6 +81,7 @@ function getEventDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%if(bAdmin){ %>
 											 		+ '<li>'
 											 			+ '<a href="eventEdit.jsp"> '
 											 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-primary btn-sm" onclick="editEvent(this.id)">'
@@ -94,6 +96,7 @@ function getEventDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%}%>
 											 	+ ' </ul>'
 											 +  '</td>'
 									     + '</tr>';
@@ -106,7 +109,6 @@ function getEventDetails() {
 	});
 }
 function getEventProfile(eventId){
-	//alert("getEventProfile..........eventId=="+eventId);
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	$.ajax({
@@ -120,7 +122,6 @@ function getEventProfile(eventId){
 }
 
 function editEvent(eventId){
-	//alert("editEvent----------eventId=="+eventId);
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	$.ajax({
@@ -128,14 +129,12 @@ function editEvent(eventId){
 		url : "emp/eventService/getEventId",
 		success : function(data) {
 			if (data.Msg = "success") {
-				//window.location.href = "storiesList.jsp";
 			}
 		}
 	});
 	
 }
 function deleteEvent(eventId){
-	//alert("eventId=="+eventId);
 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	$.ajax({
@@ -147,6 +146,27 @@ function deleteEvent(eventId){
 		}
 	});
 	
+}
+function searchEvent(){
+	alert("== searchEvent ==");
+	var eventName =$("#searchEventName").val();
+	var days = $("#searchEventDays").val();
+	var eventObject = new Object();
+	eventObject.eventName = eventName;
+	eventObject.days = days;
+	$.ajax({
+		data : eventObject,
+		url : "emp/eventService/searchEvent",
+		success : function(data) {
+			if (data.Msg = "success") {
+				$.each(
+						data.EventSearch,
+						function(key, val) {
+						}
+				)
+			}
+		}
+	});
 }
 </script>
 </head>
@@ -177,7 +197,7 @@ function deleteEvent(eventId){
 							<div class="table-responsive">
 								<table class="table  table-bordered">
 									<tr>
-										<th>Event Name11</th>
+										<th>Event Name</th>
 										<th>Days</th>
 										<th>Date</th>
 										<th>Address</th>
@@ -186,13 +206,13 @@ function deleteEvent(eventId){
 									<tr>
 										<td><div class="row">
 												<div class="col-md-10">
-													<input type="text" name='name0' placeholder='Event Name'
-														class="form-control " style="width: 200px;" />
+													<input type="text" name='name0' placeholder='Event Name' name="searchEventName" 
+													id="searchEventName" class="form-control " style="width: 200px;" onkeyup="searchEvent();" />
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Days'
+													<input type="text" name='name0' placeholder='Days' name="searchEventDays" id="searchEventDays"
 														class="form-control " style="width: 50px;" />
 												</div>
 											</div></td>

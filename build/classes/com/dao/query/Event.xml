@@ -27,4 +27,17 @@
 		delete from event where
 		eventId = #eventId#
 	</delete>
+	<select id="eventSearch" parameterClass="com.dto.EventDTO" resultClass="com.dto.EventDTO">
+		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from event
+	   <dynamic prepend="WHERE ">
+	      <isNotEmpty prepend="AND" property="eventName">
+	         eventName like #eventName#
+	      </isNotEmpty>
+			
+	      <isNotEmpty prepend="AND" property="noOfDays">
+	         noOfDays like #noOfDays#
+	      </isNotEmpty>
+	   </dynamic>
+      
+    </select>
 </sqlMap>

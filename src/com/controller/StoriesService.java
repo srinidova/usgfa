@@ -49,16 +49,15 @@ public class StoriesService {
 		String result = "fail";
 		String resultFile = "fail";
 		String sId = null;
+		String sLoginId = "";
 
-		// System.out.println("1.a In addStories---------- name===" + name);
-		// System.out.println("1.b In addStories---------- profession===" +
-		// profession);
-		//// System.out.println("1.d In addStories---------- farmName===" +
-		// farmName);
-
-		//// System.out.println("getContextPath-------"+request.getContextPath());
 		try {
 			if (StringUtils.isNotEmpty(title)) {
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+				
 				StoriesDTO storiesDto = new StoriesDTO();
 				sId = CommonUtils.getAutoGenId();
 				String sUpdatedOn = CommonUtils.getDate();
@@ -76,18 +75,14 @@ public class StoriesService {
 				storiesDto.setFarmPinCode(farmPinCode);
 				storiesDto.setAboutFarm(aboutFarm);
 				storiesDto.setUpdatedOn(sUpdatedOn);
+				storiesDto.setUpdatedBy(sLoginId);
 
-				// System.out.println("1.e In addStories---------- sId===" +
-				// sId);
-				// System.out.println("1.f In addStories----------
-				// sUpdatedOn===" + sUpdatedOn);
 
 				StoriesBO bo = new StoriesBO();
 				result = bo.addStories(storiesDto);
 
 				
 			}
-			// System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				CommonUtils.saveFileData(request, sId, "STORIES");
 				jObj.put("Msg", result);
@@ -97,7 +92,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 
@@ -112,11 +106,8 @@ public class StoriesService {
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
 
 		try {
-			// System.out.println("1. *****Called getStoriesDetails**********");
 			storiesList = bo.getStoriesDetails();
 
-			// System.out.println("****storiesList.size=="+storiesList.size());
-			// System.out.println("arraylist--->" + storiesList.toString());
 			if (!(storiesList.size() < 0)) {
 				jobj1.put("StoriesDetails", storiesList);
 			} else {
@@ -125,7 +116,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jobj1);
 		return jobj1;
 
 	}
@@ -134,13 +124,11 @@ public class StoriesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getStoriesId")
 	public JSONObject getStoriesId(@QueryParam("storiesId") String storiesId, @Context HttpServletRequest request) {
-		System.out.println("1. *****Called getStoriesId**********storiesId==" + storiesId);
 		JSONObject jobj = new JSONObject();
 		try {
 			HttpSession session = request.getSession();
 
 			if (!(storiesId.length() < 0)) {
-				System.out.println("Profile44444444444 jobj-->" + jobj);
 				session.setAttribute("STORIESID", storiesId);
 			} else {
 				jobj.put("StoriesId", "failed");
@@ -148,7 +136,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -161,7 +148,6 @@ public class StoriesService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String storiesId = (String) session.getAttribute("STORIESID");
-	    System.out.println("1a. *****Called getStoriesProfile**********storiesId==" + storiesId);
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		try {
@@ -172,8 +158,6 @@ public class StoriesService {
 				StoriesBO bo = new StoriesBO();
 				storiesList = bo.getStoriesProfile(dto);
 
-				 System.out.println("****storiesList.size==" + storiesList.size());
-				 System.out.println("arraylist--->" + storiesList.toString());
 				if (!(storiesList.size() < 0)) {
 					jobj.put("StoriesProfile", storiesList);
 				} else {
@@ -186,14 +170,11 @@ public class StoriesService {
 		// get stories images
 		StoriesFileDTO storiesFileDto = new StoriesFileDTO();
 		storiesFileDto.setStoriesId(storiesId);
-		//System.out.println("****storiesImages==" + storiesFileDto.getStoriesId());
 		StoriesFileBO storiesFileBo = new StoriesFileBO();
 		lstUploadFileDTO = storiesFileBo.getStoriesImages(storiesFileDto);
 		if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
-			//System.out.println("****lstUploadFileDTO.size==" + lstUploadFileDTO.size());
 			jobj.put("STORIESFILES", lstUploadFileDTO);
 		}
-		// System.out.println("Profile jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -206,8 +187,6 @@ public class StoriesService {
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String storiesId = (String) session.getAttribute("STORIESID");
-		// System.out.println("1a. *****Called editStories**********storiesId=="
-		// + storiesId);
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
 
 		try {
@@ -218,9 +197,6 @@ public class StoriesService {
 				StoriesBO bo = new StoriesBO();
 				storiesList = bo.getStoriesProfile(dto);
 
-				// System.out.println("****storiesList.size==" +
-				// storiesList.size());
-				// System.out.println("arraylist--->" + storiesList.toString());
 				if (!(storiesList.size() < 0)) {
 					jobj.put("EditStories", storiesList);
 				} else {
@@ -230,7 +206,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("editStories jobj-->" + jobj);
 		return jobj;
 
 	}
@@ -247,17 +222,13 @@ public class StoriesService {
 			@QueryParam("aboutFarm") String aboutFarm) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
-		// System.out.println("1a. *****Called
-		// storiesUpdate**********storiesId==" + storiesId);
-		// System.out.println("1.a In storiesUpdate---------- name===" + name);
-		// System.out.println("1.b In storiesUpdate---------- profession===" +
-		// profession);
-		// System.out.println("1.d In storiesUpdate---------- farmName===" +
-		// farmName);
+		String sLoginId = "";
 
-		//// System.out.println("getContextPath-------"+request.getContextPath());
 		try {
 			if (StringUtils.isNotEmpty(name)) {
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
 				StoriesDTO storiesDto = new StoriesDTO();
 				String sUpdatedOn = CommonUtils.getDate();
 				storiesDto.setStoriesId(storiesId);
@@ -273,17 +244,13 @@ public class StoriesService {
 				storiesDto.setFarmPinCode(farmPinCode);
 				storiesDto.setAboutFarm(aboutFarm);
 				storiesDto.setUpdatedOn(sUpdatedOn);
+				storiesDto.setUpdatedBy(sLoginId);
 
-				// System.out.println("1.e In storiesUpdate---------- sId===" +
-				// storiesId);
-				// System.out.println("1.f In storiesUpdate----------
-				// sUpdatedOn===" + sUpdatedOn);
 
 				StoriesBO bo = new StoriesBO();
 				result = bo.storiesUpdate(storiesDto);
 				CommonUtils.saveFileData(request, storiesId, "STORIES");
 			}
-			// System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
@@ -292,7 +259,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 
@@ -300,8 +266,6 @@ public class StoriesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/deleteStories")
 	public JSONObject deleteStories(@QueryParam("storiesId") String storiesId) {
-		// System.out.println("1. *****Called
-		// deleteStories**********storiesId==" + storiesId);
 
 		JSONObject jobj1 = new JSONObject();
 		StoriesBO bo = new StoriesBO();
@@ -315,7 +279,6 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println("delete jobj-->" + jobj1);
 		return jobj1;
 
 	}

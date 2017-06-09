@@ -4,9 +4,7 @@ function login() {
 	var msg = "";
 	var title = "";
 	var loginMobile =  $("#loginMobile").val();
-	//alert("loginMobile=="+loginMobile.length);
 	var loginPassword =  $("#loginPassword").val();
-	//alert("loginPassword=="+loginPassword.length);
 	if (loginMobile.length == 0) {
 		msg = "errLogin";
 		title = "Mobile No";
@@ -33,7 +31,6 @@ function login() {
 			url : "emp/LoginService/getUser",
 			success : function(data) {
 				if (data.Msg == 'success') {
-					//alert(".....success......");
 					window.location.href = "memberList.jsp";
 				}else{
 					$("#errLogin").text(data.Msg);
@@ -46,8 +43,7 @@ function login() {
 function resetPassword(){
 	$("#errLogin").text("");
 	var loginMobile = $("#loginMobile").val();
-	//var loginPassword = $("#loginPassword").val();
-	//alert("----------in to resetPassword--------------");
+	var loginPassword = $("#loginPassword").val();
 	if (loginMobile.length == 0) {
 		msg = "errLogin";
 		title = "Mobile No";
@@ -78,8 +74,7 @@ function resetPassword(){
 function forgotpassword(){
 	$("#errLogin").text("");
 	var loginMobile = $("#loginMobile").val();
-	//var loginPassword = $("#loginPassword").val();
-	//alert("----------in to forgotpassword--------------");
+	var loginPassword = $("#loginPassword").val();
 	if (loginMobile.length == 0) {
 		msg = "errLogin";
 		title = "Mobile No";
@@ -109,10 +104,7 @@ function forgotpassword(){
 }
 
 function mobileCheck(fName, title, msg) {
-	 //alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
-	//alert("== allNumber ==");
 	var fieldName = document.getElementById(fName);
-	//alert("== fieldName =="+fieldName);
 	var number = /^[0-9]+$/;
 	if (!fieldName.value.match(number)) {			
 		$("#" + msg).text(title + " must have numbers only");
@@ -131,10 +123,8 @@ function mobileCheck(fName, title, msg) {
 	
 }
 function emptyCheck(fieldName, title, msg) {
-	//alert("----fieldName----"+fieldName+"--------title----------"+title+"--------msg----------"+msg);
 	
 	var fieldName_len = document.getElementById(fieldName).value.length;
-	//alert("----fieldName_len----"+fieldName_len);
 	if (fieldName_len == 0) {
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
@@ -147,7 +137,6 @@ function emptyCheck(fieldName, title, msg) {
 }
 
 function loginClear(){
-	//alert("in to clear");
 	$("#errLogin").text("");
 	$("#loginMobile").val("");
 	$("#loginPassword").val("");

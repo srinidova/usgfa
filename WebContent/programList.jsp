@@ -1,4 +1,11 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+%>
 <html>
 
 <!----------------------top_header start-------------------------------->
@@ -55,12 +62,10 @@ td ul.actions li {
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//alert("-------1-----");
 	getProgramDetails();
 });
 
 function getProgramDetails() {
-	//alert("-------2-----");
 	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/programService/getProgramDetails",
@@ -68,8 +73,6 @@ function getProgramDetails() {
 					$.each(
 							data.ProgramDetails,
 							function(key, val) {
-								//alert(data.ProgramDetails[key].programName);
-								//alert(data.ProgramDetails[key].dateAndTimeFrom);
 									html = html
 									     + '<tr>'
 										     + '<td class="e_mn">'+data.ProgramDetails[key].programName+'</td>'
@@ -86,6 +89,7 @@ function getProgramDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%if(bAdmin){ %>
 											 		+ '<li>'
 											 			+ '<a href="programEdit.jsp"> '
 											 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-primary btn-sm" onclick="editProgram(this.id)">'
@@ -93,6 +97,7 @@ function getProgramDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		
 											 		+ '<li>'
 											 			+ '<a href="programList.jsp"> '
 											 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-danger btn-sm" onclick="deleteProgram(this.id)">'
@@ -100,6 +105,7 @@ function getProgramDetails() {
 											 				+ '</button>'
 											 			+ '</a>'
 											 		+ '</li>'
+											 		<%}%>
 											 	+ ' </ul>'
 											 +  '</td>'
 									     + '</tr>';
@@ -113,11 +119,8 @@ function getProgramDetails() {
 }
 
 function getProgramProfile(programId){
-	////alert("test.....0.....programId=="+programId);
 	var programObject = new Object();
-	////alert("test....1......programId=="+programId);
 	programObject.programId = programId;
-	////alert("test.....2.....programId=="+programId);
 	$.ajax({
 		data : programObject,
 		url : "emp/programService/getProgramId",
@@ -128,11 +131,8 @@ function getProgramProfile(programId){
 	});
 }
 function editProgram(programId){
-	//alert("editProgram----------programId=="+programId);
 	var programObject = new Object();
 	programObject.programId = programId;
-	/* var newsObject = new Object();
-	newsObject.newsId = newsId; */
 	$.ajax({
 		data : programObject,
 		url : "emp/programService/getProgramId",
@@ -144,7 +144,6 @@ function editProgram(programId){
 	
 }
 function deleteProgram(programId){
-	//alert("programId=="+programId);
 	var programObject = new Object();
 	programObject.programId = programId;
 	$.ajax({

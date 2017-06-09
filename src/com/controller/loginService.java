@@ -31,6 +31,7 @@ public class LoginService {
 		String result = "fail";
 		String sRole = null;
 		String sPwd = null;
+		String sLoginId = null;
 		MemberDTO memDto = null;
 		HttpSession session = null;
 		try {
@@ -41,12 +42,14 @@ public class LoginService {
 				if (memDto != null) {
 					sPwd = memDto.getPassword();
 					sRole = memDto.getMemberType();
-
+					sLoginId = memDto.getMemberId();
+					
 					if (loginPassword.equals(sPwd)) {
 						result = "success";
 						session = request.getSession();
 						session.setAttribute("LOGINMEMBER", memDto);
 						session.setAttribute("LOGINROLE", sRole);
+						session.setAttribute("LOGINID", sLoginId);
 
 					} else {
 						result = "Invalid Password";
@@ -67,7 +70,6 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/logout")
 	public JSONObject logout(@Context HttpServletRequest request, @QueryParam("temp") String temp) {
-
 		JSONObject jObj = new JSONObject();
 		HttpSession session = request.getSession();
 		session.setAttribute("LOGINROLE", null);
@@ -90,7 +92,6 @@ public class LoginService {
 		String sPropertyContent = null;
 		boolean bSentSms = false;
 		Sms sms = new Sms();
-		System.out.println("a. loginMobile==" + loginMobile);
 
 		MemberBO memberBO = new MemberBO();
 		memDto = memberBO.getMemberByMobile(loginMobile);
@@ -100,17 +101,13 @@ public class LoginService {
 
 		if (memDto != null && sRole.equals("Life")) {
 			sPin = CommonUtils.getPin();
-			System.out.println("b. in to sPin==" + sPin);
 
 			memDto.setPassword(sPin);
 			String sPwdUpdate = memberBO.passwordUpdate(memDto);
-			System.out.println("c. in to sPwdUpdate==" + sPwdUpdate);
 
 			if (sPwdUpdate.equals("success")) {
 				sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsOtpText");
-				System.out.println("d. sPropertyContent==" + sPropertyContent);
 				sMessage = sPin + " " + sPropertyContent;
-				System.out.println("e. sMessage==" + sMessage);
 
 				bSentSms = sms.sendMessage(request, loginMobile, sMessage);
 				if (bSentSms) {
@@ -141,7 +138,6 @@ public class LoginService {
 		String sPropertyContent = null;
 		boolean bSentSms = false;
 		Sms sms = new Sms();
-		System.out.println("a. loginMobile==" + loginMobile);
 
 		MemberBO memberBO = new MemberBO();
 		memDto = memberBO.getMemberByMobile(loginMobile);
@@ -151,11 +147,8 @@ public class LoginService {
 		}
 		if (memDto != null && sRole.equals("Life")) {
 			sPwd = memDto.getPassword();
-			System.out.println("b. in to sPwd==" + sPwd);
 			sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsPwdText");
-			System.out.println("c. sPropertyContent==" + sPropertyContent);
 			sMessage = sPwd + " " + sPropertyContent;
-			System.out.println("d. sMessage==" + sMessage);
 
 			bSentSms = sms.sendMessage(request, loginMobile, sMessage);
 			if (bSentSms) {

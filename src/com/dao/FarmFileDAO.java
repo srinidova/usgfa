@@ -15,7 +15,6 @@ public class FarmFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			System.out.println("3. In FarmFileDAO newsFile---------- farmFile===" + farmFileDto.getFarmId());
 			session.insert("FarmFile.farmFile", farmFileDto);
 			result = "success";
 		} catch (Exception e) {

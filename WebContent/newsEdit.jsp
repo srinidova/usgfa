@@ -24,9 +24,7 @@
 
 <script type="text/javascript">
 function newsEditFarmValidation() {
-	//alert("==Entered==");
 	$("#newsMessage").text("");
-	//alert("==1==");
 	var newsTitle = document.getElementById("newsEditTitle");
 	var date = document.getElementById("newsEditDate");
 	var paper = document.getElementById("newsEditPaper");
@@ -35,7 +33,6 @@ function newsEditFarmValidation() {
 	var msg = "";
     var title = "";
     $("#newsEditFailMsg").text();
-	//alert("==2==");
 	if(newsTitle.value.length == 0){
 		msg = "errEditNewsNameTitle";
 		title = "Name Title";
@@ -45,7 +42,6 @@ function newsEditFarmValidation() {
 		newsTitle.focus();
 		return false;
 	} else if (date.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errDate";
 		title = "Date";
 
@@ -54,13 +50,11 @@ function newsEditFarmValidation() {
 		date.focus();
 		return false;
 	}else if (paper.value.length == 0 && link.value.length == 0) {
-		//alert("----paper /link  zero-------");
 		msg = "errEditNewsPaper";
 		title = "Paper or Link/Url";
 
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
-		//date.focus();
 		return false;
 	}else{
 		$("#errEditNewsNameTitle").text("");
@@ -71,14 +65,12 @@ function newsEditFarmValidation() {
 
 }
 $(document).ready(function() {
-	//alert("-------in editNews--Jsp---");
 	$.ajax({
 		url : "emp/newsService/editNews",
 		success : function(data) {
 				$.each(
 						data.EditNews,
 						function(key, val) {
-							//alert("-------in editNews--Jsp---newsTitle=="+data.EditNews[key].date);
 						$('#newsId').val(data.EditNews[key].newsId);	
 						$('#newsEditTitle').val(data.EditNews[key].newsTitle);
 					 	$('#newsEditDate').val(data.EditNews[key].date);
@@ -99,7 +91,6 @@ function newsUpdate(){
 	var link = $("#newsEditLink").val();
 	var moreInfo = $("#newsEditMoreInfo").val();
 
-	//alert("in to newsEditPage");
 	
 	var newsObject = new Object();
 	newsObject.newsId = newsId;
@@ -114,22 +105,10 @@ $
 		url : "emp/newsService/newsUpdate",
 		success : function(data) {
 			 if (data.Msg == 'success') {
-				//alert("----succes------")
-				//alert("in to newsEdit");
 				window.location.href = "newsList.jsp";
-				//alert("a4...........newsEdit");
 			}else{
-				//alert("------error----------");
 				$("#newsEditFailMsg").text("News Edit Failed");
 			} 
-			/* if (data.Msg == 'success') {
-				alert(".....success......");
-				window.location.href = "newsList.jsp";
-				//alert("a4...........");
-			}else{
-				alert(".....error......");
-				$("#newsEditFailMsg").text("News Registration Failed");
-			}  */
 		}
 	});
 	
@@ -164,7 +143,7 @@ $
 					<div class="form-group">
 						<label for="event_name">Name Title *</label> <span class="errMsg" id="errEditNewsNameTitle"></span>
 						<input type="text" class="form-control" id="newsEditTitle" name="newsEditTitle" maxlength="30"
-						onkeyup="validateTitle(id,'Name Title','errEditNewsNameTitle',5,30);">
+						onkeyup="validateTitle(id,'Name Title','errEditNewsNameTitle',3,30);">
 						<input type="hidden" class="form-control" id="newsId" name="newsId">
 					</div>
 				</div>
@@ -173,7 +152,7 @@ $
 						<label for="time_from">Date *</label> <span class="errMsg" id="errEditNewsDate"></span>
 						<div class='input-group date' id="newsEditDate1">
 							<input type='text' class="form-control" id="newsEditDate" name="newsEditDate" maxlength="30"
-							onkeyup="validateTitle(id,'Date','errEditNewsDate',5,30);"/> 
+							onkeyup="validateTitle(id,'Date','errEditNewsDate',3,30);"/> 
 							<span class="input-group-addon">
 							 <span class="glyphicon glyphicon-calendar"></span>
 							</span>

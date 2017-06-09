@@ -25,9 +25,7 @@
 <script type="text/javascript">
 
 function programEditFarmValidation() {
-	//alert("==Entered==");
 	$("#programMessage").text("");
-	//alert("==1==");
 	var programName = document.getElementById("programEditName");
 	var duration = document.getElementById("programEditDuration");
 	var dateAndTimeFrom = document.getElementById("programEditDateAndTimeFrom");
@@ -37,9 +35,7 @@ function programEditFarmValidation() {
 	var youtube = document.getElementById("programEditYoutube");
 	var moreInfo = document.getElementById("programEditMoreInfo");
 	$("#programEditFailMsg").text("");
-	//alert("==2==");
 	if (programName.value.length == 0) {
-		//alert("----newsTitle zero-------");
 		msg = "errEventName";
 		title = "Event Name ";
 
@@ -48,7 +44,6 @@ function programEditFarmValidation() {
 		programName.focus();
 		return false;
 	}else if (dateAndTimeFrom.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errEditProDateAndTimeFrom";
 		title = "Date & TimeFrom";
 
@@ -57,7 +52,6 @@ function programEditFarmValidation() {
 		dateAndTimeFrom.focus();
 		return false;
 	}else if (dateAndTimeTo.value.length == 0) {
-		//alert("----date zero-------");
 		msg = "errEditProDateAndTimeTo";
 		title = "Date & Time To";
 
@@ -66,13 +60,11 @@ function programEditFarmValidation() {
 		errEditProDateAndTimeTo.focus();
 		return false;
 	}else if (channel.value.length == 0 && youtube.value.length == 0) {
-		//alert("----channel /youtube  zero-------");
 		msg = "errEditProChannel";
 		title = "Channel or Youtube";
 
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
-		//date.focus();
 		return false;
 	}else{
 		$("#errEditProgramName").text("");
@@ -84,24 +76,20 @@ function programEditFarmValidation() {
 
 }
 $(document).ready(function() {
-	//alert("-------in editProgram--Jsp---");
 	$.ajax({
 		url : "emp/programService/editProgram",
 		success : function(data) {
 				$.each(
 						data.EditProgram,
 						function(key, val) {
-							//alert("-------in editProgram--Jsp---programName=="+data.EditProgram[key].programName);
 							$('#programId').val(data.EditProgram[key].programId);	
 							$('#programEditName').val(data.EditProgram[key].programName);
 						 	$('#programEditDuration').val(data.EditProgram[key].duration);
-						 	//alert("-------in editProgram--Jsp---programEditDuration=="+data.EditProgram[key].duration);
 							$('#programEditDateAndTimeFrom').val(data.EditProgram[key].dateAndTimeFrom);
 							$('#programEditDateAndTimeTo').val(data.EditProgram[key].dateAndTimeTo);
 							$('#programEditChannel').val(data.EditProgram[key].channel);
 							$('#programEditGuest').val(data.EditProgram[key].guest);
 							$('#programEditYoutube').val(data.EditProgram[key].youtube);
-							//alert("-------in editProgram--Jsp---programEditYoutube=="+data.EditProgram[key].youtube);
 							$('#programEditMoreInfo').val(data.EditProgram[key].moreInfo);
 						}
 				)
@@ -109,7 +97,6 @@ $(document).ready(function() {
 	});
 });
 function programUpdate(){
-	//alert("-------in progrmProgram--Jsp---");
 	var programId = $("#programId").val();
 	var programName = $("#programEditName").val();
 	var duration  = $("#programEditDuration").val();
@@ -137,15 +124,9 @@ function programUpdate(){
 		data : programObject,
 		url : "emp/programService/programUpdate",
 		success : function(data) {
-			/* if (data.Msg = "success") {
-				window.location.href = "programList.jsp";
-			} */
 			if (data.Msg == 'success') {
-				//alert(".....success......");
 				window.location.href = "programList.jsp";
-				//alert("a4...........");
 			}else{
-				//alert(".....error......");
 				$("#programEditFailMsg").text("Program Edit Failed");
 			} 
 		}
@@ -185,7 +166,7 @@ function programUpdate(){
 						<label for="program_name">Program Name *</label> <span class="errMsg" id="errEditProgramName"></span>
 						<input
 							type="text" class="form-control" id="programEditName"
-							name="programEditName" maxlength="30" onkeyup="validateTitle(id,'Program Name','errEditProgramName',5,30);"> <input type="hidden"
+							name="programEditName" maxlength="30" onkeyup="validateTitle(id,'Program Name','errEditProgramName',3,30);"> <input type="hidden"
 							class="form-control" id="programId" name="programId">
 					</div>
 				</div>

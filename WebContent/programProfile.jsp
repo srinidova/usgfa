@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <script type="text/javascript" src="js/program.js"></script>
@@ -29,7 +37,6 @@
 $(document)
 .ready(
 		function() {
-			//alert("-------in Program Profile--Jsp---");
 			var html = '';
 			$
 					.ajax({
@@ -39,7 +46,6 @@ $(document)
 									.each(
 											data.ProgramProfile,
 											function(key, val) {
-												//alert("getProgramProfile---*****123*****-------programId=="+data.ProgramProfile[key].programId);
 												 $('#programProfName')
 														.text(
 																data.ProgramProfile[key].programName);
@@ -70,11 +76,9 @@ $(document)
 														.val(
 																data.ProgramProfile[key].programId); 
 											})
-											//alert("-------1-------");
 											$.each(
 													data.PROGRAMFILES,
 													function(key, val) {
-														//alert("PROGRAMFILES---*****99999999999*****-------filePath=="+data.PROGRAMFILES[key].filePath);
 														html = html
 														/*  +'<li class="col-md-12">'
 														+'<div class="fff">'
@@ -107,9 +111,7 @@ $(document)
 					});
 		});
 function editProfProgram() {
-	////alert("editProfProgram---**********-------programProfNewsId=="+ $("#programProfNewsId").val());
 	var programId = $("#programProfProgramId").val();
-	//alert("editProfProgram---**********-------programId=="+programId);
 	var progarmObject = new Object();
 	programObject.programId = programId;
 	$.ajax({
@@ -381,6 +383,7 @@ function editProfProgram() {
 						</div>
 					</div>
 				</div>
+				<%if(bAdmin){ %>
 				<div class="panel-footer">
 					<span> <a href="programEdit.jsp"
 						onclick="editProfProgram()" data-original-title="Edit this user"
@@ -388,6 +391,14 @@ function editProfProgram() {
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>
+				<%} else{%>
+				<div class="panel-footer">
+					<span> <a  data-original-title="Edit this user"
+						data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i
+							class="glyphicon glyphicon-edit"></i></a>
+					</span>
+				</div>
+				<%}%>
 			</div>
 		</div>
 	</div>

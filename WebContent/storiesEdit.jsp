@@ -26,9 +26,6 @@
 
 <script type="text/javascript">
 	function storiesEditFarmValidation() {
-		//alert("==Entered==");
-		//$("#storiesMessage").text("");
-		//alert("==1==");
 		var name = document.getElementById("storiesEditName");
 		var profession = document.getElementById("storiesEditProfession");
 		var farmName = document.getElementById("storiesEditFarmName");
@@ -38,9 +35,7 @@
 		var district = document.getElementById("storiesEditDistrict");
 		var farmPinCode = document.getElementById("storiesEditFarmPinCode");
 		var aboutFarm = document.getElementById("storiesEditAboutFarm");
-		//alert("==2==");
 		if (name.value.length == 0) {
-		//alert("----name zero-------");
 		msg = "errEditStoName";
 		title = "Name ";
 		$("storiesEditFailMsg").text();
@@ -49,17 +44,7 @@
 		$("#" + msg).show();
 		name.focus();
 		return false;
-	} /* else if (profession.value.length == 0) {
-		//alert("----profession zero-------");
-		msg = "errEditStoProfession";
-		title = "Profession";
-
-		$("#" + msg).text(title + " should not be empty");
-		$("#" + msg).show();
-		profession.focus();
-		return false;
-	} */else if (farmName.value.length == 0) {
-		//alert("----farmName zero-------");
+	} else if (farmName.value.length == 0) {
 		msg = "errEditStoFarmName";
 		title = "Farm Name";
 
@@ -68,7 +53,6 @@
 		farmName.focus();
 		return false;
 	} else if (farmAddress.value.length == 0) {
-		//alert("----farmAddress zero-------");
 		msg = "errEditStoFarmAddress";
 		title = "Farm Address";
 
@@ -77,7 +61,6 @@
 		farmAddress.focus();
 		return false;
 	} else if (place.value.length == 0) {
-		//alert("----farmAddress zero-------");
 		msg = "errEditFarmPlace";
 		title = "Farm Address";
 
@@ -86,7 +69,6 @@
 		place.focus();
 		return false;
 	} else if (mandal.value.length == 0) {
-		//alert("----farmAddress zero-------");
 		msg = "errEditStomandal";
 		title = "Farm Address";
 
@@ -95,7 +77,6 @@
 		mandal.focus();
 		return false;
 	} else if (district.value.length == 0) {
-		//alert("----farmAddress zero-------");
 		msg = "errEditStoDistrict";
 		title = "Farm Address";
 
@@ -104,7 +85,6 @@
 		district.focus();
 		return false;
 	} else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
-		//alert("----farmAddress zero-------");
 		msg = "errStoriesEditFarmPinCode";
 		title = "Farm Pin Code";
 
@@ -113,7 +93,6 @@
 		farmPinCode.focus();
 		return false;
 	}else if (aboutFarm.value.length == 0) {
-		//alert("----aboutFarm zero-------");
 	msg = "errEditStoAboutFarm";
 	title = "About You/Farm";
 
@@ -136,12 +115,10 @@
 	}
 	$(document).ready(
 			function() {
-				//alert("-------in editStories--Jsp---");
 				$.ajax({
 					url : "emp/storiesService/editStories",
 					success : function(data) {
 						$.each(data.EditStories, function(key, val) {
-							//alert("-------in editStories--Jsp---storiesTitle=="+data.EditStories[key].storiesId);
 							$('#storiesId')
 									.val(data.EditStories[key].storiesId);
 							$('#storiesEditTitle').val(
@@ -171,7 +148,6 @@
 				});
 			});
 	function storiesUpdate() {
-		//alert("in to update");
 		var storiesId = $("#storiesId").val();
 		var title = $("#storiesEditTitle").val();
 		var name = $("#storiesEditName").val();
@@ -203,10 +179,8 @@
 			url : "emp/storiesService/storiesUpdate",
 			success : function(data) {
 				if (data.Msg == 'success') {
-					//alert(".......success..........");
 					window.location.href = "storiesList.jsp";
 				}else{
-					//alert("......error............");
 					$("#storiesEditFailMsg").text("Stories Edit Failed");
 				}
 			}
@@ -257,7 +231,7 @@
 					<div class="form-group">
 						<label for="first_name">Name *</label> <span class="errMsg" id="errEditStoName"></span>
 						<input type="text"
-							class="form-control" id="storiesEditName" name="storiesEditName" maxlength="30" onkeyup="validateTitle(id,'Name','errEditStoName',5,30);">
+							class="form-control" id="storiesEditName" name="storiesEditName" maxlength="30" onkeyup="validateTitle(id,'Name','errEditStoName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -273,7 +247,7 @@
 						<label for="farm_name">Farm Name *</label> <span class="errMsg" id="errEditStoFarmName"></span>
 						<input type="text"
 							class="form-control" id="storiesEditFarmName"
-							name="storiesEditFarmName" maxlength="30" onkeyup="validateTitle(id,'Farm Name','errEditStoFarmName',5,30);">
+							name="storiesEditFarmName" maxlength="30" onkeyup="validateTitle(id,'Farm Name','errEditStoFarmName',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -289,7 +263,7 @@
 						<label for="farm_place_city">Farm Place/City *</label> <span class="errMsg" id="errEditFarmPlace"></span>
 						<input
 							type="text" class="form-control" id="storiesEditPlace"
-							name="storiesEditPlace" maxlength="30" onkeyup="validateTitle(id,'Farm Place/City','errEditFarmPlace',5,30);">
+							name="storiesEditPlace" maxlength="30" onkeyup="validateTitle(id,'Farm Place/City','errEditFarmPlace',3,30);">
 					</div>
 				</div>
 
@@ -299,7 +273,7 @@
 						<label for="mandal">Mandal *</label> <span class="errMsg" id="errEditStomandal"></span>
 						<input type="text"
 							class="form-control" id="storiesEditMandal"
-							name="storiesEditMandal"  maxlength="30" onkeyup="validateTitle(id,'Mandal','errEditStomandal',5,30);">
+							name="storiesEditMandal"  maxlength="30" onkeyup="validateTitle(id,'Mandal','errEditStomandal',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -307,7 +281,7 @@
 						<label for="district">District *</label> <span class="errMsg" id="errEditStoDistrict"></span>
 						 <input type="text"
 							class="form-control" id="storiesEditDistrict"
-							name="storiesEditDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errEditStoDistrict',5,30);">
+							name="storiesEditDistrict" maxlength="30" onkeyup="validateTitle(id,'District','errEditStoDistrict',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">

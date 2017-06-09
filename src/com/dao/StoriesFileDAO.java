@@ -15,7 +15,6 @@ public class StoriesFileDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			//System.out.println("3. In StoriesFileDAO storiesFile---------- getNewsTitle===" + newsDto.getNewsTitle());
 			session.insert("StoriesFile.storiesFile", storiesFileDto);
 			result = "success";
 		} catch (Exception e) {
@@ -29,7 +28,6 @@ public class StoriesFileDAO {
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			//System.out.println("3. In StoriesDAO getStoriesImage---------- fileId===" + storiesFileDto.getStoriesId());
 			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getStoriesImages", storiesFileDto.getStoriesId());
 			result = "success";
 		} catch (Exception e) {
