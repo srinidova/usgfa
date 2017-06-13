@@ -88,11 +88,95 @@ function storiesFarmValidation() {
 		$("#errStoMandal").text("");
 		$("#errStoDistrict").text("");
 		$("#errStoAboutYou").text("");
-		saveStories();
+		saveStoriesNew();
+		//saveStories();
 	}
 	
 	
 }
+
+function saveStoriesNew(){
+	   var title = $("#title").val();
+	   var name = $("#name").val();
+	   var profession = $("#profession").val();
+	   var farmName = $("#farmName").val();
+	   var farmAddress = $("#farmAddress").val();
+	   var place = $("#place").val();
+	   var mandal = $("#mandal").val();
+	   var district = $("#district").val();
+	   var farmState = $("#farmState").val();
+	   var farmPinCode = $("#farmPinCode").val();
+	   var aboutFarm = $("#aboutFarm").val();
+	   
+		var formData = new FormData();
+		formData.append("title", title);
+		formData.append("name", name);
+		formData.append("profession", profession);
+		formData.append("farmName", farmName);
+		formData.append("farmAddress", farmAddress);
+		formData.append("place", place);
+		formData.append("mandal", mandal);
+		formData.append("district", district);
+		formData.append("farmState", farmState);
+		formData.append("farmPinCode", farmPinCode);
+		formData.append("aboutFarm", aboutFarm);
+		formData.append("file", $("#file")[0].files[0]);
+
+		alert('------saveStoriesNew---------');
+		$.ajax({
+			type: 'POST',
+			url : "emp/storiesService/addStoriesNew",
+        	data: formData,
+        	cache: false,
+        	contentType: false,
+        	processData: false,
+			success : function(data) {
+				if (data.Msg == 'success') {
+					window.location.href = "storiesList.jsp";
+				}else{
+					$("#storiesRegFailMsg").text("Stories Registration Failed");
+				}  
+			}
+		});
+	  
+/* 	   var storiesObject = new Object();
+	   
+	   
+	   storiesObject.title = title;
+	   storiesObject.name = name;
+	   storiesObject.profession = profession;
+	   storiesObject.farmName = farmName;
+	   storiesObject.farmAddress = farmAddress;
+	   storiesObject.place = place;
+	   storiesObject.mandal = mandal;
+	   storiesObject.district = district;
+	   storiesObject.farmState = farmState;
+	   storiesObject.farmPinCode = farmPinCode;
+	   storiesObject.aboutFarm = aboutFarm;
+	   
+	   $
+		.ajax({
+			data : storiesObject,
+			url : "emp/storiesService/addStories",
+			success : function(data) {
+				if (data.Msg == 'success') {
+					window.location.href = "storiesList.jsp";
+				}else{
+					$("#storiesRegFailMsg").text("Stories Registration Failed");
+				} 
+
+			}
+		});
+	   $
+		.ajax({
+			data : uploadFile,
+			url : "emp/storiesService/getStoriesImages",
+			success : function(data) {
+				if (data.Msg = "success") {
+					window.location.href = "newsList.jsp";
+				}			}
+		}); */
+} 
      
    function saveStories(){
 	   var title = $("#title").val();

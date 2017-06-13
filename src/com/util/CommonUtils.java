@@ -154,12 +154,11 @@ public class CommonUtils {
 			try {
 
 				String imageId = UUID.randomUUID().toString();
-				uploadedFileLocation = destination + imageId + "."
-						+ FilenameUtils.getExtension(fileDetail.getFileName());
+				uploadedFileLocation = destination + imageId + "."+ FilenameUtils.getExtension(fileDetail.getFileName());
+				String sDbFilePath = "images/uploads/" + imageId + "." + FilenameUtils.getExtension(fileDetail.getFileName());
 				saveToFile(uploadedInputStream, uploadedFileLocation);
 				if (StringUtils.isNotEmpty(uploadedFileLocation)) {
-					hm.put(imageId, uploadedFileLocation.substring(35));
-
+					hm.put(imageId, sDbFilePath);
 				}
 			} catch (IOException e) {
 				// return Response.status(500).entity("Can not save
@@ -200,8 +199,9 @@ public class CommonUtils {
 				}
 
 				String sOutFile = destination + sImageId + "." + sFileExtn;
+				String sDbFilePath = "images/uploads/" + sImageId + "." + sFileExtn;
 				if (StringUtils.isNotEmpty(sOutFile)) {
-					hm.put(sImageId, sOutFile.substring(35));
+					hm.put(sImageId, sDbFilePath);
 				}
 
 				fileoutputstream = new FileOutputStream(new File(sOutFile));
@@ -406,6 +406,27 @@ public static SmsDTO getSmsProperties(ServletContext objContext) throws IOExcept
 
 		}
 		return sPropertyContent;
+	}
+	
+	public  void uploadFileToLocation(FormDataContentDisposition fileDetail, InputStream uploadedInputStream,HttpServletRequest request, String path) throws IOException{
+		String sFileExtn = null;
+		//String destination = "D:/currentworking/usgfa/WebContent/images/uploads/";
+		String destination = path;
+		HashMap<String, String> hm = null;
+		HttpSession session = request.getSession();
+		
+		if (uploadedInputStream != null && fileDetail != null) {
+			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
+
+			if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
+				hm = unZipIt(uploadedInputStream, destination);
+			} else {
+				hm = fileSave(request, uploadedInputStream, fileDetail, destination);
+			}
+		}
+		if (hm != null && hm.size() > 0) {
+			session.setAttribute("UPLOADED_FILELIST", hm);
+		}
 	}
 	
 }

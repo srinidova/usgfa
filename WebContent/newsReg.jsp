@@ -54,7 +54,8 @@
 			$("#errDate").text("");
 			$("#errPaper").text("");
 			$("#errMoreInfo").text("");
-			newsSave();
+			//newsSave();
+			newsSave1();
 		}
 
 	}
@@ -86,6 +87,39 @@
 			}
 		});
 
+	}
+	
+	function newsSave1() {
+		var newsTitle = $("#newsTitle").val();
+		var date = $("#date").val();
+		var paper = $("#paper").val();
+		var link = $("#link").val();
+		var moreInfo = $("#moreInfo").val();
+		var file = $("#file")[0].files[0];
+
+		var formData = new FormData();
+		formData.append("newsTitle", newsTitle);
+		formData.append("paper", paper);
+		formData.append("date", date);
+		formData.append("link", link);
+		formData.append("moreInfo", moreInfo);
+		formData.append("file", $("#file")[0].files[0]);
+
+		$.ajax({
+			type: 'POST',
+			url : "emp/newsService/addNewsNew",
+        	data: formData,
+        	cache: false,
+        	contentType: false,
+        	processData: false,
+			success : function(data) {
+				if (data.Msg == 'success') {
+					window.location.href = "newsList.jsp";
+				}else{
+					$("#newsRegFailMsg").text("News Registration Failed");
+				}  
+			}
+		});
 	}
 </script>
 </head>
@@ -211,8 +245,7 @@ function test2 (){alert ("**************");
 								<div class="form-group col-md-6">
 									<label for="Upload Photo">Select Photo(s)</label> <input
 										id="file" name="file" class="file form-control" type="file">
-									<a href="#"><button
-											class="btn btn-success btn-sm text-right">Upload</button></a>
+									<!-- <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a> -->
 								</div>
 							</form>
 						</div>

@@ -1,12 +1,15 @@
 package com.controller;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -21,6 +24,8 @@ import com.bo.UploadFileBO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.UploadFileDTO;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
 import net.sf.json.JSONObject;
@@ -198,7 +203,7 @@ public class NewsService {
 		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
 		String resultFileEdit = "fail";
 		String resultNewsFileEdit = "fail";
-
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		try {
 			if (StringUtils.isNotEmpty(newsId)) {
 
@@ -208,6 +213,16 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				newsList = bo.getNewsProfile(dto);
 
+				// get news Images
+
+				NewsFileDTO newsFileDto = new NewsFileDTO();
+				newsFileDto.setNewsId(newsId);
+				NewsFileBO newsFileBo = new NewsFileBO();
+				lstUploadFileDTO = newsFileBo.getNewsImages(newsFileDto);
+				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
+					jobj.put("NEWSFILES", lstUploadFileDTO);
+				}
+				
 
 				if (!(newsList.size() < 0)) {
 					jobj.put("EditNews", newsList);
@@ -271,5 +286,134 @@ public class NewsService {
 		return jObj;
 	}
 	
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addNewsNew")
+	public JSONObject addNewsNew(@Context HttpServletRequest request, @FormDataParam("newsId") String newsId,
+			@FormDataParam("newsTitle") String newsTitle, @FormDataParam("date") String date,
+			@FormDataParam("paper") String paper, @FormDataParam("link") String link,
+			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
+		
+		
+		//@FormParam("accept")
+		JSONObject jObj = new JSONObject();
+		String result = "fail";
+		String resultFile = "fail";
+		String resultNewsFile = "fail";
+		String sId = null;
+		String sUpdtedOn = null;
+		String sLoginId = "";
+		//System.out.println("newsTitle--------------"+newsTitle);
+		try {
+			//System.out.println("newsTitle=="+newsTitle+"-----------date=="+date+"-----------paper=="+paper+"-----------link=="+link);
+			//System.out.println("in=="+in+"-----------info=="+info);
+			if (StringUtils.isNotEmpty(newsTitle)) {
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+				
+				NewsDTO newsDto = new NewsDTO();
+				sId = CommonUtils.getAutoGenId();
+				sUpdtedOn = CommonUtils.getDate();
+
+
+				newsDto.setNewsId(sId);
+				newsDto.setNewsTitle(newsTitle);
+				newsDto.setDate(date);
+				newsDto.setPaper(paper);
+				newsDto.setLink(link);
+				newsDto.setMoreInfo(moreInfo);
+				newsDto.setUpdatedOn(sUpdtedOn);
+				newsDto.setUpdatedBy(sLoginId);
+
+				NewsBO bo = new NewsBO();
+				result = bo.addNewsDetails(newsDto);
+			}
+			if (!"fail".equals(result)) {
+				CommonUtils.saveFileData(request, sId, "NEWS");
+				jObj.put("Msg", result);
+			} else {
+				jObj.put("Msg", result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jObj;
+	}
 	
+	
+/*	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/newsUpdateNew")
+	public JSONObject newsUpdateNew(@Context HttpServletRequest request, @QueryParam("newsId") String newsId,
+			@QueryParam("newsTitle") String newsTitle, @QueryParam("date") String date,
+			@QueryParam("paper") String paper, @QueryParam("link") String link,
+			@QueryParam("moreInfo") String moreInfo) {*/
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/newsUpdateNew")
+	public JSONObject newsUpdateNew(@Context HttpServletRequest request, @FormDataParam("newsId") String newsId,
+			@FormDataParam("newsTitle") String newsTitle, @FormDataParam("date") String date,
+			@FormDataParam("paper") String paper, @FormDataParam("link") String link,
+			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
+		JSONObject jObj = new JSONObject();
+		String result = "fail";
+		String sLoginId = "";
+
+
+		try {
+			if (StringUtils.isNotEmpty(newsTitle)) {
+				
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+
+				NewsDTO newsDto = new NewsDTO();
+				String sUpdtedOn = CommonUtils.getDate();
+
+
+				newsDto.setNewsId(newsId);
+				newsDto.setNewsTitle(newsTitle);
+				newsDto.setDate(date);
+				newsDto.setPaper(paper);
+				newsDto.setLink(link);
+				newsDto.setMoreInfo(moreInfo);
+				newsDto.setUpdatedOn(sUpdtedOn);
+				newsDto.setUpdatedBy(sLoginId);
+
+				NewsBO bo = new NewsBO();
+				result = bo.newsUpdate(newsDto);
+
+				
+			}
+			if (!"fail".equals(result)) {
+				CommonUtils.saveFileData(request, newsId, "NEWS");
+				jObj.put("Msg", result);
+			} else {
+				jObj.put("Msg", result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jObj;
+	}
 }
+
+
+	

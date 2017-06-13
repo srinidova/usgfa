@@ -10,4 +10,8 @@
 	<delete id="deleteNewsFile" parameterClass="com.dto.NewsFileDTO">
 		delete from newsfile  where newsId = #newsId# and  fileId = #fileId#
 	</delete>
+	<select id="getNewsFileByFileId" resultClass="com.dto.NewsFileDTO" parameterClass="java.lang.String">
+		select newsId, fileId from newsfile where fileId = #value#
+	</select>
+	
 </sqlMap>

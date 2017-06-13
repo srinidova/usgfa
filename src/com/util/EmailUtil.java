@@ -27,7 +27,6 @@ import com.dto.EmailDTO;
 public class EmailUtil {
 
 	public static void send(EmailDTO emailDTO) throws AddressException, MessagingException {
-		System.out.println("******************send*****************");
 		String host = null;
 		String port = null;
 		String toAddress = null;
@@ -48,15 +47,6 @@ public class EmailUtil {
 			subject = emailDTO.getSubject();
 			htmlBody = emailDTO.getHtmlBody();
 			
-			System.out.println("a. userName===" + userName);
-			System.out.println("b. password===" + password);
-			System.out.println("c. host===" + host);
-			System.out.println("d. port===" + port);
-			System.out.println("e. toAddress===" + toAddress);
-			System.out.println("f. ccAddress===" + ccAddress);
-			System.out.println("g. bccAddress===" + bccAddress);
-			System.out.println("h. subject===" + subject);
-			System.out.println("i. htmlBody===" + htmlBody);
 
 			Properties properties = new Properties();
 			properties.put("mail.smtp.host", host);

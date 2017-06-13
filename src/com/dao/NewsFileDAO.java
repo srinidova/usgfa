@@ -62,4 +62,33 @@ public class NewsFileDAO {
 		}
 		return result;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<UploadFileDTO> getNewsFilesByFileId(NewsFileDTO newsFileDTO) {
+		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+			System.out.println("newsFileDTO.getFileId =="+newsFileDTO.getFileId());
+			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getNewsFilesByFileId", newsFileDTO.getFileId());
+			System.out.println("uploadFiledto.size =="+uploadFiledto.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return uploadFiledto;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<NewsFileDTO> getNewsFileByFileId(NewsFileDTO newsFileDTO) {
+		ArrayList<NewsFileDTO> newsFileDto = new ArrayList<NewsFileDTO>();
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+			System.out.println("newsFileDTO.getFileId =="+newsFileDTO.getFileId());
+			newsFileDto = (ArrayList<NewsFileDTO>) session.queryForList("NewsFile.getNewsFileByFileId", newsFileDTO.getFileId());
+			System.out.println("newsFileDto.size =="+newsFileDto.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return newsFileDto;
+	}
 }

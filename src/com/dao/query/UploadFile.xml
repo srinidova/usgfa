@@ -45,4 +45,9 @@
 		update uploadfile set showPublic = #showPublic#  where fileId = #fileId#
 	</update>
 	
+	<select id="getNewsFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from newsfile where newsId in (select newsId from newsfile where fileId = #value#))
+	</select>
+	
 </sqlMap>

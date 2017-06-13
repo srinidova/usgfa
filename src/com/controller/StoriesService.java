@@ -1,12 +1,15 @@
 package com.controller;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -28,6 +31,8 @@ import com.dto.ProgramFileDTO;
 import com.dto.StoriesDTO;
 import com.dto.StoriesFileDTO;
 import com.dto.UploadFileDTO;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
 import net.sf.json.JSONObject;
@@ -281,5 +286,82 @@ public class StoriesService {
 		}
 		return jobj1;
 
+	}
+	
+/*	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addStories")
+	public JSONObject addStories(@Context HttpServletRequest request, @QueryParam("storiesId") String storiesId,
+			@QueryParam("title") String title, @QueryParam("name") String name,
+			@QueryParam("profession") String profession, @QueryParam("farmName") String farmName,
+			@QueryParam("farmAddress") String farmAddress, @QueryParam("place") String place,
+			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
+			@QueryParam("farmState") String farmState, @QueryParam("farmPinCode") String farmPinCode,
+			@QueryParam("aboutFarm") String aboutFarm) {*/
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addStoriesNew")
+	public JSONObject addStoriesNew(@Context HttpServletRequest request, @FormDataParam("storiesId") String storiesId,
+			@FormDataParam("title") String title, @FormDataParam("name") String name,
+			@FormDataParam("profession") String profession, @FormDataParam("farmName") String farmName,
+			@FormDataParam("farmAddress") String farmAddress, @FormDataParam("place") String place,
+			@FormDataParam("mandal") String mandal, @FormDataParam("district") String district,
+			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
+			@FormDataParam("aboutFarm") String aboutFarm,
+			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {	
+		JSONObject jObj = new JSONObject();
+		String result = "fail";
+		String resultFile = "fail";
+		String sId = null;
+		String sLoginId = "";
+		String path = "";
+		try {
+			if (StringUtils.isNotEmpty(title)) {
+				
+				if(request.getSession().getAttribute("LOGINID") != null){
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
+				
+				StoriesDTO storiesDto = new StoriesDTO();
+				sId = CommonUtils.getAutoGenId();
+				String sUpdatedOn = CommonUtils.getDate();
+
+				storiesDto.setStoriesId(sId);
+				storiesDto.setTitle(title);
+				storiesDto.setName(name);
+				storiesDto.setProfession(profession);
+				storiesDto.setFarmName(farmName);
+				storiesDto.setFarmAddress(farmAddress);
+				storiesDto.setPlace(place);
+				storiesDto.setMandal(mandal);
+				storiesDto.setDistrict(district);
+				storiesDto.setFarmState(farmState);
+				storiesDto.setFarmPinCode(farmPinCode);
+				storiesDto.setAboutFarm(aboutFarm);
+				storiesDto.setUpdatedOn(sUpdatedOn);
+				storiesDto.setUpdatedBy(sLoginId);
+
+
+				StoriesBO bo = new StoriesBO();
+				result = bo.addStories(storiesDto);
+
+				
+			}
+			if (!"fail".equals(result)) {
+				CommonUtils utils = new CommonUtils();
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
+				
+				CommonUtils.saveFileData(request, sId, "STORIES");
+				jObj.put("Msg", result);
+			} else {
+				jObj.put("Msg", result);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jObj;
 	}
 }

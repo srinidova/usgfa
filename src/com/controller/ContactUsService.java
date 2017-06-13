@@ -32,10 +32,7 @@ public class ContactUsService {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 
-		System.out.println("1.a In addContact---------- name===" + name);
-		System.out.println("1.b In addContact---------- email===" + email);
-		//System.out.println("1.d In addNews---------- date===" + date);
-		
+		System.out.println("in to contact us page");
 
 
 		try {
@@ -54,31 +51,24 @@ public class ContactUsService {
 				ContactUsBO contactUsBo = new ContactUsBO();
 				
 				result = contactUsBo.addContact(contactUsDto);
-				
+				System.out.println("in to contact us page"+result);
+
 				ServletContext objContext = request.getServletContext();
 				MailDTO mailDto = new MailDTO();
-				//mailDto.setEmail(email);
 				mailDto.setEmail("medasanipurushotham@gmail.com");
 				
 				EmailUtil emailUtils = new EmailUtil();
-				 System.out.println("1.a in contactUs  emailUtils Page");
 				 
 				 EmailDTO emailDTO = CommonUtils.getMailProperties(objContext);
 				 emailDTO.setToAddress(email);
 				 emailDTO.setSubject(subject);
 				 emailDTO.setHtmlBody(message);
-				 //emailDTO.setBccAddress(email);
-				// emailDTO.setCcAddress(email);
 				 
 				 
 				 emailUtils.send(emailDTO);
 
-				 //emailUtils.send("mail.dovasofttech.com", "587", "srinivas.dova@dovasofttech.com", "P@ssw0rd123", "cnudova@gmail.com", "srinidova@gmail.com", "cnudova@gmail.com", "TestMail", "TestMail.............", null);
-				//emailUtils.sendEmail(emailDTO);
-				 System.out.println("1.b in to emailUtils Page");
 					}
 				
-			System.out.println("result........." + result);
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
@@ -86,8 +76,8 @@ public class ContactUsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error in contactUs page");
 		}
-		//System.out.println("jobj-->" + jObj);
 		return jObj;
 	}
 

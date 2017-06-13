@@ -148,7 +148,6 @@ function deleteEvent(eventId){
 	
 }
 function searchEvent(){
-	alert("== searchEvent ==");
 	var eventName =$("#searchEventName").val();
 	var days = $("#searchEventDays").val();
 	var eventObject = new Object();

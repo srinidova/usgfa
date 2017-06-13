@@ -85,7 +85,7 @@
 				<div class="team-1">
 					<div class="col-md-2">
 						<div class="aboutus_img">
-							<img src="images/uploads/da652f37-5a69-45a6-8d22-ffa83fd4795b.jpg" class="img-responsive ">
+							<img src="images/uploads/f3206d12-a3da-4b81-b1bf-13206105b9de.png" class="img-responsive ">
 						</div>
 					</div>
 					<div class="col-md-10">

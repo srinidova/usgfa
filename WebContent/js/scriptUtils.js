@@ -74,6 +74,9 @@ function validateTitle(fName, title, msg, mi, mx) {
 		$("#memberFarmEditFarmMandal").text("");
 		$("#memberFarmEditFarmDistrict").text("");
 		$("#errMemberFarmEditFarmPincode").text("");
+		$("#errNameContact").text("");
+		$("#errSubjectContact").text("");
+		$("#errMessageContact").text("");
 		$("#errDuration").text("");
 		return true;
 	}

@@ -33,7 +33,6 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 
 <script type="text/javascript">
-var dispImages = '';
 	$(document)
 			.ready(
 					function() {
@@ -65,47 +64,7 @@ var dispImages = '';
 																	.val(
 																			data.NewsProfile[key].newsId);
 														})
-														
-														$.each(
-																data.NEWSFILES,
-																function(key, val) {
-																	dispImages = dispImages
-																	+'<div class="item next left">'
-																	+'<div class="row">'
-																		+'<div class="col-md-12">'
-																			+'<div class="col-item">'
-																				+'<div class="photo">'
-																					+'<a class="g-image" href="#" data-image-id="2" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
-																						+'<img class="img-responsive" src="'+data.NEWSFILES[key].filePath+'" alt="Short alt text">'
-																					+'</a>'
-																				+'</div>'
-																				+'<div class="img_tiltle" style="margin-top: 7px;">'
-																					+'<h2>Image 222</h2>'
-																				+'</div>'
-																				+'<div class="caption" style="margin-top: 0px;">'
-																					+'<div class="checkbox">'
-																						+'<label>'
-																							+'<a href="#" onclick="updateShowAsPublic();">'
-																								+'<input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public'
-																							+'</a>'
-																						+'</label>'
-																						+'<div class="suceee_msg">'
-																							+'<!-- <h4>Updated successfully</h4> -->'
-																						+'</div>'
-																					+'</div>'
-																					+'<div class="delete_box">'
-																						+'<a href="#" onclick="deleteFile();"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																						+'<div class="suceee_msg">'
-																							+'<!-- <h4>Delete Message</h4> -->'
-																						+'</div>'
-																					+'</div>'
-																				+'</div>'
-																			+'</div>'
-																		+'</div>'
-																	+'</div>'
-																+'</div>'
-																})
-																document.getElementById("newsImages").innerHTML = dispImages;
+														showNewsImages(data);
 									}
 								});
 						
@@ -125,31 +84,93 @@ var dispImages = '';
 		});
 
 	}
-	function updateShowAsPublic(fileId){
+	
+	function updateShowAsPublicNews(fileId){
+		var setVal = '';
+		if(document.getElementById(fileId).checked){
+			setVal = '1';
+		}else{
+			setVal = '0';
+		}
 		var uploadFileObject = new Object();
-		uploadFileObject.fileId = "7ec737d4-d179-4620-9c8e-3450ccd7ffdf"; 
-		uploadFileObject.showAsPublic = "0";
-		$.ajax({
+		uploadFileObject.fileId = fileId; 
+		uploadFileObject.showAsPublic = setVal;
+		uploadFileObject.type = "NEWS";
+  		$.ajax({
 			data : uploadFileObject,
 			url : "emp/uploadService/updateShowAsPublic",
 			success : function(data) {
 				if (data.Msg = "success") {
+					showNewsImages(data);
 				}
 			}
-		});
+		}); 
 	}
-	function deleteFile(fileId){
+	
+	function deleteFileNews(fileId){
+		alert("fileId--------"+fileId);
 		var newsObject = new Object();
-		newsObject.newsId = "677b75af6f6143f38ad7b3045d15821a"; 
+		newsObject.fileId = fileId; 
+		newsObject.type = "NEWS";
 		$.ajax({
 			data : newsObject,
 			url : "emp/uploadService/deleteImage",
 			success : function(data) {
 				if (data.Msg = "success") {
+					showNewsImages(data);
 				}
 			}
 		});
 	}
+
+	
+	function showNewsImages(data){
+	var dispImages = '';
+	var dispClas = '';
+	var dispChkd = '';
+	$.each(
+			data.NEWSFILES,
+			function(key, val) {
+				//alert(data.NEWSFILES[key].showPublic);
+				if(data.NEWSFILES[key].showPublic == 1){
+					dispChkd = 'checked';
+				}else{
+					dispChkd = '';
+				}
+				if(key == 0){
+					dispClas = "item active";
+				}else{
+					dispClas = "item";
+				}
+				dispImages = dispImages
+				+'<div class="'+ dispClas +'">'
+				+'<ul class="thumbnails">'
+					+'<li class="col-md-12">'
+						+'<div class="fff">'
+							+'<div class="thumbnail">'
+								+'<a href="#">'
+								     +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'</a>'
+							+'</div>'
+/* 							+'<div class="caption">'
+								+'<div class="checkbox">'
+									+'<label>'
+									    +'<input id="'+data.NEWSFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.NEWSFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+									+'</label>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+								+'<div class="delete_box">'
+									+'<a href="#" name="'+data.NEWSFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+							+'</div>' */
+						+'</div>'
+					+'</li>'
+				+'</ul>'
+			+'</div>'
+			})
+			document.getElementById("newsImages").innerHTML = dispImages;
+}
 	
 </script>
 </head>
@@ -243,7 +264,7 @@ var dispImages = '';
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6" style="margin-left: 250px;">
 						<div class="row">
 
 							<div class="col-md-12" style="margin-bottom: 10px;">
@@ -267,11 +288,11 @@ var dispImages = '';
 					<!----------------------photo_gallery end------------------------------>
 
                     <!----------------------video_gallery------------------------------>
-					<div class="col-md-6">
+<!-- 					<div class="col-md-6">
 						<div class="row">
 
 							<div class="col-md-12 " style="margin-bottom: 10px;">
-								<!-- Controls -->
+								Controls
 								<div class="controls pull-right">
 									<a class="left fa fa-angle-left btn btn-default button-arrow"
 										href="#carousel-example1" data-slide="prev"></a> <a
@@ -282,89 +303,11 @@ var dispImages = '';
 						</div>
 						<div id="carousel-example1" class="carousel slide "
 							data-ride="carousel">
-							<!-- Wrapper for slides -->
-							<div class="carousel-inner">
-								<div class="item">
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-item">
-												<div class="photo">
-													<iframe src="https://player.vimeo.com/video/73051736"
-														width="100%" height="347" frameborder="0"
-														webkitallowfullscreen="" mozallowfullscreen=""
-														allowfullscreen=""></iframe>
-												</div>
-
-												<div class="img_tiltle" style="margin-top: 7px;">
-													<h2>Video 1</h2>
-												</div>
-
-												<div class="caption" style="margin-top: 0px;">
-													<div class="checkbox">
-														<label> <input id="login-remember" type="checkbox"
-															name="remember" value="1"> Show as Public
-														</label>
-														<div class="suceee_msg">
-															<!-- <h4>Updated successfully</h4> -->
-														</div>
-													</div>
-													<div class="delete_box">
-														<a href="#"><i class="fa fa-trash-o"
-															aria-hidden="true"></i> Delete</a>
-														<div class="suceee_msg">
-															<!-- <h4>Delete Message</h4> -->
-														</div>
-													</div>
-												</div>
-
-
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="item active">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-item">
-												<div class="photo">
-													<iframe src="https://player.vimeo.com/video/73051736"
-														width="100%" height="347" frameborder="0"
-														webkitallowfullscreen="" mozallowfullscreen=""
-														allowfullscreen=""></iframe>
-												</div>
-											</div>
-
-											<div class="img_tiltle" style="margin-top: 7px;">
-												<h2>Video 1</h2>
-											</div>
-
-											<div class="caption" style="margin-top: 0px;">
-												<div class="checkbox">
-													<label> <input id="login-remember" type="checkbox"
-														name="remember" value="1"> Show as Public
-													</label>
-													<div class="suceee_msg">
-														<!-- <h4>Updated successfully</h4> -->
-													</div>
-												</div>
-												<div class="delete_box">
-													<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-														Delete</a>
-													<div class="suceee_msg">
-														<!-- <h4>Delete Message</h4> -->
-													</div>
-												</div>
-											</div>
-
-
-
-
-										</div>
-									</div>
-								</div>
+							Wrapper for slides
+							<div class="carousel-inner" id="newsImages">
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!----------------------video_gallery end------------------------------>
 
 				</div>

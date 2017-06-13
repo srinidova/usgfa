@@ -32,4 +32,14 @@ public class NewsFileBO {
 		NewsFileDAO dao = new NewsFileDAO();
 		return dao.deleteNewsFile(newsFileDto);
 	}
+	
+	public ArrayList<UploadFileDTO> getNewsFilesByFileId(NewsFileDTO newsFileDto) {
+		NewsFileDAO newsFileDao = new NewsFileDAO();
+		return newsFileDao.getNewsFilesByFileId(newsFileDto);
+	}
+	
+	public ArrayList<NewsFileDTO> getNewsFileByFileId(NewsFileDTO newsFileDto) {
+		NewsFileDAO newsFileDao = new NewsFileDAO();
+		return newsFileDao.getNewsFileByFileId(newsFileDto);
+	}
 }
