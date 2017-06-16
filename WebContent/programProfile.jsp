@@ -42,8 +42,7 @@ $(document)
 					.ajax({
 						url : "emp/programService/getProgramProfile",
 						success : function(data) {
-							$
-									.each(
+							$.each(
 											data.ProgramProfile,
 											function(key, val) {
 												 $('#programProfName')
@@ -76,6 +75,7 @@ $(document)
 														.val(
 																data.ProgramProfile[key].programId); 
 											})
+											showProgramProfImages(data);
 											$.each(
 													data.PROGRAMFILES,
 													function(key, val) {
@@ -123,6 +123,53 @@ function editProfProgram() {
 		}
 	});
 
+}
+function showProgramProfImages(data){
+	var dispImages = '';
+	var dispClas = '';
+	var dispChkd = '';
+	$.each(
+			data.PROGRAMFILES,
+			function(key, val) {
+				alert(data.PROGRAMFILES[key].showPublic);
+				if(data.PROGRAMFILES[key].showPublic == 1){
+					dispChkd = 'checked';
+				}else{
+					dispChkd = '';
+				}
+				if(key == 0){
+					dispClas = "item active";
+				}else{
+					dispClas = "item";
+				}
+				dispImages = dispImages
+				+'<div class="'+ dispClas +'">'
+				+'<ul class="thumbnails">'
+					+'<li class="col-md-12">'
+						+'<div class="fff">'
+							+'<div class="thumbnail">'
+								+'<a href="#">'
+								     +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'</a>'
+							+'</div>'
+							+'<div class="caption">'
+								+'<div class="checkbox">'
+									+'<label>'
+									    +'<input id="'+data.PROGRAMFILES[key].fileId+'" onclick="updateShowAsPublicProgram(this.id);" type="checkbox" value="'+data.PROGRAMFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+									+'</label>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+								+'<div class="delete_box">'
+									+'<a href="#" name="'+data.PROGRAMFILES[key].fileId+'" onclick="deleteFileProgram(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+							+'</div>'
+						+'</div>'
+					+'</li>'
+				+'</ul>'
+			+'</div>'
+			})
+			document.getElementById("programProfImages").innerHTML = dispImages;
 }
 </script>
 </head>
@@ -197,7 +244,7 @@ function editProfProgram() {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-6" style="margin-left: 250px;">
 							<nav>
 								<ul class="control-box pager text-left">
 									<li><a data-slide="prev" href="#myCarousel" class=""><i
@@ -208,158 +255,14 @@ function editProfProgram() {
 								</ul>
 							</nav>
 							<div class="carousel slide" id="myCarousel">
-								<div class="carousel-inner">
-									<div class="item active">
-										<ul class="thumbnails">
-											<div id="programImages"></div>
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<a href="#"> <img
-															src="images/5326574-a-sheep-wallpapers.jpg"
-															class="img-responsive" alt="">
-														</a>
-													</div>
-													<div class="img_tiltle">
-														<h2>Image 1</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg"></div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<div class="item ">
-										<ul class="thumbnails">
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<a href="#"><img
-															src="images/5326574-a-sheep-wallpapers.jpg" alt=""></a>
-													</div>
-													<div class="img_tiltle">
-														<h2>Image 2</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg"></div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg"></div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 col-lg-6 ">
-							<nav>
-								<ul class="control-box pager" style="width: 98%;">
-									<li><a data-slide="prev" href="#myCarousel1" class=""><i
-											class="glyphicon glyphicon-chevron-left"></i></a></li>
-									<li><a data-slide="next" href="#myCarousel1" class="">
-											<i class="glyphicon glyphicon-chevron-right"></i>
-									</a></li>
-								</ul>
-							</nav>
-							<div class="carousel slide" id="myCarousel1">
-								<div class="carousel-inner">
-									<div class="item active">
-										<ul class="thumbnails">
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="258" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 1</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg"></div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!--  <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-
-									<div class="item ">
-										<ul class="thumbnails">
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="258" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 2</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg"></div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg"></div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-
+								<div class="carousel-inner" id="programProfImages">
 								</div>
 
-
+								<!-- /.control-box -->
 
 							</div>
-
-
 						</div>
+						
 					</div>
 					<div class="row">
 						<div class="col-md-12">

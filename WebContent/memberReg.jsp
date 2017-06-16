@@ -50,7 +50,24 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		mobile.focus();
 		return false;
-	}else if (place.value.length == 0) {
+	}/* else if (email.value.length > 0 ) {
+		
+		var x = email.value;
+		alert("x=="+x);
+		var atpos = x.indexOf("@");
+	    var dotpos = x.lastIndexOf(".");
+	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+	    	//alert("y==");
+	    	msg = "errEmail";
+			title = "Email";
+
+			$("#" + msg).text(title + " please enter valid email");
+			$("#" + msg).show();
+			email.focus();
+			return false;
+	    }
+	} */
+	else if (place.value.length == 0) {
 		msg = "errPlace";
 		title = "Place/City";
 

@@ -1031,7 +1031,7 @@
 																		<!-------------event gallery end------------->
 
 																		<div class="readmore">
-																			<a href="NewsList.jsp">More info...</a>
+																			<a href="newsList.jsp">More info...</a>
 																		</div>
 																	</div>
 																</div>

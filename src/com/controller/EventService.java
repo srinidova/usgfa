@@ -1,10 +1,13 @@
 package com.controller;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -24,6 +27,8 @@ import com.dto.EventGuestDTO;
 import com.dto.GuestDTO;
 import com.dto.MemberDTO;
 import com.dto.UploadFileDTO;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
 import net.sf.json.JSONObject;
@@ -31,27 +36,30 @@ import net.sf.json.JSONObject;
 @Path("/eventService")
 public class EventService {
 
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addEvent")
 	public JSONObject addEvent(@Context HttpServletRequest request, 
-			@QueryParam("eventId") String eventId,
-			@QueryParam("eventName") String eventName, 
-			@QueryParam("noOfDays") String noOfDays,
-			@QueryParam("timeFrom") String timeFrom, 
-			@QueryParam("timeEnd") String timeEnd, 
-			@QueryParam("address") String address,
-			@QueryParam("place") String place,
-			@QueryParam("mandal") String mandal,
-			@QueryParam("district") String district,
-			@QueryParam("state") String state,
-			@QueryParam("landMark") String landMark,
-			@QueryParam("pincode") String pinCode,
-			@QueryParam("moreInfo") String moreInfo,
-			@QueryParam("guestId") String guestId,
-			@QueryParam("guestTitle") String guestTitle,
-			@QueryParam("guestName") String guestName,
-			@QueryParam("guestDesi") String guestDesi) {
+			@FormDataParam("eventId") String eventId,
+			@FormDataParam("eventName") String eventName, 
+			@FormDataParam("noOfDays") String noOfDays,
+			@FormDataParam("timeFrom") String timeFrom, 
+			@FormDataParam("timeEnd") String timeEnd, 
+			@FormDataParam("address") String address,
+			@FormDataParam("place") String place,
+			@FormDataParam("mandal") String mandal,
+			@FormDataParam("district") String district,
+			@FormDataParam("state") String state,
+			@FormDataParam("landMark") String landMark,
+			@FormDataParam("pincode") String pinCode,
+			@FormDataParam("moreInfo") String moreInfo,
+			@FormDataParam("guestId") String guestId,
+			@FormDataParam("guestTitle") String guestTitle,
+			@FormDataParam("guestName") String guestName,
+			@FormDataParam("guestDesi") String guestDesi,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
@@ -66,7 +74,11 @@ public class EventService {
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
 				
-				
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -237,6 +249,7 @@ public class EventService {
 		String eventId = (String) session.getAttribute("EVENTID");
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
 		ArrayList<GuestDTO> guestList = new ArrayList<GuestDTO>();
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
 		try {
 			if (StringUtils.isNotEmpty(eventId)) {
@@ -259,6 +272,14 @@ public class EventService {
 				
 				if (!(guestList.size() < 0)) {
 					jobj.put("EventGuestEdit", guestList);
+					// get program image
+					EventFileDTO eventFileDto = new EventFileDTO();
+					eventFileDto.setEventId(eventId);
+					EventFileBO eventFileBo = new EventFileBO();
+					lstUploadFileDTO = eventFileBo.getEventImages(eventFileDto);
+					if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+						jobj.put("EVENTFILES", lstUploadFileDTO);
+					}
 				}
 				
 				
@@ -269,23 +290,26 @@ public class EventService {
 		return jobj;
 
 	}
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/eventUpdate")
 	public JSONObject eventUpdate(@Context HttpServletRequest request, 
-			@QueryParam("eventId") String eventId,
-			@QueryParam("eventName") String eventName, 
-			@QueryParam("noOfDays") String noOfDays,
-			@QueryParam("timeFrom") String timeFrom, 
-			@QueryParam("timeEnd") String timeEnd, 
-			@QueryParam("address") String address,
-			@QueryParam("place") String place,
-			@QueryParam("mandal") String mandal,
-			@QueryParam("district") String district,
-			@QueryParam("state") String state,
-			@QueryParam("landMark") String landMark,
-			@QueryParam("pincode") String pinCode,
-			@QueryParam("moreInfo") String moreInfo) {
+			@FormDataParam("eventId") String eventId,
+			@FormDataParam("eventName") String eventName, 
+			@FormDataParam("noOfDays") String noOfDays,
+			@FormDataParam("timeFrom") String timeFrom, 
+			@FormDataParam("timeEnd") String timeEnd, 
+			@FormDataParam("address") String address,
+			@FormDataParam("place") String place,
+			@FormDataParam("mandal") String mandal,
+			@FormDataParam("district") String district,
+			@FormDataParam("state") String state,
+			@FormDataParam("landMark") String landMark,
+			@FormDataParam("pincode") String pinCode,
+			@FormDataParam("moreInfo") String moreInfo,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
@@ -293,9 +317,15 @@ public class EventService {
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
 				
-				if(request.getSession().getAttribute("LOGINID") != null){
-				sLoginId = (String) request.getSession().getAttribute("LOGINID");
-			}
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
+				
+				if (request.getSession().getAttribute("LOGINID") != null) {
+					sLoginId = (String) request.getSession().getAttribute("LOGINID");
+				}
 				EventDTO eventDto = new EventDTO();
 				eventDto.setEventId(eventId);
 				eventDto.setEventName(eventName);

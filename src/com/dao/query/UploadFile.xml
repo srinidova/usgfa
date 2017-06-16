@@ -49,5 +49,26 @@
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
 		where fileId in (select fileId from newsfile where newsId in (select newsId from newsfile where fileId = #value#))
 	</select>
-	
+	<select id="getProgramFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from programfile where programId in (select programId from programfile where fileId = #value#))
+	</select>
+	<!-- <event file> -->
+	<select id="getUploadFleByEventId"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from eventfile where eventId = #value#)
+	</select>
+	<select id="getEventFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from eventfile where eventId in (select eventId from eventfile where fileId = #value#))
+	</select>
+	<!-- <stories file> -->
+	<select id="getUploadFleByStoriesId"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from storiesfile where storiesId = #value#)
+	</select>
+	<select id="getStoriesFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from storiesfile where storiesId in (select storiesId from storiesfile where fileId = #value#))
+	</select>
 </sqlMap>

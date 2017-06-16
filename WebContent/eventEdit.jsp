@@ -151,7 +151,7 @@ $(document).ready(function() {
 						
 						}
 				)
-				
+				showEventImages(data);
 				$.each(
 						data.EventGuestEdit,
 						function(key, val) {
@@ -187,7 +187,7 @@ function eventUpdate(){
 	var state = $("#eventEditstate").val();
 	var landMark = $("#eventEditLandMark").val();
 	var pincode = $("#eventEditPincode").val();
-	
+	var file = $("#file")[0].files[0];
 	
 	    var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
 		var elmsGstName = document.querySelectorAll("[id='guestName']")
@@ -212,8 +212,45 @@ function eventUpdate(){
 				guestDesi = guestDesi + elmsGstDesi[i].value;
 
 		}
+
+		var formData = new FormData();
+		formData.append("eventId", eventId);
+		formData.append("eventName", eventName);
+		formData.append("noOfDays", noOfDays);
+		formData.append("timeFrom", timeFrom);
+		formData.append("timeEnd", timeEnd);
+		formData.append("address", address);
+		formData.append("place", place);
+		formData.append("mandal", mandal);
+		formData.append("moreInfo", moreInfo);
+		formData.append("district", district);
+		formData.append("state", state);
+		formData.append("landMark", landMark);
+		formData.append("pincode", pincode);
+		formData.append("file", file);
 		
-	var eventObject = new Object();
+		formData.append("guestTitle", guestTitle);
+		formData.append("guestName", guestName);
+		formData.append("guestDesi", guestDesi);
+		
+
+		$.ajax({
+			type: 'POST',
+			url : "emp/eventService/eventUpdate",
+        	data: formData,
+        	cache: false,
+        	contentType: false,
+        	processData: false,
+			success : function(data) {
+				if (data.Msg == 'success') {
+					window.location.href = "eventList.jsp";
+				}else{
+					$("#eventEditFailMsg").text("Event Edit Failed");
+				}  
+			}
+		});
+		
+/* 	var eventObject = new Object();
 	eventObject.eventId = eventId;
 	eventObject.eventName = eventName;
 	eventObject.noOfDays = noOfDays;
@@ -238,7 +275,7 @@ function eventUpdate(){
 				$("#eventEditFailMsg").text("Event Edit Failed");
 			} 
 		}
-	}); 
+	});  */
 	
 }
 function deleteGuest(guestId){
@@ -290,6 +327,54 @@ function pincodeCheck(fName, title, msg) {
 		$("#" + msg).text("");
 		return true;
 	}
+}
+
+function showEventImages(data){
+	var dispImages = '';
+	var dispClas = '';
+	var dispChkd = '';
+	$.each(
+			data.EVENTFILES,
+			function(key, val) {
+				alert(data.EVENTFILES[key].showPublic);
+				if(data.EVENTFILES[key].showPublic == 1){
+					dispChkd = 'checked';
+				}else{
+					dispChkd = '';
+				}
+				if(key == 0){
+					dispClas = "item active";
+				}else{
+					dispClas = "item";
+				}
+				dispImages = dispImages
+				+'<div class="'+ dispClas +'">'
+				+'<ul class="thumbnails">'
+					+'<li class="col-md-12">'
+						+'<div class="fff">'
+							+'<div class="thumbnail">'
+								+'<a href="#">'
+								     +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'</a>'
+							+'</div>'
+							+'<div class="caption">'
+								+'<div class="checkbox">'
+									+'<label>'
+									    +'<input id="'+data.EVENTFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.EVENTFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+									+'</label>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+								+'<div class="delete_box">'
+									+'<a href="#" name="'+data.EVENTFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+							+'</div>'
+						+'</div>'
+					+'</li>'
+				+'</ul>'
+			+'</div>'
+			})
+			document.getElementById("eventEditImages").innerHTML = dispImages;
 }
 </script>
 </head>
@@ -423,8 +508,8 @@ function pincodeCheck(fName, title, msg) {
 							<div class="form-group">
 								<label for="Upload Photo">Upload Event Photos / Videos</label> <input
 									id="file" name="file" class="file form-control" type="file">
-								<a href="#"><button
-										class="btn btn-success btn-sm text-right">Upload</button></a>
+								<!-- <a href="#"><button
+										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
 					</div>
@@ -436,39 +521,7 @@ function pincodeCheck(fName, title, msg) {
 			<div class="clearfix"></div>
 
 			<!----------------------photo_gallery------------------------------>
-
-			<div class="row">
-				<div class="modal fade" id="image-gallery" tabindex="-1"
-					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-					style="display: none;">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">
-									<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-								</button>
-								<h4 class="modal-title" id="image-gallery-title"></h4>
-							</div>
-							<div class="modal-body">
-								<img id="image-gallery-image" class="img-responsive"
-									src="images/g2.jpg">
-							</div>
-							<div class="modal-footer">
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary"
-										id="show-previous-image" style="display: none;">Previous</button>
-								</div>
-								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
-								<div class="col-md-2">
-									<button type="button" id="show-next-image"
-										class="btn btn-default">Next</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-5">
+			<div class="col-md-5" style="margin-left: 250px;">
 				<div class="row">
 
 					<div class="col-md-12" style="margin-bottom: 10px;">
@@ -481,194 +534,12 @@ function pincodeCheck(fName, title, msg) {
 						</div>
 					</div>
 				</div>
-				<div id="carousel-example" class="carousel slide"
-					data-ride="carousel">
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner">
-						<div class="item active left">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="col-item">
-										<div class="photo">
-											<a class="g-image" href="#" data-image-id="1"
-												data-toggle="modal" data-title="" data-caption=""
-												data-image="images/g2.jpg" data-target="#image-gallery">
-												<img class="img-responsive" src="images/g2.jpg"
-												alt="Short alt text">
-											</a>
-										</div>
-
-										<div class="img_tiltle" style="margin-top: 7px;">
-											<h2>Image 1</h2>
-										</div>
-
-										<div class="caption" style="margin-top: 0px;">
-											<div class="checkbox">
-												<label> <input id="login-remember" type="checkbox"
-													name="remember" value="1"> Show as Public
-												</label>
-												<div class="suceee_msg">
-													<!-- <h4>Updated successfully</h4> -->
-												</div>
-											</div>
-											<div class="delete_box">
-												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-													Delete</a>
-												<div class="suceee_msg">
-													<!-- <h4>Delete Message</h4> -->
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+				<div id="carousel-example" class="carousel slide" data-ride="carousel">
+						<div class="carousel-inner" id="eventEditImages">
 						</div>
-						<div class="item next left">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="col-item">
-										<div class="photo">
-											<a class="g-image" href="#" data-image-id="2"
-												data-toggle="modal" data-title="" data-caption=""
-												data-image="images/g1.jpeg" data-target="#image-gallery">
-												<img class="img-responsive" src="images/g1.jpeg"
-												alt="Short alt text">
-											</a>
-										</div>
-
-
-										<div class="img_tiltle" style="margin-top: 7px;">
-											<h2>Image 2</h2>
-										</div>
-
-										<div class="caption" style="margin-top: 0px;">
-											<div class="checkbox">
-												<label> <input id="login-remember" type="checkbox"
-													name="remember" value="1"> Show as Public
-												</label>
-												<div class="suceee_msg">
-													<!-- <h4>Updated successfully</h4> -->
-												</div>
-											</div>
-											<div class="delete_box">
-												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-													Delete</a>
-												<div class="suceee_msg">
-													<!-- <h4>Delete Message</h4> -->
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 			<!----------------------photo_gallery end------------------------------>
-
-			<!----------------------video_gallery------------------------------>
-			<div class="col-md-5">
-				<div class="row">
-
-					<div class="col-md-12 " style="margin-bottom: 10px;">
-						<!-- Controls -->
-						<div class="controls pull-right">
-							<a class="left fa fa-angle-left btn btn-default button-arrow"
-								href="#carousel-example1" data-slide="prev"></a> <a
-								class="right fa fa-angle-right btn btn-default button-arrow"
-								href="#carousel-example1" data-slide="next"></a>
-						</div>
-					</div>
-				</div>
-				<div id="carousel-example1" class="carousel slide "
-					data-ride="carousel">
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner">
-						<div class="item">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="col-item">
-										<div class="photo">
-											<iframe src="https://player.vimeo.com/video/73051736"
-												width="100%" height="275" frameborder="0"
-												webkitallowfullscreen="" mozallowfullscreen=""
-												allowfullscreen=""></iframe>
-										</div>
-
-										<div class="img_tiltle" style="margin-top: 7px;">
-											<h2>Video 1</h2>
-										</div>
-
-										<div class="caption" style="margin-top: 0px;">
-											<div class="checkbox">
-												<label> <input id="login-remember" type="checkbox"
-													name="remember" value="1"> Show as Public
-												</label>
-												<div class="suceee_msg">
-													<!-- <h4>Updated successfully</h4> -->
-												</div>
-											</div>
-											<div class="delete_box">
-												<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-													Delete</a>
-												<div class="suceee_msg">
-													<!-- <h4>Delete Message</h4> -->
-												</div>
-											</div>
-										</div>
-
-
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="item active">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="col-item">
-										<div class="photo">
-											<iframe src="https://player.vimeo.com/video/73051736"
-												width="100%" height="275" frameborder="0"
-												webkitallowfullscreen="" mozallowfullscreen=""
-												allowfullscreen=""></iframe>
-										</div>
-									</div>
-
-									<div class="img_tiltle" style="margin-top: 7px;">
-										<h2>Video 1</h2>
-									</div>
-
-									<div class="caption" style="margin-top: 0px;">
-										<div class="checkbox">
-											<label> <input id="login-remember" type="checkbox"
-												name="remember" value="1"> Show as Public
-											</label>
-											<div class="suceee_msg">
-												<!-- <h4>Updated successfully</h4> -->
-											</div>
-										</div>
-										<div class="delete_box">
-											<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i>
-												Delete</a>
-											<div class="suceee_msg">
-												<!-- <h4>Delete Message</h4> -->
-											</div>
-										</div>
-									</div>
-
-
-
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!----------------------video_gallery end------------------------------>
-
-
 			<!------------------------------guests form--------------------------------------->
 			<div class="input_fields_wrap">
 				<div class="row">

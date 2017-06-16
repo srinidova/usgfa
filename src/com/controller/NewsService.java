@@ -315,6 +315,7 @@ public class NewsService {
 				//System.out.println( request.getServletContext().getRealPath("/"));
 				path = request.getServletContext().getRealPath("/") + "images/uploads/";
 				utils.uploadFileToLocation(info, in, request, path);
+			
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");

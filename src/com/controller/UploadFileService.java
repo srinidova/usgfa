@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.bo.NewsBO;
 import com.bo.NewsFileBO;
+import com.bo.ProgramFileBO;
 import com.bo.UploadFileBO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
@@ -36,88 +37,37 @@ public class UploadFileService {
 	public JSONObject deleteImage(@QueryParam("fileId") String fileId, @QueryParam("type") String sType,
 			@Context HttpServletRequest request) {
 		String result = "fail";
-		String deleteFilePath = null;
-		String sExstFilePath = null;
 		String path = "";
 		JSONObject jObj = new JSONObject();
-		NewsFileDTO newsFileDto = null;
 		NewsFileBO newsFileBo = null;
-		ArrayList<NewsFileDTO> lstNewsFileDto = null;
-		String sNewsId = null;
-		boolean bFileDeleted = false;
-		UploadFileBO fileBo = null;
-		String sDelFileUpload = null;
-		String sDelRef = null;
+		ProgramFileBO programFileBo = null;
 		ArrayList<UploadFileDTO> lstLatestUploadFiles = null;
-		System.out.println("a. fileId ==" + fileId + "------------sType ==" + sType);
+		System.out.println("a.in upload fileId ==" + fileId + "------------sType ==" + sType);
+		System.out.println("a 1.in upload fileId ==" + fileId + "------------sType ==" + sType);
 		try {
+			path = request.getServletContext().getRealPath("/");
+			System.out.println("e. path==" + path);
+			newsFileBo = new NewsFileBO();
+			programFileBo = new ProgramFileBO();
 			if (StringUtils.isNotEmpty(sType) && sType.equals("NEWS")) {
-				newsFileDto = new NewsFileDTO();
-				
-				//********* getting news Id **********//
-				newsFileDto.setFileId(fileId);
-				newsFileBo = new NewsFileBO();
-				lstNewsFileDto = newsFileBo.getNewsFileByFileId(newsFileDto);
-				System.out.println("b. lstUploadFileDTO.size ==" + lstNewsFileDto.size());
-				if (lstNewsFileDto != null && lstNewsFileDto.size() > 0) {
-					for (int i = 0; i < lstNewsFileDto.size(); i++) {
-						NewsFileDTO objNewsFileDto = lstNewsFileDto.get(i);
-						sNewsId = objNewsFileDto.getNewsId();
-					}
-				}
-				System.out.println("c. sNewsId==" + sNewsId);
-
-				//********* getting File path **********//
-				newsFileDto.setNewsId(sNewsId);
-				NewsFileBO boNewsFile = new NewsFileBO();
-				ArrayList<UploadFileDTO> lstUploadFileDTO = boNewsFile.getUploadFleByNewsId(newsFileDto);
-				System.out.println("c1. lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
-				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
-					for (int j = 0; j < lstUploadFileDTO.size(); j++) {
-						UploadFileDTO uploadFileDTO = lstUploadFileDTO.get(j);
-						String sExtFileId = uploadFileDTO.getFileId();
-						System.out.println("c2. fileId ==" + fileId + "------------sExtFileId ==" + sExtFileId);
-						if(fileId.equals(sExtFileId)){
-							sExstFilePath = uploadFileDTO.getFilePath();
-							break;
-						}
-					}
-				}
-				System.out.println("d. sExstFilePath==" + sExstFilePath);
-
-				//********* deleting physical file **********//
-				path = request.getServletContext().getRealPath("/");
-				System.out.println("e. path==" + path);
-				deleteFilePath = path + sExstFilePath;
-				System.out.println("f. deleteFilePath==" + deleteFilePath);
-				File newFile = new File(deleteFilePath);
-				if (newFile.exists()) {
-					System.out.println("g. ==deleteFile Exists==");
-					newFile.delete();
-					bFileDeleted = true;
-				}
-				System.out.println("h.bFileDeleted==" + bFileDeleted);
-				
-				//********* deleting data from tables **********//
-				if (bFileDeleted) {
-					fileBo = new UploadFileBO();
-					sDelFileUpload = fileBo.deleteImage(fileId);
-					System.out.println("i. sDelFileUpload==" + sDelFileUpload);
-
-					sDelRef = boNewsFile.deleteNewsFile(newsFileDto);
-					System.out.println("j. sDelRef==" + sDelRef);
-
-					//********* getting updated list**********//
-					System.out.println("j. getFileId==" + newsFileDto.getFileId()+"------------- getNewsId==" + newsFileDto.getNewsId());
-					lstLatestUploadFiles = newsFileBo.getUploadFleByNewsId(newsFileDto);
-					System.out.println("l. lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
-					if (lstLatestUploadFiles != null && lstLatestUploadFiles.size() > 0) {
-						jObj.put("NEWSFILES", lstLatestUploadFiles);
-					}
+				lstLatestUploadFiles = newsFileBo.deleteFileNews(fileId, path);
+				System.out.println("l.in upload lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
+				jObj.put("NEWSFILES", lstLatestUploadFiles);
+				result = "success";
+			}if(sType.equals("PROGRAM")){
+				if(StringUtils.isNotEmpty(sType) && sType.equals("PROGRAM")){
+					lstLatestUploadFiles = programFileBo.deleteFileProgram(fileId, path);
+					System.out.println("l.in upload program lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
+					jObj.put("PROGRAMFILES",lstLatestUploadFiles);
 					result = "success";
 				}
-
 			}
+			/*else if(StringUtils.isNotEmpty(sType) && sType.equals("PROGRAM")){
+				lstLatestUploadFiles = programFileBo.deleteFileProgram(fileId, path);
+				System.out.println("l.in upload program lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
+				jobj1.put("PROGRAMFILE",lstLatestUploadFiles);
+				result = "success";
+			}*/
 
 			jObj.put("Msg", result);
 		} catch (Exception e) {

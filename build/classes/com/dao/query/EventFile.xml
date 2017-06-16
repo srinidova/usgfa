@@ -7,5 +7,10 @@
 		eventfile(eventId,fileId)
 		values(#eventId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteEventFile" parameterClass="com.dto.EventFileDTO">
+		delete from eventfile  where eventId = #eventId# and  fileId = #fileId#
+	</delete>
+	<select id="getEventFileByFileId" resultClass="com.dto.EventFileDTO" parameterClass="java.lang.String">
+		select eventId, fileId from eventfile where fileId = #value#
+	</select>
 </sqlMap>

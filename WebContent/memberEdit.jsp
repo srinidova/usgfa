@@ -181,6 +181,7 @@ if(sRole != null && sRole.equals("Admin")){
 					url : "emp/memberService/editMember",
 					success : function(data) {
 						$.each(data.EditMember, function(key, val) {
+							alert("in to member edit");
 							$('#memberId').val(data.EditMember[key].memberId);
 							$('#memberEditTitle').val(
 									data.EditMember[key].title);
@@ -218,6 +219,7 @@ if(sRole != null && sRole.equals("Admin")){
 				});
 			});
 	function memberUpdate1() {
+		alert("in to member update")
 		var memberId = $("#memberId").val();
 		var title = $("#memberEditTitle").val();
 		var firstName = $("#memberEditFirstName").val();
@@ -274,13 +276,15 @@ if(sRole != null && sRole.equals("Admin")){
 		memberObject.aboutFarm = aboutFarm;
 		memberObject.farmState = farmState;
 		memberObject.farmPincode = farmPincode;
-
+       
 		$.ajax({
 			data : memberObject,
 			url : "emp/memberService/memberUpdate",
 			success : function(data) {
 				if (data.Msg == 'success') {
+					 alert("after member update successful")
 					window.location.href = "memberList.jsp";
+					
 				}else{
 					$("#memberEditFailMsg").text("Member Edit Failed");
 				} 

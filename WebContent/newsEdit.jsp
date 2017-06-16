@@ -156,10 +156,12 @@ function showNewsImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var imgCtrl = true;
 	$.each(
 			data.NEWSFILES,
 			function(key, val) {
 				//alert(data.NEWSFILES[key].showPublic);
+				imgCtrl = false;
 				if(data.NEWSFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -198,6 +200,9 @@ function showNewsImages(data){
 			+'</div>'
 			})
 			document.getElementById("newsEditImages").innerHTML = dispImages;
+			if(imgCtrl){
+				document.getElementById("newsEditImagesCont").style.display = 'none';
+			}
 }
 
 function updateShowAsPublicNews(fileId){
@@ -223,7 +228,7 @@ function updateShowAsPublicNews(fileId){
 }
 
 function deleteFileNews(fileId){
-//alert("fileId--------"+fileId);
+alert("fileId--------"+fileId);
 	var newsObject = new Object();
 	newsObject.fileId = fileId; 
 	newsObject.type = "NEWS";
@@ -365,7 +370,7 @@ function deleteFileNews(fileId){
 				<div class="col-md-6" style="margin-left: 250px;">
 					<div class="row">
 
-						<div class="col-md-12" style="margin-bottom: 10px;">
+						<div class="col-md-12" style="margin-bottom: 10px;" id="newsEditImagesCont">
 							<!-- Controls -->
 							<div class="controls pull-right ">
 								<a class="left fa fa-angle-left btn btn-default button-arrow"
@@ -377,7 +382,6 @@ function deleteFileNews(fileId){
 					</div>
 					<div id="carousel-example" class="carousel slide"
 						data-ride="carousel">
-						<!-- Wrapper for slides -->
 						<div class="carousel-inner" id="newsEditImages">
 						</div>
 					</div>

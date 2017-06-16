@@ -34,8 +34,8 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 
 <script type="text/javascript">
-	var dispImages = "";
-	var dispClas = "";
+	/* var dispImages = "";
+	var dispClas = ""; */
 	$(document).ready(
 					function() {
 						$
@@ -68,7 +68,8 @@ if(sRole != null && sRole.equals("Admin")){
 																	.val(
 																			data.StoriesProfile[key].storiesId);
 														})
-														$.each(
+														showStoriesProfImages(data);
+														/* $.each(
 																data.STORIESFILES,
 																function(key, val) {
 																	if(key == 0){
@@ -102,8 +103,8 @@ if(sRole != null && sRole.equals("Admin")){
 																		+'</li>'
 																	+'</ul>'
 																+'</div>'
-																})
-																document.getElementById("storiesImages").innerHTML = dispImages;
+																}) */
+																//document.getElementById("storiesImages").innerHTML = dispImages;
 									}
 								});
 					});
@@ -120,6 +121,53 @@ if(sRole != null && sRole.equals("Admin")){
 			}
 		});
 
+	}
+	function showStoriesProfImages(data){
+		var dispImages = '';
+		var dispClas = '';
+		var dispChkd = '';
+		$.each(
+				data.STORIESFILES,
+				function(key, val) {
+					alert(data.STORIESFILES[key].showPublic);
+					if(data.STORIESFILES[key].showPublic == 1){
+						dispChkd = 'checked';
+					}else{
+						dispChkd = '';
+					}
+					if(key == 0){
+						dispClas = "item active";
+					}else{
+						dispClas = "item";
+					}
+					dispImages = dispImages
+					+'<div class="'+ dispClas +'">'
+					+'<ul class="thumbnails">'
+						+'<li class="col-md-12">'
+							+'<div class="fff">'
+								+'<div class="thumbnail">'
+									+'<a href="#">'
+									     +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="">'
+									+'</a>'
+								+'</div>'
+								+'<div class="caption">'
+									+'<div class="checkbox">'
+										+'<label>'
+										    +'<input id="'+data.STORIESFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.STORIESFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+										+'</label>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+									+'<div class="delete_box">'
+										+'<a href="#" name="'+data.STORIESFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+						+'</li>'
+					+'</ul>'
+				+'</div>'
+				})
+				document.getElementById("storiesProfImages").innerHTML = dispImages;
 	}
 </script>
 </head>
@@ -184,110 +232,58 @@ if(sRole != null && sRole.equals("Admin")){
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">
-							<nav>
-								<ul class="control-box pager text-left">
-									<li><a data-slide="prev" href="#myCarousel" class=""><i
-											class="glyphicon glyphicon-chevron-left"></i></a></li>
-									<li><a data-slide="next" href="#myCarousel" class="">
-											<i class="glyphicon glyphicon-chevron-right"></i>
-									</a></li>
-								</ul>
-							</nav>
-							<div class="carousel slide" id="myCarousel">
-								<div class="carousel-inner" id="storiesImages">
+						<div class="modal fade" id="image-gallery" tabindex="-1"
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+										</button>
+										<h4 class="modal-title" id="image-gallery-title"></h4>
+									</div>
+									<div class="modal-body">
+										<img id="image-gallery-image" class="img-responsive" src="">
+									</div>
+									<div class="modal-footer">
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary"
+												id="show-previous-image">Previous</button>
+										</div>
+										<div class="col-md-8 text-justify" id="image-gallery-caption">
+											This text will be overwritten by jQuery</div>
+										<div class="col-md-2">
+											<button type="button" id="show-next-image"
+												class="btn btn-default">Next</button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6 col-lg-6 ">
-							<nav>
-								<ul class="control-box pager" style="width: 98%;">
-									<li><a data-slide="prev" href="#myCarousel1" class=""><i
-											class="glyphicon glyphicon-chevron-left"></i></a></li>
-									<li><a data-slide="next" href="#myCarousel1" class="">
-											<i class="glyphicon glyphicon-chevron-right"></i>
-									</a></li>
-								</ul>
-							</nav>
-							<div class="carousel slide" id="myCarousel1">
-								<div class="carousel-inner">
-									<div class="item active">
-										<ul class="thumbnails">
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="258" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 1</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!--  <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6" style="margin-left: 250px;">
 
-									<div class="item ">
-										<ul class="thumbnails">
-											<li class="col-md-12">
-												<div class="fff">
-													<div class="thumbnail">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="258" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 2</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!--  <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!--  <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
+
+							<div class="control-box pager ">
+								<a class="left fa fa-angle-left btn btn-default button-arrow"
+									href="#myCarousel" data-slide="prev"></a> <a
+									class="right fa fa-angle-right btn btn-default button-arrow"
+									href="#myCarousel" data-slide="next"></a>
+							</div>
+
+							<div class="carousel slide" id="myCarousel">
+								<div class="carousel-inner" id="storiesProfImages">
 								</div>
 
+								<!-- /.control-box -->
+
 							</div>
+							<!-- /#myCarousel -->
 
 						</div>
 					</div>
+					
 					<div class="row">
 						<div class="col-md-12">
 

@@ -71,9 +71,39 @@ function saveProgram(){
 	var guest = $("#guest").val();
 	var youtube = $("#youtube").val();
 	var moreInfo = $("#moreInfo").val();
+	var file = $("#file")[0].files[0];
+	
+	var formData = new FormData();
+	formData.append("programName", programName);
+	formData.append("duration", duration);
+	formData.append("dateAndTimeFrom", dateAndTimeFrom);
+	formData.append("dateAndTimeTo", dateAndTimeTo);
+	formData.append("channel", channel);
+	formData.append("guest", guest);
+	formData.append("youtube", youtube);
+	formData.append("moreInfo", moreInfo);
+	formData.append("file", file);
 	
 	
-	var programObject = new Object();
+	
+
+	$.ajax({
+		type: 'POST',
+		url : "emp/programService/addProgram",
+    	data: formData,
+    	cache: false,
+    	contentType: false,
+    	processData: false,
+		success : function(data) {
+			if (data.Msg == 'success') {
+				window.location.href = "programList.jsp";
+			}else{
+				$("#programRegFailMsg").text("Program Registration Failed");
+			}  
+		}
+	});
+	
+	/* var programObject = new Object();
 	programObject.programName = programName;
 	programObject.duration = duration;
 	programObject.dateAndTimeFrom = dateAndTimeFrom;
@@ -103,7 +133,7 @@ function saveProgram(){
 			if (data.Msg = "success") {
 			}
 		}
-	});
+	}); */
 }
 function checkTwoFields(fieldName1, fieldName2, title, msg) {
 	var fieldName1_len = document.getElementById(fieldName1).value.length;
@@ -264,8 +294,8 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> <input
 									id="file" name="file" class="file form-control" type="file">
-								<a href="#"><button
-										class="btn btn-success btn-sm text-right">Upload</button></a>
+								<!-- <a href="#"><button
+										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
 					</div>

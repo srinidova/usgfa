@@ -51,7 +51,9 @@ public class ContactUsService {
 				ContactUsBO contactUsBo = new ContactUsBO();
 				
 				result = contactUsBo.addContact(contactUsDto);
+				System.out.println("in to contact us page"+email);
 				System.out.println("in to contact us page"+result);
+				
 
 				ServletContext objContext = request.getServletContext();
 				MailDTO mailDto = new MailDTO();

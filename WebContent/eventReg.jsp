@@ -121,6 +121,7 @@ function saveEvent(){
 	 var title = $("#title").val();
 	 var name = $("#name").val();
 	 var designation = $("#designation").val();
+	 var file = $("#file")[0].files[0];
 	 
 		var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
 		var elmsGstName = document.querySelectorAll("[id='guestName']")
@@ -146,46 +147,42 @@ function saveEvent(){
 				guestDesi = guestDesi + elmsGstDesi[i].value;
 
 		}
-	 
-	var eventObject = new Object();
-	eventObject.eventName = eventName;
-	eventObject.noOfDays = noOfDays;
-	eventObject.timeFrom = timeFrom;
-	eventObject.timeEnd = timeEnd;
-	eventObject.address = address;
-	eventObject.place = place;
-	eventObject.mandal = mandal;
-	eventObject.moreInfo = moreInfo;
-	eventObject.district = district;
-	eventObject.state = state;
-	eventObject.landMark = landMark;
-	eventObject.pincode = pincode; 
-	
-	eventObject.guestTitle = guestTitle;
-	eventObject.guestName = guestName;
-	eventObject.guestDesi = guestDesi;
-	
-	$
-	.ajax({
-		data : eventObject,
-		url : "emp/eventService/addEvent",
-		success : function(data) {
-			if (data.Msg == 'success') {
-				window.location.href = "eventList.jsp";
-			}else{
-				$("#eventRegFailMsg").text("Event Registration Failed");
-			}  
-		}
-	});
-	$
-	.ajax({
-		data : uploadFile,
-		url : "emp/eventService/getEventImages",
-		success : function(data) {
-			if (data.Msg = "success") {
+		
+		var formData = new FormData();
+		formData.append("eventName", eventName);
+		formData.append("noOfDays", noOfDays);
+		formData.append("timeFrom", timeFrom);
+		formData.append("timeEnd", timeEnd);
+		formData.append("address", address);
+		formData.append("place", place);
+		formData.append("mandal", mandal);
+		formData.append("moreInfo", moreInfo);
+		formData.append("district", district);
+		formData.append("state", state);
+		formData.append("landMark", landMark);
+		formData.append("pincode", pincode);
+		formData.append("file", file);
+		
+		formData.append("guestTitle", guestTitle);
+		formData.append("guestName", guestName);
+		formData.append("guestDesi", guestDesi);
+		
+
+		$.ajax({
+			type: 'POST',
+			url : "emp/eventService/addEvent",
+        	data: formData,
+        	cache: false,
+        	contentType: false,
+        	processData: false,
+			success : function(data) {
+				if (data.Msg == 'success') {
+					window.location.href = "eventList.jsp";
+				}else{
+					$("#eventRegFailMsg").text("Event Registration Failed");
+				}  
 			}
-		}
-	});
+		});
 }
 
 function pincodeCheck(fName, title, msg) {
@@ -358,8 +355,8 @@ function pincodeCheck(fName, title, msg) {
 							<div class="form-group">
 								<label for="Upload Photo">Upload Event Photos / Videos</label> <input
 									id="file" name="file" class="file form-control" type="file">
-								<a href="#"><button
-										class="btn btn-success btn-sm text-right">Upload</button></a>
+								<!-- <a href="#"><button
+										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
 					</div>

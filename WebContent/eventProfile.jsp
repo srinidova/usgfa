@@ -49,8 +49,7 @@ $(document)
 					.ajax({
 						url : "emp/eventService/getEventProfile",
 						success : function(data) {
-							$
-									.each(
+							$.each(
 											data.EventProfile,
 											function(key, val) {
 											    $('#eventProfEventName').text(data.EventProfile[key].eventName);
@@ -62,35 +61,7 @@ $(document)
 												$('#eventProfMoreInfo').text(data.EventProfile[key].moreInfo);
 												$('#eventProfEventId').val(data.EventProfile[key].eventId); 
 											})
-											$.each(
-													data.EVENTFILES,
-													function(key, val) {
-														html = html
-														+'<li>'
-														+'<div class="fff">'
-															+'<div class="photo">'
-																+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a>'
-															+'</div>'
-															+'<div class="img_tiltle" style="margin-top: 7px;">'
-																+'<h2>Image 1</h2>'
-															+'</div>'
-															+'<div class="caption" style="margin-top: 0px;">'
-																+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
-																	+'<div class="suceee_msg">'
-																		+'/* <h4>Updated successfully</h4> */'
-																	+'</div>'
-																+'</div>'
-																+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																	+'<div class="suceee_msg">'
-																		+'/* <h4>Delete Message</h4> */'
-																	+'</div>'
-																+'</div>'
-															+'</div>'
-														+'</div>'
-														+'</li>'
-
-													})
-													$(html).appendTo("#eventImages");
+											showEventProfImages(data);
 						}
 					});
 		});
@@ -107,6 +78,54 @@ function editProfEvent() {
 		}
 	});
 
+}
+
+function showEventProfImages(data){
+	var dispImages = '';
+	var dispClas = '';
+	var dispChkd = '';
+	$.each(
+			data.EVENTFILES,
+			function(key, val) {
+				alert(data.EVENTFILES[key].showPublic);
+				if(data.EVENTFILES[key].showPublic == 1){
+					dispChkd = 'checked';
+				}else{
+					dispChkd = '';
+				}
+				if(key == 0){
+					dispClas = "item active";
+				}else{
+					dispClas = "item";
+				}
+				dispImages = dispImages
+				+'<div class="'+ dispClas +'">'
+				+'<ul class="thumbnails">'
+					+'<li class="col-md-12">'
+						+'<div class="fff">'
+							+'<div class="thumbnail">'
+								+'<a href="#">'
+								     +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'</a>'
+							+'</div>'
+							+'<div class="caption">'
+								+'<div class="checkbox">'
+									+'<label>'
+									    +'<input id="'+data.EVENTFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.EVENTFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+									+'</label>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+								+'<div class="delete_box">'
+									+'<a href="#" name="'+data.EVENTFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+									+'<div class="suceee_msg"></div>'
+								+'</div>'
+							+'</div>'
+						+'</div>'
+					+'</li>'
+				+'</ul>'
+			+'</div>'
+			})
+			document.getElementById("eventProfImages").innerHTML = dispImages;
 }
 </script>
 </head>
@@ -203,7 +222,7 @@ function editProfEvent() {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-6" style="margin-left: 250px;">
 
 
 							<div class="control-box pager ">
@@ -214,174 +233,7 @@ function editProfEvent() {
 							</div>
 
 							<div class="carousel slide" id="myCarousel">
-								<div class="carousel-inner">
-									<div class="item active">
-										<ul style="padding-left: 0px;">
-											<div id="programImages"></div>
-											<li>
-												<div class="fff">
-													<div class="photo">
-														<a class="g-image" href="#" data-image-id=""
-															data-toggle="modal" data-title="" data-caption=""
-															data-image="images/g1.jpeg" data-target="#image-gallery">
-															<img class="img-responsive" src="images/g1.jpeg"
-															alt="Short alt text">
-														</a>
-													</div>
-													<div class="img_tiltle" style="margin-top: 7px;">
-														<h2>Image 1</h2>
-													</div>
-													<div class="caption" style="margin-top: 0px;">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<div class="item ">
-										<ul style="padding-left: 0px;">
-											<li>
-												<div class="fff">
-													<div class="photo">
-														<a class="g-image" href="#" data-image-id=""
-															data-toggle="modal" data-title="" data-caption=""
-															data-image="images/g2.jpg" data-target="#image-gallery">
-															<img class="img-responsive" src="images/g2.jpg"
-															alt="Short alt text">
-														</a>
-													</div>
-													<div class="img_tiltle" style="margin-top: 7px;">
-														<h2>Image 2</h2>
-													</div>
-													<div class="caption" style="margin-top: 0px;">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<!-- /Slide3 -->
-								</div>
-
-								<!-- /.control-box -->
-
-							</div>
-							<!-- /#myCarousel -->
-
-						</div>
-						<div class="col-md-6 col-lg-6 ">
-							<div class="control-box pager ">
-								<a class="left fa fa-angle-left btn btn-default button-arrow"
-									href="#myCarousel1" data-slide="prev"></a> <a
-									class="right fa fa-angle-right btn btn-default button-arrow"
-									href="#myCarousel1" data-slide="next"></a>
-							</div>
-							<div class="carousel slide" id="myCarousel1">
-								<div class="carousel-inner">
-									<div class="item active">
-										<ul style="padding-left: 0px;">
-											<li>
-												<div class="fff">
-													<div class="">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="339" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 1</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<!-- /Slide1 -->
-									<!-- /Slide2 -->
-
-									<div class="item ">
-										<ul style="padding-left: 0px;">
-											<li>
-												<div class="fff">
-													<div class="">
-														<iframe src="https://player.vimeo.com/video/152115588"
-															width="100%" height="339" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-													<div class="img_tiltle">
-														<h2>video 2</h2>
-													</div>
-													<div class="caption">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</div>
-									<!-- /Slide3 -->
+								<div class="carousel-inner" id="eventProfImages">
 								</div>
 
 								<!-- /.control-box -->

@@ -52,19 +52,22 @@ import org.apache.commons.lang.StringUtils;
 @Path("/programService")
 public class ProgramService {
 
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addProgram")
 	public JSONObject addProgram(@Context HttpServletRequest request, 
-			@QueryParam("programId") String programId,
-			@QueryParam("programName") String programName, 
-			@QueryParam("duration") String duration,
-			@QueryParam("dateAndTimeFrom") String dateAndTimeFrom, 
-			@QueryParam("dateAndTimeTo") String dateAndTimeTo, 
-			@QueryParam("channel") String channel,
-			@QueryParam("guest") String guest,
-			@QueryParam("youtube") String youtube,
-			@QueryParam("moreInfo") String moreInfo) {
+			@FormDataParam("programId") String programId,
+			@FormDataParam("programName") String programName, 
+			@FormDataParam("duration") String duration,
+			@FormDataParam("dateAndTimeFrom") String dateAndTimeFrom, 
+			@FormDataParam("dateAndTimeTo") String dateAndTimeTo, 
+			@FormDataParam("channel") String channel,
+			@FormDataParam("guest") String guest,
+			@FormDataParam("youtube") String youtube,
+			@FormDataParam("moreInfo") String moreInfo,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
@@ -73,6 +76,13 @@ public class ProgramService {
 
 		try {
 			if (StringUtils.isNotEmpty(programName)) {
+				
+
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -211,7 +221,7 @@ public class ProgramService {
 		String resultFile = "fail";
 		String resultFileProgram = "fail";
 		String resultFileEdit = "fail";
-
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		try {
 			if (StringUtils.isNotEmpty(programId)) {
 
@@ -250,6 +260,14 @@ public class ProgramService {
 				}
 				if (!(programList.size() < 0)) {
 					jobj.put("EditProgram", programList);
+					
+					ProgramFileDTO programFileDto = new ProgramFileDTO();
+					programFileDto.setProgramId(programId);
+					ProgramFileBO programFileBo = new ProgramFileBO();
+					lstUploadFileDTO = programFileBo.getProgramImages(programFileDto);
+					if(lstUploadFileDTO != null && lstUploadFileDTO.size() > 0){
+						jobj.put("PROGRAMFILES", lstUploadFileDTO);
+					}
 				} else {
 					jobj.put("EditProgram", "failed");
 				}
@@ -281,16 +299,22 @@ public class ProgramService {
 
 	}	
 
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/programUpdate")
-	public JSONObject newsUpdate(@Context HttpServletRequest request, @QueryParam("programId") String programId,
-			@QueryParam("programName") String programName, @QueryParam("duration") String duration,
-			@QueryParam("dateAndTimeFrom") String dateAndTimeFrom, @QueryParam("dateAndTimeTo") String dateAndTimeTo,
-			 @QueryParam("channel") String channel,
-			 @QueryParam("guest") String guest,
-			 @QueryParam("youtube") String youtube,
-			@QueryParam("moreInfo") String moreInfo) {
+	public JSONObject programUpdate(@Context HttpServletRequest request, 
+			@FormDataParam("programId") String programId,
+			@FormDataParam("programName") String programName, 
+			@FormDataParam("duration") String duration,
+			@FormDataParam("dateAndTimeFrom") String dateAndTimeFrom, 
+			@FormDataParam("dateAndTimeTo") String dateAndTimeTo,
+			@FormDataParam("channel") String channel,
+			@FormDataParam("guest") String guest,
+			@FormDataParam("youtube") String youtube,
+			@FormDataParam("moreInfo") String moreInfo,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
@@ -298,6 +322,12 @@ public class ProgramService {
 
 		try {
 			if (StringUtils.isNotEmpty(programName)) {
+				
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
 				
 				ProgramDTO programDto = new ProgramDTO();
 				String sUpdatedOn = CommonUtils.getDate();

@@ -7,5 +7,7 @@
 		storiesfile(storiesId,fileId)
 		values(#storiesId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteStoiesFile" parameterClass="com.dto.StoriesFileDTO">
+		delete from storiesfile  where storiesId = #storiesId# and  fileId = #fileId#
+	</delete>
 </sqlMap>

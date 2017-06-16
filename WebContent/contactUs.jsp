@@ -46,6 +46,24 @@ function contactUsFarmValidation() {
 		$("#" + msg).show();
 		email.focus();
 		return false;
+	}else if (email.value.length > 0 ) {
+		
+		var x = email.value;
+		//alert("x=="+x);
+		var atpos = x.indexOf("@");
+	    var dotpos = x.lastIndexOf(".");
+	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+	    	//alert("y==");
+	    	msg = "errEmailContact";
+			title = "Email";
+
+			$("#" + msg).text(title + " please enter valid email");
+			$("#" + msg).show();
+			email.focus();
+			return false;
+	    }else{
+	    	return true;
+	    }
 	}else if (subject.value.length == 0) {
 		msg = "errSubjectContact";
 		title = "Subject";
@@ -63,6 +81,7 @@ function contactUsFarmValidation() {
 		message.focus();
 		return false;
 	}else{
+		alert("==farm valid==");
 		$("#errName").text("");
 		$("#errEmail").text("");
 		$("#errSubject").text("");
@@ -86,9 +105,8 @@ function saveContact(){
 	contactObject.subject = subject;
 	contactObject.message = message;
 	
-	
-	$
-	.ajax({
+	alert("==b4==");
+	$.ajax({
 		data : contactObject,
 		url : "emp/contactService/addContact",
 		success : function(data) {

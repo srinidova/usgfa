@@ -7,5 +7,10 @@
 		programfile(programId,fileId)
 		values(#programId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteProgramFile" parameterClass="com.dto.ProgramFileDTO">
+		delete from programfile  where programId = #programId# and  fileId = #fileId#
+	</delete>
+	<select id="getProgramFileByFileId" resultClass="com.dto.ProgramFileDTO" parameterClass="java.lang.String">
+		select programId, fileId from programfile where fileId = #value#
+	</select>
 </sqlMap>

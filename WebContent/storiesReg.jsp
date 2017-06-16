@@ -107,6 +107,7 @@ function saveStoriesNew(){
 	   var farmState = $("#farmState").val();
 	   var farmPinCode = $("#farmPinCode").val();
 	   var aboutFarm = $("#aboutFarm").val();
+	   var file = $("#file")[0].files[0];
 	   
 		var formData = new FormData();
 		formData.append("title", title);
@@ -120,7 +121,7 @@ function saveStoriesNew(){
 		formData.append("farmState", farmState);
 		formData.append("farmPinCode", farmPinCode);
 		formData.append("aboutFarm", aboutFarm);
-		formData.append("file", $("#file")[0].files[0]);
+		formData.append("file", file);
 
 		alert('------saveStoriesNew---------');
 		$.ajax({
@@ -407,8 +408,8 @@ function saveStoriesNew(){
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> <input
 									id="file" name="file" class="file form-control" type="file">
-								<a href="#"><button
-										class="btn btn-success btn-sm text-right">Upload</button></a>
+								<!-- <a href="#"><button
+										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
 					</div>

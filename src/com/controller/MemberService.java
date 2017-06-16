@@ -143,6 +143,7 @@ public class MemberService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberDetails")
 	public JSONObject getMemberDetails() {
+		System.out.println("in to memberDetails");
 		JSONObject jobj1 = new JSONObject();
 		MemberBO bo = new MemberBO();
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
@@ -184,7 +185,7 @@ public class MemberService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getMemberProfile")
 	public JSONObject getMemberProfile(@Context HttpServletRequest request) {
-
+    System.out.println("in to member profile");
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String memberId = (String) session.getAttribute("MEMBERID");
@@ -237,7 +238,7 @@ public class MemberService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/editMember")
 	public JSONObject editMember(@Context HttpServletRequest request) {
-
+        System.out.println("in to member edit");
 		JSONObject jobj = new JSONObject();
 		HttpSession session = request.getSession();
 		String memberId = (String) session.getAttribute("MEMBERID");
@@ -248,7 +249,7 @@ public class MemberService {
 			if (StringUtils.isNotEmpty(memberId)) {
 				MemberDTO memberDto = new MemberDTO();
 				memberDto.setMemberId(memberId);
-
+                System.out.println("in to member edit"+memberId);
 				MemberBO bo = new MemberBO();
 				memberList = bo.getMemberProfile(memberDto);
 
@@ -267,6 +268,7 @@ public class MemberService {
 					jobj.put("MemberFarmEdit", farmList);
 				}
 			}
+			System.out.println("in member edit jobj"+jobj);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -297,14 +299,14 @@ public class MemberService {
 		String sLoginId = "";
 		boolean bFarmNew = false;
 		String memberfarmResult = "fail";
-
+        System.out.println("in to member update");
 		try {
 			if (StringUtils.isNotEmpty(title)) {
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
 				}
 				
-				
+				System.out.println("in to member update");
 				MemberDTO memberDto = new MemberDTO();
 				memberDto.setMemberId(memberId);
 				memberDto.setTitle(title);
@@ -343,7 +345,7 @@ public class MemberService {
 				farmDto.setAboutFarm(aboutFarm);
 				farmDto.setFarmState(farmState);
 				farmDto.setFarmPincode(farmPincode);
-				
+				System.out.println("in member update "+memberResult);
 
 				FarmBO farmBo = new FarmBO();
 				if(bFarmNew){
@@ -362,6 +364,7 @@ public class MemberService {
 				}
 
 			}
+				//System.out.println("in memberfarm update "+memberfarmResult);
 			if (!"fail".equals(memberResult)) {
 				jObj.put("Msg", memberResult);
 			} else {

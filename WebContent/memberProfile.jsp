@@ -43,6 +43,7 @@ if(sRole != null && sRole.equals("Admin")){
 												.each(
 														data.MemberProfile,
 														function(key, val) {
+															alert("in to member profile");
 															$('#memberProfTitle')
 																	.text(
 																			data.MemberProfile[key].title);
@@ -112,6 +113,7 @@ if(sRole != null && sRole.equals("Admin")){
 								});
 					});
 	function editProfMember() {
+		alert("in to member edit ");
 		var memberId = $("#memberProfMemberId").val();
 		var memberObject = new Object();
 		memberObject.memberId = memberId;

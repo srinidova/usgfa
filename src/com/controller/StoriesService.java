@@ -40,16 +40,19 @@ import net.sf.json.JSONObject;
 @Path("/storiesService")
 public class StoriesService {
 
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addStories")
-	public JSONObject addStories(@Context HttpServletRequest request, @QueryParam("storiesId") String storiesId,
-			@QueryParam("title") String title, @QueryParam("name") String name,
-			@QueryParam("profession") String profession, @QueryParam("farmName") String farmName,
-			@QueryParam("farmAddress") String farmAddress, @QueryParam("place") String place,
-			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
-			@QueryParam("farmState") String farmState, @QueryParam("farmPinCode") String farmPinCode,
-			@QueryParam("aboutFarm") String aboutFarm) {
+	public JSONObject addStories(@Context HttpServletRequest request, @FormDataParam("storiesId") String storiesId,
+			@FormDataParam("title") String title, @FormDataParam("name") String name,
+			@FormDataParam("profession") String profession, @FormDataParam("farmName") String farmName,
+			@FormDataParam("farmAddress") String farmAddress, @FormDataParam("place") String place,
+			@FormDataParam("mandal") String mandal, @FormDataParam("district") String district,
+			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
+			@FormDataParam("aboutFarm") String aboutFarm,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
@@ -58,6 +61,12 @@ public class StoriesService {
 
 		try {
 			if (StringUtils.isNotEmpty(title)) {
+				
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -193,6 +202,7 @@ public class StoriesService {
 		HttpSession session = request.getSession();
 		String storiesId = (String) session.getAttribute("STORIESID");
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
+		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 
 		try {
 			if (StringUtils.isNotEmpty(storiesId)) {
@@ -204,6 +214,14 @@ public class StoriesService {
 
 				if (!(storiesList.size() < 0)) {
 					jobj.put("EditStories", storiesList);
+					// get stories images
+					StoriesFileDTO storiesFileDto = new StoriesFileDTO();
+					storiesFileDto.setStoriesId(storiesId);
+					StoriesFileBO storiesFileBo = new StoriesFileBO();
+					lstUploadFileDTO = storiesFileBo.getStoriesImages(storiesFileDto);
+					if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
+						jobj.put("STORIESFILES", lstUploadFileDTO);
+					}
 				} else {
 					jobj.put("EditStories", "failed");
 				}
@@ -215,22 +233,31 @@ public class StoriesService {
 
 	}
 
-	@GET
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/storiesUpdate")
-	public JSONObject storiesUpdate(@Context HttpServletRequest request, @QueryParam("storiesId") String storiesId,
-			@QueryParam("title") String title, @QueryParam("name") String name,
-			@QueryParam("profession") String profession, @QueryParam("farmName") String farmName,
-			@QueryParam("farmAddress") String farmAddress, @QueryParam("place") String place,
-			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
-			@QueryParam("farmState") String farmState, @QueryParam("farmPinCode") String farmPinCode,
-			@QueryParam("aboutFarm") String aboutFarm) {
+	public JSONObject storiesUpdate(@Context HttpServletRequest request, @FormDataParam("storiesId") String storiesId,
+			@FormDataParam("title") String title, @FormDataParam("name") String name,
+			@FormDataParam("profession") String profession, @FormDataParam("farmName") String farmName,
+			@FormDataParam("farmAddress") String farmAddress, @FormDataParam("place") String place,
+			@FormDataParam("mandal") String mandal, @FormDataParam("district") String district,
+			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
+			@FormDataParam("aboutFarm") String aboutFarm,
+			@FormDataParam("file") InputStream in,
+            @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
 
 		try {
 			if (StringUtils.isNotEmpty(name)) {
+				CommonUtils utils = new CommonUtils();
+				String path = "";
+				//System.out.println( request.getServletContext().getRealPath("/"));
+				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				utils.uploadFileToLocation(info, in, request, path);
+				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
 				}
