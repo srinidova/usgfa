@@ -30,6 +30,7 @@ public class StoriesFileBO {
 		return storiesFileDao.deleteStoriesFile(storiesFileDTO);
 	}
 	public ArrayList<UploadFileDTO> getStoriesFilesByFileId(StoriesFileDTO storiesFileDTO) {
+		System.out.println("in to storiesfile showaspublic");
 		StoriesFileDAO storiesFileDao = new StoriesFileDAO();
 		return storiesFileDao.getStoriesFilesByFileId(storiesFileDTO);
 	}
@@ -104,8 +105,8 @@ public class StoriesFileBO {
 				System.out.println("j. sDelRef==" + sDelRef);
 
 				// ********* getting updated list**********//
-				System.out.println("j. getFileId==" + storiesFileDto.getFileId() + "------------- getNewsId=="+ storiesFileDto.getStoriesId());
-				lstLatestUploadFiles = getUploadFleByStoriesId(storiesFileDto);
+				System.out.println("j. getFileId==" + storiesFileDto.getFileId() + "------------- getStoriesId=="+ storiesFileDto.getStoriesId());
+				lstLatestUploadFiles = getStoriesImages(storiesFileDto);
 				System.out.println("l. lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 			}
 		} catch (Exception ex) {

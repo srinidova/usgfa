@@ -50,7 +50,14 @@
 			$("#" + msg).text(title + " should not be empty");
 			$("#" + msg).show();
 			return false;
-		} else {
+		} else if (duration.value.length == 0 ) {
+			msg = "errDuration";
+			title = "Duration";
+
+			$("#" + msg).text(title + " should not be empty");
+			$("#" + msg).show();
+			return false;
+		}else {
 			$("#errProgramName").text("");
 			$("#errDateAndTimeFrom").text("");
 			$("#errDateAndTimeTo").text("");
@@ -221,7 +228,7 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 					<div class="form-group">
 						<label for="duration">Duration</label>  <span class="errMsg" id="errDuration"></span>
 						<input type="text" class="form-control" id="duration" name="duration" maxlength="30"
-						onkeyup="validateTitle(id,'Duration ','errDuration',3,30);">
+						onkeyup="allNumber(id,'Duration ','errDuration',3,30);">
 					</div>
 				</div>
 				<div class="col-md-5">

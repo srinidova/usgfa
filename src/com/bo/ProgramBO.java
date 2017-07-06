@@ -3,9 +3,11 @@ package com.bo;
 import java.util.ArrayList;
 
 import com.dao.EmployeeDAO;
+import com.dao.MemberDAO;
 import com.dao.NewsDAO;
 import com.dao.ProgramDAO;
 import com.dto.EmployeeDTO;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.UploadFileDTO;
@@ -37,6 +39,10 @@ public class ProgramBO {
 		ProgramDAO dao = new ProgramDAO();
 		return dao.programUpdate(programDto);
 	}
-    
+	public ArrayList<ProgramDTO> searchProgram(ProgramDTO programDto){
+		//System.out.println("in to memberBO ");
+		ProgramDAO dao = new ProgramDAO();
+	     return dao.searchProgram(programDto);
+	}
 }
 

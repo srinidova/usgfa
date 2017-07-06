@@ -35,5 +35,24 @@
 		where
 		newsId = #newsId#
 	</update>
+<select id="newsSearch" parameterClass="com.dto.NewsDTO" resultClass="com.dto.NewsDTO">
+		select
+		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
+		news where newsId is not null
+   
+   <isNotNull property="newsTitle">
+	    AND newsTitle like '%$newsTitle$%'
+   </isNotNull>
 
+	<isNotNull property="paper">
+		AND paper like '%$paper$%'
+	</isNotNull>
+	
+	<isNotNull property="link">
+		AND link like '%$link$%'
+	</isNotNull>
+
+	
+
+    </select>
 </sqlMap>

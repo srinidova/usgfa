@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import com.connection.IbatisFactory;
 import com.dto.BloodGroupDTO;
 import com.dto.EmployeeDTO;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.SkillsDTO;
@@ -84,5 +85,30 @@ public class ProgramDAO {
 		}
 		return result;
 	}
+	@SuppressWarnings("unchecked")
+	public ArrayList<ProgramDTO> searchProgram(ProgramDTO programDto) {
+		ArrayList<ProgramDTO> programdto = new ArrayList<ProgramDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		//System.out.println("in to memberDAO");
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			String sProgramName = programDto.getProgramName();
+			String sChannel = programDto.getChannel();
+			String sGuest = programDto.getGuest();
+			
+			System.out.println("3.a In ProgramDAO searchProgram---------- sProgramName===" + sProgramName);
+			System.out.println("3.b In ProgramDAO searchProgram---------- sChannel===" + sChannel);
+			System.out.println("3.c In ProgramDAO searchProgram---------- sGuest===" + sGuest);
+
+			programdto = (ArrayList<ProgramDTO>) session.queryForList("Program.programSearch", programDto);
+			System.out.println("in to program Update size"+programdto.size());
 	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return programdto;
+	}
 }

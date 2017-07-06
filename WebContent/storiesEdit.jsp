@@ -35,6 +35,7 @@
 		var district = document.getElementById("storiesEditDistrict");
 		var farmPinCode = document.getElementById("storiesEditFarmPinCode");
 		var aboutFarm = document.getElementById("storiesEditAboutFarm");
+		var number = /^[0-9]+$/;
 		if (name.value.length == 0) {
 		msg = "errEditStoName";
 		title = "Name ";
@@ -84,7 +85,15 @@
 		$("#" + msg).show();
 		district.focus();
 		return false;
-	} else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
+	} else if (farmPinCode.value.length > 0 && !farmPinCode.value.match(number) ) {
+		msg = "errStoriesEditFarmPinCode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		farmPinCode.focus();
+		return false;
+	}else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
 		msg = "errStoriesEditFarmPinCode";
 		title = "Farm Pin Code";
 
@@ -225,6 +234,7 @@
 		var dispClas = '';
 		var dispChkd = '';
 		var imgCtrl = true;
+		if(data.STORIESFILES != null ){
 		$.each(
 				data.STORIESFILES,
 				function(key, val) {
@@ -246,19 +256,19 @@
 						+'<li class="col-md-12">'
 							+'<div class="fff">'
 								+'<div class="thumbnail">'
-									+'<a href="#">'
-									     +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="">'
+									+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.STORIESFILES[key].filePath+'" data-target="#image-gallery">'
+									  +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
 									+'</a>'
 								+'</div>'
 								+'<div class="caption">'
 									+'<div class="checkbox">'
 										+'<label>'
-										    +'<input id="'+data.STORIESFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.STORIESFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+										    +'<input id="'+data.STORIESFILES[key].fileId+'" onclick="updateShowAsPublicStories(this.id);" type="checkbox" value="'+data.STORIESFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
 										+'</label>'
 										+'<div class="suceee_msg"></div>'
 									+'</div>'
 									+'<div class="delete_box">'
-										+'<a href="#" name="'+data.STORIESFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+										+'<a href="#" name="'+data.STORIESFILES[key].fileId+'" onclick="deleteFileStories(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
 										+'<div class="suceee_msg"></div>'
 									+'</div>'
 								+'</div>'
@@ -268,10 +278,49 @@
 				+'</div>'
 				})
 				document.getElementById("storiesEditImages").innerHTML = dispImages;
-		//alert("imgCtrl=="+imgCtrl);
-		if(imgCtrl){
-			document.getElementById("storiesEditImgCont").style.display = 'none';
+				$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 		}
+				if(imgCtrl){
+					document.getElementById("storiesEditImgCont").style.display = 'none';
+				}
+	}
+	function deleteFileStories(fileId){
+		//alert("fileId----"+fileId);
+		var storiesObject = new Object();
+		storiesObject.fileId = fileId;
+		storiesObject.type = "STORIES";
+		//alert("fileId----"+fileId);
+		$.ajax({
+			data : storiesObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data){
+				if(data.Msg = 'success'){
+					showProgramImages(data);
+				}
+			}
+		})
+	}
+	function updateShowAsPublicStories(fileId){
+		//alert("fileId----"+fileId);
+		var setVal = '';
+		if(document.getElementById(fileId).checked){
+			setVal = '1';
+		}else{
+			setVal = '0';
+		}
+		var uploadFileObject = new Object();
+		uploadFileObject.fileId = fileId; 
+		uploadFileObject.showAsPublic = setVal;
+		uploadFileObject.type = "STORIES";
+			$.ajax({
+			data : uploadFileObject,
+			url : "emp/uploadService/updateShowAsPublic",
+			success : function(data) {
+				if (data.Msg = "success") {
+					showStoriesImages(data);
+				}
+			}
+		}); 
 	}
 </script>
 </head>
@@ -427,7 +476,36 @@
 			<!-------------------------Upload Photo end--------------------------------------->
 
 			<!----------------------photo_gallery------------------------------>
-
+			<div class="row">
+				<div class="modal fade" id="image-gallery" tabindex="-1"
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+					style="display: none;">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="image-gallery-title"></h4>
+							</div>
+							<div class="modal-body" id="modelBodyNewsProf">
+							    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
+							</div>
+							<div class="modal-footer">
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary"
+										id="show-previous-image" style="display: none;">Previous</button>
+								</div>
+								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+								<div class="col-md-2">
+									<button type="button" id="show-next-image"
+										class="btn btn-primary">Next</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-md-5" style="margin-left: 250px;">
 				<div class="row">
 

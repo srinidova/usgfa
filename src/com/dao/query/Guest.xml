@@ -17,20 +17,7 @@
 		delete from guest where
 		guestId = #guestId#
 	</delete>
-	<!-- <delete id="deleteGuest" parameterClass="com.dto.EventGuestDTO">
-		delete from eventguest  where eventId = #eventId# and  guestId = #guestId#
-	</delete> -->
-	 <!-- <select id="getGuestDetails" resultClass="com.dto.GuestDTO">
-		select
-		guestId,title,name,designation from
-		guest
-	</select>
-	
-	<update id="farmUpdate" parameterClass="com.dto.FarmDTO">
-		update farm set farmName
-		= #farmName#, farmPlace = #farmPlace#, farmAddress = #farmAddress#, farmMandal = #farmMandal#, farmDistrict
-		= #farmDistrict#, aboutFarm = #aboutFarm#, farmState = #farmState#, farmPincode = #farmPincode# 
-		where
-		farmId = #farmId#
-	</update> -->
+	<update id="updateGuest" parameterClass="com.dto.GuestDTO">
+	update guest set title = #title#, name = #name#, designation = #designation# where guestId = #guestId#
+	</update>
 </sqlMap>

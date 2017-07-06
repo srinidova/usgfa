@@ -61,6 +61,12 @@ if(sRole != null && (sRole.equals("Life") || sRole.equals("Admin") ) ){
                             </ul>
                         </li>
                         <li><a href='contactUs.jsp'>Contact Us</a></li>
+                        <li><a href='committeeReg.jsp'>Committee</a></li>
+<!--                         <li><a href="#">Committee</a>
+                        	<ul>
+                                <li><a href='committeeReg.jsp'>Committee New</a></li>
+                            </ul>
+                         </li> -->
                     </ul>
                 </nav>
             </div>

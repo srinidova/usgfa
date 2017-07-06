@@ -21,7 +21,18 @@ private String haveFarm;
 private String memberType;
 private String amountPaid;
 private String password;
+private String filePath;
+private String committeRole;
+private String committeId;
+private String committeDispayOder;
+private String committeComments;
 
+public String getFilePath() {
+	return filePath;
+}
+public void setFilePath(String filePath) {
+	this.filePath = filePath;
+}
 public String getMemberId() {
 	return memberId;
 }
@@ -142,5 +153,28 @@ public String getPassword() {
 public void setPassword(String password) {
 	this.password = password;
 }
-
+public String getCommitteRole() {
+	return committeRole;
+}
+public void setCommitteRole(String committeRole) {
+	this.committeRole = committeRole;
+}
+public String getCommitteId() {
+	return committeId;
+}
+public void setCommitteId(String committeId) {
+	this.committeId = committeId;
+}
+public String getCommitteDispayOder() {
+	return committeDispayOder;
+}
+public void setCommitteDispayOder(String committeDispayOder) {
+	this.committeDispayOder = committeDispayOder;
+}
+public String getCommitteComments() {
+	return committeComments;
+}
+public void setCommitteComments(String committeComments) {
+	this.committeComments = committeComments;
+}
 }

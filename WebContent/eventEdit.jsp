@@ -39,6 +39,7 @@ function eventEditFarmValidation() {
 	var district = document.getElementById("eventEditDistrict");
 	var landMark = document.getElementById("eventEditLandMark");
 	var pincode = document.getElementById("eventEditPincode");
+	
 	var msg = "";
 	var title = "";
 	$("#eventEditFailMsg").text("");
@@ -152,7 +153,9 @@ $(document).ready(function() {
 						}
 				)
 				showEventImages(data);
-				$.each(
+				//alert("EventGuestEdit===="+data.EventGuestEdit);
+				showGuests(data);
+/* 				$.each(
 						data.EventGuestEdit,
 						function(key, val) {
 							content = content
@@ -169,7 +172,7 @@ $(document).ready(function() {
 								+'</td>'
 						+'</tr>'; 
 					})
-					$('tbody').html(content); 
+					$('tbody').html(content);  */
 		}
 	});
 });
@@ -195,6 +198,7 @@ function eventUpdate(){
 		var guestTitle = "";
 		var guestName = "";
 		var guestDesi = "";
+		
 		for (var i = 0; i < elmsGstName.length - 1; i++) {
 			if (guestTitle.length > 0)
 				guestTitle = guestTitle + "~" + elmsGstTitle[i].value;
@@ -232,7 +236,7 @@ function eventUpdate(){
 		formData.append("guestTitle", guestTitle);
 		formData.append("guestName", guestName);
 		formData.append("guestDesi", guestDesi);
-		
+		//alert("in eventEdit page "+guestName);
 
 		$.ajax({
 			type: 'POST',
@@ -250,32 +254,7 @@ function eventUpdate(){
 			}
 		});
 		
-/* 	var eventObject = new Object();
-	eventObject.eventId = eventId;
-	eventObject.eventName = eventName;
-	eventObject.noOfDays = noOfDays;
-	eventObject.timeFrom = timeFrom;
-	eventObject.timeEnd = timeEnd;
-	eventObject.address = address;
-	eventObject.place = place;
-	eventObject.mandal = mandal;
-	eventObject.moreInfo = moreInfo;
-	eventObject.district = district;
-	eventObject.state = state;
-	eventObject.landMark = landMark;
-	eventObject.pincode = pincode; 
-	 $
-	.ajax({
-		data : eventObject,
-		url : "emp/eventService/eventUpdate",
-		success : function(data) {
-			if (data.Msg == 'success') {
-				window.location.href = "eventList.jsp";
-			}else{
-				$("#eventEditFailMsg").text("Event Edit Failed");
-			} 
-		}
-	});  */
+
 	
 }
 function deleteGuest(guestId){
@@ -286,7 +265,8 @@ function deleteGuest(guestId){
 		data : guestObject,
 		url : "emp/eventService/deleteGuest",
 		success : function(data) {
-			$.each(
+			showGuests(data);
+/* 			$.each(
 					data.EventGuestEdit,
 					function(key, val) {
 						content = content
@@ -303,13 +283,43 @@ function deleteGuest(guestId){
 							+'</td>'
 					+'</tr>'; 
 				})
-				$('tbody').html(content); 
+				$('tbody').html(content);  */
 		
 		}
 	});
 	
 }
 
+function showGuests(data){
+	//alert("qaqaqa========"+data.EventGuestEdit);
+	var content = "";
+	var disGuest = false;
+	$.each(
+			data.EventGuestEdit,
+			function(key, val) {
+				disGuest = true;
+				content = content
+				+'<tr>'
+				+'<td>'+data.EventGuestEdit[key].title+'</td>'
+				+'<td>'+data.EventGuestEdit[key].name+'</td>'
+				+'<td>'+data.EventGuestEdit[key].designation+'</td>'
+				+'<td>'
+				+'<div class="add_button" style="margin-top: 0px;">'
+						+'<button id='+data.EventGuestEdit[key].guestId+' class="btn btn-primary btn-sm add_field_button" onclick="deleteGuest(this.id)">'
+							+'<i class="fa fa-minus" aria-hidden="true"></i'
+						+'</button>'
+					+'</div>'
+					+'</td>'
+			+'</tr>'; 
+		})
+		//alert("disGuest========"+disGuest);
+	if(disGuest){
+		$('tbody').html(content); 
+	}else{
+		document.getElementById("guestList").style.display = 'none';
+	}
+		
+}
 function pincodeCheck(fName, title, msg) {
 	var fieldName = document.getElementById(fName);
 	var number = /^[0-9]+$/;
@@ -333,10 +343,13 @@ function showEventImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispImgCtrls = true;
+	if(data.EVENTFILES != null ){
 	$.each(
 			data.EVENTFILES,
 			function(key, val) {
-				alert(data.EVENTFILES[key].showPublic);
+				dispImgCtrls = false;
+				//alert(data.EVENTFILES[key].showPublic);
 				if(data.EVENTFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -353,19 +366,19 @@ function showEventImages(data){
 					+'<li class="col-md-12">'
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.EVENTFILES[key].filePath+'" data-target="#image-gallery">'
+								  +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
 								+'<div class="checkbox">'
 									+'<label>'
-									    +'<input id="'+data.EVENTFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.EVENTFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+									    +'<input id="'+data.EVENTFILES[key].fileId+'" onclick="updateShowAsPublicEvent(this.id);" type="checkbox" value="'+data.EVENTFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
 									+'</label>'
 									+'<div class="suceee_msg"></div>'
 								+'</div>'
 								+'<div class="delete_box">'
-									+'<a href="#" name="'+data.EVENTFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+									+'<a href="#" name="'+data.EVENTFILES[key].fileId+'" onclick="deleteFileEvent(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
 									+'<div class="suceee_msg"></div>'
 								+'</div>'
 							+'</div>'
@@ -375,6 +388,49 @@ function showEventImages(data){
 			+'</div>'
 			})
 			document.getElementById("eventEditImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	}
+	if(dispImgCtrls){
+		document.getElementById("eventEditImgCtrl").style.display = 'none';
+	}
+}
+function deleteFileEvent(fileId){
+	//alert("fileId----"+fileId);
+	var eventObject = new Object();
+	eventObject.fileId = fileId;
+	eventObject.type = "EVENT";
+	//alert("fileId----"+fileId);
+	$.ajax({
+		data : eventObject,
+		url : "emp/uploadService/deleteImage",
+		success : function(data){
+			if(data.Msg = 'success'){
+				showEventImages(data);
+			}
+		}
+	})
+}
+function updateShowAsPublicEvent(fileId){
+	//alert("fileId----"+fileId);
+	var setVal = '';
+	if(document.getElementById(fileId).checked){
+		setVal = '1';
+	}else{
+		setVal = '0';
+	}
+	var uploadFileObject = new Object();
+	uploadFileObject.fileId = fileId; 
+	uploadFileObject.showAsPublic = setVal;
+	uploadFileObject.type = "EVENT";
+		$.ajax({
+		data : uploadFileObject,
+		url : "emp/uploadService/updateShowAsPublic",
+		success : function(data) {
+			if (data.Msg = "success") {
+				showStoriesImages(data);
+			}
+		}
+	}); 
 }
 </script>
 </head>
@@ -521,8 +577,38 @@ function showEventImages(data){
 			<div class="clearfix"></div>
 
 			<!----------------------photo_gallery------------------------------>
+			<div class="row">
+				<div class="modal fade" id="image-gallery" tabindex="-1"
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+					style="display: none;">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="image-gallery-title"></h4>
+							</div>
+							<div class="modal-body" id="modelBodyNewsProf">
+							    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
+							</div>
+							<div class="modal-footer">
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary"
+										id="show-previous-image" style="display: none;">Previous</button>
+								</div>
+								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+								<div class="col-md-2">
+									<button type="button" id="show-next-image"
+										class="btn btn-primary">Next</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-md-5" style="margin-left: 250px;">
-				<div class="row">
+				<div class="row" id="eventEditImgCtrl">
 
 					<div class="col-md-12" style="margin-bottom: 10px;">
 						<!-- Controls -->
@@ -549,8 +635,8 @@ function showEventImages(data){
 						</div>
 
 
-						<div class="card-block p-0"
-							style="overflow-y: scroll; height: 250px; width: 100%;">
+						<div class="card-block p-0" id="guestList"
+							style="overflow-y: scroll; width:80%;">
 							<table class="table table-bordered table-responsive ">
 								<thead class="">
 									<tr>
@@ -561,37 +647,7 @@ function showEventImages(data){
 									</tr>
 								</thead>
 								<tbody>
-								<!-- 	<tr>
-										<td>Mr</td>
-										<td>September 14, 2013</td>
-										<td>jhlilk22@yahoo.com</td>
-										<td><div class="add_button" style="margin-top: 0px;">
-												<button class="btn btn-primary btn-sm add_field_button">
-													<i class="fa fa-minus" aria-hidden="true"></i>
-												</button>
-											</div></td>
-									</tr> -->
-									<div id="guestListData"></div>
-<!-- 									<tr>
-										<td>Mr</td>
-										<td>September 14, 2013</td>
-										<td>jhlilk22@yahoo.com</td>
-										<td><div class="add_button" style="margin-top: 0px;">
-												<button class="btn btn-primary btn-sm add_field_button">
-													<i class="fa fa-minus" aria-hidden="true"></i>
-												</button>
-											</div></td>
-									</tr>
-									<tr>
-										<td>Mr</td>
-										<td>September 14, 2013</td>
-										<td>jhlilk22@yahoo.com</td>
-										<td><div class="add_button" style="margin-top: 0px;">
-												<button class="btn btn-primary btn-sm add_field_button">
-													<i class="fa fa-minus" aria-hidden="true"></i>
-												</button>
-											</div></td>
-									</tr> -->
+
 
 								</tbody>
 							</table>
@@ -600,7 +656,7 @@ function showEventImages(data){
 
 				</div>
 			</div>
-
+          
 			<div class="row">
 				<div class="col-md-10">
 					<!-- <div class="member_registration" style="margin-left: 0px;">
@@ -626,7 +682,7 @@ function showEventImages(data){
 
 				</div>
 			</div>
-
+               <!-- --------------------guest form start------------------------------- -->
 			<div class="row">
 				<div class="col-md-10">
 					<div class="from">
@@ -644,13 +700,13 @@ function showEventImages(data){
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
-								<label for="name">Name</label> <input type="text"
+								<label for="name">Name</label> <input type="text"  maxlength="30"
 									class="form-control" id="guestName" name="guestName">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="form-group">
-								<label for="designation">Designation</label> <input type="text"
+								<label for="designation">Designation</label> <input type="text"  maxlength="30"
 									class="form-control" id="guestDesi"
 									name="guestDesi">
 							</div>
@@ -668,6 +724,47 @@ function showEventImages(data){
 			</div>
 
 			<!------------------------------guests form end--------------------------------------->
+			
+			<!-- ----------------guest1 form start--------- -------------------------------------->
+			<div id="guests_block" style="display: none;">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="from">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="title">Title</label> <select class="form-control" id="guestTitle" name="guestTitle">
+								<option value=""></option>
+								<option value="Mr">Mr</option>
+								<option value="Ms">Ms</option>
+								<option value="Dr">Dr</option>
+								<option value="Prof">Prof</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="name">Name</label> <input type="text"
+								class="form-control" id="guestName" name="guestName">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label for="designation">Designation</label> <input type="text"
+								class="form-control" id="guestDesi" name="guestDesi">
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="add_button">
+							<button class="btn btn-primary btn-sm remove_field">
+								<i class="fa fa-minus" aria-hidden="true"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+			<!----------------------------------- ---guest1 form end --------------------->
 
 			<!-------------------------submit button--------------------------------------->
 			<div class="col-md-10">
@@ -765,6 +862,7 @@ function showEventImages(data){
   
   
   $(document).ready(function() {
+	  $("#eventEditMoreInfo").val("");
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID

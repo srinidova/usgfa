@@ -80,29 +80,6 @@ $(document)
 													data.PROGRAMFILES,
 													function(key, val) {
 														html = html
-														/*  +'<li class="col-md-12">'
-														+'<div class="fff">'
-														  +'<div class="thumbnail">' 
-														+'<a href="#"><img src='+data.PROGRAMFILES[key].filePath+' alt="">'
-														  +'</a>' 
-														  +'</div>'
-														  +'<div class="img_tiltle">'
-														    +'<h2>Image 2</h2>'
-														  +'</div>'
-														  +'<div class="caption">'
-														    +'<div class="checkbox">'
-														      +'<label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
-														      +'<div class="suceee_msg">'
-														      +'</div>'
-														    +'</div>'
-														    +'<div class="delete_box"><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-														      +'<div class="suceee_msg">'
-														      +'</div>'
-														    +'</div>'
-														  +'</div>'
-														+'</div>'
-													      +'</li>'  */
-
 													})
 													
 													$(html).appendTo("#programImages");
@@ -128,10 +105,14 @@ function showProgramProfImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispImgCtrls = true;
+	if(data.PROGRAMFILES != null){
+	
 	$.each(
 			data.PROGRAMFILES,
 			function(key, val) {
-				alert(data.PROGRAMFILES[key].showPublic);
+				dispImgCtrls = false;
+				//alert(data.PROGRAMFILES[key].showPublic);
 				if(data.PROGRAMFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -147,29 +128,23 @@ function showProgramProfImages(data){
 				+'<ul class="thumbnails">'
 					+'<li class="col-md-12">'
 						+'<div class="fff">'
-							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="">'
-								+'</a>'
-							+'</div>'
-							+'<div class="caption">'
-								+'<div class="checkbox">'
-									+'<label>'
-									    +'<input id="'+data.PROGRAMFILES[key].fileId+'" onclick="updateShowAsPublicProgram(this.id);" type="checkbox" value="'+data.PROGRAMFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
-									+'</label>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-								+'<div class="delete_box">'
-									+'<a href="#" name="'+data.PROGRAMFILES[key].fileId+'" onclick="deleteFileProgram(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-							+'</div>'
+						+'<div class="thumbnail">'
+							+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.PROGRAMFILES[key].filePath+'" data-target="#image-gallery">'
+							  +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+							+'</a>'
+						+'</div>'
 						+'</div>'
 					+'</li>'
 				+'</ul>'
 			+'</div>'
 			})
 			document.getElementById("programProfImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	}
+	//alert("dispImgCtrls========"+dispImgCtrls);
+	if(dispImgCtrls){
+		document.getElementById("programProfImgCtrl").style.display = 'none';
+	}
 }
 </script>
 </head>
@@ -244,6 +219,36 @@ function showProgramProfImages(data){
 						</div>
 					</div>
 					<div class="row">
+						<div class="modal fade" id="image-gallery" tabindex="-1"
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+							style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+										</button>
+										<h4 class="modal-title" id="image-gallery-title"></h4>
+									</div>
+									<div class="modal-body" id="modelBodyNewsProf">
+									    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
+									</div>
+									<div class="modal-footer">
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary"
+												id="show-previous-image" style="display: none;">Previous</button>
+										</div>
+										<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+										<div class="col-md-2">
+											<button type="button" id="show-next-image"
+												class="btn btn-primary">Next</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="programProfImgCtrl">
 						<div class="col-md-6" style="margin-left: 250px;">
 							<nav>
 								<ul class="control-box pager text-left">

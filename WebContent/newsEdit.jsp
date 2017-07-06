@@ -133,8 +133,8 @@ function newsUpdateNew(){
 	formData.append("date", date);
 	formData.append("link", link);
 	formData.append("moreInfo", moreInfo);
-	formData.append("file", $("#file")[0].files[0]);
-
+	formData.append("file", file);
+//alert("file-----"+file);
 	$.ajax({
 		type: 'POST',
 		url : "emp/newsService/newsUpdateNew",
@@ -157,6 +157,7 @@ function showNewsImages(data){
 	var dispClas = '';
 	var dispChkd = '';
 	var imgCtrl = true;
+	if(data.NEWSFILES != null){
 	$.each(
 			data.NEWSFILES,
 			function(key, val) {
@@ -176,10 +177,10 @@ function showNewsImages(data){
 				+'<div class="'+ dispClas +'">'
 				+'<ul class="thumbnails">'
 					+'<li class="col-md-12">'
-						+'<div class="fff">'
-							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="">'
+							+'<div class="fff">'
+								+'<div class="thumbnail">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
+								  +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
@@ -200,6 +201,8 @@ function showNewsImages(data){
 			+'</div>'
 			})
 			document.getElementById("newsEditImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	}
 			if(imgCtrl){
 				document.getElementById("newsEditImagesCont").style.display = 'none';
 			}
@@ -228,7 +231,7 @@ function updateShowAsPublicNews(fileId){
 }
 
 function deleteFileNews(fileId){
-alert("fileId--------"+fileId);
+//alert("fileId--------"+fileId);
 	var newsObject = new Object();
 	newsObject.fileId = fileId; 
 	newsObject.type = "NEWS";
@@ -348,9 +351,8 @@ alert("fileId--------"+fileId);
 									</button>
 									<h4 class="modal-title" id="image-gallery-title"></h4>
 								</div>
-								<div class="modal-body">
-									<img id="image-gallery-image" class="img-responsive"
-										src="images/g2.jpg">
+								<div class="modal-body" id="modelBodyNewsProf">
+								    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
 								</div>
 								<div class="modal-footer">
 									<div class="col-md-2">
@@ -360,17 +362,17 @@ alert("fileId--------"+fileId);
 									<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
 									<div class="col-md-2">
 										<button type="button" id="show-next-image"
-											class="btn btn-default">Next</button>
+											class="btn btn-primary">Next</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" style="margin-left: 250px;">
+				<div class="col-md-6" style="margin-left: 250px;" id="newsEditImagesCont">
 					<div class="row">
 
-						<div class="col-md-12" style="margin-bottom: 10px;" id="newsEditImagesCont">
+						<div class="col-md-12" style="margin-bottom: 10px;" >
 							<!-- Controls -->
 							<div class="controls pull-right ">
 								<a class="left fa fa-angle-left btn btn-default button-arrow"

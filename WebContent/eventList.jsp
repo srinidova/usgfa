@@ -55,7 +55,7 @@ tr td.e_details {
 
 <script type="text/javascript">
         $(document).ready(function(){
-	getEventDetails();
+        	getEventDetails();
 });
 
 function getEventDetails() {
@@ -63,47 +63,8 @@ function getEventDetails() {
 	$.ajax({
 				url : "emp/eventService/getEventDetails",
 				success : function(data) {
-					$.each(
-							data.EventDetails,
-							function(key, val) {
-									html = html
-									     + '<tr>'
-										     + '<td class="e_name">'+data.EventDetails[key].eventName+'</td>'
-										     +  '<td class="e_days">'+data.EventDetails[key].noOfDays+'</td>'
-											  +  '<td class="e_date">'+data.EventDetails[key].timeFrom+'</td>' 
-											 +  '<td class="e_details">'+data.EventDetails[key].address+'</td>'
-											 +  '<td>'
-											 	+ '<ul class="actions">'
-											 		+ '<li>'
-											 			+ '<a href="eventProfile.jsp"> '
-											 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-success btn-sm" onclick="getEventProfile(this.id)">'
-											 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%if(bAdmin){ %>
-											 		+ '<li>'
-											 			+ '<a href="eventEdit.jsp"> '
-											 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-primary btn-sm" onclick="editEvent(this.id)">'
-											 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		+ '<li>'
-											 			+ '<a href="eventList.jsp"> '
-											 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-danger btn-sm" onclick="deleteEvent(this.id)">'
-											 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%}%>
-											 	+ ' </ul>'
-											 +  '</td>'
-									     + '</tr>';
-							}
-					)
-					$(html).appendTo("#eventListData");
-					$(html).appendTo("</table></div></div>");
+					//alert("in to event details");
+					showEventList(data);
 				}
 					
 	});
@@ -148,24 +109,81 @@ function deleteEvent(eventId){
 	
 }
 function searchEvent(){
+	document.getElementById("eventListData").innerHTML = "";
+	//alert("in to event serach");
 	var eventName =$("#searchEventName").val();
 	var days = $("#searchEventDays").val();
+	var date = $("#searchEventDate").val();
+	var address = $("#searchEventAddress").val();
+	//alert("1.in to event serach")
 	var eventObject = new Object();
+	//alert("2.in to event serach")
 	eventObject.eventName = eventName;
 	eventObject.days = days;
+	eventObject.date = date;
+	eventObject.address = address;
 	$.ajax({
 		data : eventObject,
 		url : "emp/eventService/searchEvent",
 		success : function(data) {
 			if (data.Msg = "success") {
-				$.each(
-						data.EventSearch,
-						function(key, val) {
-						}
-				)
+				showEventList(data);
 			}
 		}
 	});
+}
+function showEventList(data){
+	//alert("in to showEventList page");
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	//alert("data====="+data);
+	$.each(
+			data.EventDetails,
+			function(key, val) {
+			//	alert("====EventDetails====="+data.EventDetails);
+					html = html
+					     + '<tr>'
+						     + '<td class="e_name">'+data.EventDetails[key].eventName+'</td>'
+						     +  '<td class="e_days">'+data.EventDetails[key].noOfDays+'</td>'
+							  +  '<td class="e_date">'+data.EventDetails[key].timeFrom+'</td>' 
+							 +  '<td class="e_details">'+data.EventDetails[key].address+'</td>'
+							 +  '<td>'
+							 	+ '<ul class="actions">'
+							 		+ '<li>'
+							 			+ '<a href="eventProfile.jsp"> '
+							 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-success btn-sm" onclick="getEventProfile(this.id)">'
+							 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%if(bAdmin){ %>
+							 		+ '<li>'
+							 			+ '<a href="eventEdit.jsp"> '
+							 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-primary btn-sm" onclick="editEvent(this.id)">'
+							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		+ '<li>'
+							 			+ '<a href="eventList.jsp"> '
+							 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-danger btn-sm" onclick="deleteEvent(this.id)">'
+							 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%}%>
+							 	+ ' </ul>'
+							 +  '</td>'
+					     + '</tr>';
+			}
+	)
+	$(html).appendTo("#eventListData");
+	$(html).appendTo("</table></div></div>");
+	$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+}
+function clearEventSearch(){
+	$("#searchEventName").val("");
+	$("#searchEventAddress").val("");
+	searchEvent();
 }
 </script>
 </head>
@@ -200,34 +218,34 @@ function searchEvent(){
 										<th>Days</th>
 										<th>Date</th>
 										<th>Address</th>
-										<th></th>
+										<th style="width: 125px;"></th>
 									</tr>
 									<tr>
 										<td><div class="row">
 												<div class="col-md-10">
-													<input type="text" name='name0' placeholder='Event Name' name="searchEventName" 
+													<input type="text"  placeholder='Event Name' name="searchEventName" 
 													id="searchEventName" class="form-control " style="width: 200px;" onkeyup="searchEvent();" />
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Days' name="searchEventDays" id="searchEventDays"
+													<input type="text"  placeholder='Days' name="searchEventDays" id="searchEventDays"
 														class="form-control " style="width: 50px;" />
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Date'
+													<input type="text"  placeholder='Date' name="searchEventDate" id="searchEventDate"
 														class="form-control " style="width: 80px;" />
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" class="form-control" style=""
-														placeholder="" cols="0" rows="1">
+													<input type="text" class="form-control" style="" name="searchEventAddress" id="searchEventAddress"
+														placeholder="Address" cols="0" rows="1" onkeyup="searchEvent();" />
 												</div>
 											</div></td>
-										<td></td>
+										<td><input type="button" value="CLEAR" onClick="clearEventSearch();"/></td>
 									</tr>
 								</table>
 							</div>

@@ -231,7 +231,7 @@ public class CommonUtils {
 			for(Map.Entry m:hmImages.entrySet()){
 				String sFileId  = (String) m.getKey();
 				String sFilePath  = (String) m.getValue();
-			
+				System.out.println("bbbbbbbb sFileId"+sFileId+"-------- sFilePath"+sFilePath+"-------- sId"+sId);
 			// saving in to uploadFile Table
 			UploadFileDTO uploadFileDto = new UploadFileDTO();
 			uploadFileDto.setFileId(sFileId);
@@ -279,7 +279,9 @@ public class CommonUtils {
 		    	farmFileDto.setFileId(sFileId);
 		    	farmFileDto.setFarmId(sId);
 		    	FarmFileBO farmFileBo = new FarmFileBO();
+		    	System.out.println("in to farm page ");
 		    	sResult = farmFileBo.farmFile(farmFileDto);
+		    	System.out.println("after farm result"+sResult);
 		    }
 	
 		    session.setAttribute("UPLOADED_FILELIST", null);
@@ -414,10 +416,12 @@ public static SmsDTO getSmsProperties(ServletContext objContext) throws IOExcept
 		String destination = path;
 		HashMap<String, String> hm = null;
 		HttpSession session = request.getSession();
-		
-		if (uploadedInputStream != null && fileDetail != null) {
-			sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
-
+		 System.out.println("fileDetail=========="+fileDetail);
+		 sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
+		 System.out.println("sFileExtn=========="+sFileExtn);
+		if (uploadedInputStream != null && fileDetail != null && sFileExtn != null) {
+			
+            
 			if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
 				hm = unZipIt(uploadedInputStream, destination);
 			} else {

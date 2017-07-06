@@ -99,7 +99,7 @@ public class LoginService {
 			sRole = memDto.getMemberType();
 		}
 
-		if (memDto != null && sRole.equals("Life")) {
+		if (memDto != null && (sRole.equals("Life") || sRole.equals("Admin"))) {
 			sPin = CommonUtils.getPin();
 
 			memDto.setPassword(sPin);
@@ -145,7 +145,7 @@ public class LoginService {
 		if (memDto != null) {
 			sRole = memDto.getMemberType();
 		}
-		if (memDto != null && sRole.equals("Life")) {
+		if (memDto != null && (sRole.equals("Life") || sRole.equals("Admin"))) {
 			sPwd = memDto.getPassword();
 			sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsPwdText");
 			sMessage = sPwd + " " + sPropertyContent;

@@ -35,6 +35,7 @@ public class EventFileBO {
 		return eventFileDAO.deleteEventFile(eventFileDTO);
 	}
 	public ArrayList<UploadFileDTO> getEventFilesByFileId(EventFileDTO eventFileDTO){
+		System.out.println("in to event showAsPublic");
 		EventFileDAO eventFileDAO = new EventFileDAO();
 		return eventFileDAO.getEventFilesByFileId(eventFileDTO);
 	}
@@ -58,7 +59,7 @@ public class EventFileBO {
 		ArrayList<UploadFileDTO> lstLatestUploadFiles = null;
 		
 		try {
-			// ********* getting news Id **********//
+			// ********* getting event Id **********//
 			eventFileDto = new EventFileDTO();
 			eventFileDto.setFileId(sFileId);
 			lstEventFileDto = getEventFileByFileId(eventFileDto);

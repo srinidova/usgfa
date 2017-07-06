@@ -167,6 +167,7 @@ public class EventService {
 			eventList = bo.getEventDetails();
 			
 			if (!(eventList.size() < 0)) {
+				//eventList = bo.updatedEvent(eventList);
 				jobj1.put("EventDetails", eventList);
 			} else {
 				jobj1.put("EventDetails", "failed");
@@ -223,7 +224,15 @@ public class EventService {
 				} else {
 					jobj.put("EventProfile", "failed");
 				}
+				EventGuestDTO eventGuestDto = new EventGuestDTO();
+				eventGuestDto.setEventId(eventId);
 				
+				GuestBO guestBo = new GuestBO();
+				guestList = guestBo.getGuestDetailsByEventId(eventGuestDto);
+				if (!(guestList.size() < 0)) {
+					jobj.put("EventGuestProfile", guestList);
+				}
+				System.out.println("in to guest profile size " + guestList.size());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -308,11 +317,18 @@ public class EventService {
 			@FormDataParam("landMark") String landMark,
 			@FormDataParam("pincode") String pinCode,
 			@FormDataParam("moreInfo") String moreInfo,
+			@FormDataParam("guestId") String guestId,
+			@FormDataParam("guestTitle") String guestTitle,
+			@FormDataParam("guestName") String guestName,
+			@FormDataParam("guestDesi") String guestDesi,
 			@FormDataParam("file") InputStream in,
             @FormDataParam("file") FormDataContentDisposition info) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
+		String delims = "~";
+		String resultGuest = "fail";
+		String resultEventGuest = "fail";
 
 		try {
 			if (StringUtils.isNotEmpty(eventName)){
@@ -346,6 +362,43 @@ public class EventService {
 				
 				EventBO bo = new EventBO();
 				result = bo.eventUpdate(eventDto);
+				
+				GuestBO guestBo = new GuestBO();
+				EventGuestBO eventGuestBo = new EventGuestBO();
+				
+				String[] tokensTitle = guestTitle.split(delims);
+				String[] tokensName = guestName.split(delims);
+				String[] tokensDesi = guestDesi.split(delims);
+
+				int tokenCountTitle = tokensTitle.length;
+				if(StringUtils.isNotEmpty(guestTitle) &&tokenCountTitle > 0){
+					for (int j = 0; j < tokenCountTitle; j++) {
+						
+						String sTitle =  tokensTitle[j];
+						String sName = tokensName[j];
+						String sDesi = tokensDesi[j];
+						
+						GuestDTO guestDto = new GuestDTO();
+						
+						String sGuestId = CommonUtils.getAutoGenId();
+						guestDto.setGuestId(sGuestId);
+						guestDto.setTitle(sTitle);
+						guestDto.setName(sName);
+						guestDto.setDesignation(sDesi);
+						System.out.println("in to add guest in eventEdit page");
+						resultGuest = guestBo.addGuest(guestDto);
+						System.out.println("add guest ---------"+resultGuest);
+						
+						
+						EventGuestDTO eventGuestDto = new EventGuestDTO();
+						eventGuestDto.setEventId(eventId);
+						//eventGuestDto.setEventId(sEventId);
+						eventGuestDto.setGuestId(sGuestId);
+
+						resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
+						System.out.println("resultEventGuest------"+resultEventGuest);
+					}
+				}
 				
 				CommonUtils.saveFileData(request, eventId, "EVENT");
 			}
@@ -442,20 +495,32 @@ public class EventService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/searchEvent")
-	public JSONObject searchEvent(@QueryParam("eventName") String sEventName, @QueryParam("days") String sDays) {
+	public JSONObject searchEvent(
+		@QueryParam("eventName") String sEventName, 
+		@QueryParam("days") String sDays,
+		@QueryParam("date") String sDate,
+		@QueryParam("address") String sAddress
+		) {
+		System.out.println("in to event search eventName==="+sEventName+"========in to event search days======="+sDays);
+		System.out.println("in to event search date==="+sDate+"============in to event search address========="+sAddress);
+		
 		JSONObject jobj1 = new JSONObject();
 		EventBO bo = new EventBO();
 		EventDTO dto = new EventDTO();
-		dto.setEventName("'%"+sEventName+"'");
-		dto.setNoOfDays("'%"+sDays+"'");
+		
+		dto.setEventName(sEventName);
+		dto.setNoOfDays(sDays);
+		dto.setTimeFrom(sDate);
+		dto.setAddress(sAddress);
 		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
+
 		try {
 			eventList = bo.searchEvent(dto);
 			if(eventList != null && eventList.size() > 0){
 				jobj1.put("Msg", "success");
-				jobj1.put("EventSearch", eventList);
+				jobj1.put("EventDetails", eventList);
 			}else {
-				jobj1.put("Msg", "fail");
+				jobj1.put("EventDetails", "failed");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

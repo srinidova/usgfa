@@ -69,42 +69,6 @@ if(sRole != null && sRole.equals("Admin")){
 																			data.StoriesProfile[key].storiesId);
 														})
 														showStoriesProfImages(data);
-														/* $.each(
-																data.STORIESFILES,
-																function(key, val) {
-																	if(key == 0){
-																		dispClas = "item active";
-																	}else{
-																		dispClas = "item";
-																	}
-																	dispImages = dispImages
-																	+'<div class="'+ dispClas +'">'
-																	+'<ul class="thumbnails">'
-																		+'<li class="col-md-12">'
-																			+'<div class="fff">'
-																				+'<div class="thumbnail">'
-																					+'<a href="#">'
-																					     +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="">'
-																					+'</a>'
-																				+'</div>'
-																				+'<div class="caption">'
-																					+'<div class="checkbox">'
-																						+'<label>'
-																						    +'<input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public'
-																						+'</label>'
-																						+'<div class="suceee_msg"></div>'
-																					+'</div>'
-																					+'<div class="delete_box">'
-																						+'<a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																						+'<div class="suceee_msg"></div>'
-																					+'</div>'
-																				+'</div>'
-																			+'</div>'
-																		+'</li>'
-																	+'</ul>'
-																+'</div>'
-																}) */
-																//document.getElementById("storiesImages").innerHTML = dispImages;
 									}
 								});
 					});
@@ -126,10 +90,13 @@ if(sRole != null && sRole.equals("Admin")){
 		var dispImages = '';
 		var dispClas = '';
 		var dispChkd = '';
+		var dispImgCtrls = true;
+		if(data.STORIESFILES != null){
 		$.each(
 				data.STORIESFILES,
 				function(key, val) {
-					alert(data.STORIESFILES[key].showPublic);
+					dispImgCtrls = false;
+					//alert(data.STORIESFILES[key].showPublic);
 					if(data.STORIESFILES[key].showPublic == 1){
 						dispChkd = 'checked';
 					}else{
@@ -145,29 +112,23 @@ if(sRole != null && sRole.equals("Admin")){
 					+'<ul class="thumbnails">'
 						+'<li class="col-md-12">'
 							+'<div class="fff">'
-								+'<div class="thumbnail">'
-									+'<a href="#">'
-									     +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="">'
-									+'</a>'
-								+'</div>'
-								+'<div class="caption">'
-									+'<div class="checkbox">'
-										+'<label>'
-										    +'<input id="'+data.STORIESFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.STORIESFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
-										+'</label>'
-										+'<div class="suceee_msg"></div>'
-									+'</div>'
-									+'<div class="delete_box">'
-										+'<a href="#" name="'+data.STORIESFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-										+'<div class="suceee_msg"></div>'
-									+'</div>'
-								+'</div>'
+							+'<div class="thumbnail">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.STORIESFILES[key].filePath+'" data-target="#image-gallery">'
+								  +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								+'</a>'
+							+'</div>'
 							+'</div>'
 						+'</li>'
 					+'</ul>'
 				+'</div>'
 				})
 				document.getElementById("storiesProfImages").innerHTML = dispImages;
+				$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+		}
+				//alert("dispImgCtrls========"+dispImgCtrls);
+				if(dispImgCtrls){
+					document.getElementById("storiesProfImgCtrl").style.display = 'none';
+				}
 	}
 </script>
 </head>
@@ -233,7 +194,8 @@ if(sRole != null && sRole.equals("Admin")){
 					</div>
 					<div class="row">
 						<div class="modal fade" id="image-gallery" tabindex="-1"
-							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+							style="display: none;">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -242,52 +204,41 @@ if(sRole != null && sRole.equals("Admin")){
 										</button>
 										<h4 class="modal-title" id="image-gallery-title"></h4>
 									</div>
-									<div class="modal-body">
-										<img id="image-gallery-image" class="img-responsive" src="">
+									<div class="modal-body" id="modelBodyNewsProf">
+									    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
 									</div>
 									<div class="modal-footer">
 										<div class="col-md-2">
 											<button type="button" class="btn btn-primary"
-												id="show-previous-image">Previous</button>
+												id="show-previous-image" style="display: none;">Previous</button>
 										</div>
-										<div class="col-md-8 text-justify" id="image-gallery-caption">
-											This text will be overwritten by jQuery</div>
+										<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
 										<div class="col-md-2">
 											<button type="button" id="show-next-image"
-												class="btn btn-default">Next</button>
+												class="btn btn-primary">Next</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" id="storiesProfImgCtrl">
 						<div class="col-md-6" style="margin-left: 250px;">
-
-
 							<div class="control-box pager ">
 								<a class="left fa fa-angle-left btn btn-default button-arrow"
 									href="#myCarousel" data-slide="prev"></a> <a
 									class="right fa fa-angle-right btn btn-default button-arrow"
 									href="#myCarousel" data-slide="next"></a>
 							</div>
-
 							<div class="carousel slide" id="myCarousel">
 								<div class="carousel-inner" id="storiesProfImages">
 								</div>
-
-								<!-- /.control-box -->
-
 							</div>
-							<!-- /#myCarousel -->
-
 						</div>
 					</div>
 					
 					<div class="row">
 						<div class="col-md-12">
-
-
 							<div class="card-footer p-0  hidden">
 								<nav aria-label="...">
 									<ul class="pagination justify-content-end mt-3 mr-3">

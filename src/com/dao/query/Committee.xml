@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Committee">
+	<insert id="addCommittee" parameterClass="com.dto.CommitteeDTO">
+		insert into
+		committee(committeeId,memberId,role,displayOrder,comments,updatedOn,updatedBy)
+		values(#committeeId#,#memberId#,#role#,#displayOrder#,#comments#,#updatedOn#,#updatedBy#)
+	</insert>
+	<select id="getCommitteeDetails" resultClass="com.dto.CommitteeDTO">
+		select
+		committeeId,memberId,role,displayOrder,comments,updatedOn,updatedBy
+		from
+		committee
+	</select>
+	<select id="getCommitteeProfile" parameterClass="com.dto.CommitteeDTO"
+		resultClass="com.dto.CommitteeDTO">
+		select
+		committeeId,memberId,role,displayOrder,comments,updatedOn,updatedBy
+		from
+		committee where committeeId = #committeeId#
+	</select>
+	<select id="getCommitteeById" parameterClass="java.lang.String"
+		resultClass="com.dto.CommitteeDTO">
+		select
+		committeeId,memberId,role,displayOrder,comments,updatedOn,updatedBy
+		from
+		committee where committeeId = #committeeId#
+	</select>
+	<delete id="deleteCommittee" parameterClass="com.dto.CommitteeDTO">
+		delete from
+		committee where committeeId = #committeeId#
+	</delete>
+
+	<update id="updateCommittee" parameterClass="com.dto.CommitteeDTO">
+		update committee set
+		role=#role#, displayOrder= #displayOrder#, comments=#comments#
+		where
+		committeeId = #committeeId#
+	</update>
+</sqlMap>

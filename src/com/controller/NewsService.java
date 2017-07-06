@@ -18,9 +18,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.bo.MemberBO;
 import com.bo.NewsBO;
 import com.bo.NewsFileBO;
 import com.bo.UploadFileBO;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.UploadFileDTO;
@@ -305,7 +307,7 @@ public class NewsService {
 		String sId = null;
 		String sUpdtedOn = null;
 		String sLoginId = "";
-		//System.out.println("newsTitle--------------"+newsTitle);
+		System.out.println("newsTitle--------------"+newsTitle);
 		try {
 			//System.out.println("newsTitle=="+newsTitle+"-----------date=="+date+"-----------paper=="+paper+"-----------link=="+link);
 			//System.out.println("in=="+in+"-----------info=="+info);
@@ -379,6 +381,11 @@ public class NewsService {
 				String path = "";
 				//System.out.println( request.getServletContext().getRealPath("/"));
 				path = request.getServletContext().getRealPath("/") + "images/uploads/";
+				System.out.println("-----------info-----------"+info);
+				System.out.println("-----------in-----------"+in);
+				System.out.println("-----------request-----------"+request.toString());
+				System.out.println("-----------path-----------"+path);
+				
 				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
@@ -413,6 +420,41 @@ public class NewsService {
 			e.printStackTrace();
 		}
 		return jObj;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/searchNews")
+	public JSONObject searchNews(@QueryParam("nameTitle") String sNameTitle, 
+			@QueryParam("paper") String sPaper ,
+			 @QueryParam("link") String sLink
+			 ) {
+		System.out.println("1. *****Called searchNews**********nameTitle==" +sNameTitle+"--------paper=="+sPaper);
+		System.out.println("2. *****Called searchNews**********link==" +sLink);
+		JSONObject jobj1 = new JSONObject();
+		NewsBO bo = new NewsBO();
+		NewsDTO dto = new NewsDTO();
+		dto.setNewsTitle(sNameTitle);
+		dto.setPaper(sPaper);
+		dto.setLink(sLink);
+		
+		
+		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
+		try {
+			newsList = bo.searchNews(dto);
+			System.out.println("****newsList.size==" +newsList.size());
+			if(newsList != null && newsList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("NewsDetails", newsList);
+			}else {
+				jobj1.put("NewsDetails", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("searchMember jobj-->" + jobj1);
+		return jobj1;
+
 	}
 }
 

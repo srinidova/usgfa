@@ -15,7 +15,7 @@ public class EventFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In NewsDAO eventFile---------- eventFile===" + eventFileDto.getNewsTitle());
+			System.out.println("3. In EventFileDAO eventFile---------- eventFile===" + eventFileDto.getEventId());
 			session.insert("EventFile.eventFile", eventFileDto);
 			result = "success";
 		} catch (Exception e) {

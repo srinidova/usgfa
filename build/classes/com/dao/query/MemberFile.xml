@@ -7,5 +7,10 @@
 		memberfile(memberId,fileId)
 		values(#memberId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteMemberFile" parameterClass="com.dto.MemberFileDTO">
+		delete from memberfile  where memberId = #memberId# and  fileId = #fileId#
+	</delete>
+	<select id="getMemberFileByFileId" resultClass="com.dto.MemberFileDTO" parameterClass="java.lang.String">
+		select memberId, fileId from memberfile where fileId = #value#
+	</select>
 </sqlMap>

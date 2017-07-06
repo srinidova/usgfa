@@ -7,5 +7,10 @@
 		farmfile(farmId,fileId)
 		values(#farmId#,#fileId#)
 	</insert>
-	
+	<delete id="deleteFarmFile" parameterClass="com.dto.FarmFileDTO">
+		delete from farmfile  where farmId = #farmId# and  fileId = #fileId#
+	</delete>
+	<select id="getFarmFileByFileId" resultClass="com.dto.FarmFileDTO" parameterClass="java.lang.String">
+		select farmId, fileId from farmfile where fileId = #value#
+	</select>
 </sqlMap>

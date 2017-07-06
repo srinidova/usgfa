@@ -15,6 +15,7 @@ function storiesFarmValidation() {
 	var aboutFarm = document.getElementById("aboutFarm");
 	var msg = "";
 	var title = "";
+	var number = /^[0-9]+$/;
 	$("#storiesRegFailMsg").text("");
 	if (name.value.length == 0) {
 		msg = "errName";
@@ -63,6 +64,14 @@ function storiesFarmValidation() {
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		district.focus();
+		return false;
+	}else if (farmPinCode.value.length > 0 && !farmPinCode.value.match(number) ) {
+		msg = "errFarmPinCode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		farmPinCode.focus();
 		return false;
 	}else if (farmPinCode.value.length > 0 && farmPinCode.value.length != 6) {
 		msg = "errFarmPinCode";
@@ -123,7 +132,6 @@ function saveStoriesNew(){
 		formData.append("aboutFarm", aboutFarm);
 		formData.append("file", file);
 
-		alert('------saveStoriesNew---------');
 		$.ajax({
 			type: 'POST',
 			url : "emp/storiesService/addStoriesNew",

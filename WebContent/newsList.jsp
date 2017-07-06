@@ -63,7 +63,8 @@ function getNewsDetails() {
 	$.ajax({
 				url : "emp/newsService/getNewsDetails",
 				success : function(data) {
-					$.each(
+					showNewsList(data);
+					<%-- $.each(
 							data.NewsDetails,
 							function(key, val) {
 								
@@ -104,7 +105,7 @@ function getNewsDetails() {
 							}
 					)
 					$(html).appendTo("#newsListData");
-					$(html).appendTo("</table></div></div>");
+					$(html).appendTo("</table></div></div>"); --%>
 				}
 					
 	});
@@ -150,6 +151,79 @@ function editNews(newsId){
 	
 }
 
+function searchNews(){
+	//alert("in to search news");
+	document.getElementById("newsListData").innerHTML = "";
+	var nameTitle = $("#searchNameTitle").val();
+	var paper = $("#searchPaper").val();
+	var link = $("#searchLink").val();
+	
+	var newsObject = new Object();
+	newsObject.nameTitle = nameTitle;
+	newsObject.paper = paper;
+	newsObject.link = link;
+	//alert("in to search news nameTitle"+nameTitle);
+	$.ajax({
+		data : newsObject,
+		url : "emp/newsService/searchNews",
+		success : function(data) {
+			if (data.Msg = "success") {
+				showNewsList(data);
+			}
+		}
+	});
+}
+function showNewsList(data){
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	$.each(
+			data.NewsDetails,
+			function(key, val) {
+				
+					html = html
+					     + '<tr>'
+						     + '<td class="e_mn">'+data.NewsDetails[key].newsTitle+'</td>'
+						     +  '<td class="e_mn_1">'+data.NewsDetails[key].date+'</td>'
+							 +  '<td class="e_mn_2">'+data.NewsDetails[key].paper+'</td>'
+							 +  '<td class="e_mn_3">'+data.NewsDetails[key].link+'</td>'
+							 +  '<td class="e_mn_">'
+							 	+ '<ul class="actions">'
+							 		+ '<li>'
+							 			+ '<a href="newsProfile.jsp"> '
+							 				+ '<button id='+data.NewsDetails[key].newsId+' class="btn btn-success btn-sm" onclick="getNewsProfile(this.id)">'
+							 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%if(bAdmin){ %>
+							 		+ '<li>'
+							 			+ '<a href="newsEdit.jsp"> '
+							 				+ '<button id='+data.NewsDetails[key].newsId+' class="btn btn-primary btn-sm" onclick="editNews(this.id)">'
+							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		+ '<li>'
+							 			+ '<a href="newsList.jsp"> '
+							 				+ '<button id='+data.NewsDetails[key].newsId+' class="btn btn-danger btn-sm" onclick="deleteNews(this.id)">'
+							 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%}%>
+							 	+ ' </ul>'
+							 +  '</td>'
+					     + '</tr>';
+			}
+	)
+	$(html).appendTo("#newsListData");
+	$(html).appendTo("</table></div></div>");
+}
+function clearNewsSearch(){
+	 $("#searchNameTitle").val("");
+	 $("#searchPaper").val("");
+	 $("#searchLink").val("");
+	 searchNews();
+}
 </script>
 </head>
 <body>
@@ -185,13 +259,13 @@ function editNews(newsId){
 										<th>Date</th>
 										<th>Paper</th>
 										<th>Link/Url</th>
-										<th></th>
+										<th style="width: 125px;"></th>
 									</tr>
 									<tr>
 										<td><div class="row">
 												<div class="col-md-10">
-													<input type="text" name='name0' placeholder='Name Title'
-														class="form-control " style="width: 200px;" />
+													<input type="text"  placeholder='Name Title' id="searchNameTitle" name="searchNameTitle"
+														class="form-control " style="width: 200px;" onkeyup="searchNews();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
@@ -202,17 +276,17 @@ function editNews(newsId){
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Paper'
-														class="form-control " style="width: 80px;" />
+													<input type="text"  placeholder='Paper' id="searchPaper" name="searchPaper"
+														class="form-control " style="width: 80px;" onkeyup="searchNews();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" class="form-control" style=""
-														placeholder="" cols="0" rows="1">
+													<input type="text" class="form-control" style="" id="searchLink" name="searchLink"
+														placeholder="Link/Url" cols="0" rows="1" onkeyup="searchNews();"/>
 												</div>
 											</div></td>
-										<td></td>
+										<td><input type="button" value="CLEAR" onClick="clearNewsSearch();"/></td>
 									</tr>
 									
 								</table>

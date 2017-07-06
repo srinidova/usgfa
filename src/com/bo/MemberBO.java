@@ -10,6 +10,8 @@ import org.apache.commons.lang.StringUtils;
 import com.controller.LoginService;
 import com.dao.MemberDAO;
 import com.dto.MemberDTO;
+import com.dto.MemberFileDTO;
+import com.dto.UploadFileDTO;
 import com.util.CommonUtils;
 import com.util.Sms;
 
@@ -80,7 +82,7 @@ public class MemberBO {
 		String sMessage = null;
 		Sms sms = new Sms();
 		
-		if (StringUtils.isNotEmpty(sMemType) && sMemType.equals("Life")) {
+		if (StringUtils.isNotEmpty(sMemType) && (sMemType.equals("Life") || sMemType.equals("Admin"))) {
 			sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsWelcomeLifeText");
 		}else{
 			sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsWelcomeOrdinaryText");
@@ -91,7 +93,7 @@ public class MemberBO {
 			bNotiSent = true;			
 		}
 		
-		if (StringUtils.isNotEmpty(sMemType) && sMemType.equals("Life")) {
+		if (StringUtils.isNotEmpty(sMemType) && (sMemType.equals("Life") || sMemType.equals("Admin") )) {
 			sPropertyContent = CommonUtils.getPropertyContent(request.getServletContext(), "smsOtpText");
 			sMessage = sOtp + " " + sPropertyContent;
 			boolean bSmsOtp = sms.sendMessage(request, sMobile, sMessage);
@@ -101,8 +103,45 @@ public class MemberBO {
 	}
 	
 	public ArrayList<MemberDTO> searchMember(MemberDTO memberDto){
+		//System.out.println("in to memberBO ");
 	     MemberDAO dao= new MemberDAO();
 	     return dao.searchMember(memberDto);
 	}
+	
+	public ArrayList<MemberDTO> updatedMembers(ArrayList<MemberDTO> memberList){
+	     MemberDAO dao= new MemberDAO();
+	     String sFilePath = null;
+			try {
+				if(memberList != null && memberList.size() > 0){
+					for (MemberDTO memberDTO : memberList) {
+						String sMemberId = memberDTO.getMemberId();
+						//System.out.println("sMemberId==="+sMemberId);
+						
+						MemberFileDTO memberFileDTO = new MemberFileDTO();
+						memberFileDTO.setMemberId(sMemberId);
+						
+						MemberFileBO memberFileBO = new MemberFileBO();
+						ArrayList<UploadFileDTO> lstUploadFiledto = memberFileBO.getUploadFleByMemberId(memberFileDTO);
+						//System.out.println("lstUploadFiledto.size==="+lstUploadFiledto.size());
+						
+						if(lstUploadFiledto != null && lstUploadFiledto.size() > 0){
+							for(UploadFileDTO uploadFileDTO : lstUploadFiledto){
+								String  sFilePathExt = uploadFileDTO.getFilePath();
+								sFilePath = sFilePathExt;
+							}
+						}else{
+							String sDefaultPath = "images/uploads/blankMale.jpg";
+							sFilePath = sDefaultPath;
+						}
+						System.out.println("sMemberId===="+sMemberId+"========sFilePath==="+sFilePath);
+						memberDTO.setFilePath(sFilePath);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	     return memberList;
+	}
+	
 	
 }

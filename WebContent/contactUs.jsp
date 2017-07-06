@@ -30,6 +30,8 @@ function contactUsFarmValidation() {
 	var msg = "";
 	var title = "";
 	$("#contactUsMessage").text("");
+	var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
+	//alert("!email.value.match(emailChk)-----------"+!email.value.match(emailChk));
 	if (name.value.length == 0) {
 		msg = "errNameContact";
 		title = "Name";
@@ -46,46 +48,43 @@ function contactUsFarmValidation() {
 		$("#" + msg).show();
 		email.focus();
 		return false;
-	}else if (email.value.length > 0 ) {
-		
-		var x = email.value;
-		//alert("x=="+x);
-		var atpos = x.indexOf("@");
-	    var dotpos = x.lastIndexOf(".");
-	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
-	    	//alert("y==");
+	}else if (email.value.length > 0 && !email.value.match(emailChk) ) {
+		//alert("email----1-------");
 	    	msg = "errEmailContact";
 			title = "Email";
 
 			$("#" + msg).text(title + " please enter valid email");
 			$("#" + msg).show();
 			email.focus();
+			//alert("email------2-----");
 			return false;
-	    }else{
-	    	return true;
-	    }
+
 	}else if (subject.value.length == 0) {
+		//alert("subject----1-------");
 		msg = "errSubjectContact";
 		title = "Subject";
 
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		subject.focus();
+		//alert("subject----2-------");
 		return false;
 	}else if (message.value.length == 0) {
+		//alert("message----1-------");
 		msg = "errMessageContact";
 		title = "Message";
 
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		message.focus();
+		//alert("message----2-------");
 		return false;
 	}else{
-		alert("==farm valid==");
-		$("#errName").text("");
-		$("#errEmail").text("");
-		$("#errSubject").text("");
-		$("#errMessage").text("");
+		//alert("==farm valid==");
+		$("#errNameContact").text("");
+		$("#errEmailContact").text("");
+		$("#errSubjectContact").text("");
+		$("#errMessageContact").text("");
 		saveContact();
 	}
 
@@ -93,7 +92,7 @@ function contactUsFarmValidation() {
 
 function saveContact(){
 	var name = $("#name").val();
-	var email =$("#email").val();
+	var email = $("#email").val();
 	var subject = $("#subject").val();
 	var message = $("#message").val();
 	
@@ -105,13 +104,16 @@ function saveContact(){
 	contactObject.subject = subject;
 	contactObject.message = message;
 	
-	alert("==b4==");
+	//alert("==b4==");
 	$.ajax({
 		data : contactObject,
 		url : "emp/contactService/addContact",
 		success : function(data) {
 			if (data.Msg == 'success')  {
-				//window.location.href = "contactUs.jsp";
+				$("#name").val("");
+				$("#email").val("");
+				$("#subject").val("");
+				$("#message").val("");
 				$("#contactUsMessage").text("Message Sent SuccessFully");
 			}else{
 				$("#contactUsMessage").text("ContactUs Failed");
@@ -174,7 +176,6 @@ function saveContact(){
           </div>
           </div>
           <div class="col-md-12">
-            <form id="ajax-contact"  method="post" action="#" role="form"> 
               <div class="messages" id="form-messages"></div>
               <div class="controls">
               				<div class="form-group">
@@ -191,7 +192,7 @@ function saveContact(){
                   <div class="col-md-4">
                     <div class="form-group"><span class="errMsg" id="errEmailContact"></span>
                       <input id="email" type="text" name="email" class="form-control contact_page_form" placeholder="Email *" required data-error="Firstname is required."
-                       onkeyup="eMail(id,'Email','errEmailContact');">
+                       onkeyup="eMail(id,'','errEmailContact');">
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
@@ -212,26 +213,18 @@ function saveContact(){
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
-                  <div class="col-md-12">
-                  <div class="message" id="contactfrm_message">
-			         <h3>
-				         <aside class="formFailMsg" id="contactUsMessage"></aside>
-			         </h3>
-		        </div>
-                    <!-- <a href='#'> -->
-                    <input type="submit" class="btn btn-success pull-right"  onclick = "contactUsFarmValidation();" value="Send message">
-                    <!-- <div class="message">
-            <h3>
-            <aside class=" " id="contactUsMessage" style="display: none">Save Sucessfully</aside>
-           <aside class="formFailMsg" id="contactUsMessage"></aside>
-            </h3>
-          </div> -->
-          
-                    <!-- </a> -->
-                  </div>
-                </div>
+
+							<div class="col-md-12">
+								<input type="submit" class="btn btn-success pull-right"
+									onclick="contactUsFarmValidation();" value="Send message">
+							</div>
+							<div class="message" id="contactfrm_message" style="margin-right:50px; margin-top:-70px;">
+								<h3>
+									<aside class="formFailMsg" id="contactUsMessage"></aside>
+								</h3>
+							</div>
+						</div>
               </div>
-            </form>
           </div>
         </div>
       </div>

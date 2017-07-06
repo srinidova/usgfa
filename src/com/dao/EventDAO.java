@@ -84,7 +84,7 @@ public class EventDAO {
 		}
 		return result;
 	}
-	
+	@SuppressWarnings("unchecked")
 	public ArrayList<EventDTO> searchEvent(EventDTO eventDto) {
 		ArrayList<EventDTO> eventdto = new ArrayList<EventDTO>();
 		boolean bAnd = false;
@@ -94,8 +94,18 @@ public class EventDAO {
 			
 			String sEventName = eventDto.getEventName();
 			String sEventDays = eventDto.getNoOfDays();
+			String sEventDate = eventDto.getTimeFrom();
+			String sEventAddress = eventDto.getAddress();
+			
+			System.out.println("3.a In EventDAO searchEvent---------- sEventName===" + sEventName);
+			System.out.println("3.a In EventDAO searchEvent---------- sEventDays===" + sEventDays);
+			System.out.println("3.a In EventDAO searchEvent---------- sEventDate===" + sEventDate);
+			System.out.println("3.a In EventDAO searchEvent---------- sEventAddress===" + sEventAddress);
 
 			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.eventSearch", eventDto);
+			
+			
+			System.out.println("in to event search eventsize"+eventdto.size());
 
 		}catch(Exception e){
 			

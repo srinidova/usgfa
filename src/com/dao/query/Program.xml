@@ -28,4 +28,22 @@
 		where
 		programId = #programId#
 	</update>
+	<select id="programSearch" parameterClass="com.dto.ProgramDTO" resultClass="com.dto.ProgramDTO">
+		select programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn from 
+		program where programId is not null
+   
+   <isNotNull property="programName">
+	    AND programName like '%$programName$%'
+   </isNotNull>
+
+	<isNotNull property="channel">
+		AND channel like '%$channel$%'
+	</isNotNull>
+
+    <isNotNull property="guest">
+		AND guest like '%$guest$%'
+	</isNotNull>
+	
+
+    </select>
 </sqlMap>

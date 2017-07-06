@@ -37,6 +37,7 @@ public class ProgramFileBO {
 	}
 	
 	public ArrayList<UploadFileDTO> getProgramFilesByFileId(ProgramFileDTO programFileDTO) {
+		System.out.println("in to programFileBo showAsPublic");
 		ProgramFileDAO programFileDao = new ProgramFileDAO();
 		return programFileDao.getProgramFilesByFileId(programFileDTO);
 	}

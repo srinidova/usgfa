@@ -28,16 +28,24 @@
 		eventId = #eventId#
 	</delete>
 	<select id="eventSearch" parameterClass="com.dto.EventDTO" resultClass="com.dto.EventDTO">
-		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from event
-	   <dynamic prepend="WHERE ">
-	      <isNotEmpty prepend="AND" property="eventName">
-	         eventName like #eventName#
-	      </isNotEmpty>
-			
-	      <isNotEmpty prepend="AND" property="noOfDays">
-	         noOfDays like #noOfDays#
-	      </isNotEmpty>
-	   </dynamic>
-      
+		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from
+		event where eventId is not null
+		
+		<isNotNull property="eventName">
+	    AND eventName like '%$eventName$%'
+   </isNotNull>
+   
+   <isNotNull property="noOfDays">
+	    AND noOfDays like '%$noOfDays$%'
+   </isNotNull>
+   
+   <isNotNull property="timeFrom">
+	    AND timeFrom like '%$timeFrom$%'
+   </isNotNull>
+   
+    <isNotNull property="address">
+	    AND address like '%$address$%'
+   </isNotNull>
+		
     </select>
 </sqlMap>

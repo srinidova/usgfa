@@ -5,17 +5,18 @@
 	<settings useStatementNamespaces="true" />
 
 	<transactionManager type="JDBC">
-		<dataSource type="SIMPLE">
-
-			<!-- <property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
-			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/test" />
-			<property name="JDBC.Username" value="root" />
-			<property name="JDBC.Password" value="root" /> -->
-    <property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
-			<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3309/dovasoft_usgfa" />
-			<property name="JDBC.Username" value="root" />
-			<property name="JDBC.Password" value="pass@123" />
-		</dataSource>
+	<!-- <dataSource type="SIMPLE">
+		<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+		<property name="JDBC.ConnectionURL" value="jdbc:mysql://162.253.124.32:3306/dovasoft_usgfa" />
+		<property name="JDBC.Username" value="dovasoft_test" />
+		<property name="JDBC.Password" value="test@123456789" />
+	</dataSource> -->
+	<dataSource type="SIMPLE">
+		<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
+		<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3309/dovasoft_usgfa" />
+		<property name="JDBC.Username" value="root" />
+		<property name="JDBC.Password" value="pass@123" />
+	</dataSource>
 	</transactionManager>
 
 	<sqlMap resource="com/dao/query/Employee.xml" />
@@ -36,4 +37,5 @@
 	<sqlMap resource="com/dao/query/FarmFile.xml" />
 	<sqlMap resource="com/dao/query/Guest.xml" /> 
 	<sqlMap resource="com/dao/query/EventGuest.xml" />
+	<sqlMap resource="com/dao/query/Committee.xml" />
 </sqlMapConfig>

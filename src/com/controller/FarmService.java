@@ -14,10 +14,13 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.bo.FarmBO;
+import com.bo.FarmFileBO;
 import com.bo.MemberBO;
 import com.dto.FarmDTO;
+import com.dto.FarmFileDTO;
 import com.dto.MemberDTO;
 import com.dto.MemberFarmDTO;
+import com.dto.UploadFileDTO;
 
 import net.sf.json.JSONObject;
 
@@ -34,6 +37,8 @@ public class FarmService {
 		String memberId = (String) session.getAttribute("MEMBERID");
 		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
 		ArrayList<FarmDTO> farmList = new ArrayList<FarmDTO>();
+		String farmId = null;
+		ArrayList<UploadFileDTO> lstUploadFarmFileDTO = null;
 
 		try {
 			if (StringUtils.isNotEmpty(memberId)) {
@@ -45,6 +50,28 @@ public class FarmService {
 				farmList = fbo.getFarmDetailsByMemberId(memberFarmDto);
 				if (!(farmList.size() < 0)) {
 					jobj.put("MemberFarmEdit", farmList);
+					for(int i=0; i < farmList.size(); i++){
+						FarmDTO farmDTO = farmList.get(i);
+						if(farmDTO != null){
+							farmId = farmDTO.getFarmId();
+						}
+					}
+				}
+				
+				//get farm images		
+				System.out.println("4. farmId==="+farmId);		
+				if (StringUtils.isNotEmpty(farmId)) {		
+					System.out.println("in to farm images");		
+					FarmFileDTO farmFileDto = new FarmFileDTO();		
+					farmFileDto.setFarmId(farmId);		
+					FarmFileBO farmFileBo = new FarmFileBO();		
+					lstUploadFarmFileDTO = farmFileBo.getFarmImages(farmFileDto);		
+					System.out.println("lstUploadFarmFileDTO.size===="+lstUploadFarmFileDTO.size());		
+					if(lstUploadFarmFileDTO != null && lstUploadFarmFileDTO.size()>0){			
+						jobj.put("FARMFILES", lstUploadFarmFileDTO);					
+						
+						
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -53,7 +80,18 @@ public class FarmService {
 		return jobj;
 
 	}
-	
+	//get farm images		
+	/*System.out.println("4. farmId==="+farmId);		
+	if (StringUtils.isNotEmpty(farmId)) {		
+		System.out.println("in to farm images");		
+		FarmFileDTO farmFileDto = new FarmFileDTO();		
+		farmFileDto.setFarmId(farmId);		
+		FarmFileBO farmFileBo = new FarmFileBO();		
+		lstUploadFarmFileDTO = farmFileBo.getFarmImages(farmFileDto);		
+		System.out.println("lstUploadFarmFileDTO.size===="+lstUploadFarmFileDTO.size());		
+		if(lstUploadFarmFileDTO != null && lstUploadFarmFileDTO.size()>0){			
+			jobj.put("FARMFILES", lstUploadFarmFileDTO);					}
+	}*/
 	
 	
 	

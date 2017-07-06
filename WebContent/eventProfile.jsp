@@ -12,10 +12,10 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 <script type="text/javascript" src="js/event.js"></script>
 <script type="text/javascript">
-	var evenData = '${sessionScope.sessEvent}';
+	/* var evenData = '${sessionScope.sessEvent}';
 	$(document).ready(function() {
 		showEventData(evenData);
-	});
+	}); */
 </script>
 </head>
 <body>
@@ -45,8 +45,8 @@ $(document)
 .ready(
 		function() {
 			var html = '';
-			$
-					.ajax({
+			//var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered table-responsive">';
+			$.ajax({
 						url : "emp/eventService/getEventProfile",
 						success : function(data) {
 							$.each(
@@ -62,6 +62,18 @@ $(document)
 												$('#eventProfEventId').val(data.EventProfile[key].eventId); 
 											})
 											showEventProfImages(data);
+														showGuests(data);
+							/* $.each(
+									data.EventGuestProfile,
+									function(key, val) {
+										html = html
+										 +'<tr>'
+										+'<td>'+data.EventGuestProfile[key].title+'</td>'
+										+'<td>'+data.EventGuestProfile[key].name+'</td>'
+										+'<td>'+data.EventGuestProfile[key].designation+'</td>'
+										+'</tr>';  
+								})
+								$(html).appendTo("#guestProfileData"); */
 						}
 					});
 		});
@@ -79,15 +91,54 @@ function editProfEvent() {
 	});
 
 }
-
+function showGuests(data){
+	//alert("qaqaqa========"+data.EventGuestProfile);
+	var content = "";
+	var disGuest = false;
+	$.each(
+			data.EventGuestProfile,
+			function(key, val) {
+				disGuest = true;
+				content = content
+				 +'<tr>'
+				+'<td>'+data.EventGuestProfile[key].title+'</td>'
+				+'<td>'+data.EventGuestProfile[key].name+'</td>'
+				+'<td>'+data.EventGuestProfile[key].designation+'</td>'
+				+'</tr>';  
+		})
+		//alert("qaqa========="+content);
+	//alert("qaqa========="+disGuest);
+	//$('guestProfList').innerHTML(content); 
+	
+ 		if(disGuest){
+ 			document.getElementById("guestProfList").innerHTML = content;
+		}else{
+			document.getElementById("guestProfileData").style.display = 'none';
+		}
+		//alert("qaqa========="+disGuest); 
+}
 function showEventProfImages(data){
+	//alert("wwwwwwwwwwwwww");
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispItem = '';
+	var dispImgCtrls = true;
+	if(data.EVENTFILES != null){
+
 	$.each(
 			data.EVENTFILES,
 			function(key, val) {
-				alert(data.EVENTFILES[key].showPublic);
+				dispImgCtrls = false;
+				//alert("qaqaaaaaaa8888888888888888"+data.EVENTFILES[key].filePath);
+				var filename = data.EVENTFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && fExt == 'mp4'){
+					dispItem = '<iframe src="'+data.EVENTFILES[key].filePath+'" autoplay="false" autostart="false" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
+				//alert("dispItem"+dispItem);
 				if(data.EVENTFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -100,32 +151,26 @@ function showEventProfImages(data){
 				}
 				dispImages = dispImages
 				+'<div class="'+ dispClas +'">'
-				+'<ul class="thumbnails">'
-					+'<li class="col-md-12">'
-						+'<div class="fff">'
+				+'<div class="row">'
+					+'<div class="col-sm-12">'
+						+'<div class="col-item">'
 							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.EVENTFILES[key].filePath+'" data-target="#image-gallery">'
+								  + dispItem
 								+'</a>'
 							+'</div>'
-							+'<div class="caption">'
-								+'<div class="checkbox">'
-									+'<label>'
-									    +'<input id="'+data.EVENTFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.EVENTFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
-									+'</label>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-								+'<div class="delete_box">'
-									+'<a href="#" name="'+data.EVENTFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-							+'</div>'
 						+'</div>'
-					+'</li>'
-				+'</ul>'
+					+'</div>'
+				+'</div>'
 			+'</div>'
 			})
 			document.getElementById("eventProfImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	}
+	//alert("dispImgCtrls========"+dispImgCtrls);
+	if(dispImgCtrls){
+		document.getElementById("eventProfImgCtrl").style.display = 'none';
+	}
 }
 </script>
 </head>
@@ -191,9 +236,32 @@ function showEventProfImages(data){
 							</table>
 						</div>
 					</div>
+					
+					
+					
+					<div class="col-md-10 col-lg-8 col-md-offset-2" id="guestProfileData">
+					<div class="guest_registration">
+					<h4>Guests</h4>
+							</div>
+								<table class="table table-user-information  table-bordered table-responsive">
+									<thead class="">
+										<tr>
+											<th><b>Title</b></th>
+											<th><b>Name</b></th>
+											<th><b>Designation</b></th>
+										</tr>
+									</thead>
+									<tbody id="guestProfList">
+									</tbody>
+								</table>
+							</div>
+					
+					
+					
 					<div class="row">
 						<div class="modal fade" id="image-gallery" tabindex="-1"
-							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+							style="display: none;">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -202,125 +270,35 @@ function showEventProfImages(data){
 										</button>
 										<h4 class="modal-title" id="image-gallery-title"></h4>
 									</div>
-									<div class="modal-body">
-										<img id="image-gallery-image" class="img-responsive" src="">
+									<div class="modal-body" id="modelBodyNewsProf">
+									    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
 									</div>
 									<div class="modal-footer">
 										<div class="col-md-2">
 											<button type="button" class="btn btn-primary"
-												id="show-previous-image">Previous</button>
+												id="show-previous-image" style="display: none;">Previous</button>
 										</div>
-										<div class="col-md-8 text-justify" id="image-gallery-caption">
-											This text will be overwritten by jQuery</div>
+										<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
 										<div class="col-md-2">
 											<button type="button" id="show-next-image"
-												class="btn btn-default">Next</button>
+												class="btn btn-primary">Next</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" id="eventProfImgCtrl">
 						<div class="col-md-6" style="margin-left: 250px;">
-
-
 							<div class="control-box pager ">
 								<a class="left fa fa-angle-left btn btn-default button-arrow"
 									href="#myCarousel" data-slide="prev"></a> <a
 									class="right fa fa-angle-right btn btn-default button-arrow"
 									href="#myCarousel" data-slide="next"></a>
 							</div>
-
 							<div class="carousel slide" id="myCarousel">
 								<div class="carousel-inner" id="eventProfImages">
 								</div>
-
-								<!-- /.control-box -->
-
-							</div>
-							<!-- /#myCarousel -->
-
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="member_registration" style="margin-left: 0px;">
-								<h2>Guests</h2>
-							</div>
-							<div class="card-block p-0"
-								style="overflow-y: scroll; height: 250px; width: 100%;">
-								<table class="table table-bordered table-responsive ">
-									<thead class="">
-										<tr>
-											<th>Title</th>
-											<th>Name</th>
-											<th>Designation</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-										<tr>
-											<td>Mr</td>
-											<td>September 14, 2013</td>
-											<td>jhlilk22@yahoo.com</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div class="card-footer p-0  hidden">
-								<nav aria-label="...">
-									<ul class="pagination justify-content-end mt-3 mr-3">
-										<li class="page-item disabled"><span class="page-link">Previous</span>
-										</li>
-										<li class="page-item"><a class="page-link" href="#">1</a></li>
-										<li class="page-item active"><span class="page-link">2<span
-												class="sr-only">(current)</span>
-										</span></li>
-										<li class="page-item"><a class="page-link" href="#">3</a></li>
-										<li class="page-item"><a class="page-link" href="#">Next</a>
-										</li>
-									</ul>
-								</nav>
 							</div>
 						</div>
 					</div>

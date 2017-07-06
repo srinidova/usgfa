@@ -288,7 +288,7 @@
 																					</div>
 																				</div>
 																			</div>
-																			<div class="row">
+<!-- 																			<div class="row">
 																				<div class="modal fade" id="image-gallery"
 																					tabindex="-1" role="dialog"
 																					aria-labelledby="myModalLabel" aria-hidden="true">
@@ -322,7 +322,7 @@
 																						</div>
 																					</div>
 																				</div>
-																			</div>
+																			</div> -->
 																			<div id="carousel-example2" class="carousel slide"
 																				data-ride="carousel">
 																				<!-- Wrapper for slides -->

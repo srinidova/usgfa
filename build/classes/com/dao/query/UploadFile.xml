@@ -37,6 +37,10 @@
 	resultClass="com.dto.UploadFileDTO">
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from memberfile where memberId = #value#)
 	</select>
+	<select id="getFarmImages"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from farmfile where farmId = #value#)
+	</select>
 	<select id="getUploadFleByNewsId"  parameterClass="java.lang.String"
 	resultClass="com.dto.UploadFileDTO">
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from newsfile where newsId = #value#)
@@ -70,5 +74,23 @@
 	<select id="getStoriesFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
 		where fileId in (select fileId from storiesfile where storiesId in (select storiesId from storiesfile where fileId = #value#))
+	</select>
+	<!-- <member file> -->
+	<select id="getUploadFleByMemberId"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from memberfile where memberId = #value#)
+	</select>
+	<select id="getMemberFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from memberfile where memberId in (select memberId from memberfile where fileId = #value#))
+	</select>
+	<!-- < Farm file> -->
+	<select id="getUploadFleByFarmId"  parameterClass="java.lang.String"
+	resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where fileId in (select fileId from farmfile where farmId = #value#)
+	</select>
+	<select id="getFarmFilesByFileId"  parameterClass="java.lang.String" resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
+		where fileId in (select fileId from farmfile where farmId in (select farmId from farmfile where fileId = #value#))
 	</select>
 </sqlMap>

@@ -3,6 +3,7 @@ package com.dao;
 import java.util.ArrayList;
 
 import com.connection.IbatisFactory;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -78,4 +79,31 @@ public class NewsDAO {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
+	public ArrayList<NewsDTO> searchNews(NewsDTO newsDto) {
+		ArrayList<NewsDTO> newsdto = new ArrayList<NewsDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		//System.out.println("in to memberDAO");
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			String sNameTitle = newsDto.getNewsTitle();
+			String sPaper = newsDto.getPaper();
+			String sLink = newsDto.getLink();
+			
+			
+			System.out.println("3.a In NewsDAO searchNews---------- sNameTitle===" + sNameTitle);
+			System.out.println("3.b In NewsDAO searchNews---------- sPaper===" + sPaper);
+			System.out.println("3.c In NewsDAO searchNews---------- sLink===" + sLink);
+
+			newsdto = (ArrayList<NewsDTO>) session.queryForList("News.newsSearch", newsDto);
+			System.out.println("in to news Update size"+newsdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return newsdto;
+	}
 }

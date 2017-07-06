@@ -1,15 +1,21 @@
 package com.dao;
 
+import java.io.Reader;
 import java.util.ArrayList;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.connection.IbatisFactory;
 import com.dto.MemberDTO;
+import com.ibatis.common.resources.Resources;
 import com.ibatis.sqlmap.client.SqlMapClient;
+import com.ibatis.sqlmap.client.SqlMapClientBuilder;
 
 
 public class MemberDAO {
+	//static Logger log = Logger.getLogger(MemberDAO.class.getName());
+
 	public String addMember(MemberDTO memberDto) {
 		String result = "fail";
 		try {
@@ -104,43 +110,33 @@ public class MemberDAO {
 		}
 		return result;
 	}	
+	@SuppressWarnings("unchecked")
 	public ArrayList<MemberDTO> searchMember(MemberDTO memberDto) {
 		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
 		boolean bAnd = false;
 		String sQuery = null;
+		//System.out.println("in to memberDAO");
 		try{
 			SqlMapClient session = new IbatisFactory().getSession();
 			
 			String sMemName = memberDto.getFirstName();
 			String sMemPro = memberDto.getProfession();
-			//System.out.println("3.a In MemberDAO searchMember---------- sMemName===" + sMemName);
-			//System.out.println("3.b In MemberDAO searchMember---------- sMemPro===" + sMemPro);
-/*			StringBuffer objStringBuffer = new StringBuffer("select memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from member ");
-			String sMemName = memberDto.getFirstName();
-			String sMemPro = memberDto.getProfession();
+			String sMemship = memberDto.getMemberType();
+			String sMemPlace = memberDto.getPlace();
+			String sMemHaveFarm = memberDto.getHaveFarm();
 			
-			if(StringUtils.isNotEmpty(sMemName)){
-				if (bAnd) {
-					objStringBuffer.append(" and firstName like '" + sMemName + "%'");
-				} else {
-					objStringBuffer.append(" where firstName like '" + sMemName + "%'");
-					bAnd = true;
-				}
-			}
-			if(StringUtils.isNotEmpty(sMemPro)){
-				if (bAnd) {
-					objStringBuffer.append(" and profession like '" + sMemPro + "%'");
-				} else {
-					objStringBuffer.append(" where profession like '" + sMemPro + "%'");
-					bAnd = true;
-				}
-			}
-			sQuery = objStringBuffer.toString();
-			System.out.println("3. In MemberDAO searchMember---------- sQuery===" + sQuery);*/
-			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.memberSearch", memberDto);
+			/*System.out.println("3.a In MemberDAO searchMember---------- sMemName===" + sMemName);
+			System.out.println("3.b In MemberDAO searchMember---------- sMemPro===" + sMemPro);
+			System.out.println("3.c In MemberDAO searchMember---------- sMemship===" + sMemship);
+			System.out.println("3.d In MemberDAO searchMember---------- sMemPlace===" + sMemPlace);
+			System.out.println("3.e In MemberDAO searchMember---------- sMemHaveFarm===" + sMemHaveFarm);*/
 
-		}catch(Exception e){
+			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.memberSearch", memberDto);
+			//System.out.println("in to member Update size"+memberdto.size());
+	
 			
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return memberdto;
 	}

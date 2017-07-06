@@ -35,4 +35,8 @@ public class NewsBO {
 		NewsDAO dao = new NewsDAO();
 		return dao.newsUpdate(newsDto);
 	}
+	public ArrayList<NewsDTO> searchNews(NewsDTO newsDto) {
+		NewsDAO dao = new NewsDAO();
+		return dao.searchNews(newsDto);
+	}
 }

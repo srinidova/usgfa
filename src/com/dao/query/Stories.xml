@@ -36,4 +36,24 @@
 		storiesId = #storiesId#
 
 	</update>
+	<select id="storiesSearch" parameterClass="com.dto.StoriesDTO" resultClass="com.dto.StoriesDTO">
+		select
+		storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn from
+		stories where storiesId is not null
+   
+   <isNotNull property="name">
+	    AND name like '%$name$%'
+   </isNotNull>
+
+	<isNotNull property="farmName">
+		AND farmName like '%$farmName$%'
+	</isNotNull>
+	
+	<isNotNull property="place">
+		AND  place like '%$place$%'
+	</isNotNull>
+
+	
+
+    </select>
 </sqlMap>

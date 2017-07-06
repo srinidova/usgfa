@@ -77,7 +77,8 @@ function getStoriesDetails() {
 	$.ajax({
 				url : "emp/storiesService/getStoriesDetails",
 				success : function(data) {
-					$.each(
+					showStoriesList(data);
+					<%-- $.each(
 							data.StoriesDetails,
 							function(key, val) {
 									html = html
@@ -119,7 +120,7 @@ function getStoriesDetails() {
 							}
 					)
 					$(html).appendTo("#storiesListData");
-					$(html).appendTo("</table></div></div>");
+					$(html).appendTo("</table></div></div>"); --%>
 				}
 					
 	});
@@ -162,6 +163,88 @@ function deleteStories(storiesId){
 	});
 	
 }
+function searchStories(){
+	
+	//alert("in to search stories");
+	document.getElementById("storiesListData").innerHTML = "";
+	//var nameTitle = $("#searchNameTitle").val();
+	var name= $("#searchName").val();
+	var farmName = $("#searchFarmName").val();
+	var place = $("#searchPlace").val();
+	//alert("1.in to search stories");
+	
+	
+	var storiesObject = new Object();
+	storiesObject.name = name;
+	storiesObject.farmName = farmName;
+	storiesObject.place = place;
+	//alert("2.in to search stories");
+	$.ajax({
+		data : storiesObject,
+		url : "emp/storiesService/searchStories",
+		success : function(data) {
+			if (data.Msg = "success") {
+				showStoriesList(data);
+			}
+		}
+	});
+	
+}
+function showStoriesList(data){
+	
+	//alert("in to show stories list"+data);
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	$.each(
+			data.StoriesDetails,
+			function(key, val) {
+				//alert("data.StoriesDetails======"+data.StoriesDetails);
+					html = html
+					     + '<tr>'
+						     + '<td class="e_mn">'+data.StoriesDetails[key].name+'</td>'
+						     +  '<td class="e_mn_1">'+data.StoriesDetails[key].farmName+'</td>'
+							 +  '<td class="e_mn_2">'+data.StoriesDetails[key].farmState+'</td>'
+							 +  '<td class="e_mn_3">'+data.StoriesDetails[key].district+'</td>'
+							 +  '<td class="e_mn_4">'+data.StoriesDetails[key].mandal+'</td>'
+							 +  '<td class="e_mn_5">'+data.StoriesDetails[key].place+'</td>'
+							 +  '<td class="e_mn_6">'
+							 	+ '<ul class="actions">'
+							 		+ '<li>'
+							 			+ '<a href="storiesProfile.jsp"> '
+							 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-success btn-sm" onclick="getStoriesProfile(this.id)">'
+							 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%if(bAdmin){ %>
+							 		+ '<li>'
+							 			+ '<a href="storiesEdit.jsp"> '
+							 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-primary btn-sm" onclick="editStories(this.id)">'
+							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		+ '<li>'
+							 			+ '<a href="storiesList.jsp"> '
+							 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-danger btn-sm" onclick="deleteStories(this.id)">'
+							 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%}%>
+							 	+ ' </ul>'
+							 +  '</td>'
+					     + '</tr>';
+			}
+	)
+	$(html).appendTo("#storiesListData");
+	$(html).appendTo("</table></div></div>");
+}
+function clearStoriesList(){
+	$("#searchName").val("");
+	$("#searchFarmName").val("");
+	$("#searchPlace").val("");
+	searchStories();
+}
 </script>
 </head>
 <!----------------------body_content start-------------------------->
@@ -197,19 +280,19 @@ function deleteStories(storiesId){
 									<th>District</th>
 									<th>Mandal</th>
 									<th>Place</th>
-									<th></th>
+									<th style="width: 125px;"></th>
 								</tr>
 								<tr>
 									<td><div class="row">
 											<div class="col-md-10">
-												<input type="text" name='name0' placeholder='Name'
-													class="form-control " style="width: 200px;" />
+												<input type="text"  placeholder='Name' id="searchName" name="searchName"
+													class="form-control " style="width: 200px;" onkeyup="searchStories();" />
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
-												<input type="text" name='name0' placeholder='Farm Name'
-													class="form-control " style="width: 50px;" />
+												<input type="text"  placeholder='Farm Name' id="searchFarmName" name="searchFarmName"
+													class="form-control " style="width: 50px;" onkeyup="searchStories();" />
 											</div>
 										</div></td>
 									<td><div class="row">
@@ -232,11 +315,11 @@ function deleteStories(storiesId){
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
-												<input type="text" class="form-control" style=""
-													placeholder="" cols="0" rows="1">
+												<input type="text" class="form-control" style="" id="searchPlace" name="searchPlace"
+													placeholder="place" cols="0" rows="1" onkeyup="searchStories();">
 											</div>
 										</div></td>
-									<td></td>
+									<td><input type="button" value="CLEAR" onClick="clearStoriesList();"/></td>
 								</tr>
 							</table>
 							<div class="row">

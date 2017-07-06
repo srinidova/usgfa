@@ -139,29 +139,6 @@ function programUpdate(){
 		}
 	});
 	
-	/* var programObject = new Object();
-	programObject.programId = programId;
-	programObject.programName = programName;
-	programObject.duration = duration;
-	programObject.dateAndTimeFrom = dateAndTimeFrom;
-	programObject.dateAndTimeTo = dateAndTimeTo;
-	programObject.channel = channel;
-	programObject.guest = guest;
-	programObject.youtube = youtube;
-	programObject.moreInfo = moreInfo;
-	
-	$
-	.ajax({
-		data : programObject,
-		url : "emp/programService/programUpdate",
-		success : function(data) {
-			if (data.Msg == 'success') {
-				window.location.href = "programList.jsp";
-			}else{
-				$("#programEditFailMsg").text("Program Edit Failed");
-			} 
-		}
-	}); */
 	
 }
 function showProgramImages(data){
@@ -190,8 +167,8 @@ function showProgramImages(data){
 					+'<li class="col-md-12">'
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.PROGRAMFILES[key].filePath+'" data-target="#image-gallery">'
+								  +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
@@ -213,24 +190,28 @@ function showProgramImages(data){
 			})
 //}
 			document.getElementById("programEditImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 			if(imgCtrl){
 				document.getElementById("programEditImgCtrl").style.display = 'none';
 			}
 }
 function updateShowAsPublicProgram(fileId){
+	//alert("fileId---"+fileId);
 	var setVal = '';
 	if(document.getElementById(fileId).checked){
 		setVal = '1';
 	}else{
 		setVal = '0';
 	}
+	//alert("setVal-----"+setVal);
 	var uploadFileObject = new Object();
 	uploadFileObject.fileId = fileId; 
 	uploadFileObject.showAsPublic = setVal;
 	uploadFileObject.type = "PROGRAM";
+	//alert("setVal---"+setVal);
 		$.ajax({
 		data : uploadFileObject,
-		url : "emp/uploadFileService/updateShowAsPublic",
+		url : "emp/uploadService/updateShowAsPublic",
 		success : function(data) {
 			if (data.Msg = "success") {
 				showProgramImages(data);
@@ -385,10 +366,10 @@ function deleteFileProgram(fileId){
 			<!----------------------photo_gallery------------------------------>
 
 			
-			<div class="col-md-5" style="margin-left: 250px;">
+			<div class="col-md-5" style="margin-left: 250px;" id="programEditImgCtrl">
 				<div class="row">
 
-					<div class="col-md-12" style="margin-bottom: 10px;" id="programEditImgCtrl">
+					<div class="col-md-12" style="margin-bottom: 10px;">
 						<!-- Controls -->
 						<div class="controls pull-right ">
 							<a class="left fa fa-angle-left btn btn-default button-arrow"

@@ -78,4 +78,31 @@ public class StoriesDAO {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public ArrayList<StoriesDTO> searchStories(StoriesDTO storiesDto) {
+		ArrayList<StoriesDTO> storiesdto = new ArrayList<StoriesDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		//System.out.println("in to memberDAO");
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			String sName = storiesDto.getName();
+			String sFarmName = storiesDto.getFarmName();
+			String sPlace = storiesDto.getPlace();
+			
+			
+			System.out.println("3.a In StoriesDAO searchStories---------- sName===" + sName);
+			System.out.println("3.b In StoriesDAO searchStories---------- sFarmName===" + sFarmName);
+			System.out.println("3.c In StoriesDAO searchStories---------- sPlace===" + sPlace);
+
+			storiesdto = (ArrayList<StoriesDTO>) session.queryForList("Stories.storiesSearch", storiesDto);
+			System.out.println("in to stories Update size"+storiesdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return storiesdto;
+	}
 }

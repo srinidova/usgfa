@@ -31,89 +31,67 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						var html =' ';
-						$
-								.ajax({
-									url : "emp/memberService/getMemberProfile",
-									success : function(data) {
-										$
-												.each(
-														data.MemberProfile,
-														function(key, val) {
-															alert("in to member profile");
-															$('#memberProfTitle')
-																	.text(
-																			data.MemberProfile[key].title);
-															$('#memberProfName')
-																	.text(
-																			data.MemberProfile[key].firstName);
-															$('#memberProfMobile')
-																	.text(
-																			data.MemberProfile[key].mobile);
-															$('#memberProfEmail')
-																	.text(
-																			data.MemberProfile[key].email);
-															$('#memberProfAddress')
-																	.text(
-																			data.MemberProfile[key].address);
-															$('#memberProfProfession')
-															.text(
-																	data.MemberProfile[key].profession);
-															$('#memberProfMemberId')
-																	.val(
-																			data.MemberProfile[key].memberId);
-															$('#memberProfMemberType')
-															.text(
-																	data.MemberProfile[key].memberType);
-															$('#memberProfAmount')
-															.text(
-																	data.MemberProfile[key].amountPaid);
-														})
-										$.each(
-											data.MemberFarmProfile,
-											function(key, val) {
-												$('#memberFarmProfFarmName').text(data.MemberFarmProfile[key].farmName);
-												$('#memberFarmProfFarmAddress').text(data.MemberFarmProfile[key].farmAddress);
-												$('#memberFarmProfAboutFarm').text(data.MemberFarmProfile[key].aboutFarm);
-												
-										})
-										$.each(
-												data.MEMBERFILES,
-												function(key, val) {
-													html = html
-													+'<li>'
-													+'<div class="fff">'
-														+'<div class="photo">'
-															+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="images/g1.jpeg" data-target="#image-gallery"> <img class="img-responsive" src="images/g1.jpeg" alt="Short alt text"> </a>'
-														+'</div>'
-														+'<div class="img_tiltle" style="margin-top: 7px;">'
-															+'<h2>Image 1</h2>'
-														+'</div>'
-														+'<div class="caption" style="margin-top: 0px;">'
-															+'<div class="checkbox"> <label> <input id="login-remember" type="checkbox" name="remember" value="1"> Show as Public </label>'
-																+'<div class="suceee_msg">'
-																	+'/* <h4>Updated successfully</h4> */'
-																+'</div>'
-															+'</div>'
-															+'<div class="delete_box"> <a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-																+'<div class="suceee_msg">'
-																	+'/* <h4>Delete Message</h4> */'
-																+'</div>'
-															+'</div>'
-														+'</div>'
-													+'</div>'
-													+'</li>'
 
-												})
-												$(html).appendTo("#eventImages");
-									}
-								});
-					});
+	$(document).ready(
+			function() {
+				var html = ' ';
+				var farmProfDis = true;
+				
+				$.ajax({
+					url : "emp/memberService/getMemberProfile",
+					success : function(data) {
+						$.each(data.MemberProfile, function(key, val) {
+							//alert("in to member profile");
+							$('#memberProfTitle').text(
+									data.MemberProfile[key].title);
+							$('#memberProfName').text(
+									data.MemberProfile[key].firstName);
+							$('#memberProfMobile').text(
+									data.MemberProfile[key].mobile);
+							$('#memberProfEmail').text(
+									data.MemberProfile[key].email);
+							$('#memberProfAddress').text(
+									data.MemberProfile[key].address);
+							$('#memberProfProfession').text(
+									data.MemberProfile[key].profession);
+							$('#memberProfMemberId').val(
+									data.MemberProfile[key].memberId);
+							$('#memberProfMemberType').text(
+									data.MemberProfile[key].memberType);
+							$('#memberProfAmount').text(
+									data.MemberProfile[key].amountPaid);
+
+						})
+						//alert("----------aaaaaaaaaaaa-----------"+data.MEMBERFILES);
+						if(data.MEMBERFILES != null ){
+						showMemberProfImages(data);
+						}
+						//alert("----------bbbbbbbbbbbbb-----------");
+						//alert("MemberFarmProfile======"+data.MemberFarmProfile);
+						$.each(
+								data.MemberFarmProfile, 
+								function(key, val) {
+							farmProfDis = false;
+						//	alert("----------bbbbbb11111111bbbbbbb-----------farmProfDis====="+farmProfDis);
+							$('#memberFarmProfFarmName').text(
+									data.MemberFarmProfile[key].farmName);
+							$('#memberFarmProfFarmAddress').text(
+									data.MemberFarmProfile[key].farmAddress);
+							$('#memberFarmProfAboutFarm').text(
+									data.MemberFarmProfile[key].aboutFarm);
+
+						})
+						showFarmProfImages(data);
+						//alert("farmProfDis=====88888=============="+farmProfDis);
+						if(farmProfDis){
+							document.getElementById("farmProf").style.display = 'none';
+						}
+					}
+				});
+
+			});
 	function editProfMember() {
-		alert("in to member edit ");
+		//alert("in to member edit ");
 		var memberId = $("#memberProfMemberId").val();
 		var memberObject = new Object();
 		memberObject.memberId = memberId;
@@ -126,6 +104,68 @@ if(sRole != null && sRole.equals("Admin")){
 			}
 		});
 
+	}
+	function showMemberProfImages(data) {
+		var dispImages = '';
+		var dispClas = '';
+		var dispChkd = '';
+		var memImgCont = '';
+
+		$
+				.each(
+						data.MEMBERFILES,
+						function(key, val) {
+
+							memImgCont = memImgCont
+									+ '<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.MEMBERFILES[key].filePath+'" data-target="#image-gallery">'
+									+ '<img src="'+data.MEMBERFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+									+ '</a>';
+						})
+		document.getElementById("memberProfImages").innerHTML = memImgCont;
+		$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+
+	}
+	function showFarmProfImages(data) {
+		var dispImages = '';
+		var dispClas = '';
+		var dispChkd = '';
+		var dispImgCtrls = true;
+		if (data.FARMFILES != null) {
+			$
+					.each(
+
+							data.FARMFILES,
+							function(key, val) {
+								dispImgCtrls = false;
+								//alert("data.FARMFILES" + data.FARMFILES);
+								//alert(data.MEMBERFILES[key].showPublic);
+								if (data.FARMFILES[key].showPublic == 1) {
+									dispChkd = 'checked';
+								} else {
+									dispChkd = '';
+								}
+								if (key == 0) {
+									dispClas = "item active";
+								} else {
+									dispClas = "item";
+								}
+								dispImages = dispImages
+										+ '<div class="'+ dispClas +'">'
+										+ '<ul class="thumbnails">'
+										+ '<li class="col-md-12">'
+										+ '<div class="fff">'
+										+ '<div class="thumbnail">'
+										+ '<a href="#">'
+										+ '<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="">'
+										+ '</a>' + '</div>' + '</div>'
+										+ '</li>' + '</ul>' + '</div>'
+							})
+			document.getElementById("farmProfImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+		}
+		if (dispImgCtrls) {
+			document.getElementById("farmProfImgCtrl").style.display = 'none';
+		}
 	}
 </script>
 </head>
@@ -192,6 +232,41 @@ if(sRole != null && sRole.equals("Admin")){
 												<td><b> Profession :</b></td>
 												<td><div id="memberProfProfession"></div></td>
 											</tr>
+											<tr>
+												<td><b> Photo :</b></td>
+												<td><div id="memberProfImages"></div></td>
+											</tr>
+<!-- 											<tr>
+												<td colspan="2" style="text-align: center">
+												<div id="memberProfImages"></div>
+												</td>
+											</tr> -->
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-10 col-lg-8 col-md-offset-2">
+									<div class="member_registration">
+										<h2>Member Registration</h2>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10 col-lg-8 col-md-offset-2">
+									<table
+										class="table table-user-information  table-bordered table-responsive">
+										<tbody>
+											<tr>
+												<td class="text-nowrap"><b>Membership Type :</b></td>
+												<td><div id="memberProfMemberType"></div></td>
+											</tr>
+											<tr>
+												<td><b>Amount :</b></td>
+												<td><div id="memberProfAmount"></div></td>
 											</tr>
 
 										</tbody>
@@ -200,7 +275,7 @@ if(sRole != null && sRole.equals("Admin")){
 							</div>
 						</div>
 						<div class="clearfix"></div>
-						<div class="col-md-12">
+						<div class="col-md-12" id="farmProf">
 							<div class="row">
 								<div class="col-md-10 col-lg-8 col-md-offset-2">
 									<div class="member_registration">
@@ -238,221 +313,46 @@ if(sRole != null && sRole.equals("Admin")){
 						</div>
 						<div class="clearfix"></div>
 						<div class="row">
-							<div class="modal fade" id="image-gallery" tabindex="-1"
-								role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal">
-												<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-											</button>
-											<h4 class="modal-title" id="image-gallery-title"></h4>
+						<div class="modal fade" id="image-gallery" tabindex="-1"
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+							style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+										</button>
+										<h4 class="modal-title" id="image-gallery-title"></h4>
+									</div>
+									<div class="modal-body" id="modelBodyNewsProf">
+									    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
+									</div>
+									<div class="modal-footer">
+										<div class="col-md-2">
+											<button type="button" class="btn btn-primary"
+												id="show-previous-image" style="display: none;">Previous</button>
 										</div>
-										<div class="modal-body">
-											<img id="image-gallery-image" class="img-responsive" src="">
-										</div>
-										<div class="modal-footer">
-											<div class="col-md-2">
-												<button type="button" class="btn btn-primary"
-													id="show-previous-image">Previous</button>
-											</div>
-											<div class="col-md-8 text-justify" id="image-gallery-caption">
-												This text will be overwritten by jQuery</div>
-											<div class="col-md-2">
-												<button type="button" id="show-next-image"
-													class="btn btn-default">Next</button>
-											</div>
+										<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+										<div class="col-md-2">
+											<button type="button" id="show-next-image"
+												class="btn btn-primary">Next</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="">
-							<div class="col-md-6">
+					</div>
+						<div class="row" id="farmProfImgCtrl">
+							<div class="col-md-6" style="margin-left: 250px;">
 								<div class="control-box pager ">
 									<a class="left fa fa-angle-left btn btn-default button-arrow"
 										href="#myCarousel" data-slide="prev"></a> <a
 										class="right fa fa-angle-right btn btn-default button-arrow"
 										href="#myCarousel" data-slide="next"></a>
 								</div>
+
 								<div class="carousel slide" id="myCarousel">
-									<div class="carousel-inner">
-										<div class="item active">
-											<ul style="padding-left: 0px;">
-												<li>
-													<div class="fff">
-														<div class="photo">
-															<a class="g-image" href="#" data-image-id="1"
-																data-toggle="modal" data-title="" data-caption=""
-																data-image="images/g1.jpeg" data-target="#image-gallery">
-																<img class="img-responsive" src="images/g1.jpeg"
-																alt="Short alt text">
-															</a>
-														</div>
-														<div class="img_tiltle" style="margin-top: 7px;">
-															<h2>Image 1</h2>
-														</div>
-														<div class="caption" style="margin-top: 0px;">
-															<div class="checkbox">
-																<label> <input id="login-remember"
-																	type="checkbox" name="remember" value="1"> Show
-																	as Public
-																</label>
-																<div class="suceee_msg"></div>
-															</div>
-															<div class="delete_box">
-																<a href="#"><i class="fa fa-trash-o"
-																	aria-hidden="true"></i> Delete</a>
-																<div class="suceee_msg"></div>
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-										<div class="item ">
-											<ul style="padding-left: 0px;">
-												<li>
-													<div class="fff">
-														<div class="photo">
-															<a class="g-image" href="#" data-image-id="2"
-																data-toggle="modal" data-title="" data-caption=""
-																data-image="images/g2.jpg" data-target="#image-gallery">
-																<img class="img-responsive" src="images/g2.jpg"
-																alt="Short alt text">
-															</a>
-														</div>
-														<div class="img_tiltle" style="margin-top: 7px;">
-															<h2>Image 2</h2>
-														</div>
-														<div class="caption" style="margin-top: 0px;">
-															<div class="checkbox">
-																<label> <input id="login-remember"
-																	type="checkbox" name="remember" value="1"> Show
-																	as Public
-																</label>
-																<div class="suceee_msg"></div>
-															</div>
-															<div class="delete_box">
-																<a href="#"><i class="fa fa-trash-o"
-																	aria-hidden="true"></i> Delete</a>
-																<div class="suceee_msg"></div>
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6 col-lg-6 ">
-								<div class="control-box pager ">
-									<a class="left fa fa-angle-left btn btn-default button-arrow"
-										href="#myCarousel1" data-slide="prev"></a> <a
-										class="right fa fa-angle-right btn btn-default button-arrow"
-										href="#myCarousel1" data-slide="next"></a>
-								</div>
-								<div class="carousel slide" id="myCarousel1">
-									<div class="carousel-inner">
-										<div class="item active">
-											<ul style="padding-left: 0px;">
-												<li>
-													<div class="fff">
-														<div class="">
-															<iframe src="https://player.vimeo.com/video/152115588"
-																width="100%" height="339" frameborder="0"
-																webkitallowfullscreen="" mozallowfullscreen=""
-																allowfullscreen=""></iframe>
-														</div>
-														<div class="img_tiltle">
-															<h2>video 1</h2>
-														</div>
-														<div class="caption">
-															<div class="checkbox">
-																<label> <input id="login-remember"
-																	type="checkbox" name="remember" value="1"> Show
-																	as Public
-																</label>
-																<div class="suceee_msg"></div>
-															</div>
-															<div class="delete_box">
-																<a href="#"><i class="fa fa-trash-o"
-																	aria-hidden="true"></i> Delete</a>
-																<div class="suceee_msg"></div>
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-
-										<div class="item ">
-											<ul style="padding-left: 0px;">
-												<li>
-													<div class="fff">
-														<div class="">
-															<iframe src="https://player.vimeo.com/video/152115588"
-																width="100%" height="339" frameborder="0"
-																webkitallowfullscreen="" mozallowfullscreen=""
-																allowfullscreen=""></iframe>
-														</div>
-														<div class="img_tiltle">
-															<h2>video 2</h2>
-														</div>
-														<div class="caption">
-															<div class="checkbox">
-																<label> <input id="login-remember"
-																	type="checkbox" name="remember" value="1"> Show
-																	as Public
-																</label>
-																<div class="suceee_msg">
-																	<!-- <h4>Updated successfully</h4> -->
-																</div>
-															</div>
-															<div class="delete_box">
-																<a href="#"><i class="fa fa-trash-o"
-																	aria-hidden="true"></i> Delete</a>
-																<div class="suceee_msg"></div>
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-
-									</div>
-
-								</div>
-
-							</div>
-						</div>
-						<div class="clearfix"></div>
-						<div class="col-md-12">
-							<div class="row">
-								<div class="col-md-10 col-lg-8 col-md-offset-2">
-									<div class="member_registration">
-										<h2>Member Registration</h2>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-10 col-lg-8 col-md-offset-2">
-									<table
-										class="table table-user-information  table-bordered table-responsive">
-										<tbody>
-											<tr>
-												<td class="text-nowrap"><b>Membership Type :</b></td>
-												<td><div id="memberProfMemberType"></div>
-												</td>
-											</tr>
-											<tr>
-												<td><b>Amount :</b></td>
-												<td><div id="memberProfAmount"></div></td>
-											</tr>
-
-										</tbody>
-									</table>
+									<div class="carousel-inner" id="farmProfImages"></div>
 								</div>
 							</div>
 						</div>
@@ -469,9 +369,8 @@ if(sRole != null && sRole.equals("Admin")){
 				</div>
 				<%} else{%>
 				<div class="panel-footer">
-					<span> <a 
-						data-original-title="Edit this user" data-toggle="tooltip"
-						type="button" class="btn btn-sm btn-warning"><i
+					<span> <a data-original-title="Edit this user"
+						data-toggle="tooltip" type="button" class="btn btn-sm btn-warning"><i
 							class="glyphicon glyphicon-edit"></i></a>
 					</span>
 				</div>

@@ -13,7 +13,7 @@ if(sRole != null && sRole.equals("Admin")){
 <script type="text/javascript">
 function memberFarmValidation() {
 
-	$("#eventRegFailMsg").text("");
+	$("#memberRegFailMsg").text("");
 	var firstName = document.getElementById("firstName");
 	var middleName = document.getElementById("middleName");
 	var lastName = document.getElementById("lastName");
@@ -34,6 +34,14 @@ function memberFarmValidation() {
 	var farmDistrict = document.getElementById("farmDistrict");
 	var aboutFarm = document.getElementById("aboutFarm");
 	var farmPincode = document.getElementById("farmPincode");
+	var number = /^[0-9]+$/;
+	var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
+	
+	 var file = $('#file').val().split('.').pop().toLowerCase();
+	/* if($.inArray(file, ['gif','png','jpg','jpeg']) == -1) {
+	    alert('invalid extension!');
+	} */
+	
 	if (firstName.value.length == 0) {
 		msg = "errFirstName";
 		title = "First Name ";
@@ -50,24 +58,18 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		mobile.focus();
 		return false;
-	}/* else if (email.value.length > 0 ) {
-		
-		var x = email.value;
-		alert("x=="+x);
-		var atpos = x.indexOf("@");
-	    var dotpos = x.lastIndexOf(".");
-	    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
-	    	//alert("y==");
-	    	msg = "errEmail";
-			title = "Email";
+	}else if (email.value.length > 0 && !email.value.match(emailChk) ) {
+		//alert("email----1-------");
+    	msg = "errEmail";
+		title = "";
 
-			$("#" + msg).text(title + " please enter valid email");
-			$("#" + msg).show();
-			email.focus();
-			return false;
-	    }
-	} */
-	else if (place.value.length == 0) {
+		$("#" + msg).text(title + " please enter valid email");
+		$("#" + msg).show();
+		email.focus();
+		//alert("email------2-----");
+		return false;
+
+    }else if (place.value.length == 0) {
 		msg = "errPlace";
 		title = "Place/City";
 
@@ -90,6 +92,14 @@ function memberFarmValidation() {
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		district.focus();
+		return false;
+	}else if (pincode.value.length > 0 && !pincode.value.match(number) ) {
+		msg = "errMemRegPinCode";
+		title = "Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		pincode.focus();
 		return false;
 	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
 		msg = "errMemRegPinCode";
@@ -131,6 +141,14 @@ function memberFarmValidation() {
 		$("#" + msg).show();
 		farmDistrict.focus();
 		return false;
+	}else if (haveFarm == 'yes' && farmPincode.value.length > 0 && !farmPincode.value.match(number)) {
+		msg = "errFarmPincode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only ");
+		$("#" + msg).show();
+		farmPincode.focus();
+		return false;
 	}else if (haveFarm == 'yes' && farmPincode.value.length > 0 && farmPincode.value.length != 6) {
 		msg = "errFarmPincode";
 		title = "Farm Pin Code";
@@ -140,12 +158,12 @@ function memberFarmValidation() {
 		farmPincode.focus();
 		return false;
 	}else{
-		$("#eMail").text("");
 		$("#farmName").text("");
 		$("#farmPlace").text("");
 		$("#farmMandal").text("");
 		$("#farmDistrict").text("");
 		$("#farmPincode").text("");
+		$("#errEmail").text("");
 		saveMember();
 	}
 
@@ -177,56 +195,65 @@ function memberFarmValidation() {
 	var farmState = $("#farmState").val();
 	var farmPincode = $("#farmPincode").val();
 	var amount = $("#amount").val();
+	var file = $("#file")[0].files[0];
+	var fileFarm = $("#fileFarm")[0].files[0];
+	
+	//alert("in to farm  fileFarm"+fileFarm);
+	var formData = new FormData();
+	formData.append("title", title);
+	formData.append("firstName", firstName);
+	formData.append("middleName", middleName);
+	formData.append("lastName", lastName);
+	formData.append("mobile", mobile);
+	formData.append("email", email);
+	formData.append("address", address);
+	formData.append("place", place);
+	formData.append("mandal", mandal);
+	formData.append("district", district);
+	formData.append("state", state);
+	formData.append("pincode", pincode);
+	formData.append("profession", profession);
+	formData.append("haveFarm", haveFarm);
 	
 	
-	var memberObject = new Object();
-	memberObject.title =title;
-	memberObject.firstName=firstName;
-	memberObject.middleName = middleName;
-	memberObject.lastName = lastName
-	memberObject.mobile = mobile;
-	memberObject.email = email;
-	memberObject.address = address;
-	memberObject.place = place;
-	memberObject.mandal = mandal;
-	memberObject.district = district;
-	memberObject.state = state;
-	memberObject.pincode = pincode;
-	memberObject.profession = profession;
-	memberObject.farmName = farmName;
-	memberObject.farmPlace = farmPlace;
-	memberObject.farmAddress = farmAddress;
-	memberObject.farmMandal = farmMandal;
-	memberObject.farmDistrict = farmDistrict;
-	memberObject.aboutFarm = aboutFarm;
-	memberObject.farmState = farmState;
-	memberObject.farmPincode = farmPincode;
-	memberObject.memberType = memberType;
-	memberObject.haveFarm = haveFarm;
-	memberObject.amount = amount;
+	formData.append("memberType", memberType);
+	formData.append("farmName", farmName);
+	formData.append("farmPlace", farmPlace);
+	formData.append("farmAddress", farmAddress);
+	formData.append("farmMandal", farmMandal);
+	formData.append("farmDistrict", farmDistrict);
+	formData.append("aboutFarm", aboutFarm);
+	formData.append("farmState", farmState);
 	
-	
+	formData.append("farmPincode", farmPincode);
+	formData.append("amount", amount);
+	formData.append("file", file);
+	formData.append("fileFarm", fileFarm);
+
 	$.ajax({
-		data : memberObject,
+		type: 'POST',
 		url : "emp/memberService/addMember",
+    	data: formData,
+    	cache: false,
+    	contentType: false,
+    	processData: false,
 		success : function(data) {
 			if (data.Msg == 'success') {
 				window.location.href = "memberList.jsp";
-			}else if (data.Msg == 'fail'){
-				$("#eventRegFailMsg").text("Member Registration Failed");
 			}else{
-				$("#eventRegFailMsg").text(data.Msg);
-			} 
+				$("#memberRegFailMsg").text("Member Registration Failed");
+			}  
 		}
 	});
-	$.ajax({
+	
+	/* $.ajax({
 		data : uploadFile,
 		url : "emp/memberService/getMemberImages",
 		success : function(data) {
 			if (data.Msg = "success") {
 			}
 		}
-	});
+	}); */
 }
 
 	function pincodeCheck(fName, title, msg) {
@@ -369,7 +396,7 @@ function memberFarmValidation() {
 					<div class="form-group">
 						<label for="email">Email</label> <span class="errMsg" id="errEmail"></span>
 						<input type="text"
-							class="form-control" id="email" name="email" maxlength="30" onkeyup="eMail(id,'Email','errEmail');">
+							class="form-control" id="email" name="email" maxlength="30" onkeyup="eMail(id,'','errEmail');">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -440,9 +467,8 @@ function memberFarmValidation() {
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
 									<label for="Upload Photo">Select Photo(s)</label> <input
-										id="file" name="file" class="file form-control" type="file">
-									<a href="#"><button
-											class="btn btn-success btn-sm text-right">Upload</button></a>
+										id="file" name="file" class="file form-control" type="file" 
+										accept="image/jpg,image/png,image/jpeg,image/gif">
 								</div>
 							</form>
 						</div>
@@ -493,9 +519,9 @@ function memberFarmValidation() {
 				<div id="haveFarm" class="form-group">
 					<h2>Do you have Farm</h2>
 					<label class="radio-inline"> 
-					<input type="radio" name="yesno" value="yes"> Yes </label> 
+					<input type="radio" name="yesno" value="Yes"> Yes </label> 
 					<label class="radio-inline"> 
-					<input type="radio" name="yesno" checked value="no"> No
+					<input type="radio" name="yesno" checked value="No"> No
 					</label>
 				</div>
 			</div>
@@ -542,7 +568,7 @@ function memberFarmValidation() {
 			</div>
 			<div class="message" id="memberfrm_message">
 				<h3>
-				<aside class="formFailMsg" id="eventRegFailMsg"></aside>
+				<aside class="formFailMsg" id="memberRegFailMsg"></aside>
 			</h3>
 			</div>
 		</div>
@@ -623,33 +649,69 @@ function memberFarmValidation() {
 			</div>
 
 			<!-------------------------Upload Photo--------------------------------------->
-			<div class="row">
-				<div class="col-md-12">
-					<!--<div class="col-md-3">
-          <div class="image"> <img src="images/img.png" class="img-responsive"> </div>
-        </div>-->
-					<div class="upload_img">
-						<form method="post" action="emp/commonUtils/upload"
-							enctype="multipart/form-data">
-							<div class="form-group col-md-7">
-								<label for="Upload Photo">Upload Farm Photo(s)</label> <input
-									id="file" name="file" class="file form-control" type="file">
-								<a href="#"><button
-										class="btn btn-success btn-sm text-right">Upload</button></a>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-
 			<div id="gallery_section">
 				<div class="container">
 					<div class="row">
 
-						<!----------------------photo_gallery------------------------------>
+						<!----------------------farm photo_gallery------------------------------>
+               <div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2">
+							<div class="image">
+								<img src="images/img.png"
+									class="img-responsive img-thumbnail g-image" href="#"
+									data-image-id="2" data-toggle="modal" data-title=""
+									data-caption="" data-image="images/placeholder.jpg"
+									data-target="#image-gallery">
+							</div>
+						</div>
+						<div class="upload_img">
+							<form method="post" action="emp/commonUtils/upload"
+								enctype="multipart/form-data">
+								<div class="form-group col-md-6">
+									<label for="Upload Photo">Select Photo(s)</label> <input
+										id="fileFarm" name="fileFarm" class="file form-control" type="file"
+										accept="image/jpg,image/png,image/jpeg,image/gif">
+								</div>
+							</form>
+						</div>
+						
+					</div>
+				</div>
+				
+				<div class="row">
+				<div class="modal fade" id="image-gallery" tabindex="-1"
+					role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+					style="display: none;">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="image-gallery-title"></h4>
+							</div>
+							<div class="modal-body">
+								<img id="image-gallery-image" class="img-responsive" src="">
+							</div>
+							<div class="modal-footer">
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary"
+										id="show-previous-image" style="display: none;">Previous</button>
+								</div>
+								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
+								<div class="col-md-2">
+									<button type="button" id="show-next-image"
+										class="btn btn-default">Next</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				
 
-
-						<!----------------------photo_gallery end------------------------------>
+						<!----------------------farm photo_gallery end------------------------------>
 
 						<!----------------------video_gallery------------------------------>
 
@@ -672,19 +734,33 @@ function memberFarmValidation() {
 <!----------------------footer end --------------------------------->
 <script> 
 $(function(){
-	if($('[name="yesno"]:checked').val() == 'no'){
+	if($('[name="yesno"]:checked').val() == 'No'){
 		$('#moreFields').html('');
 	}
 	$(document).on('change','[name="yesno"]',function(){
 					var html = '';
-		if($(this).val() == 'yes' ){
+		if($(this).val() == 'Yes' ){
 			html = $('#farmFields').html();			
 		}
 		$('#moreFields').html(html);
 	})
 	
 })
+/* $(function(){
 
+$('input[name^="mobile"]').change(function() {
+alert("in to validation");
+    var $current = $(this);
+
+    $('input[name^="mobile"]').each(function() {
+        if ($(this).val() == $current.val() && $(this).attr('mobile') != $current.attr('id'))
+        {
+            alert('duplicate found!');
+        }
+
+    });
+  });
+}); */
 
 </script>
 </body>

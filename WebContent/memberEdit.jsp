@@ -11,7 +11,7 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 <!-- <script type="text/javascript" src="js/member.js"></script> -->
 </head>
-<body onload="test2();">
+<body>
 	<!----------------------top_header start-------------------------------->
 	<jsp:include page="includes.jsp" />
 	<!----------------------top_header end---------------------------------->
@@ -49,7 +49,10 @@ if(sRole != null && sRole.equals("Admin")){
 		var memberType = document.getElementById("editMemberType");
 		var amount = document.getElementById("editAmount");
 		var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
-		
+		var number = /^[0-9]+$/;
+		var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
+		var editfileFarm = $("#editfileFarm")[0].files[0];
+		var file = $('#file').val().split('.').pop().toLowerCase();
 		var farmName = document.getElementById("memberFarmEditFarmName");
 		var farmPlace = document.getElementById("memberFarmEditFarmPlace");
 		var farmAddress = document.getElementById("memberFarmEditFarmAddress");
@@ -82,7 +85,18 @@ if(sRole != null && sRole.equals("Admin")){
 		$("#" + msg).show();
 		mobile.focus();
 		return false;
-	}else if (place.value.length == 0) {
+	}else if (email.value.length > 0 && !email.value.match(emailChk) ) {
+		//alert("email----1-------");
+    	msg = "errEditMemEmail";
+		title = "Email";
+
+		$("#" + msg).text(title + " please enter valid email");
+		$("#" + msg).show();
+		email.focus();
+		//alert("email------2-----");
+		return false;
+
+    }else if (place.value.length == 0) {
 		msg = "errEditMemPlace";
 		title = "Place/City";
 
@@ -105,6 +119,14 @@ if(sRole != null && sRole.equals("Admin")){
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
 		district.focus();
+		return false;
+	}else if (pincode.value.length > 0 && !pincode.value.match(number) ) {
+		msg = "errEditMemPincode";
+		title = "Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only");
+		$("#" + msg).show();
+		pincode.focus();
 		return false;
 	}else if (pincode.value.length > 0 && pincode.value.length != 6) {
 		msg = "errEditMemPincode";
@@ -154,12 +176,21 @@ if(sRole != null && sRole.equals("Admin")){
 		$("#" + msg).show();
 		farmPincode.focus();
 		return false;
+	}else if (haveFarm == 'yes' && farmPincode.value.length > 0 && !farmPincode.value.match(number)) {
+		msg = "errMemberFarmEditFarmPincode";
+		title = "Farm Pin Code";
+
+		$("#" + msg).text(title + " must have numbers only ");
+		$("#" + msg).show();
+		farmPincode.focus();
+		return false;
 	}else{
 		$("#memberFarmEditFarmName").text("");
 		$("#memberFarmEditFarmPlace").text("");
 		$("#memberFarmEditFarmMandal").text("");
 		$("#memberFarmEditFarmDistrict").text("");
 		$("#errMemberFarmEditFarmPincode").text("");
+		$("#errEditMemEmail").text("");
 		memberUpdate1();
 	}
 		
@@ -180,8 +211,10 @@ if(sRole != null && sRole.equals("Admin")){
 				$.ajax({
 					url : "emp/memberService/editMember",
 					success : function(data) {
-						$.each(data.EditMember, function(key, val) {
-							alert("in to member edit");
+						
+						$.each(data.EditMember,
+								function(key, val) {
+							//alert("in to member edit filePath=="+data.EditMember[key].filePath);
 							$('#memberId').val(data.EditMember[key].memberId);
 							$('#memberEditTitle').val(
 									data.EditMember[key].title);
@@ -214,12 +247,15 @@ if(sRole != null && sRole.equals("Admin")){
 							$('#editAmount').val(
 									data.EditMember[key].amountPaid);
 							$('#memberFarmEditHaveFarm').val(data.EditMember[key].haveFarm);
+							document.getElementById("memberImg").src = data.EditMember[key].filePath;
 						})
+						//showMemberImages(data);
+						showFarmData();
 					}
 				});
 			});
 	function memberUpdate1() {
-		alert("in to member update")
+		//alert("in to member update")
 		var memberId = $("#memberId").val();
 		var title = $("#memberEditTitle").val();
 		var firstName = $("#memberEditFirstName").val();
@@ -247,52 +283,60 @@ if(sRole != null && sRole.equals("Admin")){
 		var aboutFarm = $("#memberFarmEditAboutFarm").val();
 		var farmState = $("#memberFarmEditFarmState").val();
 		var farmPincode = $("#memberFarmEditFarmPincode").val();
-		
+		var file = $("#file")[0].files[0];
+		var editfileFarm = $("#editfileFarm")[0].files[0];
         
-		var memberObject = new Object();
-		memberObject.memberId = memberId;
-		memberObject.title = title;
-		memberObject.firstName = firstName;
-		memberObject.middleName = middleName;
-		memberObject.lastName = lastName;
-		memberObject.mobile = mobile;
-		memberObject.email = email;
-		memberObject.address = address;
-		memberObject.place = place;
-		memberObject.mandal = mandal;
-		memberObject.district = district;
-		memberObject.state = state;
-		memberObject.pincode = pincode;
-		memberObject.profession = profession;
-		memberObject.haveFarm = haveFarm;
-		memberObject.memberType = memberType;
-		memberObject.amount = amount;
-		memberObject.farmId = farmId;
-		memberObject.farmName = farmName;
-		memberObject.farmPlace = farmPlace;
-		memberObject.farmAddress = farmAddress;
-		memberObject.farmMandal = farmMandal;
-		memberObject.farmDistrict = farmDistrict;
-		memberObject.aboutFarm = aboutFarm;
-		memberObject.farmState = farmState;
-		memberObject.farmPincode = farmPincode;
-       
-		$.ajax({
-			data : memberObject,
-			url : "emp/memberService/memberUpdate",
-			success : function(data) {
-				if (data.Msg == 'success') {
-					 alert("after member update successful")
-					window.location.href = "memberList.jsp";
-					
-				}else{
-					$("#memberEditFailMsg").text("Member Edit Failed");
-				} 
-			}
-		});
+		
+	var formData = new FormData();
+	formData.append("memberId", memberId);
+	formData.append("title", title);
+	formData.append("firstName", firstName);
+	formData.append("middleName", middleName);
+	formData.append("lastName", lastName);
+	formData.append("mobile", mobile);
+	formData.append("email", email);
+	formData.append("address", address);
+	formData.append("place", place);
+	formData.append("mandal", mandal);
+	formData.append("district", district);
+	formData.append("state", state);
+	formData.append("pincode", pincode);
+	formData.append("profession", profession);
+	formData.append("haveFarm", haveFarm);
+	
+	
+	formData.append("memberType", memberType);
+	formData.append("farmId", farmId);
+	formData.append("farmName", farmName);
+	formData.append("farmPlace", farmPlace);
+	formData.append("farmAddress", farmAddress);
+	formData.append("farmMandal", farmMandal);
+	formData.append("farmDistrict", farmDistrict);
+	formData.append("aboutFarm", aboutFarm);
+	formData.append("farmState", farmState);
+	
+	formData.append("farmPincode", farmPincode);
+	formData.append("amount", amount);
+	formData.append("file", file);
+	formData.append("editfileFarm", editfileFarm);
+	//var fileFarm = $("#fileFarm")[0].files[0];
 
+	$.ajax({
+		type: 'POST',
+		url : "emp/memberService/memberUpdate",
+    	data: formData,
+    	cache: false,
+    	contentType: false,
+    	processData: false,
+		success : function(data) {
+			if (data.Msg == 'success') {
+				window.location.href = "memberList.jsp";
+			}else{
+				$("#memberEditFailMsg").text("Member Edit Failed");
+			}  
+		}
+	});
 	}
-
 	function test() {
 		$.ajax({
 			url : "emp/farmService/getFarm",
@@ -317,6 +361,7 @@ if(sRole != null && sRole.equals("Admin")){
 							data.MemberFarmEdit[key].farmPincode);
 					$('#memberFarmEditFarmId').val(data.MemberFarmEdit[key].farmId);
 				})
+				showFarmImages(data);
 			}
 		});
 
@@ -358,6 +403,202 @@ if(sRole != null && sRole.equals("Admin")){
 			$("#" + msg).text("");
 			return true;
 		}
+	}
+/*	function showMemberImages(data){
+		var dispImages = '';
+		var dispClas = '';
+		var dispChkd = '';
+		var imgCtrl = true;
+		//if(!data.MEMBERFILES == "undefined"){
+			//alert("in to "+data.MEMBERFILES);
+		$.each(
+				data.MEMBERFILES,
+				function(key, val) {
+					//alert("in to MEMBERFILES "+data.MEMBERFILES);
+					imgCtrl = false;
+					if(data.MEMBERFILES[key].showPublic == 1){
+						dispChkd = 'checked';
+					}else{
+						dispChkd = '';
+					}
+					if(key == 0){
+						dispClas = "item active";
+					}else{
+						dispClas = "item";
+					}
+					dispImages = dispImages
+					+'<div class="'+ dispClas +'">'
+					+'<ul class="thumbnails">'
+						+'<li class="col-md-12">'
+							+'<div class="fff">'
+								+'<div class="thumbnail">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.MEMBERFILES[key].filePath+'" data-target="#image-gallery">'
+								 +'<img src="'+data.MEMBERFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+									+'</a>'
+								+'</div>'
+								+'<div class="caption">'
+									+'<div class="checkbox">'
+										+'<label>'
+										    +'<input id="'+data.MEMBERFILES[key].fileId+'" onclick="updateShowAsPublicMember(this.id);" type="checkbox" value="'+data.MEMBERFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+										+'</label>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+									+'<div class="delete_box">'
+										+'<a href="#" name="'+data.MEMBERFILES[key].fileId+'" onclick="deleteFileMember(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+						+'</li>'
+					+'</ul>'
+				+'</div>'
+				})
+	//}
+				document.getElementById("memberEditImages").innerHTML = dispImages;
+				$.getScript('js/popup.js');
+				if(imgCtrl){
+					document.getElementById("memberEditImgCtrl").style.display = 'none';
+				}
+	}
+	function deleteFileMember(fileId){
+		//alert("fileId---"+fileId);
+		var memberObject = new Object();
+		memberObject.fileId = fileId;
+		memberObject.type = "MEMBER";
+		$.ajax({
+			data : memberObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data){
+				if(data.Msg = 'success'){
+					showMemberImages(data);
+				}
+			}
+		})
+	}
+	function updateShowAsPublicMember(fileId){
+		//alert("fileId---"+fileId);
+		var setVal = '';
+		if(document.getElementById(fileId).checked){
+			setVal = '1';
+		}else{
+			setVal = '0';
+		}
+		//alert("setVal-----"+setVal);
+		var uploadFileObject = new Object();
+		uploadFileObject.fileId = fileId; 
+		uploadFileObject.showAsPublic = setVal;
+		uploadFileObject.type = "MEMBER";
+		//alert("setVal---"+setVal);
+			$.ajax({
+			data : uploadFileObject,
+			url : "emp/uploadService/updateShowAsPublic",
+			success : function(data) {
+				if (data.Msg = "success") {
+					showMemberImages(data);
+				}
+			}
+		}); 
+	}*/
+	function showFarmImages(data){
+		var dispImages = '';
+		var dispClas = '';
+		var dispChkd = '';
+		var imgCtrl = true;
+		//alert("in to "+data.FARMFILES);
+		
+		if(data.FARMFILES != null ){
+		$.each(
+				data.FARMFILES,
+				function(key, val) {
+					//imgCtrl = false;
+					//alert("in to FARMFILES "+data.FARMFILES);
+					//alert(data.FARMFILES[key].fileId);
+					
+					
+					if(data.FARMFILES[key].showPublic == 1){
+						dispChkd = 'checked';
+					}else{
+						dispChkd = '';
+					}
+					if(key == 0){
+						dispClas = "item active";
+					}else{
+						dispClas = "item";
+					}
+					dispImages = dispImages
+					+'<div class="'+ dispClas +'">'
+					+'<ul class="thumbnails">'
+						+'<li class="col-md-12">'
+							+'<div class="fff">'
+								+'<div class="thumbnail">'
+									+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.FARMFILES[key].filePath+'" data-target="#image-gallery">'
+									  +'<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+									+'</a>'
+								+'</div>'
+								+'<div class="caption">'
+									+'<div class="checkbox">'
+										+'<label>'
+										    +'<input id="'+data.FARMFILES[key].fileId+'" onclick="updateShowAsPublicFarm(this.id);" type="checkbox" value="'+data.FARMFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
+										+'</label>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+									+'<div class="delete_box">'
+										+'<a href="#" name="'+data.FARMFILES[key].fileId+'" onclick="deleteFileFarm(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
+										+'<div class="suceee_msg"></div>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+						+'</li>'
+					+'</ul>'
+				+'</div>'
+				})
+				document.getElementById("farmEditImages").innerHTML = dispImages;
+				$.getScript('js/popup.js');
+		}
+		// alert("imgCtrl=="+imgCtrl);
+		 if(imgCtrl){
+			document.getElementById("farmEditImgCont").style.display = 'none';
+		}  
+	}
+	function deleteFileFarm(fileId){
+		//alert ("This is a warning message!");
+		var farmObject = new Object();
+		farmObject.fileId = fileId;
+		farmObject.type = "FARM";
+		$.ajax({
+			data : farmObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data){
+				alert ("This is a warning message!");
+				if(data.Msg = 'success'){
+					showFarmImages(data);
+				}
+			}
+		})
+	}
+	function updateShowAsPublicFarm(fileId){
+		//alert("fileId---"+fileId);
+		var setVal = '';
+		if(document.getElementById(fileId).checked){
+			setVal = '1';
+		}else{
+			setVal = '0';
+		}
+		//alert("setVal-----"+setVal);
+		var uploadFileObject = new Object();
+		uploadFileObject.fileId = fileId; 
+		uploadFileObject.showAsPublic = setVal;
+		uploadFileObject.type = "FARM";
+		//alert("setVal---"+setVal);
+			$.ajax({
+			data : uploadFileObject,
+			url : "emp/uploadService/updateShowAsPublic",
+			success : function(data) {
+				if (data.Msg = "success") {
+					showFarmImages(data);
+				}
+			}
+		}); 
 	}
 </script>
 </head>
@@ -431,7 +672,7 @@ if(sRole != null && sRole.equals("Admin")){
 					<div class="form-group">
 						<label for="email">Email</label> <span class="errMsg" id="errEditMemEmail"></span>
 						<input type="text"
-							class="form-control" id="memberEditEmail" name="memberEditEmail" maxlength="30" onkeyup="eMail(id,'Email','errEditMemEmail');">
+							class="form-control" id="memberEditEmail" name="memberEditEmail" maxlength="30" onkeyup="eMail(id,'','errEditMemEmail');">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -499,21 +740,18 @@ if(sRole != null && sRole.equals("Admin")){
 					<div class="col-md-12">
 						<div class="col-md-2">
 							<div class="image">
-								<img src="images/img.png"
+								<img src="images/img.png" id="memberImg"
 									class="img-responsive img-thumbnail g-image" href="#"
 									data-image-id="1" data-toggle="modal" data-title=""
-									data-caption="" data-image="images/placeholder.jpg"
-									data-target="#image-gallery">
+									data-caption="">
 							</div>
 						</div>
 						<div class="upload_img">
 							<form method="post" action="emp/commonUtils/upload"
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
-									<label for="Upload Photo">Select Photo(s)</label> <input
+									<label for="Upload Photo">Select Photo</label> <input
 										id="file" name="file" class="file form-control" type="file">
-									<a href="#"><button
-											class="btn btn-success btn-sm text-right">Upload</button></a>
 								</div>
 							</form>
 						</div>
@@ -522,6 +760,13 @@ if(sRole != null && sRole.equals("Admin")){
 			</div>
 
 
+
+
+			<!-------------------------Upload Photo end--------------------------------------->
+
+		</div>
+		<div class="clearfix"></div>
+             <!----------------------photo_gallery------------------------------>
 
 			<div class="row">
 				<div class="modal fade" id="image-gallery" tabindex="-1"
@@ -535,8 +780,8 @@ if(sRole != null && sRole.equals("Admin")){
 								</button>
 								<h4 class="modal-title" id="image-gallery-title"></h4>
 							</div>
-							<div class="modal-body">
-								<img id="image-gallery-image" class="img-responsive" src="">
+							<div class="modal-body" id="modelBodyNewsProf">
+							    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
 							</div>
 							<div class="modal-footer">
 								<div class="col-md-2">
@@ -546,18 +791,33 @@ if(sRole != null && sRole.equals("Admin")){
 								<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
 								<div class="col-md-2">
 									<button type="button" id="show-next-image"
-										class="btn btn-default">Next</button>
+										class="btn btn-primary">Next</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-------------------------Upload Photo end--------------------------------------->
+			<!-- <div class="col-md-5" style="margin-left: 250px;">
+				<div class="row">
 
-		</div>
-		<div class="clearfix"></div>
-
+					<div class="col-md-12" style="margin-bottom: 10px;" id="memberEditImgCtrl">
+						Controls
+						<div class="controls pull-right ">
+							<a class="left fa fa-angle-left btn btn-default button-arrow"
+								href="#carousel-example" data-slide="prev"></a> <a
+								class="right fa fa-angle-right btn btn-default button-arrow"
+								href="#carousel-example" data-slide="next"></a>
+						</div>
+					</div>
+				</div>
+				<div id="carousel-example" class="carousel slide" data-ride="carousel">
+						<div class="carousel-inner" id="memberEditImages">
+						</div>
+				</div>
+				
+			</div> -->
+			<!----------------------photo_gallery end------------------------------>
 
 
 
@@ -567,10 +827,10 @@ if(sRole != null && sRole.equals("Admin")){
 				<div id="haveFarm" class="form-group">
 					<h2>Do you have Farm</h2>
 					<label class="radio-inline"> 
-						<input type="radio" name="yesno" id="yesno" value="yes" onclick="test()"> Yes
+						<input type="radio" name="yesno" id="yesno" value="Yes" onclick="test()"> Yes
 					</label> 
 					<label class="radio-inline"> 
-						<input type="radio" name="yesno" id="yesno" checked value="no"> No
+						<input type="radio" name="yesno" id="yesno" checked value="No"> No
 					</label>
 				</div>
 			</div>
@@ -706,12 +966,22 @@ if(sRole != null && sRole.equals("Admin")){
 				<div class="col-md-12">
 					<!--<div class="col-md-3">
           <div class="image"> <img src="images/img.png" class="img-responsive"> </div>
-        </div>-->
+        </div>--><div class="col-md-2">
+							<div class="image">
+								<img src="images/img.png"
+									class="img-responsive img-thumbnail g-image" href="#"
+									data-image-id="1" data-toggle="modal" data-title=""
+									data-caption="">
+							</div>
+						</div>
 					<div class="upload_img">
+					<form method="post" action="emp/commonUtils/upload"
+								enctype="multipart/form-data">
 						<div class="form-group col-md-7">
 							<label for="Upload Photo">Upload Farm Photo(s)</label> <input
-								id="file-0b" class="file form-control" type="file">
+								id="editfileFarm"  name="editfileFarm" class="file form-control" type="file">
 						</div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -720,240 +990,28 @@ if(sRole != null && sRole.equals("Admin")){
 					<div class="row">
 
 						<!----------------------photo_gallery------------------------------>
+			<div class="col-md-5" style="margin-left: 250px;">
+				<div class="row">
 
-						<div class="row">
-							<div class="modal fade" id="image-gallery" tabindex="-1"
-								role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-								style="display: none;">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal">
-												<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-											</button>
-											<h4 class="modal-title" id="image-gallery-title"></h4>
-										</div>
-										<div class="modal-body">
-											<img id="image-gallery-image" class="img-responsive"
-												src="images/g2.jpg">
-										</div>
-										<div class="modal-footer">
-											<div class="col-md-2">
-												<button type="button" class="btn btn-primary"
-													id="show-previous-image" style="display: none;">Previous</button>
-											</div>
-											<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
-											<div class="col-md-2">
-												<button type="button" id="show-next-image"
-													class="btn btn-default">Next</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+					<div class="col-md-12" style="margin-bottom: 10px;" id="farmEditImgCont">
+						<!-- Controls -->
+						<div class="controls pull-right ">
+							<a class="left fa fa-angle-left btn btn-default button-arrow"
+								href="#carousel-example" data-slide="prev"></a> <a
+								class="right fa fa-angle-right btn btn-default button-arrow"
+								href="#carousel-example" data-slide="next"></a>
 						</div>
-						<div class="col-md-6">
-							<div class="row">
-
-								<div class="col-md-12" style="margin-bottom: 10px;">
-									<!-- Controls -->
-									<div class="controls pull-right ">
-										<a class="left fa fa-angle-left btn btn-default button-arrow"
-											href="#carousel-example" data-slide="prev"></a> <a
-											class="right fa fa-angle-right btn btn-default button-arrow"
-											href="#carousel-example" data-slide="next"></a>
-									</div>
-								</div>
-							</div>
-							<div id="carousel-example" class="carousel slide"
-								data-ride="carousel">
-								<!-- Wrapper for slides -->
-								<div class="carousel-inner">
-									<div class="item active left">
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="col-item">
-													<div class="photo">
-														<a class="g-image" href="#" data-image-id="1"
-															data-toggle="modal" data-title="" data-caption=""
-															data-image="images/g2.jpg" data-target="#image-gallery">
-															<img class="img-responsive" src="images/g2.jpg"
-															alt="Short alt text">
-														</a>
-													</div>
-
-													<div class="img_tiltle" style="margin-top: 7px;">
-														<h2>Image 1</h2>
-													</div>
-
-													<div class="caption" style="margin-top: 0px;">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item next left">
-										<div class="row">
-											<div class="col-md-12">
-												<div class="col-item">
-													<div class="photo">
-														<a class="g-image" href="#" data-image-id="2"
-															data-toggle="modal" data-title="" data-caption=""
-															data-image="images/g1.jpeg" data-target="#image-gallery">
-															<img class="img-responsive" src="images/g1.jpeg"
-															alt="Short alt text">
-														</a>
-													</div>
-
-
-													<div class="img_tiltle" style="margin-top: 7px;">
-														<h2>Image 2</h2>
-													</div>
-
-													<div class="caption" style="margin-top: 0px;">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+					</div>
+				</div>
+				<div id="carousel-example" class="carousel slide" data-ride="carousel">
+						<div class="carousel-inner" id="farmEditImages">
 						</div>
+				</div>
+				
+			</div>
 						<!----------------------photo_gallery end------------------------------>
 
-						<!----------------------video_gallery------------------------------>
-						<div class="col-md-6">
-							<div class="row">
-
-								<div class="col-md-12 " style="margin-bottom: 10px;">
-									<!-- Controls -->
-									<div class="controls pull-right">
-										<a class="left fa fa-angle-left btn btn-default button-arrow"
-											href="#carousel-example1" data-slide="prev"></a> <a
-											class="right fa fa-angle-right btn btn-default button-arrow"
-											href="#carousel-example1" data-slide="next"></a>
-									</div>
-								</div>
-							</div>
-							<div id="carousel-example1" class="carousel slide "
-								data-ride="carousel">
-								<!-- Wrapper for slides -->
-								<div class="carousel-inner">
-									<div class="item">
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="col-item">
-													<div class="photo">
-														<iframe src="https://player.vimeo.com/video/73051736"
-															width="100%" height="347" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-
-													<div class="img_tiltle" style="margin-top: 7px;">
-														<h2>Video 1</h2>
-													</div>
-
-													<div class="caption" style="margin-top: 0px;">
-														<div class="checkbox">
-															<label> <input id="login-remember"
-																type="checkbox" name="remember" value="1"> Show
-																as Public
-															</label>
-															<div class="suceee_msg">
-																<!-- <h4>Updated successfully</h4> -->
-															</div>
-														</div>
-														<div class="delete_box">
-															<a href="#"><i class="fa fa-trash-o"
-																aria-hidden="true"></i> Delete</a>
-															<div class="suceee_msg">
-																<!-- <h4>Delete Message</h4> -->
-															</div>
-														</div>
-													</div>
-
-
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="item active">
-										<div class="row">
-											<div class="col-md-12">
-												<div class="col-item">
-													<div class="photo">
-														<iframe src="https://player.vimeo.com/video/73051736"
-															width="100%" height="347" frameborder="0"
-															webkitallowfullscreen="" mozallowfullscreen=""
-															allowfullscreen=""></iframe>
-													</div>
-												</div>
-
-												<div class="img_tiltle" style="margin-top: 7px;">
-													<h2>Video 1</h2>
-												</div>
-
-												<div class="caption" style="margin-top: 0px;">
-													<div class="checkbox">
-														<label> <input id="login-remember" type="checkbox"
-															name="remember" value="1"> Show as Public
-														</label>
-														<div class="suceee_msg">
-															<!-- <h4>Updated successfully</h4> -->
-														</div>
-													</div>
-													<div class="delete_box">
-														<a href="#"><i class="fa fa-trash-o"
-															aria-hidden="true"></i> Delete</a>
-														<div class="suceee_msg">
-															<!-- <h4>Delete Message</h4> -->
-														</div>
-													</div>
-												</div>
-
-
-
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!----------------------video_gallery end------------------------------>
+						
 
 					</div>
 				</div>
@@ -972,45 +1030,42 @@ if(sRole != null && sRole.equals("Admin")){
 <!----------------------footer end --------------------------------->
 <script>
 	$(function() {
-		if ($('[name="yesno"]:checked').val() == 'no') {
+		if ($('[name="yesno"]:checked').val() == 'No') {
 			$('#moreFields').html('');
 		}
 		$(document).on('change', '[name="yesno"]', function() {
 			var html = '';
-			if ($(this).val() == 'yes') {
+			if ($(this).val() == 'Yes') {
 				html = $('#farmFields').html();
 			}
 			$('#moreFields').html(html);
 		})
 
 	})
-	
-function setRadioCheckedValue(radio_name, val) {
-	//alert("gets here");
-	//var oRadio = document.forms[0].elements[radio_name];
-	var oRadio = document.getElementById("yesno");
-	//alert("oRadio=="+oRadio.length);
-	for(var i = 0; i < oRadio.length; i++) { 
-		if(oRadio[i].value == val) {
-			oRadio[i].checked;
+
+	function setRadioCheckedValue(radio_name, val) {
+		//alert("gets here");
+		//var oRadio = document.forms[0].elements[radio_name];
+		var oRadio = document.getElementById("yesno");
+		//alert("oRadio=="+oRadio.length);
+		for (var i = 0; i < oRadio.length; i++) {
+			if (oRadio[i].value == val) {
+				oRadio[i].checked;
+			}
 		}
 	}
-} 
 
-	
+	function showFarmData() {
+		//alert("memberFarmEditHaveFarm==" + $("#memberFarmEditHaveFarm").val());
+		if ($("#memberFarmEditHaveFarm").val() == 'Yes') {
+			document.getElementById("yesno").checked = 'true';
+			test();
+			var html = '';
+			html = $('#farmFields').html();
+			$('#moreFields').html(html);
+		}
 
-			function test2 () {
-			//alert("memberFarmEditHaveFarm=="+$("#memberFarmEditHaveFarm").val());
-			if($("#memberFarmEditHaveFarm").val() == 'yes'){
-				document.getElementById("yesno").checked = 'true';
-				test();
-				var html = '';
-				html = $('#farmFields').html();
-				$('#moreFields').html(html);
-			}
-
-			}
-
+	}
 </script>
 </body>
 </html>

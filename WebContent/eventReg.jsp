@@ -361,13 +361,13 @@ function pincodeCheck(fName, title, msg) {
 						</form>
 					</div>
 				</div>
-				<div class="row"></div>
+				<!-- <div class="row"></div> -->
 			</div>
 
 		</div>
-		<div class="clearfix"></div>
+		<!-- <div class="clearfix"></div> -->
 
-		</form>
+		<!-- </form> -->
 	</div>
 	<div class="clearfix"></div>
 
@@ -394,13 +394,13 @@ function pincodeCheck(fName, title, msg) {
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="name">Name</label> <input type="text"
+							<label for="name">Name</label> <input type="text" maxlength="30"
 								class="form-control" id="guestName" name="guestName">
 						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="designation">Designation</label> <input type="text"
+							<label for="designation">Designation</label> <input type="text" maxlength="30"
 								class="form-control" id="guestDesi" name="guestDesi">
 						</div>
 					</div>
@@ -509,6 +509,7 @@ function pincodeCheck(fName, title, msg) {
   
   
   $(document).ready(function() {
+	  $("#moreInfo").val("");
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID

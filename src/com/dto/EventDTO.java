@@ -16,6 +16,19 @@ private String pincode;
 private String moreInfo;
 private String updatedBy;
 private String updatedOn;
+private String filePath;
+public String getPincode() {
+	return pincode;
+}
+public void setPincode(String pincode) {
+	this.pincode = pincode;
+}
+public String getFilePath() {
+	return filePath;
+}
+public void setFilePath(String filePath) {
+	this.filePath = filePath;
+}
 public String getEventId() {
 	return eventId;
 }

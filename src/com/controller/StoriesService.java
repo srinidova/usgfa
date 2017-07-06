@@ -391,4 +391,38 @@ public class StoriesService {
 		}
 		return jObj;
 	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/searchStories")
+	public JSONObject searchStories(@QueryParam("name") String sName, 
+			@QueryParam("farmName") String sFarmName ,
+			 @QueryParam("place") String sPlace
+			 ) {
+		System.out.println("1. *****Called searchStories**********name==" +sName+"--------farmName=="+sFarmName);
+		System.out.println("2. *****Called searchStories**********place==" +sPlace);
+		JSONObject jobj1 = new JSONObject();
+		StoriesBO bo = new StoriesBO();
+		StoriesDTO dto = new StoriesDTO();
+		dto.setName(sName);
+		dto.setFarmName(sFarmName);
+		dto.setPlace(sPlace);
+		
+		
+		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
+		try {
+			storiesList = bo.searchStories(dto);
+			System.out.println("****storiesList.size==" +storiesList.size());
+			if(storiesList != null && storiesList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("StoriesDetails", storiesList);
+			}else {
+				jobj1.put("StoriesDetails", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("searchMember jobj-->" + jobj1);
+		return jobj1;
+
+	}
 }

@@ -70,49 +70,7 @@ function getProgramDetails() {
 	$.ajax({
 				url : "emp/programService/getProgramDetails",
 				success : function(data) {
-					$.each(
-							data.ProgramDetails,
-							function(key, val) {
-									html = html
-									     + '<tr>'
-										     + '<td class="e_mn">'+data.ProgramDetails[key].programName+'</td>'
-										     +  '<td class="e_mn_1">'+data.ProgramDetails[key].duration+'</td>'
-											 +  '<td class="e_mn_2">'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
-											 +  '<td class="e_mn_3">'+data.ProgramDetails[key].channel+'</td>'
-											 +  '<td class="e_mn_4">'+data.ProgramDetails[key].guest+'</td>'
-											 +  '<td class="e_mn_5">'
-											 	+ '<ul class="actions">'
-											 		+ '<li>'
-											 			+ '<a href="programProfile.jsp"> '
-											 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-success btn-sm" onclick="getProgramProfile(this.id)">'
-											 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%if(bAdmin){ %>
-											 		+ '<li>'
-											 			+ '<a href="programEdit.jsp"> '
-											 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-primary btn-sm" onclick="editProgram(this.id)">'
-											 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		
-											 		+ '<li>'
-											 			+ '<a href="programList.jsp"> '
-											 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-danger btn-sm" onclick="deleteProgram(this.id)">'
-											 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%}%>
-											 	+ ' </ul>'
-											 +  '</td>'
-									     + '</tr>';
-							}
-					)
-					$(html).appendTo("#programListData");
-					$(html).appendTo("</table></div></div>");
+					showProgramList(data);
 				}
 					
 	});
@@ -156,6 +114,79 @@ function deleteProgram(programId){
 	});
 	
 }
+function searchProgram(){
+	//alert("in to program search");
+	document.getElementById("programListData").innerHTML = "";
+	var programName = $("#searchProgramName").val();
+	var channel = $("#searchChannel").val();
+	var guest = $("#searchGuest").val();
+	var programObject = new Object();
+	programObject.programName = programName;
+	programObject.channel = channel;
+	programObject.guest = guest;
+	//alert("in to program search programName==="+programName);
+	$.ajax({
+		data : programObject,
+		url : "emp/programService/searchProgram",
+		success : function(data) {
+			if (data.Msg = "success") {
+				showProgramList(data);
+			}
+		}
+	});
+}
+function showProgramList(data){
+	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	$.each(
+			data.ProgramDetails,
+			function(key, val) {
+					html = html
+					     + '<tr>'
+						     + '<td class="e_mn">'+data.ProgramDetails[key].programName+'</td>'
+						     +  '<td class="e_mn_1">'+data.ProgramDetails[key].duration+'</td>'
+							 +  '<td class="e_mn_2">'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
+							 +  '<td class="e_mn_3">'+data.ProgramDetails[key].channel+'</td>'
+							 +  '<td class="e_mn_4">'+data.ProgramDetails[key].guest+'</td>'
+							 +  '<td class="e_mn_5">'
+							 	+ '<ul class="actions">'
+							 		+ '<li>'
+							 			+ '<a href="programProfile.jsp"> '
+							 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-success btn-sm" onclick="getProgramProfile(this.id)">'
+							 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%if(bAdmin){ %>
+							 		+ '<li>'
+							 			+ '<a href="programEdit.jsp"> '
+							 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-primary btn-sm" onclick="editProgram(this.id)">'
+							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		
+							 		+ '<li>'
+							 			+ '<a href="programList.jsp"> '
+							 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-danger btn-sm" onclick="deleteProgram(this.id)">'
+							 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
+							 				+ '</button>'
+							 			+ '</a>'
+							 		+ '</li>'
+							 		<%}%>
+							 	+ ' </ul>'
+							 +  '</td>'
+					     + '</tr>';
+			}
+	)
+	$(html).appendTo("#programListData");
+	$(html).appendTo("</table></div></div>");
+}
+function clearProgramSearch(){
+	$("#searchProgramName").val("");
+	$("#searchChannel").val("");
+	$("#searchGuest").val("");
+	searchProgram();
+}
 </script>
 </head>
 
@@ -196,13 +227,13 @@ function deleteProgram(programId){
 										<th>Channel</th>
 										<th>Guest</th>
 
-										<th></th>
+										<th style="width: 125px;"></th>
 									</tr>
 									<tr>
 										<td><div class="row">
 												<div class="col-md-10">
-													<input type="text" name='name0' placeholder='Program Name'
-														class="form-control " style="width: 200px;" />
+													<input type="text" name='name0' placeholder='Program Name' id="searchProgramName" name="searchProgramName"
+														class="form-control " style="width: 200px;" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
@@ -213,25 +244,25 @@ function deleteProgram(programId){
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0'
+													<input type="text"
 														placeholder='Date & Time From' class="form-control "
 														style="width: 80px;" />
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Channel'
-														class="form-control " style="width: 80px;" />
+													<input type="text"  placeholder='Channel' id="searchChannel" name="searchChannel"
+														class="form-control " style="width: 80px;" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
-													<input type="text" name='name0' placeholder='Guest'
-														class="form-control " style="width: 80px;" />
+													<input type="text"  placeholder='Guest' id="searchGuest" name="searchGuest"
+														class="form-control " style="width: 80px;" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 
-										<td></td>
+										<td><input type="button" value="CLEAR" onClick="clearProgramSearch();"/></td>
 									</tr>
 								</table>
 								<div class="row">

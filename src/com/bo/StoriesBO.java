@@ -33,5 +33,8 @@ public class StoriesBO {
 		StoriesDAO  dao = new StoriesDAO();
 		return dao.storiesUpdate(storiesDto);
 	}
-    
+	public ArrayList<StoriesDTO> searchStories(StoriesDTO storiesDto) {
+		StoriesDAO  dao = new StoriesDAO();
+		return dao.searchStories(storiesDto);
+	}
 }

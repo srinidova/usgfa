@@ -21,7 +21,7 @@
 		update member set title
 		= #title#, firstName = #firstName#, middleName = #middleName#, lastName = #lastName#, mobile
 		= #mobile#, email = #email#, address = #address#, place = #place#, mandal = #mandal#, district = #district#, state = #state#, pincode = #pincode#,
-		profession = #profession#, updatedBy = #updatedBy#, updatedOn = #updatedOn#, haveFarm = #haveFarm#, memberType=#memberType#,amountPaid=#amountPaid#,password=#password#
+		profession = #profession#, updatedBy = #updatedBy#, updatedOn = #updatedOn#, haveFarm = #haveFarm#, memberType=#memberType#,amountPaid=#amountPaid#
 		where
 		memberId = #memberId#
 	</update>
@@ -39,18 +39,32 @@
 		update member set password = #password# where memberId = #memberId# and mobile = #mobile#
 	</update>
 	<select id="memberSearch" parameterClass="com.dto.MemberDTO" resultClass="com.dto.MemberDTO">
+	<!-- <select id="memberSearch" parameterClass="java.lang.String" resultClass="com.dto.MemberDTO"> -->
 		select
 		memberId,title,firstName,middleName,lastName,mobile,email,address,place,mandal,district,state,pincode,profession,updatedBy,updatedOn,haveFarm,memberType,amountPaid,password from
-		member
-	   <dynamic prepend="WHERE ">
-	      <isNotEmpty prepend="AND" property="firstName">
-	         firstName like #firstName#
-	      </isNotEmpty>
-			
-	      <isNotEmpty prepend="AND" property="profession">
-	         profession like #profession#
-	      </isNotEmpty>
-	   </dynamic>
-      
+		member where memberId is not null
+   
+   <isNotNull property="firstName">
+	    AND firstName like '%$firstName$%'
+   </isNotNull>
+
+	<isNotNull property="place">
+		AND place like '%$place$%'
+	</isNotNull>
+
+	<isNotNull property="profession">
+		AND profession = #profession#
+	</isNotNull>
+
+	<isNotNull property="haveFarm">
+		AND haveFarm = #haveFarm#
+	</isNotNull>
+
+	<isNotNull property="memberType">
+		AND memberType = #memberType#
+	</isNotNull>
+
     </select>
+    
+    
 </sqlMap>

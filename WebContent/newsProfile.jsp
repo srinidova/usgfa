@@ -108,7 +108,7 @@ if(sRole != null && sRole.equals("Admin")){
 	}
 	
 	function deleteFileNews(fileId){
-		alert("fileId--------"+fileId);
+		//alert("fileId--------"+fileId);
 		var newsObject = new Object();
 		newsObject.fileId = fileId; 
 		newsObject.type = "NEWS";
@@ -128,10 +128,14 @@ if(sRole != null && sRole.equals("Admin")){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispImgCtrls = true;
+	if(data.NEWSFILES != null){
+	
 	$.each(
 			data.NEWSFILES,
 			function(key, val) {
-				//alert(data.NEWSFILES[key].showPublic);
+				dispImgCtrls = false;
+				//alert(data.NEWSFILES[key].filePath);
 				if(data.NEWSFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -148,28 +152,22 @@ if(sRole != null && sRole.equals("Admin")){
 					+'<li class="col-md-12">'
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
-								+'<a href="#">'
-								     +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="">'
+								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
+								  +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
 								+'</a>'
 							+'</div>'
-/* 							+'<div class="caption">'
-								+'<div class="checkbox">'
-									+'<label>'
-									    +'<input id="'+data.NEWSFILES[key].fileId+'" onclick="updateShowAsPublicNews(this.id);" type="checkbox" value="'+data.NEWSFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
-									+'</label>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-								+'<div class="delete_box">'
-									+'<a href="#" name="'+data.NEWSFILES[key].fileId+'" onclick="deleteFileNews(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-									+'<div class="suceee_msg"></div>'
-								+'</div>'
-							+'</div>' */
 						+'</div>'
 					+'</li>'
 				+'</ul>'
 			+'</div>'
 			})
 			document.getElementById("newsImages").innerHTML = dispImages;
+			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	}
+			//alert("dispImgCtrls========"+dispImgCtrls);
+			if(dispImgCtrls){
+				document.getElementById("newsProfImgCtrl").style.display = 'none';
+			}
 }
 	
 </script>
@@ -245,9 +243,8 @@ if(sRole != null && sRole.equals("Admin")){
 										</button>
 										<h4 class="modal-title" id="image-gallery-title"></h4>
 									</div>
-									<div class="modal-body">
-										<img id="image-gallery-image" class="img-responsive"
-											src="images/g2.jpg">
+									<div class="modal-body" id="modelBodyNewsProf">
+									    <img id="image-gallery-image" align="middle" class="img-responsive" src="">
 									</div>
 									<div class="modal-footer">
 										<div class="col-md-2">
@@ -257,14 +254,14 @@ if(sRole != null && sRole.equals("Admin")){
 										<div class="col-md-8 text-justify" id="image-gallery-caption"></div>
 										<div class="col-md-2">
 											<button type="button" id="show-next-image"
-												class="btn btn-default">Next</button>
+												class="btn btn-primary">Next</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6" style="margin-left: 250px;">
+					<div class="col-md-6" style="margin-left: 250px;" id="newsProfImgCtrl">
 						<div class="row">
 
 							<div class="col-md-12" style="margin-bottom: 10px;">

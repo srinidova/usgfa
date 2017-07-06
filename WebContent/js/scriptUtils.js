@@ -154,7 +154,24 @@ function emptyCheckTwoFields(fieldName1, fieldName2, title, msg) {
 		
 	}
 }
- 
+ function onlyNumber(fName, title, msg) {
+		var fieldName = document.getElementById(fName);
+		var number = /^[0-9]+$/;
+		if (!fieldName.value.match(number)) {			
+			$("#" + msg).text(title + " must have numbers only");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		}else if(fieldName.value.length != 6){
+			$("#" + msg).text(title + " must have six numbers");
+			$("#" + msg).show();
+			fieldName.focus();
+			return false;
+		} else {
+			$("#" + msg).text("");
+			return true;
+		}
+	}
  function pincodeCheck(fName, title, msg) {
 		//alert("allLetter==fName=="+fName+"----title=="+title+"----msg=="+msg);
 		//alert("== allNumber ==");

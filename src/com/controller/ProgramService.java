@@ -29,6 +29,7 @@ import org.apache.struts2.interceptor.ServletRequestAware;
 import net.sf.json.JSONObject;
 
 import com.bo.EmployeeBO;
+import com.bo.MemberBO;
 import com.bo.NewsBO;
 import com.bo.NewsFileBO;
 import com.bo.ProgramBO;
@@ -36,6 +37,7 @@ import com.bo.ProgramFileBO;
 import com.bo.UploadFileBO;
 import com.dto.BloodGroupDTO;
 import com.dto.EmployeeDTO;
+import com.dto.MemberDTO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.ProgramDTO;
@@ -363,6 +365,39 @@ public class ProgramService {
 		}
 		return jObj;
 	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/searchProgram")
+	public JSONObject searchProgram(@QueryParam("programName") String sProgramName, 
+			@QueryParam("channel") String sChannel ,
+			 @QueryParam("guest") String sGuest
+			 ) {
+		System.out.println("1. *****Called searchProgram**********programName==" +sProgramName+"--------channel=="+sChannel);
+		System.out.println("2. *****Called searchProgram**********guest==" +sGuest);
+		JSONObject jobj1 = new JSONObject();
+		ProgramBO bo = new ProgramBO();
+		ProgramDTO dto = new ProgramDTO();
+		dto.setProgramName(sProgramName);
+		dto.setChannel(sChannel);
+		dto.setGuest(sGuest);
 
+		
+		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
+		try {
+			programList = bo.searchProgram(dto);
+			//System.out.println("****memberList.size==" +memberList.size());
+			if(programList != null && programList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("ProgramDetails", programList);
+			}else {
+				jobj1.put("ProgramDetails", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//System.out.println("searchMember jobj-->" + jobj1);
+		return jobj1;
+
+	}
 }
 
