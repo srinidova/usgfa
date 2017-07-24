@@ -39,4 +39,12 @@ public class NewsBO {
 		NewsDAO dao = new NewsDAO();
 		return dao.searchNews(newsDto);
 	}
+	public ArrayList<NewsDTO> getNewsDetailsHome(NewsDTO newsDto) {
+		NewsDAO dao = new NewsDAO();
+		return dao.getNewsDetailsHome(newsDto);
+	}
+	public ArrayList<NewsDTO> getPublicImagesHome(NewsDTO newsDto) {
+		NewsDAO dao = new NewsDAO();
+		return dao.getPublicImagesHome(newsDto);
+	}
 }

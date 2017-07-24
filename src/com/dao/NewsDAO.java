@@ -84,7 +84,6 @@ public class NewsDAO {
 		ArrayList<NewsDTO> newsdto = new ArrayList<NewsDTO>();
 		boolean bAnd = false;
 		String sQuery = null;
-		//System.out.println("in to memberDAO");
 		try{
 			SqlMapClient session = new IbatisFactory().getSession();
 			
@@ -93,12 +92,39 @@ public class NewsDAO {
 			String sLink = newsDto.getLink();
 			
 			
-			System.out.println("3.a In NewsDAO searchNews---------- sNameTitle===" + sNameTitle);
-			System.out.println("3.b In NewsDAO searchNews---------- sPaper===" + sPaper);
-			System.out.println("3.c In NewsDAO searchNews---------- sLink===" + sLink);
 
 			newsdto = (ArrayList<NewsDTO>) session.queryForList("News.newsSearch", newsDto);
-			System.out.println("in to news Update size"+newsdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return newsdto;
+	}
+	public ArrayList<NewsDTO> getNewsDetailsHome(NewsDTO newsDto) {
+		ArrayList<NewsDTO> newsdto = new ArrayList<NewsDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+
+			newsdto = (ArrayList<NewsDTO>) session.queryForList("News.getNewsDetailsHome", newsDto);
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return newsdto;
+	}
+	public ArrayList<NewsDTO> getPublicImagesHome(NewsDTO newsDto) {
+		ArrayList<NewsDTO> newsdto = new ArrayList<NewsDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			newsdto = (ArrayList<NewsDTO>) session.queryForList("uploadFile.getPublicImagesHome", newsDto);
 	
 			
 		}catch(Exception e){

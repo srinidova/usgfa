@@ -11,7 +11,7 @@
 		<property name="JDBC.Username" value="dovasoft_test" />
 		<property name="JDBC.Password" value="test@123456789" />
 	</dataSource> -->
-	<dataSource type="SIMPLE">
+	 <dataSource type="SIMPLE">
 		<property name="JDBC.Driver" value="com.mysql.jdbc.Driver" />
 		<property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3309/dovasoft_usgfa" />
 		<property name="JDBC.Username" value="root" />

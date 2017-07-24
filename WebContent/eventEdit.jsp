@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <!-- <script type="text/javascript" src="js/event.js"></script> -->
@@ -231,12 +239,13 @@ function eventUpdate(){
 		formData.append("state", state);
 		formData.append("landMark", landMark);
 		formData.append("pincode", pincode);
-		formData.append("file", file);
+		//formData.append('file',  $("#file")[0].files[i]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 		
 		formData.append("guestTitle", guestTitle);
 		formData.append("guestName", guestName);
 		formData.append("guestDesi", guestDesi);
-		//alert("in eventEdit page "+guestName);
 
 		$.ajax({
 			type: 'POST',
@@ -258,6 +267,10 @@ function eventUpdate(){
 	
 }
 function deleteGuest(guestId){
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
 	var guestObject = new Object();
 	guestObject.guestId = guestId;
 	var content = "";
@@ -266,32 +279,14 @@ function deleteGuest(guestId){
 		url : "emp/eventService/deleteGuest",
 		success : function(data) {
 			showGuests(data);
-/* 			$.each(
-					data.EventGuestEdit,
-					function(key, val) {
-						content = content
-						+'<tr>'
-						+'<td>'+data.EventGuestEdit[key].title+'</td>'
-						+'<td>'+data.EventGuestEdit[key].name+'</td>'
-						+'<td>'+data.EventGuestEdit[key].designation+'</td>'
-						+'<td>'
-						+'<div class="add_button" style="margin-top: 0px;">'
-								+'<button id='+data.EventGuestEdit[key].guestId+' class="btn btn-primary btn-sm add_field_button" onclick="deleteGuest(this.id)">'
-									+'<i class="fa fa-minus" aria-hidden="true"></i'
-								+'</button>'
-							+'</div>'
-							+'</td>'
-					+'</tr>'; 
-				})
-				$('tbody').html(content);  */
 		
 		}
 	});
+	}
 	
 }
 
 function showGuests(data){
-	//alert("qaqaqa========"+data.EventGuestEdit);
 	var content = "";
 	var disGuest = false;
 	$.each(
@@ -305,14 +300,13 @@ function showGuests(data){
 				+'<td>'+data.EventGuestEdit[key].designation+'</td>'
 				+'<td>'
 				+'<div class="add_button" style="margin-top: 0px;">'
-						+'<button id='+data.EventGuestEdit[key].guestId+' class="btn btn-primary btn-sm add_field_button" onclick="deleteGuest(this.id)">'
+						+'<button id='+data.EventGuestEdit[key].guestId+' class="btn btn-danger btn-sm" onclick="deleteGuest(this.id)">'
 							+'<i class="fa fa-minus" aria-hidden="true"></i'
 						+'</button>'
 					+'</div>'
 					+'</td>'
 			+'</tr>'; 
 		})
-		//alert("disGuest========"+disGuest);
 	if(disGuest){
 		$('tbody').html(content); 
 	}else{
@@ -343,13 +337,20 @@ function showEventImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispItem = '';
 	var dispImgCtrls = true;
 	if(data.EVENTFILES != null ){
 	$.each(
 			data.EVENTFILES,
 			function(key, val) {
 				dispImgCtrls = false;
-				//alert(data.EVENTFILES[key].showPublic);
+				var filename = data.EVENTFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.EVENTFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
 				if(data.EVENTFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -367,7 +368,7 @@ function showEventImages(data){
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
 								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.EVENTFILES[key].filePath+'" data-target="#image-gallery">'
-								  +'<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								 + dispItem
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
@@ -395,23 +396,25 @@ function showEventImages(data){
 	}
 }
 function deleteFileEvent(fileId){
-	//alert("fileId----"+fileId);
-	var eventObject = new Object();
-	eventObject.fileId = fileId;
-	eventObject.type = "EVENT";
-	//alert("fileId----"+fileId);
-	$.ajax({
-		data : eventObject,
-		url : "emp/uploadService/deleteImage",
-		success : function(data){
-			if(data.Msg = 'success'){
-				showEventImages(data);
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var eventObject = new Object();
+		eventObject.fileId = fileId;
+		eventObject.type = "EVENT";
+		$.ajax({
+			data : eventObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data){
+				if(data.Msg = 'success'){
+					showEventImages(data);
+				}
 			}
-		}
-	})
+		});
+	}
 }
 function updateShowAsPublicEvent(fileId){
-	//alert("fileId----"+fileId);
 	var setVal = '';
 	if(document.getElementById(fileId).checked){
 		setVal = '1';
@@ -431,6 +434,21 @@ function updateShowAsPublicEvent(fileId){
 			}
 		}
 	}); 
+}
+function fileCheck(obj) {
+	//alert("in to eventEdit fileCheck");
+	//alert("in to file check"+$("#"+obj).val());
+	 var fileInput = document.getElementById('file');
+	    var filePath = fileInput.value;
+	    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+	    if(!allowedExtensions.exec(filePath)){
+	        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+	        fileInput.value = '';
+	        return false;
+	    }else{
+
+	    }
+
 }
 </script>
 </head>
@@ -537,8 +555,35 @@ function updateShowAsPublicEvent(fileId){
 					<div class="form-group">
 						<label for="state"> State *</label> <select class="form-control"
 							id="eventEditstate">
+							<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
 							<option value="Telangana">Telangana</option>
-							<option value="AndhraPradesh">AndhraPradesh</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 						</select>
 					</div>
 				</div>
@@ -563,7 +608,8 @@ function updateShowAsPublicEvent(fileId){
 							enctype="multipart/form-data">
 							<div class="form-group">
 								<label for="Upload Photo">Upload Event Photos / Videos</label> <input
-									id="file" name="file" class="file form-control" type="file">
+									id="file" name="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+									accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								<!-- <a href="#"><button
 										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
@@ -659,9 +705,6 @@ function updateShowAsPublicEvent(fileId){
           
 			<div class="row">
 				<div class="col-md-10">
-					<!-- <div class="member_registration" style="margin-left: 0px;">
-									<h2>Guests</h2>
-								</div> -->
 
 					<div class="card-footer p-0  hidden">
 						<nav aria-label="...">
@@ -690,10 +733,15 @@ function updateShowAsPublicEvent(fileId){
 							<div class="form-group">
 								<label for="title">Title</label> 
 								<select class="form-control" id="guestTitle" name="guestTitle">
-									<option>Mr</option>
-									<option>Ms</option>
-									<option>Dr</option>
-									<option>Prof</option>
+									<option value="Mr">Mr</option>
+									<option value="Ms">Ms</option>
+									<option value="Dr">Dr</option>
+									<option value="Prof">Prof</option>
+									<option value="Mrs">Mrs</option>
+									<option value="Madam">Madam</option>
+									<option value="Captain">Captain</option>
+									<option value="Rev">Rev</option>
+									<option value="Hon">Hon</option>
 								</select> <!-- <input type="hidden" class="form-control" id="guestEditguestId"
 									name="guestEditguestId"> -->
 							</div>
@@ -767,6 +815,7 @@ function updateShowAsPublicEvent(fileId){
 			<!----------------------------------- ---guest1 form end --------------------->
 
 			<!-------------------------submit button--------------------------------------->
+			<%if(bAdmin){ %>
 			<div class="col-md-10">
 				<div class="submit_button text-right">
 					<a href='#'><button class="btn btn-success btn-sm text-right "
@@ -778,7 +827,7 @@ function updateShowAsPublicEvent(fileId){
 			       </h3>
 				</div>
 			</div>
-
+			<%} %>
 			<!-------------------------submit button end--------------------------------------->
 			<div class="clearfix"></div>
 		</div>
@@ -787,44 +836,6 @@ function updateShowAsPublicEvent(fileId){
 	</div>
 </div>
 
-<!-- <div id="guests_block" style="display: none;">
-	<div class="row">
-		<div class="col-md-10">
-			<div class="from">
-				<div class="col-md-3">
-					<div class="form-group">
-						<label for="title">Title</label> <select class="form-control">
-							<option selected="selected" id="title" name="title[]">--select--</option>
-							<option>Mr</option>
-							<option>Ms</option>
-							<option>Dr</option>
-							<option>Prof</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="form-group">
-						<label for="name">Name</label> <input type="text"
-							class="form-control" id="name" name="name[]">
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="form-group">
-						<label for="designation">Designation</label> <input type="text"
-							class="form-control" id="designation" name="designation[]">
-					</div>
-				</div>
-				<div class="col-md-2">
-					<div class="add_button">
-						<button class="btn btn-primary btn-sm remove_field">
-							<i class="fa fa-minus" aria-hidden="true"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> -->
 <!-- </div>
 </div>
 </div> -->
@@ -859,7 +870,28 @@ function updateShowAsPublicEvent(fileId){
 	}
 </script>
 <script type="text/javascript">
-  
+$(document).ready(function() {
+    
+    $('#guestTitle').click(function(e) {
+    	sortDropDownListByText("#guestTitle");
+    });
+    
+    $('#eventEditstate').click(function(e) {
+    	sortDropDownListByText("#eventEditstate");
+    });
+    
+
+});
+
+ function sortDropDownListByText(selItem) {
+	$(selItem).each(function() {
+		var selectedValue = $(this).val();
+		$(this).html($("option", $(this)).sort(function(a, b) {
+			return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+		}));
+		$(this).val(selectedValue);
+	});
+} 
   
   $(document).ready(function() {
 	  $("#eventEditMoreInfo").val("");

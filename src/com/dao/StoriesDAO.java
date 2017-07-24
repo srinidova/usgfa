@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.connection.IbatisFactory;
 import com.dto.NewsDTO;
+import com.dto.ProgramDTO;
 import com.dto.StoriesDTO;
 import com.dto.UploadFileDTO;
 import com.ibatis.sqlmap.client.SqlMapClient;
@@ -83,7 +84,6 @@ public class StoriesDAO {
 		ArrayList<StoriesDTO> storiesdto = new ArrayList<StoriesDTO>();
 		boolean bAnd = false;
 		String sQuery = null;
-		//System.out.println("in to memberDAO");
 		try{
 			SqlMapClient session = new IbatisFactory().getSession();
 			
@@ -92,12 +92,23 @@ public class StoriesDAO {
 			String sPlace = storiesDto.getPlace();
 			
 			
-			System.out.println("3.a In StoriesDAO searchStories---------- sName===" + sName);
-			System.out.println("3.b In StoriesDAO searchStories---------- sFarmName===" + sFarmName);
-			System.out.println("3.c In StoriesDAO searchStories---------- sPlace===" + sPlace);
 
 			storiesdto = (ArrayList<StoriesDTO>) session.queryForList("Stories.storiesSearch", storiesDto);
-			System.out.println("in to stories Update size"+storiesdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return storiesdto;
+	}
+	public ArrayList<StoriesDTO> getStoriesDetailsHome(StoriesDTO storiesDto) {
+		ArrayList<StoriesDTO> storiesdto = new ArrayList<StoriesDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			storiesdto = (ArrayList<StoriesDTO>) session.queryForList("Stories.getStoriesDetailsHome", storiesDto);
 	
 			
 		}catch(Exception e){

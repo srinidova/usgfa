@@ -48,4 +48,8 @@
    </isNotNull>
 		
     </select>
+    <select id="getEventDetailsHome" resultClass="com.dto.EventDTO">
+		select eventId,eventName,noOfDays,timeFrom,timeEnd,address,place,mandal,district,state,landMark,pinCode,moreInfo,updatedBy,updatedOn from event order by timeFrom desc limit 3 
+
+	</select>
 </sqlMap>

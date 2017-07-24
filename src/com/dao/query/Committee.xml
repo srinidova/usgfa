@@ -11,7 +11,7 @@
 		select
 		committeeId,memberId,role,displayOrder,comments,updatedOn,updatedBy
 		from
-		committee
+		committee order by displayOrder 
 	</select>
 	<select id="getCommitteeProfile" parameterClass="com.dto.CommitteeDTO"
 		resultClass="com.dto.CommitteeDTO">

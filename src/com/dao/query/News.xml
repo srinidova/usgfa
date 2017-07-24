@@ -12,6 +12,10 @@
 		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
 		news
 	</select>
+	<select id="getNewsDetailsHome" resultClass="com.dto.NewsDTO">
+		select
+		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from news order by date desc limit 3 
+	</select>
 	<delete id="deleteNews" parameterClass="com.dto.NewsDTO">
 		delete from news where
 		newsId = #newsId#
@@ -22,8 +26,7 @@
 		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
 		news where newsId = #newsId#
 	</select>
-	<select id="getNewsById" parameterClass="java.lang.String"
-		resultClass="com.dto.NewsDTO">
+	<select id="getNewsById" parameterClass="java.lang.String" resultClass="com.dto.NewsDTO">
 		select
 		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
 		news where newsId = #value#
@@ -35,7 +38,7 @@
 		where
 		newsId = #newsId#
 	</update>
-<select id="newsSearch" parameterClass="com.dto.NewsDTO" resultClass="com.dto.NewsDTO">
+	<select id="newsSearch" parameterClass="com.dto.NewsDTO" resultClass="com.dto.NewsDTO">
 		select
 		newsId,newsTitle,date,paper,link,moreInfo,updatedBy,updatedOn from
 		news where newsId is not null

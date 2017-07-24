@@ -17,7 +17,6 @@ public class MemberFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In MemberFileDAO memberFile---------- getNewsTitle===" + newsDto.getNewsTitle());
 			session.insert("MemberFile.memberFile", memberFileDto);
 			result = "success";
 		} catch (Exception e) {
@@ -32,7 +31,6 @@ public class MemberFileDAO {
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
 
-			//System.out.println("3. In MemberDAO getMemberImage---------- fileId===" + memberFileDto.getMemberId());
 			lstUploadFileDTO = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getMemberImages", memberFileDto.getMemberId());
 
 			result = "success";
@@ -72,9 +70,7 @@ public class MemberFileDAO {
 		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("memberFileDto.getFileId =="+memberFileDTO.getFileId());
 			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getMemberFilesByFileId", memberFileDTO.getFileId());
-			System.out.println("uploadFiledto.size =="+uploadFiledto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,9 +83,7 @@ public class MemberFileDAO {
 		ArrayList<MemberFileDTO> memberFileDto = new ArrayList<MemberFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("memberFileDTO.getFileId =="+memberFileDTO.getFileId());
 			memberFileDto = (ArrayList<MemberFileDTO>) session.queryForList("MemberFile.getMemberFileByFileId", memberFileDTO.getFileId());
-			System.out.println("memberFileDTO.size =="+memberFileDto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

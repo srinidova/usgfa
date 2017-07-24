@@ -103,21 +103,33 @@ public class FarmFileBO {
 
 			if (bFileDeleted) {
 				// ********* deleting data from tables **********//
+				
+				// ********* deleting data from uploadFile  table **********//
 				fileBo = new UploadFileBO();
 				sDelFileUpload = fileBo.deleteImage(sFileId);
 				System.out.println("i. sDelFileUpload==" + sDelFileUpload);
+				
+				// ********* deleting data from farmFile  table **********//
 				sDelRef = deleteFarmFile(farmFileDto);
 				System.out.println("j. sDelRef==" + sDelRef);
 
 				// ********* getting updated list**********//
-				System.out.println("j. getFileId==" + farmFileDto.getFileId() + "------------- getFarmId=="+ farmFileDto.getFarmId());
+				System.out.println("j. getFileId==" + farmFileDto.getFileId() + "------***************------- getFarmId=="+ farmFileDto.getFarmId());
 				lstLatestUploadFiles = getUploadFleByFarmId(farmFileDto);
-				System.out.println("l. lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
+				if(lstLatestUploadFiles != null && lstLatestUploadFiles.size() > 0){
+					System.out.println("l. lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
+				}
+				
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
 		return lstLatestUploadFiles;
+	}
+	public ArrayList<FarmFileDTO> getFarmFileByFarmId(String sFarmId) {
+		
+		FarmFileDAO farmFileDao = new FarmFileDAO();
+		return farmFileDao.getFarmFileByFarmId(sFarmId);
 	}
 }

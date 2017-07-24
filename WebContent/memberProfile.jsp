@@ -41,7 +41,60 @@ if(sRole != null && sRole.equals("Admin")){
 					url : "emp/memberService/getMemberProfile",
 					success : function(data) {
 						$.each(data.MemberProfile, function(key, val) {
-							//alert("in to member profile");
+							
+							var addressFull = "";
+							var address = data.MemberProfile[key].address;
+							if (address.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull =  addressFull + ", " + address;
+								}else{
+									addressFull =  addressFull + " " + address;
+								}
+							}
+							var place = data.MemberProfile[key].place;
+							if (place.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull = addressFull + ", " + place;
+								}else{
+									addressFull = addressFull + " " + place;
+								}
+							}
+
+							var mandal = data.MemberProfile[key].mandal;
+							if (mandal.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull = addressFull + ", " + mandal;
+								}else{
+									addressFull = addressFull + " " + mandal;
+								}
+							}
+							var district = data.MemberProfile[key].district;
+							if (district.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull =  addressFull + ", " +district;
+								}else{
+									addressFull =  addressFull + " " +district;
+								}
+							}
+							var state = data.MemberProfile[key].state;
+							if (state.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull = addressFull + ", " + state;
+								}else{
+									addressFull = addressFull + " " + state;
+								}
+							}
+
+							var pincode = data.MemberProfile[key].pincode;
+							if (pincode.length > 0) {
+								if (addressFull.length > 0) {
+									addressFull = addressFull + " - " + pincode;
+								}else{
+									addressFull = addressFull + " " + pincode;
+								}
+							}
+							
+							
 							$('#memberProfTitle').text(
 									data.MemberProfile[key].title);
 							$('#memberProfName').text(
@@ -51,7 +104,7 @@ if(sRole != null && sRole.equals("Admin")){
 							$('#memberProfEmail').text(
 									data.MemberProfile[key].email);
 							$('#memberProfAddress').text(
-									data.MemberProfile[key].address);
+									addressFull);
 							$('#memberProfProfession').text(
 									data.MemberProfile[key].profession);
 							$('#memberProfMemberId').val(
@@ -62,27 +115,63 @@ if(sRole != null && sRole.equals("Admin")){
 									data.MemberProfile[key].amountPaid);
 
 						})
-						//alert("----------aaaaaaaaaaaa-----------"+data.MEMBERFILES);
 						if(data.MEMBERFILES != null ){
 						showMemberProfImages(data);
 						}
-						//alert("----------bbbbbbbbbbbbb-----------");
-						//alert("MemberFarmProfile======"+data.MemberFarmProfile);
 						$.each(
 								data.MemberFarmProfile, 
 								function(key, val) {
 							farmProfDis = false;
-						//	alert("----------bbbbbb11111111bbbbbbb-----------farmProfDis====="+farmProfDis);
+							var addressFull1 = "";
+							var farmAddress = data.MemberFarmProfile[key].farmAddress;
+							if (farmAddress.length > 0) {
+								if (farmAddress.length > 0) {
+									addressFull1 =  addressFull1 + " " + farmAddress;
+								}else{
+									addressFull1 =  addressFull1 + " " + farmAddress;
+								}
+							}
+							var farmMandal = data.MemberFarmProfile[key].farmMandal;
+							if (farmMandal.length > 0) {
+								if (farmMandal.length > 0) {
+									addressFull1 = addressFull1 + ", " + farmMandal;
+								}else{
+									addressFull1 = addressFull1 + " " + farmMandal;
+								}
+							}
+							var farmDistrict = data.MemberFarmProfile[key].farmDistrict;
+							if (farmDistrict.length > 0) {
+								if (addressFull1.length > 0) {
+									addressFull1 = addressFull1 + ", " + farmDistrict;
+								}else{
+									addressFull1 = addressFull1 + " " + farmDistrict;
+								}
+							}
+							var farmState = data.MemberFarmProfile[key].farmState;
+							if (farmState.length > 0) {
+								if (addressFull1.length > 0) {
+									addressFull1 = addressFull1 + ", " + farmState;
+								}else{
+									addressFull1 = addressFull1 + " " + farmState;
+								}
+							}
+							var farmPincode = data.MemberFarmProfile[key].farmPincode;
+							if (farmState.length > 0) {
+								if (addressFull1.length > 0) {
+									addressFull1 = addressFull1 + " - " + farmPincode;
+								}else{
+									addressFull1 = addressFull1 + " " + farmPincode;
+								}
+							}
 							$('#memberFarmProfFarmName').text(
 									data.MemberFarmProfile[key].farmName);
 							$('#memberFarmProfFarmAddress').text(
-									data.MemberFarmProfile[key].farmAddress);
+									addressFull1);
 							$('#memberFarmProfAboutFarm').text(
 									data.MemberFarmProfile[key].aboutFarm);
 
 						})
 						showFarmProfImages(data);
-						//alert("farmProfDis=====88888=============="+farmProfDis);
 						if(farmProfDis){
 							document.getElementById("farmProf").style.display = 'none';
 						}
@@ -91,7 +180,6 @@ if(sRole != null && sRole.equals("Admin")){
 
 			});
 	function editProfMember() {
-		//alert("in to member edit ");
 		var memberId = $("#memberProfMemberId").val();
 		var memberObject = new Object();
 		memberObject.memberId = memberId;
@@ -129,6 +217,7 @@ if(sRole != null && sRole.equals("Admin")){
 		var dispImages = '';
 		var dispClas = '';
 		var dispChkd = '';
+		var dispItem = '';
 		var dispImgCtrls = true;
 		if (data.FARMFILES != null) {
 			$
@@ -137,8 +226,13 @@ if(sRole != null && sRole.equals("Admin")){
 							data.FARMFILES,
 							function(key, val) {
 								dispImgCtrls = false;
-								//alert("data.FARMFILES" + data.FARMFILES);
-								//alert(data.MEMBERFILES[key].showPublic);
+								var filename = data.FARMFILES[key].filePath;
+								var fExt = filename.split('.').pop();
+								if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+									dispItem = '<iframe src="'+data.FARMFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+								}else{
+									dispItem = '<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+								}
 								if (data.FARMFILES[key].showPublic == 1) {
 									dispChkd = 'checked';
 								} else {
@@ -156,7 +250,7 @@ if(sRole != null && sRole.equals("Admin")){
 										+ '<div class="fff">'
 										+ '<div class="thumbnail">'
 										+ '<a href="#">'
-										+ '<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="">'
+										+ dispItem
 										+ '</a>' + '</div>' + '</div>'
 										+ '</li>' + '</ul>' + '</div>'
 							})
@@ -236,11 +330,6 @@ if(sRole != null && sRole.equals("Admin")){
 												<td><b> Photo :</b></td>
 												<td><div id="memberProfImages"></div></td>
 											</tr>
-<!-- 											<tr>
-												<td colspan="2" style="text-align: center">
-												<div id="memberProfImages"></div>
-												</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>

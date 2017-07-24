@@ -3,25 +3,7 @@
 <head>
 <script type="text/javascript" src="js/news.js"></script>
 <script type="text/javascript">
-	function committeeSave() {
-		var member = $("#member").val();
-		var role = $("#role").val();
-		var displayOrder = $("#displayOrder").val();
-		var comments = $("#comments").val();
-		var committeeObject = new Object();
-		committeeObject.member = member;
-		committeeObject.role = role;
-		committeeObject.displayOrder = displayOrder;
-		committeeObject.comments = comments;
-		$.ajax({
-			data : committeeObject,
-			url : "emp/CommitteeService/addCommittee",
-			success : function(data) {
-				defaultData();
-			}
-		});
 
-	}
 </script>
 </head>
 <body>
@@ -81,14 +63,16 @@
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="title">Member *</label> <select class="form-control"
-							id="member" name="member">
+						<label for="title">Member *</label> <span class="errMsg" id="errCommMem"></span>
+						<select class="form-control" id="member" name="member">
 						</select>
+						
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="title">Role *</label> <select class="form-control"
+						<label for="title">Role *</label> <span class="errMsg" id="errCommRole"></span>
+						<select class="form-control"
 							id="role" name="role">
 							<option value="President">President</option>
 							<option value="Seceretary">Seceretary</option>
@@ -99,19 +83,17 @@
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="land_mark">Display Order *</label> <input type="text"
+						<label for="land_mark">Display Order *</label> <span class="errMsg" id="errdisplayOrder"></span> <input type="text"
 							class="form-control" id="displayOrder" name="displayOrder"
-							maxlength="30" tabindex="4"
-							onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errPaper');">
+							maxlength="5" tabindex="4">
 					</div>
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="more_info">Comments</label> <span class="errMsg"
-							id="errMoreInfo"></span>
+							id="errComments"></span>
 						<textarea class="form-control" rows="5" id="comments"
-							name="comments" tabindex="5" maxlength="250"
-							onkeyup="emptyCheck(id,'More Info','errMoreInfo');">
+							name="comments" tabindex="5" maxlength="250">
 						</textarea>
 					</div>
 				</div>
@@ -120,7 +102,7 @@
 				<div class="col-md-10">
 					<div class="submit_button text-right">
 						<button class="btn btn-success btn-sm text-right "
-							onclick="committeeSave();">Submit</button>
+							onclick="committeeFarmValidation();">Submit</button>
 					</div>
 					<div class="message" id="newsfrm_message">
 						<h3>
@@ -160,7 +142,105 @@
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
 <script type="text/javascript">
+var lstCommMemId = [];
+var lstCommDispOrd = [];
+var lstCommRole = [];
+function committeeFarmValidation() {
+	var displayOrder = document.getElementById("displayOrder");
+	var comments = document.getElementById("comments");
+	var role = document.getElementById("role");
+	var msg = "";
+	var title = "";
+	 if (checkCommMem()) {
+		 clearCommErrs();
+		msg = "errCommMem";
+		title = "Member";
+
+		$("#" + msg).text(title + " already exists in Committe.");
+		$("#" + msg).show();
+		return false;
+	}else if (checkCommRole()) {
+		 clearCommErrs();
+			msg = "errCommRole";
+			title = "Role";
+
+			$("#" + msg).text(title + " already exists in Committe.");
+			$("#" + msg).show();
+			return false;
+		}else if (displayOrder.value.length == 0) {
+		clearCommErrs();
+		msg = "errdisplayOrder";
+		title = "Display Order ";
+
+		$("#" + msg).text(title + " should not be empty");
+		$("#" + msg).show();
+		displayOrder.focus();
+		return false;
+	}else if (checkCommDisOrder()) {
+		clearCommErrs();
+		msg = "errdisplayOrder";
+		title = "Display Order ";
+
+		$("#" + msg).text(title + " already exists in Committe");
+		$("#" + msg).show();
+		displayOrder.focus();
+		return false;
+	}else{
+		clearCommErrs();
+		//alert("----fine------");
+		committeeSave();
+	}
+}
+
+function clearCommErrs(){
+	$("#errdisplayOrder").text("");
+	$("#errComments").text("");
+	$("#errCommMem").text("");
+	$("#errCommRole").text("");
+}
+
+function checkCommMem(){
+	var member = $("#member").val();
+	if(lstCommMemId.indexOf(member) != -1){
+		return true;
+	}	
+}
+function checkCommRole(){
+	var role = $("#role").val();
+	if(lstCommRole.indexOf(role) != -1){
+		return true;
+	}	
+}
+function checkCommDisOrder(){
+	var displayOrder = $("#displayOrder").val();
+	if(lstCommDispOrd.indexOf(displayOrder) != -1){
+		return true;
+	}	
+}
+	function committeeSave() {
+		var member = $("#member").val();
+		var role = $("#role").val();
+		var displayOrder = $("#displayOrder").val();
+		var comments = $("#comments").val();
+		var committeeObject = new Object();
+		committeeObject.member = member;
+		committeeObject.role = role;
+		committeeObject.displayOrder = displayOrder;
+		committeeObject.comments = comments;
+		$.ajax({
+			data : committeeObject,
+			url : "emp/CommitteeService/addCommittee",
+			success : function(data) {
+				window.location.href = "committeeReg.jsp";
+			}
+		});
+	}
+
 	$(document).ready(function() {
+		var comments = document.getElementById("comments");
+		if (comments.value.length > 0) {
+			$("#comments").text("");
+		}
 		defaultData();
 	});
 
@@ -224,14 +304,35 @@
 	}
 
 	function showCommitteeList(data) {
+		lstCommMemId = [];
+		lstCommDispOrd = [];
+		lstCommRole = [];
 		var html = '';
 		$.each(
 				data.COMMITTEEMEMBERLIST,
 				function(key, val) {
+					lstCommMemId.push(data.COMMITTEEMEMBERLIST[key].memberId);
+					lstCommDispOrd.push(data.COMMITTEEMEMBERLIST[key].committeDispayOder);
+					lstCommRole.push(data.COMMITTEEMEMBERLIST[key].committeRole);
+					var name = "";
+					var fname = data.COMMITTEEMEMBERLIST[key].firstName;
+					if (fname.length > 0) {
+						name = fname;
+					}
+					var mname = data.COMMITTEEMEMBERLIST[key].middleName;
+					if (mname.length > 0) {
+						name = name + " " + mname;
+					}
+
+					var lname = data.COMMITTEEMEMBERLIST[key].lastName;
+					if (lname.length > 0) {
+						name = name + " " + lname;
+					}
+					
 					html = html
 							+ '<tr>'
 							+ '<td><div class="col-md-10">'
-							+ data.COMMITTEEMEMBERLIST[key].firstName
+							+ name
 							+ '</div></td>'
 							+ '<td><div class="col-md-10">'
 							+ data.COMMITTEEMEMBERLIST[key].committeRole
@@ -299,15 +400,25 @@
 		});
 	}
 	function deleteCommittee(committeeId) {
-		var committeeObject = new Object();
-		committeeObject.committeeId = committeeId;
-		$.ajax({
-			data : committeeObject,
-			url : "emp/CommitteeService/deleteCommittee",
-			success : function(data) {
-				defaultData();
-			}
-		});
+		clearCommErrs();
+		var delConfirm = confirm("Are you sure to delete");
+		if(delConfirm == false){
+			return false;
+		}else{
+			var committeeObject = new Object();
+			committeeObject.committeeId = committeeId;
+			$.ajax({
+				data : committeeObject,
+				url : "emp/CommitteeService/deleteCommittee",
+				success : function(data) {
+					lstCommMemId = [];
+					lstCommDispOrd = [];
+					lstCommRole = [];
+					defaultData();
+				}
+			});
+		}
+
 	}
 </script>
 

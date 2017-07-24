@@ -7,11 +7,10 @@
 		memberFarm(memberId,farmId)
 		values(#memberId#,#farmId#)
 	</insert>
-	<!-- <update id="memberFarmUpdate" parameterClass="com.dto.MemberFarmDTO">
-		update farm set farmName
-		= #farmName#, farmPlace = #farmPlace#, farmAddress = #farmAddress#, farmMandal = #farmMandal#, farmDistrict
-		= #farmDistrict#, aboutFarm = #aboutFarm#, farmState = #farmState#, farmPincode = #farmPincode# 
-		where
-		farmId = #farmId#
-	</update> -->
+	<delete id="deleteMemberFarm" parameterClass="java.lang.String">
+		delete from memberFarm  where farmId = #value#
+	</delete>
+	<select id="getMemberFarmByMemberId" resultClass="com.dto.MemberFarmDTO" parameterClass="java.lang.String">
+		select memberId, farmId from memberFarm where memberId = #value#
+	</select>
 </sqlMap>

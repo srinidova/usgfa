@@ -71,4 +71,17 @@ public class FarmDAO {
 		}
 		return result;
 	}
+	public String deleteFarm(String sFarmId) {
+		String result = "fail";
+		System.out.println("in to delete farm DAO");
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+			session.delete("Farm.deleteFarm", sFarmId);
+			result = "success";
+			System.out.println("after delete farm dao ");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -64,9 +64,7 @@ public class StoriesFileDAO {
 		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("storiesFileDTO.getFileId =="+storiesFileDTO.getFileId());
 			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getStoriesFilesByFileId", storiesFileDTO.getFileId());
-			System.out.println("uploadFiledto.size =="+uploadFiledto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,9 +76,7 @@ public class StoriesFileDAO {
 		ArrayList<StoriesFileDTO> storiesFileDto = new ArrayList<StoriesFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("storiesFileDTO.getFileId =="+storiesFileDTO.getFileId());
 			storiesFileDto = (ArrayList<StoriesFileDTO>) session.queryForList("StoriesFile.getStoriesFileByFileId", storiesFileDTO.getFileId());
-			System.out.println("storiesFileDto.size =="+storiesFileDto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

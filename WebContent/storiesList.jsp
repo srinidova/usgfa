@@ -29,41 +29,7 @@ if(sRole != null && sRole.equals("Admin")){
 	<!----------------------banner end---------------------------------->
 
 	<style>
-#storiesListData {
-	width: 100%;
-	float: left;
-	margin: auto;
-	display: inline-table;
-}
 
-tr td.e_mn {
-	width: 285px;
-}
-
-tr td.e_mn_1 {
-	width: 120px;
-}
-
-tr td.e_mn_2 {
-	width: 130px;
-}
-
-tr td.e_mn_3 {
-	width: 120px;
-}
-
-tr td.e_mn_4 {
-	width: 130px;
-}
-
-tr td.e_mn_5 {
-	width: 215px;
-}
-
-td ul.actions li {
-	/* display: inline-block; */
-	display: block;
-}
 </style>
 <head>
 <script type="text/javascript">
@@ -78,49 +44,7 @@ function getStoriesDetails() {
 				url : "emp/storiesService/getStoriesDetails",
 				success : function(data) {
 					showStoriesList(data);
-					<%-- $.each(
-							data.StoriesDetails,
-							function(key, val) {
-									html = html
-									     + '<tr>'
-										     + '<td class="e_mn">'+data.StoriesDetails[key].name+'</td>'
-										     +  '<td class="e_mn_1">'+data.StoriesDetails[key].farmName+'</td>'
-											 +  '<td class="e_mn_2">'+data.StoriesDetails[key].farmState+'</td>'
-											 +  '<td class="e_mn_3">'+data.StoriesDetails[key].district+'</td>'
-											 +  '<td class="e_mn_4">'+data.StoriesDetails[key].mandal+'</td>'
-											 +  '<td class="e_mn_5">'+data.StoriesDetails[key].place+'</td>'
-											 +  '<td class="e_mn_6">'
-											 	+ '<ul class="actions">'
-											 		+ '<li>'
-											 			+ '<a href="storiesProfile.jsp"> '
-											 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-success btn-sm" onclick="getStoriesProfile(this.id)">'
-											 					+ '<i class="fa fa-eye" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%if(bAdmin){ %>
-											 		+ '<li>'
-											 			+ '<a href="storiesEdit.jsp"> '
-											 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-primary btn-sm" onclick="editStories(this.id)">'
-											 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		+ '<li>'
-											 			+ '<a href="storiesList.jsp"> '
-											 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-danger btn-sm" onclick="deleteStories(this.id)">'
-											 					+ '<i class="fa fa-trash-o" aria-hidden="true"></i>' 
-											 				+ '</button>'
-											 			+ '</a>'
-											 		+ '</li>'
-											 		<%}%>
-											 	+ ' </ul>'
-											 +  '</td>'
-									     + '</tr>';
-							}
-					)
-					$(html).appendTo("#storiesListData");
-					$(html).appendTo("</table></div></div>"); --%>
+					
 				}
 					
 	});
@@ -151,34 +75,37 @@ function editStories(storiesId){
 	
 }
 function deleteStories(storiesId){
-	var storiesObject = new Object();
-	storiesObject.storiesId = storiesId;
-	$.ajax({
-		data : storiesObject,
-		url : "emp/storiesService/deleteStories",
-		success : function(data) {
-			if (data.Msg = "success") {
+	
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var storiesObject = new Object();
+		storiesObject.storiesId = storiesId;
+		$.ajax({
+			data : storiesObject,
+			url : "emp/storiesService/deleteStories",
+			success : function(data) {
+				if (data.Msg = "success") {
+				}
 			}
-		}
-	});
+		});
+	}
+	
 	
 }
 function searchStories(){
 	
-	//alert("in to search stories");
 	document.getElementById("storiesListData").innerHTML = "";
-	//var nameTitle = $("#searchNameTitle").val();
 	var name= $("#searchName").val();
 	var farmName = $("#searchFarmName").val();
 	var place = $("#searchPlace").val();
-	//alert("1.in to search stories");
 	
 	
 	var storiesObject = new Object();
 	storiesObject.name = name;
 	storiesObject.farmName = farmName;
 	storiesObject.place = place;
-	//alert("2.in to search stories");
 	$.ajax({
 		data : storiesObject,
 		url : "emp/storiesService/searchStories",
@@ -192,21 +119,19 @@ function searchStories(){
 }
 function showStoriesList(data){
 	
-	//alert("in to show stories list"+data);
-	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	var html = '';
 	$.each(
 			data.StoriesDetails,
 			function(key, val) {
-				//alert("data.StoriesDetails======"+data.StoriesDetails);
 					html = html
 					     + '<tr>'
-						     + '<td class="e_mn">'+data.StoriesDetails[key].name+'</td>'
-						     +  '<td class="e_mn_1">'+data.StoriesDetails[key].farmName+'</td>'
-							 +  '<td class="e_mn_2">'+data.StoriesDetails[key].farmState+'</td>'
-							 +  '<td class="e_mn_3">'+data.StoriesDetails[key].district+'</td>'
-							 +  '<td class="e_mn_4">'+data.StoriesDetails[key].mandal+'</td>'
-							 +  '<td class="e_mn_5">'+data.StoriesDetails[key].place+'</td>'
-							 +  '<td class="e_mn_6">'
+						     + '<td>'+data.StoriesDetails[key].name+'</td>'
+						     +  '<td>'+data.StoriesDetails[key].farmName+'</td>'
+							 +  '<td>'+data.StoriesDetails[key].farmState+'</td>'
+							 +  '<td>'+data.StoriesDetails[key].district+'</td>'
+							 +  '<td>'+data.StoriesDetails[key].mandal+'</td>'
+							 +  '<td	>'+data.StoriesDetails[key].place+'</td>'
+							 +  '<td style="width: 150px;">'
 							 	+ '<ul class="actions">'
 							 		+ '<li>'
 							 			+ '<a href="storiesProfile.jsp"> '
@@ -216,7 +141,7 @@ function showStoriesList(data){
 							 			+ '</a>'
 							 		+ '</li>'
 							 		<%if(bAdmin){ %>
-							 		+ '<li>'
+							 		+ '<li style="margin:0 5px 0 5px;">'
 							 			+ '<a href="storiesEdit.jsp"> '
 							 				+ '<button id='+data.StoriesDetails[key].storiesId+' class="btn btn-primary btn-sm" onclick="editStories(this.id)">'
 							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
@@ -237,7 +162,6 @@ function showStoriesList(data){
 			}
 	)
 	$(html).appendTo("#storiesListData");
-	$(html).appendTo("</table></div></div>");
 }
 function clearStoriesList(){
 	$("#searchName").val("");
@@ -265,13 +189,8 @@ function clearStoriesList(){
 
 <div class="container" style="margin-top: 30px;">
 	<div class="row">
-		<div class="col-md-12">
-
 			<div class="member_list">
-				<div class="row">
-
 					<div class="col-md-10">
-						<div class="">
 							<table class="table  table-bordered">
 								<tr>
 									<th>Name</th>
@@ -286,54 +205,46 @@ function clearStoriesList(){
 									<td><div class="row">
 											<div class="col-md-10">
 												<input type="text"  placeholder='Name' id="searchName" name="searchName"
-													class="form-control " style="width: 200px;" onkeyup="searchStories();" />
+													class="form-control " style="width: 200px;" maxlength = "30" onkeyup="searchStories();" />
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
 												<input type="text"  placeholder='Farm Name' id="searchFarmName" name="searchFarmName"
-													class="form-control " style="width: 50px;" onkeyup="searchStories();" />
+													class="form-control " style="width: 50px;" maxlength = "30" onkeyup="searchStories();" />
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
 												<input type="text" name='name0' placeholder='State'
-													class="form-control " style="width: 80px;" />
+													class="form-control " style="width: 80px;" disabled/>
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
 												<input type="text" name='name0' placeholder='district'
-													class="form-control " style="width: 80px;" />
+													class="form-control " style="width: 80px;" disabled/>
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
 												<input type="text" name='name0' placeholder='mandal'
-													class="form-control " style="width: 80px;" />
+													class="form-control " style="width: 80px;" disabled/>
 											</div>
 										</div></td>
 									<td><div class="row">
 											<div class="col-md-12">
 												<input type="text" class="form-control" style="" id="searchPlace" name="searchPlace"
-													placeholder="place" cols="0" rows="1" onkeyup="searchStories();">
+													placeholder="place" cols="0" rows="1" maxlength = "30" onkeyup="searchStories();">
 											</div>
 										</div></td>
-									<td><input type="button" value="CLEAR" onClick="clearStoriesList();"/></td>
+									<td align="center"><input type="button" value="CLEAR" class="btn btn-success btn-sm" onClick="clearStoriesList();"/></td>
 								</tr>
+								<tbody id="storiesListData">
+								</tbody>
 							</table>
-							<div class="row">
-								<div class="col-md-12">
 
-									<table class="table  table-bordered">
-										<div id="storiesListData"></div>
-									</table>
-								</div>
-							</div>
-
-						</div>
 					</div>
-				</div>
 			</div>
 			<div class="clearfix"></div>
 
@@ -343,11 +254,6 @@ function clearStoriesList(){
 
 			<!------------------------------guests form end--------------------------------------->
 
-
-
-
-			<div class="clearfix"></div>
-		</div>
 	</div>
 
 </div>

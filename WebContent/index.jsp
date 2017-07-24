@@ -36,6 +36,332 @@
 	<jsp:include page="banner.jsp" />
 	<!----------------------banner end---------------------------------->
 	<!----------------------body_content------------------------------>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			getPublicImagesHome();
+			getPublicVideosHome();
+			showService('events');
+		});
+		function getNewsDetailsHome() {
+			$.ajax({
+				url : "emp/newsService/getNewsDetailsHome",
+				success : function(data) {
+					showNewsList(data);
+				}
+
+			});
+		}
+		function getEventDetailsHome() {
+			$.ajax({
+				url : "emp/eventService/getEventDetailsHome",
+				success : function(data) {
+					showEventList(data);
+					
+				}
+
+			});
+		}
+		function getProgramDetailsHome() {
+			$.ajax({
+				url : "emp/programService/getProgramDetailsHome",
+				success : function(data) {
+					showProgramList(data);
+				}
+
+			});
+		}
+		function getStoriesDetailsHome() {
+			$.ajax({
+				url : "emp/storiesService/getStoriesDetailsHome",
+				success : function(data) {
+					showStoriesList(data);
+				}
+
+			});
+		}
+
+		function getPublicImagesHome() {
+			var dispImages = '';
+			var dispClas = '';
+			$.ajax({
+						url : "emp/uploadService/getPublicImagesHome",
+						success : function(data) {
+							$.each(
+											data.getPublicImages,
+											function(key, val) {
+												//alert(data.getPublicImages[key].filePath);
+												if (key == 0) {
+													dispClas = "item active";
+												} else {
+													dispClas = "item";
+												}
+												dispImages = dispImages
+														+ '<div class="'+ dispClas +'">'
+														+ '<ul class="thumbnails">'
+														+ '<li class="col-md-12">'
+														+ '<div class="fff">'
+														+ '<div class="thumbnail">'
+														+ '<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.getPublicImages[key].filePath+'" data-target="#image-gallery">'
+														+ '<img src="'+data.getPublicImages[key].filePath+'" class="img-responsive" alt=""  align="middle">'
+														+ '</img></a>' + '</div>'
+														+ '</li>'
+														+ '</ul>' + '</div>'
+											})
+							document.getElementById("publicImages").innerHTML = dispImages;
+							$.getScript('/usgfa/js/popup.js');
+						}
+
+					});
+		}
+		function getPublicVideosHome() {
+			var dispVideos = '';
+			var dispClas = '';
+			$.ajax({
+				url : "emp/uploadService/getPublicVideosHome",
+				success : function(data) {
+					$.each(
+							data.getPublicVideos,
+							function(key, val) {
+								alert("filePath=="+data.getPublicVideos[key].filePath);
+								if (key == 0) {
+									dispClas = "item active";
+								} else {
+									dispClas = "item";
+								}
+								dispVideos = dispVideos
+										+ '<div class="'+ dispClas +'">'
+										+ '<ul class="thumbnails">'
+										+ '<li class="col-md-12">'
+										+ '<div class="fff">'
+										+ '<div class="thumbnail">'
+										+ '<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.getPublicVideos[key].filePath+'" data-target="#image-gallery1">'
+										+ '<iframe src="'+data.getPublicVideos[key].filePath+'" class="img-responsive" alt=""  align="middle" style="text-align: center;width: 100%">'
+										+ '</iframe></a>' + '</div>'
+										+ '</li>'
+										+ '</ul>' + '</div>'
+							})
+			alert("dispVideos=="+dispVideos);
+			document.getElementById("publicVideos").innerHTML = dispVideos;
+			$.getScript('/usgfa/js/popup.js');
+				}
+
+			});
+		}
+		
+		function showService(serType){
+			if(serType == 'events'){
+				getEventDetailsHome();
+			}else if(serType == 'programs'){
+				getProgramDetailsHome();
+			}else if(serType == 'news'){
+				getNewsDetailsHome();
+			}else if(serType == 'stories'){
+				getStoriesDetailsHome();
+			}
+		}
+		function showEventList(data){
+			var html = '';
+			var dispClas = '';
+			$.each(
+					data.EventDetailsHome,
+					function(key, val) {
+					if (key == 0) {
+						dispClas = "col-md-4";
+					} else {
+						dispClas = "col-md-4 col-sm-12 col-xs-12";
+					}
+							html = html
+							+'<div class='+dispClas+'>'
+							+'<div class="col-item">'
+							+'<div class="event">'
+								+'<div class="date">'
+									+'<h2>'+data.EventDetailsHome[key].timeFrom+'</h2>'
+								+'</div>'
+								+'<div class="event_name">'
+									+'<h2>'+data.EventDetailsHome[key].eventName+'</h2>'
+								+'</div>'
+								+'<div id="eventGuests"></div>'
+								+'<div class="event_details">'
+									+'<p>'+data.EventDetailsHome[key].moreInfo+'</p>'
+								+'</div>'
+								+'<div class="row">'
+									+'<div class="readmore">'
+										+'<a id='+data.EventDetailsHome[key].eventId+' href="#" onclick="getEventProfile(this.id)">More info...</a>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+							+'</div>'
+						+'</div>';
+					}
+			)
+			document.getElementById("eventListData").innerHTML = html;
+			document.getElementById("eventGuests").innerHTML = "aaaaaaaaaaaaaa";
+			
+		}
+		function getEventProfile(eventId){
+			var eventObject = new Object();
+			eventObject.eventId = eventId;
+			$.ajax({
+				data : eventObject,
+				url : "emp/eventService/getEventId",
+				success : function(data) {
+					if (data.Msg = "success") {
+						window.location.href = "eventProfile.jsp";
+					}
+				}
+			}); 
+		}
+		function showProgramList(data){
+			var html = '';
+			var dispClas = '';
+			$.each(
+					data.ProgramDetailsHome,
+					function(key, val) {
+					if (key == 0) {
+						dispClas = "col-md-4";
+					} else {
+						dispClas = "col-md-4 col-sm-12 col-xs-12";
+					}
+							html = html
+							+'<div class='+dispClas+'>'
+							+'<div class="col-item">'
+							+'<div class="event">'
+								+'<div class="date">'
+									+'<h2>'+data.ProgramDetailsHome[key].dateAndTimeFrom+'</h2>'
+								+'</div>'
+								+'<div class="event_name">'
+									+'<h2>'+data.ProgramDetailsHome[key].programName+'</h2>'
+								+'</div>'
+								+'<div class="event_details">'
+									+'<p>'+data.ProgramDetailsHome[key].moreInfo+'</p>'
+								+'</div>'
+								+'<div class="row">'
+									+'<div class="readmore">'
+										+'<a id='+data.ProgramDetailsHome[key].programId+' href="#" onclick="getProgramProfile(this.id)">More info...</a>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+							+'</div>'
+						+'</div>';
+					}
+			)
+			document.getElementById("programListData").innerHTML = html;
+			
+		}
+		function getProgramProfile(programId){
+			var programObject = new Object();
+			programObject.programId = programId;
+			$.ajax({
+				data : programObject,
+				url : "emp/programService/getProgramId",
+				success : function(data) {
+					if (data.Msg = "success") {
+						window.location.href = "programProfile.jsp";
+					}
+				}
+			});
+		}
+		function showNewsList(data){
+			var html = '';
+			var dispClas = '';
+			$.each(
+					data.NewsDetailsHome,
+					function(key, val) {
+					if (key == 0) {
+						dispClas = "col-md-4";
+					} else {
+						dispClas = "col-md-4 col-sm-12 col-xs-12";
+					}
+							html = html
+							+'<div class='+dispClas+'>'
+							+'<div class="col-item">'
+							+'<div class="event">'
+								+'<div class="date">'
+									+'<h2>'+data.NewsDetailsHome[key].date+'</h2>'
+								+'</div>'
+								+'<div class="event_name">'
+									+'<h2>'+data.NewsDetailsHome[key].newsTitle+'</h2>'
+								+'</div>'
+								+'<div class="event_details">'
+									+'<p>'+data.NewsDetailsHome[key].moreInfo+'</p>'
+								+'</div>'
+								+'<div class="row">'
+									+'<div class="readmore">'
+										+'<a id='+data.NewsDetailsHome[key].newsId+' href="#" onclick="getNewsProfile(this.id)">More info...</a>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+							+'</div>'
+						+'</div>';
+					}
+			)
+			document.getElementById("newsListData").innerHTML = html;
+			
+		}
+		function getNewsProfile(newsId){
+			var newsObject = new Object();
+			newsObject.newsId = newsId;
+			$.ajax({
+				data : newsObject,
+				url : "emp/newsService/getNewsId",
+				success : function(data) {
+					if (data.Msg = "success") {
+						window.location.href = "newsProfile.jsp";
+					}
+				}
+			});
+		}
+		function showStoriesList(data){
+			var html = '';
+			var dispClas = '';
+			$.each(
+					data.StoriesDetailsHome,
+					function(key, val) {
+					if (key == 0) {
+						dispClas = "col-md-4";
+					} else {
+						dispClas = "col-md-4 col-sm-12 col-xs-12";
+					}
+							html = html
+							+'<div class='+dispClas+'>'
+							+'<div class="col-item">'
+							+'<div class="event">'
+								+'<div class="date">'
+									+'<h2>'+data.StoriesDetailsHome[key].title+'</h2>'
+								+'</div>'
+								+'<div class="event_name">'
+									+'<h2>'+data.StoriesDetailsHome[key].name+'</h2>'
+								+'</div>'
+								+'<div class="event_details">'
+									+'<p>'+data.StoriesDetailsHome[key].aboutFarm+'</p>'
+								+'</div>'
+								+'<div class="row">'
+									+'<div class="readmore">'
+										+'<a id='+data.StoriesDetailsHome[key].storiesId+' href="#" onclick="getStoriesProfile(this.id)">More info...</a>'
+									+'</div>'
+								+'</div>'
+							+'</div>'
+							+'</div>'
+						+'</div>';
+					}
+			)
+			document.getElementById("storiesListData").innerHTML = html;
+			
+		}
+		function getStoriesProfile(storiesId){
+			var storiesObject = new Object();
+			storiesObject.storiesId = storiesId;
+			$.ajax({
+				data : storiesObject,
+				url : "emp/storiesService/getStoriesId",
+				success : function(data) {
+					if (data.Msg = "success") {
+						window.location.href = "storiesProfile.jsp";
+					}
+				}
+			});
+		}
+	</script>
 	<div id="body_content">
 
 		<!----------------------about_us------------------------------>
@@ -74,36 +400,7 @@
 
 					<!----------------------photo_gallery------------------------------>
 
-					<div class="row">
-						<div class="modal fade" id="image-gallery" tabindex="-1"
-							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">
-											<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-										</button>
-										<h4 class="modal-title" id="image-gallery-title"></h4>
-									</div>
-									<div class="modal-body">
-										<img id="image-gallery-image" class="img-responsive" src="">
-									</div>
-									<div class="modal-footer">
-										<div class="col-md-2">
-											<button type="button" class="btn btn-primary"
-												id="show-previous-image">Previous</button>
-										</div>
-										<div class="col-md-8 text-justify" id="image-gallery-caption">
-											This text will be overwritten by jQuery</div>
-										<div class="col-md-2">
-											<button type="button" id="show-next-image"
-												class="btn btn-default">Next</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
 					<div class="col-md-6">
 						<div class="row">
 							<div class="col-md-6 col-sm-6">
@@ -113,54 +410,55 @@
 							</div>
 							<div class="col-md-6 col-sm-6">
 								<!-- Controls -->
-								<div class="controls pull-right ">
-									<a class="left fa fa-angle-left btn btn-default button-arrow"
-										href="#carousel-example" data-slide="prev"></a> <a
-										class="right fa fa-angle-right btn btn-default button-arrow"
-										href="#carousel-example" data-slide="next"></a>
+								<div class="row">
+									<div class="col-md-12" style="margin-bottom: 10px;">
+										<div class="controls pull-right ">
+											<a class="left fa fa-angle-left btn btn-default button-arrow"
+												href="#carousel-example" data-slide="prev"></a> <a
+												class="right fa fa-angle-right btn btn-default button-arrow"
+												href="#carousel-example" data-slide="next"></a>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div id="carousel-example" class="carousel slide"
 							data-ride="carousel">
 							<!-- Wrapper for slides -->
-							<div class="carousel-inner">
-								<div class="item active">
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-item">
-												<div class="photo">
-													<a class="g-image" href="#" data-image-id=""
-														data-toggle="modal" data-title="" data-caption=""
-														data-image="images/g2.jpg" data-target="#image-gallery">
-														<img class="img-responsive" src="images/g2.jpg"
-														alt="Short alt text">
-													</a>
+							<div class="row">
+								<div class="modal fade" id="image-gallery" tabindex="-1"
+									role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">
+													<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+												</button>
+												<h4 class="modal-title" id="image-gallery-title"></h4>
+											</div>
+											<div class="modal-body" id="modelBodyPhotoProf">
+												<img id="image-gallery-image" class="img-responsive" src="">
+											</div>
+											<div class="modal-footer">
+												<div class="col-md-2">
+													<button type="button" class="btn btn-primary"
+														id="show-previous-image">Previous</button>
+												</div>
+												<div class="col-md-8 text-justify"
+													id="image-gallery-caption">This text will be
+													overwritten by jQuery</div>
+												<div class="col-md-2">
+													<button type="button" id="show-next-image"
+														class="btn btn-default">Next</button>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="item">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-item">
-												<div class="photo">
-													<a class="g-image" href="#" data-image-id=""
-														data-toggle="modal" data-title="" data-caption=""
-														data-image="images/g1.jpeg" data-target="#image-gallery">
-														<img class="img-responsive" src="images/g1.jpeg"
-														alt="Short alt text">
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-
 							</div>
+							<div class="carousel-inner" id="publicImages"></div>
 						</div>
+						<!-- </div> -->
 					</div>
 					<!----------------------photo_gallery end------------------------------>
 
@@ -169,51 +467,60 @@
 						<div class="row">
 							<div class="col-md-6 col-sm-6">
 								<div class="gallery">
-									<h2>Videos</h2>
+									<h2>VIDEOS</h2>
 								</div>
 							</div>
-							<div class="col-md-6 col-sm-6 ">
+							<div class="col-md-6 col-sm-6">
 								<!-- Controls -->
-								<div class="controls pull-right">
-									<a class="left fa fa-angle-left btn btn-default button-arrow"
-										href="#carousel-example1" data-slide="prev"></a> <a
-										class="right fa fa-angle-right btn btn-default button-arrow"
-										href="#carousel-example1" data-slide="next"></a>
+								<div class="row">
+									<div class="col-md-12" style="margin-bottom: 10px;">
+										<div class="controls pull-right ">
+											<a class="left fa fa-angle-left btn btn-default button-arrow"
+												href="#carousel-example" data-slide="prev"></a> <a
+												class="right fa fa-angle-right btn btn-default button-arrow"
+												href="#carousel-example" data-slide="next"></a>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div id="carousel-example1" class="carousel slide "
+						<div id="carousel-example" class="carousel slide"
 							data-ride="carousel">
 							<!-- Wrapper for slides -->
-							<div class="carousel-inner">
-								<div class="item active">
-									<div class="row">
-										<div class="col-sm-12">
-											<div class="col-item">
-												<div class="photo">
-													<iframe src="https://player.vimeo.com/video/73051736"
-														width="100%" height="347" frameborder="0"
-														webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-												</div>
+							<div class="row">
+								<div class="modal fade" id="image-gallery1" tabindex="-1"
+									role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal">
+													<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+												</button>
+												<h4 class="modal-title" id="image-gallery-title"></h4>
 											</div>
-										</div>
-									</div>
-								</div>
-								<div class="item">
-									<div class="row">
-										<div class="col-md-12">
-											<div class="col-item">
-												<div class="photo">
-													<iframe src="https://player.vimeo.com/video/73051736"
-														width="100%" height="347" frameborder="0"
-														webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+											<div class="modal-body" id="modelBodyPhotoProf">
+												<img id="image-gallery-image" class="img-responsive" src="">
+											</div>
+											<div class="modal-footer">
+												<div class="col-md-2">
+													<button type="button" class="btn btn-primary"
+														id="show-previous-image">Previous</button>
+												</div>
+												<div class="col-md-8 text-justify"
+													id="image-gallery-caption">This text will be
+													overwritten by jQuery</div>
+												<div class="col-md-2">
+													<button type="button" id="show-next-image"
+														class="btn btn-default">Next</button>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+							<div class="carousel-inner" id="publicVideos"></div>
 						</div>
+						<!-- </div> -->
 					</div>
 					<!----------------------video_gallery end------------------------------>
 
@@ -237,11 +544,10 @@
 					<div class="col-md-12" style="margin-top: 2em;">
 						<div class="panel with-nav-tabs ">
 							<ul class="nav nav-tabs">
-								<li class="active"><a href="#tab1primary" data-toggle="tab">EVENTS</a></li>
-								<li><a href="#tab2primary" data-toggle="tab">PROGRAMS</a></li>
-								<li><a href="#tab3primary" data-toggle="tab">NEWS</a></li>
-								<li><a href="#tab4primary" data-toggle="tab">Sucess
-										Stories</a></li>
+								<li class="active"><a href="#tab1primary" onclick="showService('events');" data-toggle="tab">EVENTS</a></li>
+								<li><a href="#tab2primary" onclick="showService('programs');" data-toggle="tab">PROGRAMS</a></li>
+								<li><a href="#tab3primary" onclick="showService('news');" data-toggle="tab">NEWS</a></li>
+								<li><a href="#tab4primary" onclick="showService('stories');" data-toggle="tab">Sucess Stories</a></li>
 							</ul>
 						</div>
 						<div class="tabs_content">
@@ -256,433 +562,7 @@
 											<div class="carousel-inner">
 												<div class="item active">
 													<div class="row">
-														<div class="col-md-4">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Event Name</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example2" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example2" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-<!-- 																			<div class="row">
-																				<div class="modal fade" id="image-gallery"
-																					tabindex="-1" role="dialog"
-																					aria-labelledby="myModalLabel" aria-hidden="true">
-																					<div class="modal-dialog">
-																						<div class="modal-content">
-																							<div class="modal-header">
-																								<button type="button" class="close"
-																									data-dismiss="modal">
-																									<span aria-hidden="true">×</span><span
-																										class="sr-only">Close</span>
-																								</button>
-																								<h4 class="modal-title" id="image-gallery-title"></h4>
-																							</div>
-																							<div class="modal-body">
-																								<img id="image-gallery-image"
-																									class="img-responsive" src="">
-																							</div>
-																							<div class="modal-footer">
-																								<div class="col-md-2">
-																									<button type="button" class="btn btn-primary"
-																										id="show-previous-image">Previous</button>
-																								</div>
-																								<div class="col-md-8 text-justify"
-																									id="image-gallery-caption">This text will
-																									be overwritten by jQuery</div>
-																								<div class="col-md-2">
-																									<button type="button" id="show-next-image"
-																										class="btn btn-default">Next</button>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div> -->
-																			<div id="carousel-example2" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-
-
-																										<a class="g-image" href="#" data-image-id=""
-																											data-toggle="modal" data-title=""
-																											data-caption="" data-image="images/g1.jpeg"
-																											data-target="#image-gallery"> <img
-																											class="img-responsive" src="images/g1.jpeg"
-																											alt="Short alt text">
-																										</a>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<a class="g-image" href="#" data-image-id=""
-																											data-toggle="modal" data-title=""
-																											data-caption="" data-image="images/g2.jpg"
-																											data-target="#image-gallery"> <img
-																											class="img-responsive" src="images/g2.jpg"
-																											alt="Short alt text">
-																										</a>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example3" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example3" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example3" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="eventList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Event Name</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example4" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example4" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example4" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example5" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example5" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example5" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="eventList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Event Name</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example6" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example6" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example6" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example7" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example7" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example7" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="eventList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
+														<div id="eventListData">
 														</div>
 													</div>
 												</div>
@@ -707,239 +587,7 @@
 											<div class="carousel-inner">
 												<div class="item active">
 													<div class="row">
-														<div class="col-md-4">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Progrmas</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event video------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example8" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example8" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example8" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="programList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Progrmas</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event video------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example9" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example9" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example9" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="programList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Progrmas</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event video------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example10" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example10" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example10" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="programList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
+														<div id="programListData">
 														</div>
 													</div>
 												</div>
@@ -948,7 +596,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href="programList.jsp">More Programs</a>
+													<a href='programList.jsp'>More Programs</a>
 												</div>
 											</div>
 										</div>
@@ -964,224 +612,7 @@
 											<div class="carousel-inner">
 												<div class="item active">
 													<div class="row">
-														<div class="col-md-4">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>News</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example11" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example11" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example11" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<div class="readmore">
-																			<a href="newsList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>News</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example12" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example12" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example12" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<div class="readmore">
-																			<a href="newsList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>News</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-12">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example13" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example13" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example13" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<div class="readmore">
-																			<a href="newsList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
+														<div id="newsListData">
 														</div>
 													</div>
 												</div>
@@ -1190,7 +621,7 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="more_events">
-													<a href="newsList.jsp">More News</a>
+													<a href='newsList.jsp'>More News</a>
 												</div>
 											</div>
 										</div>
@@ -1205,386 +636,7 @@
 											<div class="carousel-inner">
 												<div class="item active">
 													<div class="row">
-														<div class="col-md-4">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Sucess Stories</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example14" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example14" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example14" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example15" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example15" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example15" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="storiesList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Sucess Stories</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example16" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example16" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example16" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example17" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example17" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example17" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="storiesList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-4 col-sm-12 col-xs-12">
-															<div class="col-item">
-																<div class="event">
-																	<div class="date">
-																		<h2>22-02-2017</h2>
-																	</div>
-																	<div class="event_name">
-																		<h2>Sucess Stories</h2>
-																	</div>
-																	<div class="event_details">
-																		<p>Aliqua.adipisicing elit,sed do eiusmod tempor
-																			ncididunt ut labore et dolore magna aliqua.
-																			adipisicing elit, sed do eiusmod tempor ncididunt ut
-																			labore et dolore magna</p>
-																	</div>
-																	<div class="row">
-
-																		<!-------------event gallery------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12" pull-right>
-																					<!-- Controls -->
-																					<div class="controls pull-right	">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example18" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example18" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example18" class="carousel slide"
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g1.jpeg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="event_img">
-																										<img src="images/g2.jpg" alt=""
-																											class="img-responsive" />
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-
-																		<!-------------event gallery end------------->
-
-																		<!-------------event video------------->
-																		<div class="col-md-6">
-																			<div class="row">
-																				<div class="col-md-12 pull-right">
-																					<!-- Controls -->
-																					<div class="controls pull-right">
-																						<a
-																							class="left fa fa-angle-left btn btn-default button-arrow2"
-																							href="#carousel-example19" data-slide="prev"></a>
-																						<a
-																							class="right fa fa-angle-right btn btn-default button-arrow2"
-																							href="#carousel-example19" data-slide="next"></a>
-																					</div>
-																				</div>
-																			</div>
-																			<div id="carousel-example19" class="carousel slide "
-																				data-ride="carousel">
-																				<!-- Wrapper for slides -->
-																				<div class="carousel-inner">
-																					<div class="item active">
-																						<div class="row">
-																							<div class="col-sm-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																					<div class="item">
-																						<div class="row">
-																							<div class="col-md-12">
-																								<div class="col-item">
-																									<div class="photo">
-																										<iframe
-																											src="https://player.vimeo.com/video/73051736"
-																											width="100%" height="120" frameborder="0"
-																											webkitallowfullscreen mozallowfullscreen
-																											allowfullscreen></iframe>
-																									</div>
-																								</div>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																		<!-------------event video end------------->
-
-																		<div class="readmore">
-																			<a href="storiesList.jsp">More info...</a>
-																		</div>
-																	</div>
-																</div>
-															</div>
+														<div id="storiesListData">
 														</div>
 													</div>
 												</div>

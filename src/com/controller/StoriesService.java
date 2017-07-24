@@ -3,6 +3,7 @@ package com.controller;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import com.bo.ProgramFileBO;
 import com.bo.StoriesBO;
 import com.bo.StoriesFileBO;
 import com.bo.UploadFileBO;
+import com.dto.EventDTO;
 import com.dto.NewsDTO;
 import com.dto.ProgramDTO;
 import com.dto.ProgramFileDTO;
@@ -32,6 +34,8 @@ import com.dto.StoriesDTO;
 import com.dto.StoriesFileDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
@@ -52,21 +56,18 @@ public class StoriesService {
 			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
 			@FormDataParam("aboutFarm") String aboutFarm,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
 		String sId = null;
 		String sLoginId = "";
-
+		CommonUtils utils = new CommonUtils();
 		try {
+			
+			//List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(title)) {
-				
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
+				//utils.processFileUpload(bodyParts,request );
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -97,8 +98,12 @@ public class StoriesService {
 
 				
 			}
-			if (!"fail".equals(result)) {
+			/*if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, sId, "STORIES");
+				}*/
+			if (!"fail".equals(result)) {
+				//CommonUtils.saveFileData(request, sId, "STORIES");
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -245,18 +250,16 @@ public class StoriesService {
 			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
 			@FormDataParam("aboutFarm") String aboutFarm,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
+		CommonUtils utils = new CommonUtils();
 
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(name)) {
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
+				//utils.processFileUpload(bodyParts,request );
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -281,7 +284,12 @@ public class StoriesService {
 
 				StoriesBO bo = new StoriesBO();
 				result = bo.storiesUpdate(storiesDto);
-				CommonUtils.saveFileData(request, storiesId, "STORIES");
+				
+				if(bodyParts != null && bodyParts.size() > 0 ){
+					utils.processFileUpload(bodyParts,request );
+					CommonUtils.saveFileData(request, storiesId, "STORIES");
+					}
+				//CommonUtils.saveFileData(request, storiesId, "STORIES");
 			}
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
@@ -315,16 +323,6 @@ public class StoriesService {
 
 	}
 	
-/*	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/addStories")
-	public JSONObject addStories(@Context HttpServletRequest request, @QueryParam("storiesId") String storiesId,
-			@QueryParam("title") String title, @QueryParam("name") String name,
-			@QueryParam("profession") String profession, @QueryParam("farmName") String farmName,
-			@QueryParam("farmAddress") String farmAddress, @QueryParam("place") String place,
-			@QueryParam("mandal") String mandal, @QueryParam("district") String district,
-			@QueryParam("farmState") String farmState, @QueryParam("farmPinCode") String farmPinCode,
-			@QueryParam("aboutFarm") String aboutFarm) {*/
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -337,15 +335,18 @@ public class StoriesService {
 			@FormDataParam("farmState") String farmState, @FormDataParam("farmPinCode") String farmPinCode,
 			@FormDataParam("aboutFarm") String aboutFarm,
 			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {	
+            @FormDataParam("file") FormDataContentDisposition info, FormDataMultiPart multiPart) {	
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
 		String sId = null;
 		String sLoginId = "";
 		String path = "";
+		CommonUtils utils = new CommonUtils();
 		try {
 			if (StringUtils.isNotEmpty(title)) {
+				List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
+				//utils.processFileUpload(bodyParts,request );
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -374,14 +375,15 @@ public class StoriesService {
 				StoriesBO bo = new StoriesBO();
 				result = bo.addStories(storiesDto);
 
-				
+				if(bodyParts != null && bodyParts.size() > 0 ){
+					utils.processFileUpload(bodyParts,request );
+					CommonUtils.saveFileData(request, sId, "STORIES");
+					}
 			}
+			
 			if (!"fail".equals(result)) {
-				CommonUtils utils = new CommonUtils();
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
 				
-				CommonUtils.saveFileData(request, sId, "STORIES");
+				//CommonUtils.saveFileData(request, sId, "STORIES");
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -398,8 +400,6 @@ public class StoriesService {
 			@QueryParam("farmName") String sFarmName ,
 			 @QueryParam("place") String sPlace
 			 ) {
-		System.out.println("1. *****Called searchStories**********name==" +sName+"--------farmName=="+sFarmName);
-		System.out.println("2. *****Called searchStories**********place==" +sPlace);
 		JSONObject jobj1 = new JSONObject();
 		StoriesBO bo = new StoriesBO();
 		StoriesDTO dto = new StoriesDTO();
@@ -411,7 +411,6 @@ public class StoriesService {
 		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
 		try {
 			storiesList = bo.searchStories(dto);
-			System.out.println("****storiesList.size==" +storiesList.size());
 			if(storiesList != null && storiesList.size() > 0){
 				jobj1.put("Msg", "success");
 				jobj1.put("StoriesDetails", storiesList);
@@ -421,8 +420,30 @@ public class StoriesService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("searchMember jobj-->" + jobj1);
 		return jobj1;
 
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getStoriesDetailsHome")
+	public JSONObject getStoriesDetailsHome(){
+		JSONObject jobj1 = new JSONObject();
+		StoriesDTO dto = new StoriesDTO();
+		StoriesBO bo = new StoriesBO();
+		
+		ArrayList<StoriesDTO> storiesList = new ArrayList<StoriesDTO>();
+		try{
+			storiesList = bo.getStoriesDetailsHome(dto);
+			if(storiesList != null && storiesList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("StoriesDetailsHome", storiesList);
+			}else {
+				jobj1.put("StoriesDetailsHome", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
 	}
 }

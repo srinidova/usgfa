@@ -12,10 +12,6 @@ if(sRole != null && sRole.equals("Admin")){
 <head>
 <script type="text/javascript" src="js/event.js"></script>
 <script type="text/javascript">
-	/* var evenData = '${sessionScope.sessEvent}';
-	$(document).ready(function() {
-		showEventData(evenData);
-	}); */
 </script>
 </head>
 <body>
@@ -45,35 +41,73 @@ $(document)
 .ready(
 		function() {
 			var html = '';
-			//var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered table-responsive">';
 			$.ajax({
 						url : "emp/eventService/getEventProfile",
 						success : function(data) {
 							$.each(
 											data.EventProfile,
 											function(key, val) {
+												var addressFull = "";
+												var address = data.EventProfile[key].address;
+												if (address.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull =  addressFull + ", " + address;
+													}else{
+														addressFull =  addressFull + " " + address;
+													}
+												}
+												var place = data.EventProfile[key].place;
+												if (place.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull = addressFull + ", " + place;
+													}else{
+														addressFull = addressFull + " " + place;
+													}
+												}
+
+												var mandal = data.EventProfile[key].mandal;
+												if (mandal.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull = addressFull + ", " + mandal;
+													}else{
+														addressFull = addressFull + " " + mandal;
+													}
+												}
+												var district = data.EventProfile[key].district;
+												if (district.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull =  addressFull + ", " +district;
+													}else{
+														addressFull =  addressFull + " " +district;
+													}
+												}
+												var state = data.EventProfile[key].state;
+												if (state.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull = addressFull + ", " + state;
+													}else{
+														addressFull = addressFull + " " + state;
+													}
+												}
+
+												var pincode = data.EventProfile[key].pincode;
+												if (pincode.length > 0) {
+													if (addressFull.length > 0) {
+														addressFull = addressFull + " - " + pincode;
+													}else{
+														addressFull = addressFull + " " + pincode;
+													}
+												}
 											    $('#eventProfEventName').text(data.EventProfile[key].eventName);
-												 
 												$('#eventProfNoOfDays').text(data.EventProfile[key].noOfDays); 
 												$('#eventProfDateTimeFrom ').text(data.EventProfile[key].timeFrom);
 												$('#eventProfDateTimeEnd').text(data.EventProfile[key].timeEnd);
-												$('#eventProfAddress').text(data.EventProfile[key].address);
+												$('#eventProfAddress').text(addressFull);
 												$('#eventProfMoreInfo').text(data.EventProfile[key].moreInfo);
 												$('#eventProfEventId').val(data.EventProfile[key].eventId); 
 											})
 											showEventProfImages(data);
 														showGuests(data);
-							/* $.each(
-									data.EventGuestProfile,
-									function(key, val) {
-										html = html
-										 +'<tr>'
-										+'<td>'+data.EventGuestProfile[key].title+'</td>'
-										+'<td>'+data.EventGuestProfile[key].name+'</td>'
-										+'<td>'+data.EventGuestProfile[key].designation+'</td>'
-										+'</tr>';  
-								})
-								$(html).appendTo("#guestProfileData"); */
 						}
 					});
 		});
@@ -92,7 +126,6 @@ function editProfEvent() {
 
 }
 function showGuests(data){
-	//alert("qaqaqa========"+data.EventGuestProfile);
 	var content = "";
 	var disGuest = false;
 	$.each(
@@ -106,19 +139,14 @@ function showGuests(data){
 				+'<td>'+data.EventGuestProfile[key].designation+'</td>'
 				+'</tr>';  
 		})
-		//alert("qaqa========="+content);
-	//alert("qaqa========="+disGuest);
-	//$('guestProfList').innerHTML(content); 
 	
  		if(disGuest){
  			document.getElementById("guestProfList").innerHTML = content;
 		}else{
 			document.getElementById("guestProfileData").style.display = 'none';
 		}
-		//alert("qaqa========="+disGuest); 
 }
 function showEventProfImages(data){
-	//alert("wwwwwwwwwwwwww");
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
@@ -130,15 +158,13 @@ function showEventProfImages(data){
 			data.EVENTFILES,
 			function(key, val) {
 				dispImgCtrls = false;
-				//alert("qaqaaaaaaa8888888888888888"+data.EVENTFILES[key].filePath);
 				var filename = data.EVENTFILES[key].filePath;
 				var fExt = filename.split('.').pop();
-				if(fExt != null && fExt == 'mp4'){
-					dispItem = '<iframe src="'+data.EVENTFILES[key].filePath+'" autoplay="false" autostart="false" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.EVENTFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
 				}else{
 					dispItem = '<img src="'+data.EVENTFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
 				}
-				//alert("dispItem"+dispItem);
 				if(data.EVENTFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -167,7 +193,6 @@ function showEventProfImages(data){
 			document.getElementById("eventProfImages").innerHTML = dispImages;
 			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 	}
-	//alert("dispImgCtrls========"+dispImgCtrls);
 	if(dispImgCtrls){
 		document.getElementById("eventProfImgCtrl").style.display = 'none';
 	}

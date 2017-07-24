@@ -40,9 +40,12 @@ public class ProgramBO {
 		return dao.programUpdate(programDto);
 	}
 	public ArrayList<ProgramDTO> searchProgram(ProgramDTO programDto){
-		//System.out.println("in to memberBO ");
 		ProgramDAO dao = new ProgramDAO();
 	     return dao.searchProgram(programDto);
+	}
+	public ArrayList<ProgramDTO> getProgramDetailsHome(ProgramDTO programDto) {
+		ProgramDAO dao = new ProgramDAO();
+		return dao.getProgramDetailsHome(programDto);
 	}
 }
 

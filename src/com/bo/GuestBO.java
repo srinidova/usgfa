@@ -20,7 +20,6 @@ import com.dto.NewsDTO;
 public class GuestBO {
 
 	public String addGuest(GuestDTO guestDto) {
-		System.out.println("2. In GuestBO---------- addGuest===" + guestDto.getName());
 		GuestDAO dao = new GuestDAO();
 		return dao.addGuest(guestDto);
 	}
@@ -34,7 +33,6 @@ public class GuestBO {
 	     return dao.deleteGuest(guestDTO);
 	}
 	public String updateGuest(GuestDTO guestDto) {
-		System.out.println("2. In GuestBO---------- updateGuest===" + guestDto.getName());
 		GuestDAO dao = new GuestDAO();
 		return dao.updateGuest(guestDto);
 	}

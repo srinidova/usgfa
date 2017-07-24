@@ -90,7 +90,6 @@ public class ProgramDAO {
 		ArrayList<ProgramDTO> programdto = new ArrayList<ProgramDTO>();
 		boolean bAnd = false;
 		String sQuery = null;
-		//System.out.println("in to memberDAO");
 		try{
 			SqlMapClient session = new IbatisFactory().getSession();
 			
@@ -98,12 +97,23 @@ public class ProgramDAO {
 			String sChannel = programDto.getChannel();
 			String sGuest = programDto.getGuest();
 			
-			System.out.println("3.a In ProgramDAO searchProgram---------- sProgramName===" + sProgramName);
-			System.out.println("3.b In ProgramDAO searchProgram---------- sChannel===" + sChannel);
-			System.out.println("3.c In ProgramDAO searchProgram---------- sGuest===" + sGuest);
 
 			programdto = (ArrayList<ProgramDTO>) session.queryForList("Program.programSearch", programDto);
-			System.out.println("in to program Update size"+programdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return programdto;
+	}
+	public ArrayList<ProgramDTO> getProgramDetailsHome(ProgramDTO programDto) {
+		ArrayList<ProgramDTO> programdto = new ArrayList<ProgramDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			programdto = (ArrayList<ProgramDTO>) session.queryForList("Program.getProgramDetailsHome", programDto);
 	
 			
 		}catch(Exception e){

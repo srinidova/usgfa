@@ -103,7 +103,6 @@ public class MemberBO {
 	}
 	
 	public ArrayList<MemberDTO> searchMember(MemberDTO memberDto){
-		//System.out.println("in to memberBO ");
 	     MemberDAO dao= new MemberDAO();
 	     return dao.searchMember(memberDto);
 	}
@@ -115,14 +114,12 @@ public class MemberBO {
 				if(memberList != null && memberList.size() > 0){
 					for (MemberDTO memberDTO : memberList) {
 						String sMemberId = memberDTO.getMemberId();
-						//System.out.println("sMemberId==="+sMemberId);
 						
 						MemberFileDTO memberFileDTO = new MemberFileDTO();
 						memberFileDTO.setMemberId(sMemberId);
 						
 						MemberFileBO memberFileBO = new MemberFileBO();
 						ArrayList<UploadFileDTO> lstUploadFiledto = memberFileBO.getUploadFleByMemberId(memberFileDTO);
-						//System.out.println("lstUploadFiledto.size==="+lstUploadFiledto.size());
 						
 						if(lstUploadFiledto != null && lstUploadFiledto.size() > 0){
 							for(UploadFileDTO uploadFileDTO : lstUploadFiledto){
@@ -130,10 +127,16 @@ public class MemberBO {
 								sFilePath = sFilePathExt;
 							}
 						}else{
-							String sDefaultPath = "images/uploads/blankMale.jpg";
-							sFilePath = sDefaultPath;
+							String sDefaultMalePath = "images/blankMale.jpeg";
+							String sDefaultFemalePath = "images/blankFemale.jpeg";
+							String sTitleExt = memberDTO.getTitle();
+							if (StringUtils.isNotEmpty(sTitleExt) && (sTitleExt.equals("Ms") || sTitleExt.equals("Mrs") || sTitleExt.equals("Madam"))){
+								sFilePath = sDefaultFemalePath;
+							}else{
+								sFilePath = sDefaultMalePath;
+							}
+							
 						}
-						System.out.println("sMemberId===="+sMemberId+"========sFilePath==="+sFilePath);
 						memberDTO.setFilePath(sFilePath);
 					}
 				}

@@ -115,7 +115,6 @@ public class MemberDAO {
 		ArrayList<MemberDTO> memberdto = new ArrayList<MemberDTO>();
 		boolean bAnd = false;
 		String sQuery = null;
-		//System.out.println("in to memberDAO");
 		try{
 			SqlMapClient session = new IbatisFactory().getSession();
 			
@@ -125,14 +124,8 @@ public class MemberDAO {
 			String sMemPlace = memberDto.getPlace();
 			String sMemHaveFarm = memberDto.getHaveFarm();
 			
-			/*System.out.println("3.a In MemberDAO searchMember---------- sMemName===" + sMemName);
-			System.out.println("3.b In MemberDAO searchMember---------- sMemPro===" + sMemPro);
-			System.out.println("3.c In MemberDAO searchMember---------- sMemship===" + sMemship);
-			System.out.println("3.d In MemberDAO searchMember---------- sMemPlace===" + sMemPlace);
-			System.out.println("3.e In MemberDAO searchMember---------- sMemHaveFarm===" + sMemHaveFarm);*/
 
 			memberdto = (ArrayList<MemberDTO>) session.queryForList("Member.memberSearch", memberDto);
-			//System.out.println("in to member Update size"+memberdto.size());
 	
 			
 		}catch(Exception e){

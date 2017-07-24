@@ -93,4 +93,11 @@
 		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile 
 		where fileId in (select fileId from farmfile where farmId in (select farmId from farmfile where fileId = #value#))
 	</select>
+	<select id="getPublicImagesHome"  resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where filePath not like "%.mp4" and showPublic = '1'
+	</select>
+	<select id="getPublicVideosHome"  resultClass="com.dto.UploadFileDTO">
+		select fileId,filePath,showPublic,updatedBy,updatedOn from uploadfile where filePath like "%.mp4" and showPublic = '1'
+
+	</select>
 </sqlMap>

@@ -28,28 +28,6 @@ if(sRole != null && sRole.equals("Admin")){
 	<!----------------------banner end---------------------------------->
 
 	<style>
-#eventListData {
-	width: 100%;
-	float: left;
-	margin: auto;
-	display: inline-table;
-}
-
-tr td.e_name {
-	width: 40%;
-}
-
-tr td.e_days {
-	width: 12%;
-}
-
-tr td.e_date {
-	width: 17%;
-}
-
-tr td.e_details {
-	width: 40%;
-}
 </style>
 <head>
 
@@ -96,28 +74,30 @@ function editEvent(eventId){
 	
 }
 function deleteEvent(eventId){
-	var eventObject = new Object();
-	eventObject.eventId = eventId;
-	$.ajax({
-		data : eventObject,
-		url : "emp/eventService/deleteEvent",
-		success : function(data) {
-			if (data.Msg = "success") {
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var eventObject = new Object();
+		eventObject.eventId = eventId;
+		$.ajax({
+			data : eventObject,
+			url : "emp/eventService/deleteEvent",
+			success : function(data) {
+				if (data.Msg = "success") {
+				}
 			}
-		}
-	});
+		});
+	}
 	
 }
 function searchEvent(){
 	document.getElementById("eventListData").innerHTML = "";
-	//alert("in to event serach");
 	var eventName =$("#searchEventName").val();
 	var days = $("#searchEventDays").val();
 	var date = $("#searchEventDate").val();
 	var address = $("#searchEventAddress").val();
-	//alert("1.in to event serach")
 	var eventObject = new Object();
-	//alert("2.in to event serach")
 	eventObject.eventName = eventName;
 	eventObject.days = days;
 	eventObject.date = date;
@@ -133,20 +113,17 @@ function searchEvent(){
 	});
 }
 function showEventList(data){
-	//alert("in to showEventList page");
-	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
-	//alert("data====="+data);
+	var html = '';
 	$.each(
 			data.EventDetails,
 			function(key, val) {
-			//	alert("====EventDetails====="+data.EventDetails);
 					html = html
 					     + '<tr>'
 						     + '<td class="e_name">'+data.EventDetails[key].eventName+'</td>'
 						     +  '<td class="e_days">'+data.EventDetails[key].noOfDays+'</td>'
 							  +  '<td class="e_date">'+data.EventDetails[key].timeFrom+'</td>' 
 							 +  '<td class="e_details">'+data.EventDetails[key].address+'</td>'
-							 +  '<td>'
+							 +  '<td style="width: 150px;">'
 							 	+ '<ul class="actions">'
 							 		+ '<li>'
 							 			+ '<a href="eventProfile.jsp"> '
@@ -156,7 +133,7 @@ function showEventList(data){
 							 			+ '</a>'
 							 		+ '</li>'
 							 		<%if(bAdmin){ %>
-							 		+ '<li>'
+							 		+ '<li style="margin:0 5px 0 5px;">'
 							 			+ '<a href="eventEdit.jsp"> '
 							 				+ '<button id='+data.EventDetails[key].eventId+' class="btn btn-primary btn-sm" onclick="editEvent(this.id)">'
 							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
@@ -176,9 +153,7 @@ function showEventList(data){
 					     + '</tr>';
 			}
 	)
-	$(html).appendTo("#eventListData");
-	$(html).appendTo("</table></div></div>");
-	$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
+	document.getElementById("eventListData").innerHTML = html;
 }
 function clearEventSearch(){
 	$("#searchEventName").val("");
@@ -201,66 +176,54 @@ function clearEventSearch(){
 			</div>
 		</div>
 	</div>
-	<div class="clearfix"></div>
-
+		<div class="clearfix"></div>
 	<div class="container" style="margin-top: 30px;">
 		<div class="row">
-			<div class="col-md-12">
-
-				<div class="event_list">
-					<div class="row">
-
-						<div class="col-md-10">
-							<div class="table-responsive">
-								<table class="table  table-bordered">
-									<tr>
-										<th>Event Name</th>
-										<th>Days</th>
-										<th>Date</th>
-										<th>Address</th>
-										<th style="width: 125px;"></th>
-									</tr>
-									<tr>
-										<td><div class="row">
-												<div class="col-md-10">
-													<input type="text"  placeholder='Event Name' name="searchEventName" 
-													id="searchEventName" class="form-control " style="width: 200px;" onkeyup="searchEvent();" />
-												</div>
-											</div></td>
-										<td><div class="row">
-												<div class="col-md-12">
-													<input type="text"  placeholder='Days' name="searchEventDays" id="searchEventDays"
-														class="form-control " style="width: 50px;" />
-												</div>
-											</div></td>
-										<td><div class="row">
-												<div class="col-md-12">
-													<input type="text"  placeholder='Date' name="searchEventDate" id="searchEventDate"
-														class="form-control " style="width: 80px;" />
-												</div>
-											</div></td>
-										<td><div class="row">
-												<div class="col-md-12">
-													<input type="text" class="form-control" style="" name="searchEventAddress" id="searchEventAddress"
-														placeholder="Address" cols="0" rows="1" onkeyup="searchEvent();" />
-												</div>
-											</div></td>
-										<td><input type="button" value="CLEAR" onClick="clearEventSearch();"/></td>
-									</tr>
-								</table>
-							</div>
-						</div>
-						<div class="col-md-10">
-							<div id="eventListData"></div>
-						</div>
-
-					</div>
+			<div class="member_list" id="committeeListDiv">
+				<div class="col-md-10">
+					<table class="table  table-bordered">
+						<tr>
+							<th>Event Name</th>
+							<th>Days</th>
+							<th>Date</th>
+							<th>Address</th>
+							<th style="width: 150px;"></th>
+						</tr>
+						<tr>
+							<td><div class="row">
+									<div class="col-md-10">
+										<input type="text"  placeholder='Event Name' name="searchEventName" 
+										id="searchEventName" class="form-control " style="width: 200px;" maxlength = "30" onkeyup="searchEvent();" />
+									</div>
+								</div></td>
+							<td><div class="row">
+									<div class="col-md-12">
+										<input type="text"  placeholder='Days' name="searchEventDays" id="searchEventDays"
+											class="form-control " style="width: 50px;" disabled/>
+									</div>
+								</div></td>
+							<td><div class="row">
+									<div class="col-md-12">
+										<input type="text"  placeholder='Date' name="searchEventDate" id="searchEventDate"
+											class="form-control " style="width: 80px;" disabled/>
+									</div>
+								</div></td>
+							<td><div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" style="" name="searchEventAddress" id="searchEventAddress"
+											placeholder="Address" cols="0" rows="1" maxlength = "30" onkeyup="searchEvent();" />
+									</div>
+								</div></td>
+							<td align="center" style="width: 150px;"><input class="btn btn-success btn-sm" type="button" value="CLEAR" onClick="clearEventSearch();"/></td>
+						</tr>
+						<tbody id="eventListData">
+						</tbody>
+					</table>
 				</div>
-				<div class="clearfix"></div>
-				<div class="clearfix"></div>
 			</div>
 		</div>
 	</div>
+
 	<!----------------------body_content end---------------------------->
 
 	<!----------------------footer start ------------------------------->

@@ -49,6 +49,8 @@ public class UploadFileService {
 			@Context HttpServletRequest request) {
 		String result = "fail";
 		String path = "";
+		//path = request.getServletContext().getRealPath("/");
+		
 		JSONObject jObj = new JSONObject();
 		NewsFileBO newsFileBo = null;
 		ProgramFileBO programFileBo = null;
@@ -57,11 +59,8 @@ public class UploadFileService {
 		MemberFileBO memberFileBo = null;
 		FarmFileBO farmFileBo = null;
 		ArrayList<UploadFileDTO> lstLatestUploadFiles = null;
-		System.out.println("a.in upload fileId ==" + fileId + "------------sType ==" + sType);
-		System.out.println("a 1.in upload fileId ==" + fileId + "------------sType ==" + sType);
 		try {
 			path = request.getServletContext().getRealPath("/");
-			System.out.println("e1. path1==" + path);
 			newsFileBo = new NewsFileBO();
 			programFileBo = new ProgramFileBO();
 			storiesFileBo = new StoriesFileBO();
@@ -70,44 +69,32 @@ public class UploadFileService {
 			farmFileBo = new FarmFileBO();
 			if (StringUtils.isNotEmpty(sType) && sType.equals("NEWS")) {
 				lstLatestUploadFiles = newsFileBo.deleteFileNews(fileId, path);
-				System.out.println("l.in upload lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 				jObj.put("NEWSFILES", lstLatestUploadFiles);
 				result = "success";
 			}if(sType.equals("PROGRAM")){
 				if(StringUtils.isNotEmpty(sType) && sType.equals("PROGRAM")){
 					lstLatestUploadFiles = programFileBo.deleteFileProgram(fileId, path);
-					System.out.println("l.in upload program lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 					jObj.put("PROGRAMFILES",lstLatestUploadFiles);
 					result = "success";
 				}
 			}else if(StringUtils.isNotEmpty(sType) && sType.equals("STORIES")){
 				lstLatestUploadFiles = storiesFileBo.deleteFileStories(fileId, path);
-				System.out.println("l.in upload program lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 				jObj.put("STORIESFILES",lstLatestUploadFiles);
 				result = "success";
 			}
 			else if(StringUtils.isNotEmpty(sType) && sType.equals("EVENT")){
 				lstLatestUploadFiles = eventFileBo.deleteFileEvent(fileId, path);
-				System.out.println("l.in upload event lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 				jObj.put("EVENTFILES",lstLatestUploadFiles);
 				result = "success";
 			}else if(StringUtils.isNotEmpty(sType) && sType.equals("MEMBER")){
 				lstLatestUploadFiles = memberFileBo.deleteFileMember(fileId, path);
-				System.out.println("l.in upload member lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 				jObj.put("MEMBERFILES",lstLatestUploadFiles);
 				result = "success";
 			}else if(StringUtils.isNotEmpty(sType) && sType.equals("FARM")){
 				lstLatestUploadFiles = farmFileBo.deleteFileFarm(fileId, path);
-				System.out.println("l.in upload farm lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 				jObj.put("FARMFILES",lstLatestUploadFiles);
 				result = "success";
 			}
-			/*else if(StringUtils.isNotEmpty(sType) && sType.equals("PROGRAM")){
-				lstLatestUploadFiles = programFileBo.deleteFileProgram(fileId, path);
-				System.out.println("l.in upload program lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
-				jobj1.put("PROGRAMFILE",lstLatestUploadFiles);
-				result = "success";
-			}*/
 
 			jObj.put("Msg", result);
 		} catch (Exception e) {
@@ -140,7 +127,6 @@ public class UploadFileService {
 		FarmFileBO farmFileBo = null;
 		ArrayList<UploadFileDTO> lstUploadFileDTO = null;
 		String result = "fail";
-		System.out.println("a. fileId =="+fileId+"------------sType =="+sType);
 		try {
 			UploadFileDTO uploadFileDTO = new UploadFileDTO();
 			uploadFileDTO.setFileId(fileId);
@@ -155,7 +141,6 @@ public class UploadFileService {
 
 				newsFileBo = new NewsFileBO();
 				lstUploadFileDTO = newsFileBo.getNewsFilesByFileId(newsFileDto);
-				//System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("NEWSFILES", lstUploadFileDTO);
 					result = "success";
@@ -166,7 +151,6 @@ public class UploadFileService {
 
 				storiesFileBo = new StoriesFileBO();
 				lstUploadFileDTO = storiesFileBo.getStoriesFilesByFileId(storiesFileDto);
-				System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("STORIESFILES", lstUploadFileDTO);
 					result = "success";
@@ -178,7 +162,6 @@ public class UploadFileService {
 
 				eventFileBo = new EventFileBO();
 				lstUploadFileDTO = eventFileBo.getEventFilesByFileId(eventFileDto);
-				System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("EVENTFILES", lstUploadFileDTO);
 					result = "success";
@@ -189,7 +172,6 @@ public class UploadFileService {
 
 				programFileBo = new ProgramFileBO();
 				lstUploadFileDTO = programFileBo.getProgramFilesByFileId(programFileDto);
-				System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("PROGRAMFILES", lstUploadFileDTO);
 					result = "success";
@@ -200,7 +182,6 @@ public class UploadFileService {
 
 				memberFileBo = new MemberFileBO();
 				lstUploadFileDTO = memberFileBo.getMemberFilesByFileId(memberFileDto);
-				System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("MEMBERFILES", lstUploadFileDTO);
 					result = "success";
@@ -211,7 +192,6 @@ public class UploadFileService {
 
 				farmFileBo = new FarmFileBO();
 				lstUploadFileDTO = farmFileBo.getFarmFilesByFileId(farmFileDto);
-				System.out.println("lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 				if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 					jObj.put("FARMFILES", lstUploadFileDTO);
 					result = "success";
@@ -223,5 +203,53 @@ public class UploadFileService {
 		}
 		return jObj;
 
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPublicImagesHome")
+	public JSONObject getPublicImagesHome(){
+		
+		JSONObject jobj1 = new JSONObject();
+		UploadFileDTO uploadFileDTO = new UploadFileDTO();
+		UploadFileBO fileBo = new UploadFileBO();
+		
+		ArrayList<UploadFileDTO> uploadList = new ArrayList<UploadFileDTO>();
+		try{
+			uploadList = fileBo.getPublicImagesHome(uploadFileDTO);
+			if(uploadList != null && uploadList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("getPublicImages", uploadList);
+			}else {
+				jobj1.put("getPublicImages", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPublicVideosHome")
+	public JSONObject getPublicVideosHome(){
+		
+		JSONObject jobj1 = new JSONObject();
+		UploadFileDTO uploadFileDTO = new UploadFileDTO();
+		UploadFileBO fileBo = new UploadFileBO();
+		
+		ArrayList<UploadFileDTO> uploadList = new ArrayList<UploadFileDTO>();
+		try{
+			uploadList = fileBo.getPublicVideosHome(uploadFileDTO);
+			if(uploadList != null && uploadList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("getPublicVideos", uploadList);
+			}else {
+				jobj1.put("getPublicVideos", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
 	}
 }

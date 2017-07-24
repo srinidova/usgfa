@@ -80,19 +80,30 @@ public class FarmService {
 		return jobj;
 
 	}
-	//get farm images		
-	/*System.out.println("4. farmId==="+farmId);		
-	if (StringUtils.isNotEmpty(farmId)) {		
-		System.out.println("in to farm images");		
-		FarmFileDTO farmFileDto = new FarmFileDTO();		
-		farmFileDto.setFarmId(farmId);		
-		FarmFileBO farmFileBo = new FarmFileBO();		
-		lstUploadFarmFileDTO = farmFileBo.getFarmImages(farmFileDto);		
-		System.out.println("lstUploadFarmFileDTO.size===="+lstUploadFarmFileDTO.size());		
-		if(lstUploadFarmFileDTO != null && lstUploadFarmFileDTO.size()>0){			
-			jobj.put("FARMFILES", lstUploadFarmFileDTO);					}
-	}*/
-	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/deleteFarm")
+	public JSONObject deleteFarm(@QueryParam("farmId") String farmId, @Context HttpServletRequest request) {
+		System.out.println("in to farm delete==farmId=="+farmId);
+		JSONObject jobj1 = new JSONObject();
+		FarmBO bo = new FarmBO();
+		String path = "";
+		
+		String result = "fail";
+		try {
+			path = request.getServletContext().getRealPath("/");
+			result = bo.deleteFarm(farmId, path);
+			if(!"fail".equals(result)){
+			jobj1.put("FarmDelete", result);
+			}else{
+				jobj1.put("FarmDelete", "failed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jobj1;
+
+	}
 	
 	
 	

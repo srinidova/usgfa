@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <body>
 	<script type="text/javascript">
@@ -89,8 +97,9 @@ function saveProgram(){
 	formData.append("guest", guest);
 	formData.append("youtube", youtube);
 	formData.append("moreInfo", moreInfo);
-	formData.append("file", file);
-	
+	//formData.append('file',  $("#file")[0].files[i]);
+	for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 	
 	
 
@@ -110,37 +119,7 @@ function saveProgram(){
 		}
 	});
 	
-	/* var programObject = new Object();
-	programObject.programName = programName;
-	programObject.duration = duration;
-	programObject.dateAndTimeFrom = dateAndTimeFrom;
-	programObject.dateAndTimeTo = dateAndTimeTo;
-	programObject.channel = channel;
-	programObject.guest = guest;
-	programObject.youtube = youtube;
-	programObject.moreInfo = moreInfo;
 	
-	$
-	.ajax({
-		data : programObject,
-		url : "emp/programService/addProgram",
-		success : function(data) {
-			if (data.Msg == 'success') {
-				window.location.href = "programList.jsp";
-			}else{
-				$("#programRegFailMsg").text("Program Registration Failed");
-			}  
-		}
-	});
-	$
-	.ajax({
-		data : uploadFile,
-		url : "emp/programService/getProgramImages",
-		success : function(data) {
-			if (data.Msg = "success") {
-			}
-		}
-	}); */
 }
 function checkTwoFields(fieldName1, fieldName2, title, msg) {
 	var fieldName1_len = document.getElementById(fieldName1).value.length;
@@ -150,12 +129,26 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 	if (fieldName1_len == 0 && fieldName2_len == 0) {
 		$("#" + msg).text(title + " should not be empty");
 		$("#" + msg).show();
-		//fieldName.focus();
 		return false;
 	} else {
 		$("#" + msg).text("");
 		return true;
 	}
+}
+function fileCheck(obj) {
+	//alert("in to programReg fileCheck");
+	//alert("in to file check"+$("#"+obj).val());
+	 var fileInput = document.getElementById('file');
+	    var filePath = fileInput.value;
+	    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+	    if(!allowedExtensions.exec(filePath)){
+	        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+	        fileInput.value = '';
+	        return false;
+	    }else{
+
+	    }
+
 }
 </script>
 
@@ -300,7 +293,8 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 							enctype="multipart/form-data">
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> <input
-									id="file" name="file" class="file form-control" type="file">
+									id="file" name="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+									accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								<!-- <a href="#"><button
 										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
@@ -320,6 +314,7 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 			<!------------------------------guests form end--------------------------------------->
 
 			<!-------------------------submit button--------------------------------------->
+			<%if(bAdmin){ %>
 			<div class="col-md-10">
 				<div class="submit_button text-right">
 					<a href='#'><button class="btn btn-success btn-sm text-right "
@@ -332,7 +327,7 @@ function checkTwoFields(fieldName1, fieldName2, title, msg) {
 			</h3>
 				</div>
 			</div>
-
+			<%} %>
 			<!-------------------------submit button end--------------------------------------->
 
 

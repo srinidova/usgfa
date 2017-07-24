@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <body>
 <head>
@@ -185,8 +193,9 @@
 		formData.append("farmState", farmState);
 		formData.append("farmPinCode", farmPinCode);
 		formData.append("aboutFarm", aboutFarm);
-		formData.append("file", file);
-		
+		//formData.append('file',  $("#file")[0].files[i]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 
 		$.ajax({
 			type: 'POST',
@@ -204,41 +213,25 @@
 			}
 		});
 		
-		/* var storiesObject = new Object();
-		storiesObject.storiesId = storiesId;
-		storiesObject.title = title;
-		storiesObject.name = name;
-		storiesObject.profession = profession;
-		storiesObject.farmName = farmName;
-		storiesObject.farmAddress = farmAddress;
-		storiesObject.place = place;
-		storiesObject.mandal = mandal;
-		storiesObject.district = district;
-		storiesObject.farmState = farmState;
-		storiesObject.farmPinCode = farmPinCode;
-		storiesObject.aboutFarm = aboutFarm;
-		$.ajax({
-			data : storiesObject,
-			url : "emp/storiesService/storiesUpdate",
-			success : function(data) {
-				if (data.Msg == 'success') {
-					window.location.href = "storiesList.jsp";
-				}else{
-					$("#storiesEditFailMsg").text("Stories Edit Failed");
-				}
-			}
-		}); */
 	}
 	function showStoriesImages(data){
 		var dispImages = '';
 		var dispClas = '';
 		var dispChkd = '';
+		var dispItem = '';
 		var imgCtrl = true;
 		if(data.STORIESFILES != null ){
 		$.each(
 				data.STORIESFILES,
 				function(key, val) {
 					imgCtrl = false;
+					var filename = data.STORIESFILES[key].filePath;
+					var fExt = filename.split('.').pop();
+					if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+						dispItem = '<iframe src="'+data.STORIESFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+					}else{
+						dispItem = '<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+					}
 					//alert(data.STORIESFILES[key].showPublic);
 					if(data.STORIESFILES[key].showPublic == 1){
 						dispChkd = 'checked';
@@ -257,7 +250,7 @@
 							+'<div class="fff">'
 								+'<div class="thumbnail">'
 									+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.STORIESFILES[key].filePath+'" data-target="#image-gallery">'
-									  +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+									  +dispItem
 									+'</a>'
 								+'</div>'
 								+'<div class="caption">'
@@ -285,23 +278,25 @@
 				}
 	}
 	function deleteFileStories(fileId){
-		//alert("fileId----"+fileId);
-		var storiesObject = new Object();
-		storiesObject.fileId = fileId;
-		storiesObject.type = "STORIES";
-		//alert("fileId----"+fileId);
-		$.ajax({
-			data : storiesObject,
-			url : "emp/uploadService/deleteImage",
-			success : function(data){
-				if(data.Msg = 'success'){
-					showProgramImages(data);
+		var delConfirm = confirm("Are you sure to delete");
+		if(delConfirm == false){
+			return false;
+		}else{
+			var storiesObject = new Object();
+			storiesObject.fileId = fileId;
+			storiesObject.type = "STORIES";
+			$.ajax({
+				data : storiesObject,
+				url : "emp/uploadService/deleteImage",
+				success : function(data){
+					if(data.Msg = 'success'){
+						showStoriesImages(data);
+					}
 				}
-			}
-		})
+			});
+		}
 	}
 	function updateShowAsPublicStories(fileId){
-		//alert("fileId----"+fileId);
 		var setVal = '';
 		if(document.getElementById(fileId).checked){
 			setVal = '1';
@@ -321,6 +316,21 @@
 				}
 			}
 		}); 
+	}
+	function fileCheck(obj) {
+		//alert("in to programReg fileCheck");
+		//alert("in to file check"+$("#"+obj).val());
+		 var fileInput = document.getElementById('file');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        return false;
+		    }else{
+
+		    }
+
 	}
 </script>
 </head>
@@ -359,6 +369,11 @@
 							<option value="Ms">Ms</option>
 							<option value="Dr">Dr</option>
 							<option value="Prof">Prof</option>
+							<option value="Mrs">Mrs</option>
+							<option value="Madam">Madam</option>
+							<option value="Captain">Captain</option>
+							<option value="Rev">Rev</option>
+							<option value="Hon">Hon</option>
 						</select> <input type="hidden" class="form-control" id="storiesId"
 							name="storiesId">
 					</div>
@@ -373,9 +388,37 @@
 				<div class="col-md-5">
 					<div class="form-group">
 						<label for="profession">Profession</label> <span class="errMsg" id="errEditStoProfession"></span>
-						<input type="text"
-							class="form-control" id="storiesEditProfession"
-							name="storiesEditProfession" maxlength="30">
+						<!-- <input type="text" class="form-control" id="storiesEditProfession" name="storiesEditProfession" maxlength="30"> -->
+						<select class="form-control" id="storiesEditProfession" name="storiesEditProfession">
+							<option value="Agriculture">Agriculture</option>
+							<option value="Doctor">Doctor</option>
+							<option value="Professor">Professor</option>
+							<option value="Poultry">Poultry</option>
+							<option value="Veterinary">Veterinary</option>
+							<option value="Physician">Physician</option>
+							<option value="Teacher">Teacher</option>
+							<option value="Technician">Technician</option>
+							<option value="Lawyer">Lawyer</option>
+							<option value="Engineer">Engineer</option>
+							<option value="Accountant">Accountant</option>
+							<option value="Pharmacist">Pharmacist</option>
+							<option value="Electrician">Electrician</option>
+							<option value="Mechanic">Mechanic</option>
+							<option value="Consultant">Consultant</option>
+							<option value="Chef">Chef</option>
+							<option value="Secretary">Secretary</option>
+							<option value="Surveyor">Surveyor</option>
+							<option value="Plumber">Plumber</option>
+							<option value="Writer">Writer</option>
+							<option value="Police">Police</option>
+							<option value="Scientist">Scientist</option>
+							<option value="Architect">Architect</option>
+							<option value="Tailor">Tailor</option>
+							<option value="Artist">Artist</option>
+							<option value="Welder">Welder</option>
+							<option value="Actor">Actor</option>
+							<option value="Other">Other</option>
+						</select>
 					</div>
 				</div>
 				<div class="col-md-5">
@@ -426,8 +469,35 @@
 							class="form-control" id="storiesEditFarmState"
 							name="storiesEditFarmState">
 							<!-- <option selected="selected" id="frmSuccStory_FarmState" name="frmSuccStory_FarmState">--select--</option> -->
+							<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
 							<option value="Telangana">Telangana</option>
-							<option value="AndhraPradesh">AndhraPradesh</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 						</select>
 					</div>
 				</div>
@@ -463,7 +533,8 @@
 							enctype="multipart/form-data">
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> <input
-									id="file" name="file" class="file form-control" type="file">
+									id="file" name="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+									accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								<!-- <a href="#"><button
 										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
@@ -528,6 +599,7 @@
 
 			
 			<!-------------------------submit button--------------------------------------->
+			<%if(bAdmin){ %>
 			<div class="col-md-10">
 				<div class="submit_button text-right">
 					<a href='#'><button class="btn btn-success btn-sm text-right "
@@ -541,7 +613,7 @@
 			       </h3>
 				</div>
 			</div>
-
+			<%} %>
 			<!-------------------------submit button end--------------------------------------->
 
 
@@ -555,6 +627,29 @@
 <!----------------------footer start ------------------------------->
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
+<script type="text/javascript">
+	$(document).ready(function() {
+		 $('#storiesEditTitle').click(function(e) {
+		    	sortDropDownListByText("#storiesEditTitle");
+		    });
+	    $('#storiesEditFarmState').click(function(e) {
+	    	sortDropDownListByText("#storiesEditFarmState");
+	    });
+	    $('#storiesEditProfession').click(function(e) {
+	    	sortDropDownListByText("#storiesEditProfession");
+	    });
+	});
+
+	 function sortDropDownListByText(selItem) {
+		$(selItem).each(function() {
+			var selectedValue = $(this).val();
+			$(this).html($("option", $(this)).sort(function(a, b) {
+				return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+			}));
+			$(this).val(selectedValue);
+		});
+	} 
+</script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

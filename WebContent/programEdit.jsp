@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <body>
 
@@ -120,7 +128,9 @@ function programUpdate(){
 	formData.append("guest", guest);
 	formData.append("youtube", youtube);
 	formData.append("moreInfo", moreInfo);
-	formData.append("file", file);
+	//formData.append('file',  $("#file")[0].files[i]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 	
 
 	$.ajax({
@@ -145,12 +155,19 @@ function showProgramImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispItem = '';
 	var imgCtrl = true;
-	//if(!data.PROGRAMFILES == "undefined"){
 	$.each(
 			data.PROGRAMFILES,
 			function(key, val) {
 				imgCtrl = false;
+				var filename = data.PROGRAMFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.PROGRAMFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
 				if(data.PROGRAMFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -168,7 +185,7 @@ function showProgramImages(data){
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
 								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.PROGRAMFILES[key].filePath+'" data-target="#image-gallery">'
-								  +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								  +dispItem
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
@@ -188,7 +205,6 @@ function showProgramImages(data){
 				+'</ul>'
 			+'</div>'
 			})
-//}
 			document.getElementById("programEditImages").innerHTML = dispImages;
 			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 			if(imgCtrl){
@@ -196,19 +212,16 @@ function showProgramImages(data){
 			}
 }
 function updateShowAsPublicProgram(fileId){
-	//alert("fileId---"+fileId);
 	var setVal = '';
 	if(document.getElementById(fileId).checked){
 		setVal = '1';
 	}else{
 		setVal = '0';
 	}
-	//alert("setVal-----"+setVal);
 	var uploadFileObject = new Object();
 	uploadFileObject.fileId = fileId; 
 	uploadFileObject.showAsPublic = setVal;
 	uploadFileObject.type = "PROGRAM";
-	//alert("setVal---"+setVal);
 		$.ajax({
 		data : uploadFileObject,
 		url : "emp/uploadService/updateShowAsPublic",
@@ -221,18 +234,38 @@ function updateShowAsPublicProgram(fileId){
 }
 
 function deleteFileProgram(fileId){
-	var programObject = new Object();
-	programObject.fileId = fileId;
-	programObject.type = "PROGRAM";
-	$.ajax({
-		data : programObject,
-		url : "emp/uploadService/deleteImage",
-		success : function(data){
-			if(data.Msg = 'success'){
-				showProgramImages(data);
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var programObject = new Object();
+		programObject.fileId = fileId;
+		programObject.type = "PROGRAM";
+		$.ajax({
+			data : programObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data){
+				if(data.Msg = 'success'){
+					showProgramImages(data);
+				}
 			}
-		}
-	})
+		})
+	}
+}
+function fileCheck(obj) {
+	//alert("in to programReg fileCheck");
+	//alert("in to file check"+$("#"+obj).val());
+	 var fileInput = document.getElementById('file');
+	    var filePath = fileInput.value;
+	    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+	    if(!allowedExtensions.exec(filePath)){
+	        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+	        fileInput.value = '';
+	        return false;
+	    }else{
+
+	    }
+
 }
 </script>
 </head>
@@ -349,7 +382,8 @@ function deleteFileProgram(fileId){
 							enctype="multipart/form-data">
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> 
-								<input id="file" name="file" class="file form-control" type="file">
+								<input id="file" name="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+								accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								<!-- <a href="#"><button
 										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
@@ -390,6 +424,7 @@ function deleteFileProgram(fileId){
 			
 
 			<!-------------------------submit button--------------------------------------->
+			<%if(bAdmin){ %>
 			<div class="col-md-10">
 				<div class="submit_button text-right">
 					<a href='#'><button class="btn btn-success btn-sm text-right "
@@ -402,7 +437,7 @@ function deleteFileProgram(fileId){
 			       </h3>
 				</div>
 			</div>
-
+			<%} %>
 			<!-------------------------submit button end--------------------------------------->
 
 
@@ -428,7 +463,6 @@ function deleteFileProgram(fileId){
 			});
 
 		$('.cross_icon').click(function(){
-			//alert('asdfasdf')
 			$(this).parent().remove()
 			});
     });
@@ -436,7 +470,6 @@ function deleteFileProgram(fileId){
 	function addItem(e){
 		var html = $('.addOne').html();
 		$('#content_block').append(html);
-		//$(e).append(html);
 		
 		
 				

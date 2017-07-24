@@ -23,4 +23,12 @@ public class UploadFileBO {
 		UploadFileDAO dao = new UploadFileDAO();
 		return dao.updateShowAsPublic(uploadFileDTO);
 	}
+	public ArrayList<UploadFileDTO> getPublicImagesHome(UploadFileDTO uploadFileDTO) {
+		UploadFileDAO dao = new UploadFileDAO();
+		return dao.getPublicImagesHome(uploadFileDTO);
+	}
+	public ArrayList<UploadFileDTO> getPublicVideosHome(UploadFileDTO uploadFileDTO) {
+		UploadFileDAO dao = new UploadFileDAO();
+		return dao.getPublicVideosHome(uploadFileDTO);
+	}
 }

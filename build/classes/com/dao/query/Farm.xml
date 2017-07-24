@@ -25,4 +25,8 @@
 		where
 		farmId = #farmId#
 	</update>
+	<delete id="deleteFarm" parameterClass="java.lang.String">
+		delete from farm where
+		farmId = #value#
+	</delete>
 </sqlMap>

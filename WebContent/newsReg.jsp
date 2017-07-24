@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <script type="text/javascript" src="js/news.js"></script>
@@ -39,7 +47,6 @@
 
 			$("#" + msg).text(title + " should not be empty");
 			$("#" + msg).show();
-			//date.focus();
 			return false;
 		} else if (moreInfo.value.length == 0) {
 			msg = "errMoreInfo";
@@ -54,7 +61,6 @@
 			$("#errDate").text("");
 			$("#errPaper").text("");
 			$("#errMoreInfo").text("");
-			//newsSave();
 			newsSave1();
 		}
 
@@ -103,7 +109,9 @@
 		formData.append("date", date);
 		formData.append("link", link);
 		formData.append("moreInfo", moreInfo);
-		formData.append("file", $("#file")[0].files[0]);
+		//formData.append('file',  $("#file")[0].files[i]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 
 		$.ajax({
 			type: 'POST',
@@ -120,6 +128,24 @@
 				}  
 			}
 		});
+	}
+	function fileCheck(obj) {
+		//alert("in to programReg fileCheck");
+		//alert("in to file check"+$("#"+obj).val());
+		 $("#errUpload").text("");
+		 var fileInput = document.getElementById('file');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        $("#errUpload").text('File extensions jpg/.png/.jpeg/.gif/.mp4/.mov/.wmv/.flv/.avi only.');
+				$("#errUpload").show();
+		        return false;
+		    }else{
+		    	 $("#errUpload").text("");
+		    }
+
 	}
 </script>
 </head>
@@ -243,9 +269,9 @@ function test2 (){alert ("**************");
 							<form method="post" action="emp/commonUtils/upload"
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
-									<label for="Upload Photo">Select Photo(s)</label> <input
-										id="file" name="file" class="file form-control" type="file">
-									<!-- <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a> -->
+									<label for="Upload Photo">Select Photo(s)</label> <span class="errMsg" id="errUpload"></span> 
+									<input id="file" name="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+									accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								</div>
 							</form>
 						</div>
@@ -263,24 +289,19 @@ function test2 (){alert ("**************");
 				<!------------------------------guests form end--------------------------------------->
 
 				<!-------------------------submit button--------------------------------------->
+				<%if(bAdmin){ %>
 				<div class="col-md-10">
 					<div class="submit_button text-right">
-						<!-- <a href='#'> -->
 						<button class="btn btn-success btn-sm text-right "
 							onclick="newsFarmValidation();">Submit</button>
-						<!-- </a> -->
-
 					</div>
 					<div class="message" id="newsfrm_message">
-
 						<h3>
-				<aside class="formFailMsg" id="newsRegFailMsg"></aside>
-			</h3>
+							<aside class="formFailMsg" id="newsRegFailMsg"></aside>
+						</h3>
 					</div>
-					<!-- <div class="col-md-12"> <br>
-                    <small class="text-muted " style="text-align:right; float:right;"><strong>*</strong> These fields are required.</small> </div> -->
 				</div>
-
+				<%} %>
 				<!-------------------------submit button end--------------------------------------->
 
 
@@ -312,7 +333,13 @@ function test2 (){alert ("**************");
 		if (moreInfo.value.length > 0) {
 			$("#moreInfo").text("");
 		}
+		document.getElementById("file").onblur = function() {myFunction()};
 	});
+	
+
+	function myFunction() {
+	   // alert("Input field lost focus.");
+	}
 </script>
 </body>
 </html>

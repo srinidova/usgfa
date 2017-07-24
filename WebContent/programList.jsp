@@ -28,33 +28,7 @@ if(sRole != null && sRole.equals("Admin")){
 <!----------------------banner end---------------------------------->
 
 <style>
-#programListData {
-	width: 100%;
-	float: left;
-	margin: auto;
-	display: inline-table;
-}
 
-tr td.e_mn {
-	width: 320px;
-}
-
-tr td.e_mn_1 {
-	width: 110px;
-}
-
-tr td.e_mn_2 {
-	width: 200px;
-}
-
-tr td.e_mn_3 {
-	width: 150px;
-}
-
-td ul.actions li {
-	/* display: inline-block; */
-	display: block;
-}
 </style>
 
 
@@ -102,20 +76,26 @@ function editProgram(programId){
 	
 }
 function deleteProgram(programId){
-	var programObject = new Object();
-	programObject.programId = programId;
-	$.ajax({
-		data : programObject,
-		url : "emp/programService/deleteProgram",
-		success : function(data) {
-			if (data.Msg = "success") {
+	
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var programObject = new Object();
+		programObject.programId = programId;
+		$.ajax({
+			data : programObject,
+			url : "emp/programService/deleteProgram",
+			success : function(data) {
+				if (data.Msg = "success") {
+				}
 			}
-		}
-	});
+		});
+	}
+	
 	
 }
 function searchProgram(){
-	//alert("in to program search");
 	document.getElementById("programListData").innerHTML = "";
 	var programName = $("#searchProgramName").val();
 	var channel = $("#searchChannel").val();
@@ -124,7 +104,6 @@ function searchProgram(){
 	programObject.programName = programName;
 	programObject.channel = channel;
 	programObject.guest = guest;
-	//alert("in to program search programName==="+programName);
 	$.ajax({
 		data : programObject,
 		url : "emp/programService/searchProgram",
@@ -136,18 +115,18 @@ function searchProgram(){
 	});
 }
 function showProgramList(data){
-	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	var html = '';
 	$.each(
 			data.ProgramDetails,
 			function(key, val) {
 					html = html
 					     + '<tr>'
-						     + '<td class="e_mn">'+data.ProgramDetails[key].programName+'</td>'
-						     +  '<td class="e_mn_1">'+data.ProgramDetails[key].duration+'</td>'
-							 +  '<td class="e_mn_2">'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
-							 +  '<td class="e_mn_3">'+data.ProgramDetails[key].channel+'</td>'
-							 +  '<td class="e_mn_4">'+data.ProgramDetails[key].guest+'</td>'
-							 +  '<td class="e_mn_5">'
+						     + '<td>'+data.ProgramDetails[key].programName+'</td>'
+						     +  '<td>'+data.ProgramDetails[key].duration+'</td>'
+							 +  '<td>'+data.ProgramDetails[key].dateAndTimeFrom+'</td>'
+							 +  '<td>'+data.ProgramDetails[key].channel+'</td>'
+							 +  '<td>'+data.ProgramDetails[key].guest+'</td>'
+							 +  '<td style="width: 150px;">'
 							 	+ '<ul class="actions">'
 							 		+ '<li>'
 							 			+ '<a href="programProfile.jsp"> '
@@ -157,7 +136,7 @@ function showProgramList(data){
 							 			+ '</a>'
 							 		+ '</li>'
 							 		<%if(bAdmin){ %>
-							 		+ '<li>'
+							 		+ '<li style="margin:0 5px 0 5px;">'
 							 			+ '<a href="programEdit.jsp"> '
 							 				+ '<button id='+data.ProgramDetails[key].programId+' class="btn btn-primary btn-sm" onclick="editProgram(this.id)">'
 							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
@@ -178,8 +157,7 @@ function showProgramList(data){
 					     + '</tr>';
 			}
 	)
-	$(html).appendTo("#programListData");
-	$(html).appendTo("</table></div></div>");
+	document.getElementById("programListData").innerHTML = html;
 }
 function clearProgramSearch(){
 	$("#searchProgramName").val("");
@@ -206,19 +184,11 @@ function clearProgramSearch(){
 	</div>
 	<div class="clearfix"></div>
 
-	<!-- <div class="container" style="margin-top: 30px;">
-</div> -->
 	<div class="container" style="margin-top: 30px;">
 		<div class="row">
-			<div class="col-md-12">
-
-
-
-				<div class="program_list">
-					<div class="row">
-
+				<div class="member_list">
+					<!-- <div class="row"> -->
 						<div class="col-md-10">
-							<div class="">
 								<table class="table  table-bordered">
 									<tr>
 										<th>Program Name</th>
@@ -233,53 +203,42 @@ function clearProgramSearch(){
 										<td><div class="row">
 												<div class="col-md-10">
 													<input type="text" name='name0' placeholder='Program Name' id="searchProgramName" name="searchProgramName"
-														class="form-control " style="width: 200px;" onkeyup="searchProgram();"/>
+														class="form-control " style="width: 200px;" maxlength = "30" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text" name='name0' placeholder='Duration'
-														class="form-control " style="width: 50px;" />
+														class="form-control " style="width: 50px;" disabled/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text"
 														placeholder='Date & Time From' class="form-control "
-														style="width: 80px;" />
+														style="width: 80px;" disabled/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text"  placeholder='Channel' id="searchChannel" name="searchChannel"
-														class="form-control " style="width: 80px;" onkeyup="searchProgram();"/>
+														class="form-control " style="width: 80px;" maxlength = "30" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text"  placeholder='Guest' id="searchGuest" name="searchGuest"
-														class="form-control " style="width: 80px;" onkeyup="searchProgram();"/>
+														class="form-control " style="width: 80px;" maxlength = "30" onkeyup="searchProgram();"/>
 												</div>
 											</div></td>
 
-										<td><input type="button" value="CLEAR" onClick="clearProgramSearch();"/></td>
+										<td align="center"><input type="button" value="CLEAR" class="btn btn-success btn-sm" onClick="clearProgramSearch();"/></td>
 									</tr>
+									<tbody id="programListData">
+									</tbody>
 								</table>
-								<div class="row">
-									<div class="col-md-12">
-
-										<table class="table  table-bordered">
-											<div id="programListData"></div>
-										</table>
-									</div>
-								</div>
-							</div>
 						</div>
-					</div>
 				</div>
-				<div class="clearfix"></div>
-
-				<div class="clearfix"></div>
 
 				<!------------------------------guests form--------------------------------------->
 
@@ -287,7 +246,6 @@ function clearProgramSearch(){
 				<!------------------------------guests form end--------------------------------------->
 
 				<div class="clearfix"></div>
-			</div>
 		</div>
 
 	</div>

@@ -101,16 +101,24 @@ public class EventDAO {
 			System.out.println("3.a In EventDAO searchEvent---------- sEventDays===" + sEventDays);
 			System.out.println("3.a In EventDAO searchEvent---------- sEventDate===" + sEventDate);
 			System.out.println("3.a In EventDAO searchEvent---------- sEventAddress===" + sEventAddress);
-
 			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.eventSearch", eventDto);
-			
-			
-			System.out.println("in to event search eventsize"+eventdto.size());
-
 		}catch(Exception e){
 			
 		}
 		return eventdto;
 	}
+	public ArrayList<EventDTO> getEventDetailsHome(EventDTO eventDto) {
+		ArrayList<EventDTO> eventdto = new ArrayList<EventDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+			
+			eventdto = (ArrayList<EventDTO>) session.queryForList("Event.getEventDetailsHome", eventDto);
 	
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return eventdto;
+	}
 }

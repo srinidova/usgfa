@@ -13,4 +13,7 @@
 	<select id="getFarmFileByFileId" resultClass="com.dto.FarmFileDTO" parameterClass="java.lang.String">
 		select farmId, fileId from farmfile where fileId = #value#
 	</select>
+	<select id="getFarmFileByFarmId" resultClass="com.dto.FarmFileDTO" parameterClass="java.lang.String">
+		select farmId, fileId from farmfile where farmId = #value#
+	</select>
 </sqlMap>

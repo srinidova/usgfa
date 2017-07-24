@@ -43,7 +43,9 @@
     <isNotNull property="guest">
 		AND guest like '%$guest$%'
 	</isNotNull>
-	
-
     </select>
+     <select id="getProgramDetailsHome" resultClass="com.dto.ProgramDTO">
+		select programId,programName,duration,dateAndTimeFrom,dateAndTimeTo,channel,guest,youtube,moreInfo,updatedBy,updatedOn from program order by dateAndTimeFrom desc limit 3 
+
+	</select>
 </sqlMap>

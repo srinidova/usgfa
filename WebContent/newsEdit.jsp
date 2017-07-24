@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <body>
 	<!----------------------top_header start-------------------------------->
@@ -133,8 +141,9 @@ function newsUpdateNew(){
 	formData.append("date", date);
 	formData.append("link", link);
 	formData.append("moreInfo", moreInfo);
-	formData.append("file", file);
-//alert("file-----"+file);
+	//formData.append('file',  $("#file")[0].files[i]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 	$.ajax({
 		type: 'POST',
 		url : "emp/newsService/newsUpdateNew",
@@ -161,8 +170,14 @@ function showNewsImages(data){
 	$.each(
 			data.NEWSFILES,
 			function(key, val) {
-				//alert(data.NEWSFILES[key].showPublic);
 				imgCtrl = false;
+				var filename = data.NEWSFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.NEWSFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
 				if(data.NEWSFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -180,7 +195,7 @@ function showNewsImages(data){
 							+'<div class="fff">'
 								+'<div class="thumbnail">'
 								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
-								  +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								  +dispItem
 								+'</a>'
 							+'</div>'
 							+'<div class="caption">'
@@ -231,19 +246,38 @@ function updateShowAsPublicNews(fileId){
 }
 
 function deleteFileNews(fileId){
-//alert("fileId--------"+fileId);
-	var newsObject = new Object();
-	newsObject.fileId = fileId; 
-	newsObject.type = "NEWS";
-	$.ajax({
-		data : newsObject,
-		url : "emp/uploadService/deleteImage",
-		success : function(data) {
-			if (data.Msg = "success") {
-				showNewsImages(data);
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+	     return false;
+	}else{
+		var newsObject = new Object();
+		newsObject.fileId = fileId; 
+		newsObject.type = "NEWS";
+		$.ajax({
+			data : newsObject,
+			url : "emp/uploadService/deleteImage",
+			success : function(data) {
+				if (data.Msg = "success") {
+					showNewsImages(data);
+				}
 			}
-		}
-	});
+		});
+	}
+}
+function fileCheck(obj) {
+	//alert("in to programReg fileCheck");
+	//alert("in to file check"+$("#"+obj).val());
+	 var fileInput = document.getElementById('file');
+	    var filePath = fileInput.value;
+	    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+	    if(!allowedExtensions.exec(filePath)){
+	        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+	        fileInput.value = '';
+	        return false;
+	    }else{
+
+	    }
+
 }
 </script>
 </head>
@@ -324,7 +358,8 @@ function deleteFileNews(fileId){
 						<form method="post" action="emp/commonUtils/upload" enctype="multipart/form-data">
 							<div class="form-group col-md-6">
 								<label for="Upload Photo">Select Photo(s)</label> 
-								<input id="file"  name ="file" class="file form-control" type="file">
+								<input id="file"  name ="file" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+								accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								<!-- <a href="#"><button class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
@@ -390,6 +425,7 @@ function deleteFileNews(fileId){
 				</div>
 				<!----------------------photo_gallery end------------------------------>
 				<!-------------------------submit button--------------------------------------->
+				<%if(bAdmin){ %>
 				<div class="col-md-10">
 					<div class="submit_button text-right">
 						<a href='#'><button class="btn btn-success btn-sm text-right " onclick="newsEditFarmValidation();">Submit</button></a>
@@ -400,7 +436,7 @@ function deleteFileNews(fileId){
 			       </h3>
 					</div>
 				</div>
-
+				<%} %>
 				<!-------------------------submit button end--------------------------------------->
 
 

@@ -35,7 +35,6 @@ public class EventFileBO {
 		return eventFileDAO.deleteEventFile(eventFileDTO);
 	}
 	public ArrayList<UploadFileDTO> getEventFilesByFileId(EventFileDTO eventFileDTO){
-		System.out.println("in to event showAsPublic");
 		EventFileDAO eventFileDAO = new EventFileDAO();
 		return eventFileDAO.getEventFilesByFileId(eventFileDTO);
 	}
@@ -45,7 +44,6 @@ public class EventFileBO {
 	}
 
 	public ArrayList<UploadFileDTO> deleteFileEvent(String sFileId, String sPath) {
-		System.out.println("a. sFileId ==" + sFileId + "------------sPath ==" + sPath);
 
 		String sEventId = null;
 		String sExstFilePath = null;
@@ -63,57 +61,44 @@ public class EventFileBO {
 			eventFileDto = new EventFileDTO();
 			eventFileDto.setFileId(sFileId);
 			lstEventFileDto = getEventFileByFileId(eventFileDto);
-			System.out.println("b. lstUploadFileDTO.size ==" + lstEventFileDto.size());
 			if (lstEventFileDto != null && lstEventFileDto.size() > 0) {
 				for (int i = 0; i < lstEventFileDto.size(); i++) {
 					EventFileDTO objEventFileDto = lstEventFileDto.get(i);
 					sEventId = objEventFileDto.getEventId();
 				}
 			}
-			System.out.println("c. sEventId==" + sEventId);
 
 			// ********* getting File path **********//
 			eventFileDto.setEventId(sEventId);
 			ArrayList<UploadFileDTO> lstUploadFileDTO = getUploadFleByEventId(eventFileDto);
-			System.out.println("c1. lstUploadFileDTO.size ==" + lstUploadFileDTO.size());
 			if (lstUploadFileDTO != null && lstUploadFileDTO.size() > 0) {
 				for (int j = 0; j < lstUploadFileDTO.size(); j++) {
 					UploadFileDTO uploadFileDTO = lstUploadFileDTO.get(j);
 					String sExtFileId = uploadFileDTO.getFileId();
-					System.out.println("c2. fileId ==" + sFileId + "------------sExtFileId ==" + sExtFileId);
 					if (sFileId.equals(sExtFileId)) {
 						sExstFilePath = uploadFileDTO.getFilePath();
 						break;
 					}
 				}
 			}
-			System.out.println("d. sExstFilePath==" + sExstFilePath);
 
 			// ********* deleting physical file **********//
-			System.out.println("e. path==" + sPath);
 			deleteFilePath = sPath + sExstFilePath;
-			System.out.println("f. deleteFilePath==" + deleteFilePath);
 			File newFile = new File(deleteFilePath);
 			if (newFile.exists()) {
-				System.out.println("g. ==deleteFile Exists==");
 				newFile.delete();
 				bFileDeleted = true;
 			}
-			System.out.println("h.bFileDeleted==" + bFileDeleted);
 
 
 			if (bFileDeleted) {
 				// ********* deleting data from tables **********//
 				fileBo = new UploadFileBO();
 				sDelFileUpload = fileBo.deleteImage(sFileId);
-				System.out.println("i. sDelFileUpload==" + sDelFileUpload);
 				sDelRef = deleteEventFile(eventFileDto);
-				System.out.println("j. sDelRef==" + sDelRef);
 
 				// ********* getting updated list**********//
-				System.out.println("j. getFileId==" + eventFileDto.getFileId() + "------------- getNewsId=="+ eventFileDto.getEventId());
 				lstLatestUploadFiles = getUploadFleByEventId(eventFileDto);
-				System.out.println("l. lstLatestUploadFiles.size ==" + lstLatestUploadFiles.size());
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -53,7 +53,8 @@
 		AND  place like '%$place$%'
 	</isNotNull>
 
-	
-
     </select>
+    <select id="getStoriesDetailsHome" resultClass="com.dto.StoriesDTO">
+		select storiesId,title,name,profession,farmName,farmAddress,place,mandal,district,farmState,farmPinCode,aboutFarm,updatedBy,updatedOn from stories  order by profession desc limit 3 
+	</select>
 </sqlMap>

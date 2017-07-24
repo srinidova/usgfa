@@ -9,7 +9,6 @@ if(sRole != null && sRole.equals("Admin")){
 %>
 <html>
 <head>
-<script type="text/javascript" src="js/member.js"></script>
 <script type="text/javascript">
 function memberFarmValidation() {
 
@@ -38,9 +37,6 @@ function memberFarmValidation() {
 	var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
 	
 	 var file = $('#file').val().split('.').pop().toLowerCase();
-	/* if($.inArray(file, ['gif','png','jpg','jpeg']) == -1) {
-	    alert('invalid extension!');
-	} */
 	
 	if (firstName.value.length == 0) {
 		msg = "errFirstName";
@@ -59,14 +55,12 @@ function memberFarmValidation() {
 		mobile.focus();
 		return false;
 	}else if (email.value.length > 0 && !email.value.match(emailChk) ) {
-		//alert("email----1-------");
     	msg = "errEmail";
 		title = "";
 
 		$("#" + msg).text(title + " please enter valid email");
 		$("#" + msg).show();
 		email.focus();
-		//alert("email------2-----");
 		return false;
 
     }else if (place.value.length == 0) {
@@ -196,9 +190,7 @@ function memberFarmValidation() {
 	var farmPincode = $("#farmPincode").val();
 	var amount = $("#amount").val();
 	var file = $("#file")[0].files[0];
-	var fileFarm = $("#fileFarm")[0].files[0];
-	
-	//alert("in to farm  fileFarm"+fileFarm);
+	//alert("in to member photo format should be only ");
 	var formData = new FormData();
 	formData.append("title", title);
 	formData.append("firstName", firstName);
@@ -228,7 +220,10 @@ function memberFarmValidation() {
 	formData.append("farmPincode", farmPincode);
 	formData.append("amount", amount);
 	formData.append("file", file);
-	formData.append("fileFarm", fileFarm);
+	
+	//formData.append('fileFarm',  $("#fileFarm")[0].files[i]);
+	for (var i = 0; i < $("#fileFarm")[0].files.length; i++)
+		formData.append('fileFarm',  $("#fileFarm")[0].files[i]);
 
 	$.ajax({
 		type: 'POST',
@@ -241,19 +236,11 @@ function memberFarmValidation() {
 			if (data.Msg == 'success') {
 				window.location.href = "memberList.jsp";
 			}else{
-				$("#memberRegFailMsg").text("Member Registration Failed");
+				$("#memberRegFailMsg").text(data.Msg);
 			}  
 		}
 	});
 	
-	/* $.ajax({
-		data : uploadFile,
-		url : "emp/memberService/getMemberImages",
-		success : function(data) {
-			if (data.Msg = "success") {
-			}
-		}
-	}); */
 }
 
 	function pincodeCheck(fName, title, msg) {
@@ -301,6 +288,36 @@ function memberFarmValidation() {
 		}else{
 			document.getElementById("amount").value = '500.00';
 		}
+	}
+	function fileCheck(obj) {
+		//alert("in to programReg fileCheck");
+		//alert("in to file check"+$("#"+obj).val());
+		 var fileInput = document.getElementById('fileFarm');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        return false;
+		    }else{
+
+		    }
+
+	}
+	function fileCheck1(obj) {
+		//alert("in to memberReg fileCheck");
+		//alert("in to file check"+$("#"+obj).val());
+		 var fileInput = document.getElementById('file');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        return false;
+		    }else{
+
+		    }
+
 	}
 </script>
 </head>
@@ -364,7 +381,12 @@ function memberFarmValidation() {
 							<option value="Ms">Ms</option>
 							<option value="Dr">Dr</option>
 							<option value="Prof">Prof</option>
-						</select>
+							<option value="Mrs">Mrs</option>
+							<option value="Madam">Madam</option>
+							<option value="Captain">Captain</option>
+							<option value="Rev">Rev</option>
+							<option value="Hon">Hon</option>						
+					</select>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -429,8 +451,35 @@ function memberFarmValidation() {
 						<label for="state">State</label> <select class="form-control"
 							id="state" name="state">
 							<!-- <option selected="selected" >--select--</option> -->
+							<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
 							<option value="Telangana">Telangana</option>
-							<option value="AndhraPradesh">AndhraPradesh</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 						</select>
 					</div>
 				</div>
@@ -444,8 +493,34 @@ function memberFarmValidation() {
 					<div class="form-group">
 						<label for="profession">Profession</label> <select
 							class="form-control" id="profession" name="profession">
+							<option value="Agriculture">Agriculture</option>
 							<option value="Doctor">Doctor</option>
 							<option value="Professor">Professor</option>
+							<option value="Poultry">Poultry</option>
+							<option value="Veterinary">Veterinary</option>
+							<option value="Physician">Physician</option>
+							<option value="Teacher">Teacher</option>
+							<option value="Technician">Technician</option>
+							<option value="Lawyer">Lawyer</option>
+							<option value="Engineer">Engineer</option>
+							<option value="Accountant">Accountant</option>
+							<option value="Pharmacist">Pharmacist</option>
+							<option value="Electrician">Electrician</option>
+							<option value="Mechanic">Mechanic</option>
+							<option value="Consultant">Consultant</option>
+							<option value="Chef">Chef</option>
+							<option value="Secretary">Secretary</option>
+							<option value="Surveyor">Surveyor</option>
+							<option value="Plumber">Plumber</option>
+							<option value="Writer">Writer</option>
+							<option value="Police">Police</option>
+							<option value="Scientist">Scientist</option>
+							<option value="Architect">Architect</option>
+							<option value="Tailor">Tailor</option>
+							<option value="Artist">Artist</option>
+							<option value="Welder">Welder</option>
+							<option value="Actor">Actor</option>
+							<option value="Other">Other</option>
 						</select>
 					</div>
 				</div>
@@ -467,7 +542,7 @@ function memberFarmValidation() {
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
 									<label for="Upload Photo">Select Photo(s)</label> <input
-										id="file" name="file" class="file form-control" type="file" 
+										id="file" name="file" class="file form-control" type="file" onchange="fileCheck1(this.id);"
 										accept="image/jpg,image/png,image/jpeg,image/gif">
 								</div>
 							</form>
@@ -568,8 +643,8 @@ function memberFarmValidation() {
 			</div>
 			<div class="message" id="memberfrm_message">
 				<h3>
-				<aside class="formFailMsg" id="memberRegFailMsg"></aside>
-			</h3>
+					<aside class="formFailMsg" id="memberRegFailMsg"></aside>
+				</h3>
 			</div>
 		</div>
 
@@ -633,10 +708,35 @@ function memberFarmValidation() {
 					<label for="farm_state">Farm State</label> <select
 						class="form-control" id="farmState" name="farmState">
 						<!-- <option selected="selected" >--select--</option> -->
-						<option>Telangana</option>
-						<option>AndhraPradesh</option>
-						<!-- <option>3</option>
-							<option>4</option> -->
+						<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
+							<option value="Telangana">Telangana</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 					</select>
 				</div>
 			</div>
@@ -669,9 +769,9 @@ function memberFarmValidation() {
 							<form method="post" action="emp/commonUtils/upload"
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
-									<label for="Upload Photo">Select Photo(s)</label> <input
-										id="fileFarm" name="fileFarm" class="file form-control" type="file"
-										accept="image/jpg,image/png,image/jpeg,image/gif">
+									<label for="Upload Photo">Select Photo(s)</label> 
+									<input id="fileFarm" name="fileFarm" class="file form-control" type="file" multiple="multiple" onchange="fileCheck(this.id);"
+									accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								</div>
 							</form>
 						</div>
@@ -733,6 +833,39 @@ function memberFarmValidation() {
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
 <script> 
+$(document).ready(function() {
+    $('#profession').click(function(e) {
+    	sortDropDownListByText("#profession");
+    });
+    
+    $('#title').click(function(e) {
+    	sortDropDownListByText("#title");
+    });
+    
+    $('#state').click(function(e) {
+    	sortDropDownListByText("#state");
+    });
+    
+    $('#farmState').click(function(e) {
+    	sortDropDownListByText("#farmState");
+    });
+
+    $('#memberType').click(function(e) {
+    	sortDropDownListByText("#memberType");
+    });
+});
+
+ function sortDropDownListByText(selItem) {
+	$(selItem).each(function() {
+		var selectedValue = $(this).val();
+		$(this).html($("option", $(this)).sort(function(a, b) {
+			return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+		}));
+		$(this).val(selectedValue);
+	});
+} 
+
+
 $(function(){
 	if($('[name="yesno"]:checked').val() == 'No'){
 		$('#moreFields').html('');
@@ -746,21 +879,23 @@ $(function(){
 	})
 	
 })
-/* $(function(){
+var sortSelect = function (select, attr, order) {
+    if(attr === 'text'){
+        if(order === 'asc'){
+            $(select).html($(select).children('option').sort(function (x, y) {
+                return $(x).text().toUpperCase() < $(y).text().toUpperCase() ? -1 : 1;
+            }));
+            $(select).get(0).selectedIndex = 0;
+        }// end asc
+        if(order === 'desc'){
+            $(select).html($(select).children('option').sort(function (y, x) {
+                return $(x).text().toUpperCase() < $(y).text().toUpperCase() ? -1 : 1;
+            }));
+            $(select).get(0).selectedIndex = 0;
+        }// end desc
+    }
 
-$('input[name^="mobile"]').change(function() {
-alert("in to validation");
-    var $current = $(this);
-
-    $('input[name^="mobile"]').each(function() {
-        if ($(this).val() == $current.val() && $(this).attr('mobile') != $current.attr('id'))
-        {
-            alert('duplicate found!');
-        }
-
-    });
-  });
-}); */
+};
 
 </script>
 </body>

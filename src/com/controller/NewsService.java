@@ -3,6 +3,7 @@ package com.controller;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.bo.MemberBO;
@@ -27,6 +29,9 @@ import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.BodyPartEntity;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
@@ -296,10 +301,9 @@ public class NewsService {
 			@FormDataParam("newsTitle") String newsTitle, @FormDataParam("date") String date,
 			@FormDataParam("paper") String paper, @FormDataParam("link") String link,
 			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info, FormDataMultiPart multiPart) {
 		
 		
-		//@FormParam("accept")
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
@@ -307,21 +311,12 @@ public class NewsService {
 		String sId = null;
 		String sUpdtedOn = null;
 		String sLoginId = "";
+		CommonUtils utils = new CommonUtils();
 		System.out.println("newsTitle--------------"+newsTitle);
 		try {
-			//System.out.println("newsTitle=="+newsTitle+"-----------date=="+date+"-----------paper=="+paper+"-----------link=="+link);
-			//System.out.println("in=="+in+"-----------info=="+info);
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(newsTitle)) {
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
-			
 				
-				if(request.getSession().getAttribute("LOGINID") != null){
-					sLoginId = (String) request.getSession().getAttribute("LOGINID");
-				}
 				
 				NewsDTO newsDto = new NewsDTO();
 				sId = CommonUtils.getAutoGenId();
@@ -340,8 +335,13 @@ public class NewsService {
 				NewsBO bo = new NewsBO();
 				result = bo.addNewsDetails(newsDto);
 			}
-			if (!"fail".equals(result)) {
+			if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, sId, "NEWS");
+				}
+			if (!"fail".equals(result)) {
+				
+				
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -353,13 +353,6 @@ public class NewsService {
 	}
 	
 	
-/*	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/newsUpdateNew")
-	public JSONObject newsUpdateNew(@Context HttpServletRequest request, @QueryParam("newsId") String newsId,
-			@QueryParam("newsTitle") String newsTitle, @QueryParam("date") String date,
-			@QueryParam("paper") String paper, @QueryParam("link") String link,
-			@QueryParam("moreInfo") String moreInfo) {*/
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -368,25 +361,17 @@ public class NewsService {
 			@FormDataParam("newsTitle") String newsTitle, @FormDataParam("date") String date,
 			@FormDataParam("paper") String paper, @FormDataParam("link") String link,
 			@FormDataParam("moreInfo") String moreInfo,@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
-
+		CommonUtils utils = new CommonUtils();
 
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(newsTitle)) {
 				
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				System.out.println("-----------info-----------"+info);
-				System.out.println("-----------in-----------"+in);
-				System.out.println("-----------request-----------"+request.toString());
-				System.out.println("-----------path-----------"+path);
 				
-				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -410,8 +395,12 @@ public class NewsService {
 
 				
 			}
-			if (!"fail".equals(result)) {
+			if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, newsId, "NEWS");
+				}
+			if (!"fail".equals(result)) {
+				
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -452,9 +441,32 @@ public class NewsService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("searchMember jobj-->" + jobj1);
 		return jobj1;
 
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getNewsDetailsHome")
+	public JSONObject getNewsDetailsHome(){
+		
+		JSONObject jobj1 = new JSONObject();
+		NewsDTO dto = new NewsDTO();
+		NewsBO bo = new NewsBO();
+		
+		ArrayList<NewsDTO> newsList = new ArrayList<NewsDTO>();
+		try{
+			newsList = bo.getNewsDetailsHome(dto);
+			if(newsList != null && newsList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("NewsDetailsHome", newsList);
+			}else {
+				jobj1.put("NewsDetailsHome", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
 	}
 }
 

@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,13 +22,17 @@ import com.bo.EventFileBO;
 import com.bo.EventGuestBO;
 import com.bo.GuestBO;
 import com.bo.MemberBO;
+import com.bo.NewsBO;
 import com.dto.EventDTO;
 import com.dto.EventFileDTO;
 import com.dto.EventGuestDTO;
 import com.dto.GuestDTO;
 import com.dto.MemberDTO;
+import com.dto.NewsDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
@@ -59,7 +64,7 @@ public class EventService {
 			@FormDataParam("guestName") String guestName,
 			@FormDataParam("guestDesi") String guestDesi,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
@@ -68,17 +73,14 @@ public class EventService {
 		String delims = "~";
 		String sId = null ;
 		String sLoginId = "";
-		
+		CommonUtils utils = new CommonUtils();
 		
 
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(eventName)){
 				
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
+				
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -108,7 +110,8 @@ public class EventService {
 				EventBO bo = new EventBO();
 				result = bo.addEvent(eventDto);
 				
-				
+				if (StringUtils.isNotEmpty(guestName)){
+					
 				GuestBO guestBo = new GuestBO();
 				EventGuestBO eventGuestBo = new EventGuestBO();
 				
@@ -140,11 +143,17 @@ public class EventService {
 						resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
 					}
 				}
-				
+				}
 			}
 			
-			if (!"fail".equals(result)) {
+			if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, sId, "EVENT");
+			}
+			
+			
+			if (!"fail".equals(result)) {
+				
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -167,7 +176,6 @@ public class EventService {
 			eventList = bo.getEventDetails();
 			
 			if (!(eventList.size() < 0)) {
-				//eventList = bo.updatedEvent(eventList);
 				jobj1.put("EventDetails", eventList);
 			} else {
 				jobj1.put("EventDetails", "failed");
@@ -232,7 +240,6 @@ public class EventService {
 				if (!(guestList.size() < 0)) {
 					jobj.put("EventGuestProfile", guestList);
 				}
-				System.out.println("in to guest profile size " + guestList.size());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -322,22 +329,19 @@ public class EventService {
 			@FormDataParam("guestName") String guestName,
 			@FormDataParam("guestDesi") String guestDesi,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
 		String delims = "~";
 		String resultGuest = "fail";
 		String resultEventGuest = "fail";
+		CommonUtils utils = new CommonUtils();
 
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(eventName)){
-				
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
+				//utils.processFileUpload(bodyParts,request );
 				
 				if (request.getSession().getAttribute("LOGINID") != null) {
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -363,6 +367,7 @@ public class EventService {
 				EventBO bo = new EventBO();
 				result = bo.eventUpdate(eventDto);
 				
+				if (StringUtils.isNotEmpty(guestName)){
 				GuestBO guestBo = new GuestBO();
 				EventGuestBO eventGuestBo = new EventGuestBO();
 				
@@ -392,15 +397,16 @@ public class EventService {
 						
 						EventGuestDTO eventGuestDto = new EventGuestDTO();
 						eventGuestDto.setEventId(eventId);
-						//eventGuestDto.setEventId(sEventId);
 						eventGuestDto.setGuestId(sGuestId);
 
 						resultEventGuest = eventGuestBo.addEventGuest(eventGuestDto);
-						System.out.println("resultEventGuest------"+resultEventGuest);
 					}
 				}
-				
+				}
+				if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, eventId, "EVENT");
+				}
 			}
 			
 			if (!"fail".equals(result)) {
@@ -501,8 +507,6 @@ public class EventService {
 		@QueryParam("date") String sDate,
 		@QueryParam("address") String sAddress
 		) {
-		System.out.println("in to event search eventName==="+sEventName+"========in to event search days======="+sDays);
-		System.out.println("in to event search date==="+sDate+"============in to event search address========="+sAddress);
 		
 		JSONObject jobj1 = new JSONObject();
 		EventBO bo = new EventBO();
@@ -527,5 +531,29 @@ public class EventService {
 		}
 		return jobj1;
 
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getEventDetailsHome")
+	public JSONObject getEventDetailsHome(){
+		System.out.println("in to event getEventDetailsHome");
+		JSONObject jobj1 = new JSONObject();
+		EventDTO dto = new EventDTO();
+		EventBO bo = new EventBO();
+		
+		ArrayList<EventDTO> eventList = new ArrayList<EventDTO>();
+		try{
+			eventList = bo.getEventDetailsHome(dto);
+			if(eventList != null && eventList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("EventDetailsHome", eventList);
+			}else {
+				jobj1.put("EventDetailsHome", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
 	}
 }

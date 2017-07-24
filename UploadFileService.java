@@ -224,4 +224,31 @@ public class UploadFileService {
 		return jObj;
 
 	}
+
+	/*@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getPublicImagesHome")
+	public JSONObject getPublicImagesHome(){
+		System.out.println("in to getPublicImagesHome");
+		
+		JSONObject jobj1 = new JSONObject();
+		UploadFileDTO uploadFileDTO = new UploadFileDTO();
+		UploadFileBO fileBo = new UploadFileBO();
+		
+		ArrayList<UploadFileDTO> uploadList = new ArrayList<UploadFileDTO>();
+		try{
+			uploadList = bo.getPublicImagesHome(dto);
+			if(uploadList != null && uploadList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("getPublicImages", uploadList);
+			}else {
+				jobj1.put("getPublicImages", "failed");
+			}
+			System.out.println("in to getPublicImagesHome uploadList"+uploadList.size());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
+	}*/
 }

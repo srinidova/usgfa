@@ -10,12 +10,9 @@ public class CommitteeDAO {
 	public String addCommittee(CommitteeDTO committeeDto) {
 		String result = "fail";
 		try {
-			System.out.println("1. in to committeeDao");
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("2. in to committeeDao");
 			session.insert("Committee.addCommittee", committeeDto);
 			result = "success";
-			System.out.println("after committeeDao result" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

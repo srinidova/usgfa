@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +47,8 @@ import com.dto.SkillsDTO;
 import com.dto.UploadFileDTO;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
 import com.util.CommonUtils;
 
@@ -69,22 +72,17 @@ public class ProgramService {
 			@FormDataParam("youtube") String youtube,
 			@FormDataParam("moreInfo") String moreInfo,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String resultFile = "fail";
 		String sId = null;
 		String sLoginId = "";
-
+		CommonUtils utils = new CommonUtils();
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(programName)) {
-				
 
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
 				
 				if(request.getSession().getAttribute("LOGINID") != null){
 					sLoginId = (String) request.getSession().getAttribute("LOGINID");
@@ -106,12 +104,14 @@ public class ProgramService {
 				
 				ProgramBO bo = new ProgramBO();
 				result = bo.addProgram(programDto);
-				
-				
-				
 			}
-			if (!"fail".equals(result)) {
+			
+			if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
 				CommonUtils.saveFileData(request, sId, "PROGRAM");
+				}
+			
+			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
 				jObj.put("Msg", result);
@@ -131,8 +131,6 @@ public class ProgramService {
 		
 		ProgramBO bo= new ProgramBO();
 		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
-		
-		
 		try {
 			programList = bo.getProgramDetails();
 			
@@ -316,20 +314,17 @@ public class ProgramService {
 			@FormDataParam("youtube") String youtube,
 			@FormDataParam("moreInfo") String moreInfo,
 			@FormDataParam("file") InputStream in,
-            @FormDataParam("file") FormDataContentDisposition info) {
+            @FormDataParam("file") FormDataContentDisposition info,FormDataMultiPart multiPart) {
 		JSONObject jObj = new JSONObject();
 		String result = "fail";
 		String sLoginId = "";
-
+		CommonUtils utils = new CommonUtils();
 
 		try {
+			List<FormDataBodyPart> bodyParts = multiPart.getFields("file");
 			if (StringUtils.isNotEmpty(programName)) {
+				//utils.processFileUpload(bodyParts,request );
 				
-				CommonUtils utils = new CommonUtils();
-				String path = "";
-				//System.out.println( request.getServletContext().getRealPath("/"));
-				path = request.getServletContext().getRealPath("/") + "images/uploads/";
-				utils.uploadFileToLocation(info, in, request, path);
 				
 				ProgramDTO programDto = new ProgramDTO();
 				String sUpdatedOn = CommonUtils.getDate();
@@ -353,8 +348,12 @@ public class ProgramService {
 				ProgramBO bo = new ProgramBO();
 				
 				result = bo .programUpdate(programDto);
-				CommonUtils.saveFileData(request, programId, "PROGRAM");
+				//CommonUtils.saveFileData(request, programId, "PROGRAM");
 			}
+			if(bodyParts != null && bodyParts.size() > 0 ){
+				utils.processFileUpload(bodyParts,request );
+				CommonUtils.saveFileData(request, programId, "PROGRAM");
+				}
 			if (!"fail".equals(result)) {
 				jObj.put("Msg", result);
 			} else {
@@ -372,8 +371,6 @@ public class ProgramService {
 			@QueryParam("channel") String sChannel ,
 			 @QueryParam("guest") String sGuest
 			 ) {
-		System.out.println("1. *****Called searchProgram**********programName==" +sProgramName+"--------channel=="+sChannel);
-		System.out.println("2. *****Called searchProgram**********guest==" +sGuest);
 		JSONObject jobj1 = new JSONObject();
 		ProgramBO bo = new ProgramBO();
 		ProgramDTO dto = new ProgramDTO();
@@ -385,7 +382,6 @@ public class ProgramService {
 		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
 		try {
 			programList = bo.searchProgram(dto);
-			//System.out.println("****memberList.size==" +memberList.size());
 			if(programList != null && programList.size() > 0){
 				jobj1.put("Msg", "success");
 				jobj1.put("ProgramDetails", programList);
@@ -395,9 +391,31 @@ public class ProgramService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("searchMember jobj-->" + jobj1);
 		return jobj1;
 
+	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getProgramDetailsHome")
+	public JSONObject getProgramDetailsHome(){
+		JSONObject jobj1 = new JSONObject();
+		ProgramDTO dto = new ProgramDTO();
+		ProgramBO bo = new ProgramBO();
+		
+		ArrayList<ProgramDTO> programList = new ArrayList<ProgramDTO>();
+		try{
+			programList = bo.getProgramDetailsHome(dto);
+			if(programList != null && programList.size() > 0){
+				jobj1.put("Msg", "success");
+				jobj1.put("ProgramDetailsHome", programList);
+			}else {
+				jobj1.put("ProgramDetailsHome", "failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return jobj1;
 	}
 }
 

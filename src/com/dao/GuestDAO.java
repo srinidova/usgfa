@@ -22,7 +22,6 @@ public class GuestDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("3. In GuestDAO addFarm---------- getGuestName===" +guestDto.getName());
 			session.insert("Guest.addGuest", guestDto);
 			result = "success";
 		} catch (Exception e) {
@@ -33,10 +32,8 @@ public class GuestDAO {
 	public ArrayList<GuestDTO> getGuestDetailsByEventId(EventGuestDTO eventGuestDto) {
 		ArrayList<GuestDTO> guestdto = new ArrayList<GuestDTO>();
 		try {
-			//System.out.println("3. In GuestDAO getGuestDetailsByEventId----------");
 			SqlMapClient session = new IbatisFactory().getSession();
 			String sEventId = eventGuestDto.getEventId();
-            //System.out.println("3.1 In GuestDAO getGuestDetailsByEventId----------sEventId==="+sEventId);
 			guestdto = (ArrayList<GuestDTO>) session.queryForList("Guest.getGuestDetailsByEventId", sEventId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +48,6 @@ public class GuestDAO {
 		String result = "fail";
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("3. In GuestDAO updateGuest---------- updateGuest===" +guestDto.getName());
 			session.insert("Guest.updateGuest", guestDto);
 			result = "success";
 		} catch (Exception e) {

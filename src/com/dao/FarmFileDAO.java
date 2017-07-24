@@ -92,4 +92,16 @@ public class FarmFileDAO {
 		}
 		return farmFileDto;
 	}
+	public ArrayList<FarmFileDTO> getFarmFileByFarmId(String sFarmId) {
+		ArrayList<FarmFileDTO> farmFileDto = new ArrayList<FarmFileDTO>();
+		try {
+			SqlMapClient session = new IbatisFactory().getSession();
+			//System.out.println("sFarmId =="+sFarmId);
+			farmFileDto = (ArrayList<FarmFileDTO>) session.queryForList("FarmFile.getFarmFileByFarmId", sFarmId);
+			//System.out.println("farmFileDto.size =="+farmFileDto.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return farmFileDto;
+	}
 }

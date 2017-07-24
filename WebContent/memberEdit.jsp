@@ -9,7 +9,6 @@ if(sRole != null && sRole.equals("Admin")){
 %>
 <html>
 <head>
-<!-- <script type="text/javascript" src="js/member.js"></script> -->
 </head>
 <body>
 	<!----------------------top_header start-------------------------------->
@@ -35,6 +34,9 @@ if(sRole != null && sRole.equals("Admin")){
 
 <script type="text/javascript">
 	function memberEditFarmValidation() {
+		var number = /^[0-9]+$/;
+		var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
+
 		$("#memberMessage").text("");
 		var firstName = document.getElementById("memberEditFirstName");
 		var middleName = document.getElementById("memberEditMiddleName");
@@ -49,8 +51,6 @@ if(sRole != null && sRole.equals("Admin")){
 		var memberType = document.getElementById("editMemberType");
 		var amount = document.getElementById("editAmount");
 		var haveFarm = $('input[name=yesno]:checked', '#haveFarm').val();
-		var number = /^[0-9]+$/;
-		var emailChk = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/;
 		var editfileFarm = $("#editfileFarm")[0].files[0];
 		var file = $('#file').val().split('.').pop().toLowerCase();
 		var farmName = document.getElementById("memberFarmEditFarmName");
@@ -86,14 +86,12 @@ if(sRole != null && sRole.equals("Admin")){
 		mobile.focus();
 		return false;
 	}else if (email.value.length > 0 && !email.value.match(emailChk) ) {
-		//alert("email----1-------");
     	msg = "errEditMemEmail";
 		title = "Email";
 
 		$("#" + msg).text(title + " please enter valid email");
 		$("#" + msg).show();
 		email.focus();
-		//alert("email------2-----");
 		return false;
 
     }else if (place.value.length == 0) {
@@ -214,7 +212,7 @@ if(sRole != null && sRole.equals("Admin")){
 						
 						$.each(data.EditMember,
 								function(key, val) {
-							//alert("in to member edit filePath=="+data.EditMember[key].filePath);
+							//alert(data.EditMember[key].haveFarm);
 							$('#memberId').val(data.EditMember[key].memberId);
 							$('#memberEditTitle').val(
 									data.EditMember[key].title);
@@ -249,13 +247,11 @@ if(sRole != null && sRole.equals("Admin")){
 							$('#memberFarmEditHaveFarm').val(data.EditMember[key].haveFarm);
 							document.getElementById("memberImg").src = data.EditMember[key].filePath;
 						})
-						//showMemberImages(data);
 						showFarmData();
 					}
 				});
 			});
 	function memberUpdate1() {
-		//alert("in to member update")
 		var memberId = $("#memberId").val();
 		var title = $("#memberEditTitle").val();
 		var firstName = $("#memberEditFirstName").val();
@@ -285,7 +281,6 @@ if(sRole != null && sRole.equals("Admin")){
 		var farmPincode = $("#memberFarmEditFarmPincode").val();
 		var file = $("#file")[0].files[0];
 		var editfileFarm = $("#editfileFarm")[0].files[0];
-        
 		
 	var formData = new FormData();
 	formData.append("memberId", memberId);
@@ -318,8 +313,12 @@ if(sRole != null && sRole.equals("Admin")){
 	formData.append("farmPincode", farmPincode);
 	formData.append("amount", amount);
 	formData.append("file", file);
-	formData.append("editfileFarm", editfileFarm);
-	//var fileFarm = $("#fileFarm")[0].files[0];
+	//formData.append("editfileFarm", editfileFarm);
+	//formData.append("editfileFarm", $("#editfileFarm")[0].files[0]);
+	//formData.append('editfileFarm',  $("#editfileFarm")[0].files[i]);
+	for (var i = 0; i < $("#editfileFarm")[0].files.length; i++)
+		formData.append('editfileFarm',  $("#editfileFarm")[0].files[i]);
+	
 
 	$.ajax({
 		type: 'POST',
@@ -404,105 +403,12 @@ if(sRole != null && sRole.equals("Admin")){
 			return true;
 		}
 	}
-/*	function showMemberImages(data){
-		var dispImages = '';
-		var dispClas = '';
-		var dispChkd = '';
-		var imgCtrl = true;
-		//if(!data.MEMBERFILES == "undefined"){
-			//alert("in to "+data.MEMBERFILES);
-		$.each(
-				data.MEMBERFILES,
-				function(key, val) {
-					//alert("in to MEMBERFILES "+data.MEMBERFILES);
-					imgCtrl = false;
-					if(data.MEMBERFILES[key].showPublic == 1){
-						dispChkd = 'checked';
-					}else{
-						dispChkd = '';
-					}
-					if(key == 0){
-						dispClas = "item active";
-					}else{
-						dispClas = "item";
-					}
-					dispImages = dispImages
-					+'<div class="'+ dispClas +'">'
-					+'<ul class="thumbnails">'
-						+'<li class="col-md-12">'
-							+'<div class="fff">'
-								+'<div class="thumbnail">'
-								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.MEMBERFILES[key].filePath+'" data-target="#image-gallery">'
-								 +'<img src="'+data.MEMBERFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
-									+'</a>'
-								+'</div>'
-								+'<div class="caption">'
-									+'<div class="checkbox">'
-										+'<label>'
-										    +'<input id="'+data.MEMBERFILES[key].fileId+'" onclick="updateShowAsPublicMember(this.id);" type="checkbox" value="'+data.MEMBERFILES[key].fileId+'" name="remember"  '+ dispChkd +'> Show as Public'
-										+'</label>'
-										+'<div class="suceee_msg"></div>'
-									+'</div>'
-									+'<div class="delete_box">'
-										+'<a href="#" name="'+data.MEMBERFILES[key].fileId+'" onclick="deleteFileMember(this.name);"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>'
-										+'<div class="suceee_msg"></div>'
-									+'</div>'
-								+'</div>'
-							+'</div>'
-						+'</li>'
-					+'</ul>'
-				+'</div>'
-				})
-	//}
-				document.getElementById("memberEditImages").innerHTML = dispImages;
-				$.getScript('js/popup.js');
-				if(imgCtrl){
-					document.getElementById("memberEditImgCtrl").style.display = 'none';
-				}
-	}
-	function deleteFileMember(fileId){
-		//alert("fileId---"+fileId);
-		var memberObject = new Object();
-		memberObject.fileId = fileId;
-		memberObject.type = "MEMBER";
-		$.ajax({
-			data : memberObject,
-			url : "emp/uploadService/deleteImage",
-			success : function(data){
-				if(data.Msg = 'success'){
-					showMemberImages(data);
-				}
-			}
-		})
-	}
-	function updateShowAsPublicMember(fileId){
-		//alert("fileId---"+fileId);
-		var setVal = '';
-		if(document.getElementById(fileId).checked){
-			setVal = '1';
-		}else{
-			setVal = '0';
-		}
-		//alert("setVal-----"+setVal);
-		var uploadFileObject = new Object();
-		uploadFileObject.fileId = fileId; 
-		uploadFileObject.showAsPublic = setVal;
-		uploadFileObject.type = "MEMBER";
-		//alert("setVal---"+setVal);
-			$.ajax({
-			data : uploadFileObject,
-			url : "emp/uploadService/updateShowAsPublic",
-			success : function(data) {
-				if (data.Msg = "success") {
-					showMemberImages(data);
-				}
-			}
-		}); 
-	}*/
+
 	function showFarmImages(data){
 		var dispImages = '';
 		var dispClas = '';
 		var dispChkd = '';
+		var dispItem = '';
 		var imgCtrl = true;
 		//alert("in to "+data.FARMFILES);
 		
@@ -510,8 +416,15 @@ if(sRole != null && sRole.equals("Admin")){
 		$.each(
 				data.FARMFILES,
 				function(key, val) {
-					//imgCtrl = false;
-					//alert("in to FARMFILES "+data.FARMFILES);
+					imgCtrl = false;
+					var filename = data.FARMFILES[key].filePath;
+					var fExt = filename.split('.').pop();
+					if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+						dispItem = '<iframe src="'+data.FARMFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+					}else{
+						dispItem = '<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+					}
+					//alert("in to FARMFILES "+data.FARMFILES.length);
 					//alert(data.FARMFILES[key].fileId);
 					
 					
@@ -532,7 +445,7 @@ if(sRole != null && sRole.equals("Admin")){
 							+'<div class="fff">'
 								+'<div class="thumbnail">'
 									+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.FARMFILES[key].filePath+'" data-target="#image-gallery">'
-									  +'<img src="'+data.FARMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+									  +dispItem
 									+'</a>'
 								+'</div>'
 								+'<div class="caption">'
@@ -552,44 +465,44 @@ if(sRole != null && sRole.equals("Admin")){
 					+'</ul>'
 				+'</div>'
 				})
+				//alert("------dispImages--------"+dispImages);
 				document.getElementById("farmEditImages").innerHTML = dispImages;
 				$.getScript('js/popup.js');
 		}
-		// alert("imgCtrl=="+imgCtrl);
 		 if(imgCtrl){
 			document.getElementById("farmEditImgCont").style.display = 'none';
 		}  
 	}
 	function deleteFileFarm(fileId){
-		//alert ("This is a warning message!");
-		var farmObject = new Object();
-		farmObject.fileId = fileId;
-		farmObject.type = "FARM";
-		$.ajax({
-			data : farmObject,
-			url : "emp/uploadService/deleteImage",
-			success : function(data){
-				alert ("This is a warning message!");
-				if(data.Msg = 'success'){
-					showFarmImages(data);
+		var delConfirm = confirm("Are you sure to delete");
+		if(delConfirm == false){
+			return false;
+		}else{
+			var farmObject = new Object();
+			farmObject.fileId = fileId;
+			farmObject.type = "FARM";
+			$.ajax({
+				data : farmObject,
+				url : "emp/uploadService/deleteImage",
+				success : function(data){
+					if(data.Msg = 'success'){
+						showFarmImages(data);
+					}
 				}
-			}
-		})
+			});
+		}
 	}
 	function updateShowAsPublicFarm(fileId){
-		//alert("fileId---"+fileId);
 		var setVal = '';
 		if(document.getElementById(fileId).checked){
 			setVal = '1';
 		}else{
 			setVal = '0';
 		}
-		//alert("setVal-----"+setVal);
 		var uploadFileObject = new Object();
 		uploadFileObject.fileId = fileId; 
 		uploadFileObject.showAsPublic = setVal;
 		uploadFileObject.type = "FARM";
-		//alert("setVal---"+setVal);
 			$.ajax({
 			data : uploadFileObject,
 			url : "emp/uploadService/updateShowAsPublic",
@@ -599,6 +512,36 @@ if(sRole != null && sRole.equals("Admin")){
 				}
 			}
 		}); 
+	}
+	function fileCheck1(obj) {
+		//alert("in to memberEdit fileCheck1");
+		//alert("in to file check"+$("#"+obj).val());
+		 var fileInput = document.getElementById('file');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		       // alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        return false;
+		    }else{
+
+		    }
+
+	}
+	function fileCheck(obj) {
+		//alert("in to memberEdit fileCheck");
+		//alert("in to file check"+$("#"+obj).val());
+		 var fileInput = document.getElementById('editfileFarm');
+		    var filePath = fileInput.value;
+		    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+		    if(!allowedExtensions.exec(filePath)){
+		        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+		        fileInput.value = '';
+		        return false;
+		    }else{
+
+		    }
+
 	}
 </script>
 </head>
@@ -637,6 +580,11 @@ if(sRole != null && sRole.equals("Admin")){
 							<option value="Ms">Ms</option>
 							<option value="Dr">Dr</option>
 							<option value="Prof">Prof</option>
+							<option value="Mrs">Mrs</option>
+							<option value="Madam">Madam</option>
+							<option value="Captain">Captain</option>
+							<option value="Rev">Rev</option>
+							<option value="Hon">Hon</option>
 						</select> <input type="hidden" class="form-control" id="memberId"
 							name="memberId">
 					</div>
@@ -710,8 +658,35 @@ if(sRole != null && sRole.equals("Admin")){
 						<label for="state">State</label> <select class="form-control"
 							id="memberEditState" name="memberEditState">
 							<!-- <option selected="selected" >--select--</option> -->
+							<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
 							<option value="Telangana">Telangana</option>
-							<option value="AndhraPradesh">AndhraPradesh</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 						</select>
 					</div>
 				</div>
@@ -725,12 +700,36 @@ if(sRole != null && sRole.equals("Admin")){
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="profession">Profession</label> <select
-							class="form-control" id="memberEditProfession"
-							name="memberEditProfession">
-							<!-- <option selected="selected" >--select--</option> -->
+						<label for="profession">Profession</label> 
+						<select class="form-control" id="memberEditProfession" name="memberEditProfession">
+							<option value="Agriculture">Agriculture</option>
 							<option value="Doctor">Doctor</option>
 							<option value="Professor">Professor</option>
+							<option value="Poultry">Poultry</option>
+							<option value="Veterinary">Veterinary</option>
+							<option value="Physician">Physician</option>
+							<option value="Teacher">Teacher</option>
+							<option value="Technician">Technician</option>
+							<option value="Lawyer">Lawyer</option>
+							<option value="Engineer">Engineer</option>
+							<option value="Accountant">Accountant</option>
+							<option value="Pharmacist">Pharmacist</option>
+							<option value="Electrician">Electrician</option>
+							<option value="Mechanic">Mechanic</option>
+							<option value="Consultant">Consultant</option>
+							<option value="Chef">Chef</option>
+							<option value="Secretary">Secretary</option>
+							<option value="Surveyor">Surveyor</option>
+							<option value="Plumber">Plumber</option>
+							<option value="Writer">Writer</option>
+							<option value="Police">Police</option>
+							<option value="Scientist">Scientist</option>
+							<option value="Architect">Architect</option>
+							<option value="Tailor">Tailor</option>
+							<option value="Artist">Artist</option>
+							<option value="Welder">Welder</option>
+							<option value="Actor">Actor</option>
+							<option value="Other">Other</option>
 						</select>
 					</div>
 				</div>
@@ -751,7 +750,8 @@ if(sRole != null && sRole.equals("Admin")){
 								enctype="multipart/form-data">
 								<div class="form-group col-md-6">
 									<label for="Upload Photo">Select Photo</label> <input
-										id="file" name="file" class="file form-control" type="file">
+										id="file" name="file" class="file form-control" type="file" onchange="fileCheck1(this.id);"
+										accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 								</div>
 							</form>
 						</div>
@@ -798,25 +798,6 @@ if(sRole != null && sRole.equals("Admin")){
 					</div>
 				</div>
 			</div>
-			<!-- <div class="col-md-5" style="margin-left: 250px;">
-				<div class="row">
-
-					<div class="col-md-12" style="margin-bottom: 10px;" id="memberEditImgCtrl">
-						Controls
-						<div class="controls pull-right ">
-							<a class="left fa fa-angle-left btn btn-default button-arrow"
-								href="#carousel-example" data-slide="prev"></a> <a
-								class="right fa fa-angle-right btn btn-default button-arrow"
-								href="#carousel-example" data-slide="next"></a>
-						</div>
-					</div>
-				</div>
-				<div id="carousel-example" class="carousel slide" data-ride="carousel">
-						<div class="carousel-inner" id="memberEditImages">
-						</div>
-				</div>
-				
-			</div> -->
 			<!----------------------photo_gallery end------------------------------>
 
 
@@ -830,7 +811,7 @@ if(sRole != null && sRole.equals("Admin")){
 						<input type="radio" name="yesno" id="yesno" value="Yes" onclick="test()"> Yes
 					</label> 
 					<label class="radio-inline"> 
-						<input type="radio" name="yesno" id="yesno" checked value="No"> No
+						<input type="radio" name="yesno" id="yesno"  checked value="No" onclick="deleteFarm()"> No
 					</label>
 				</div>
 			</div>
@@ -947,8 +928,35 @@ if(sRole != null && sRole.equals("Admin")){
 						class="form-control" id="memberFarmEditFarmState"
 						name="memberFarmEditFarmState">
 						<!-- <option selected="selected" >--select--</option> -->
-						<option>Telangana</option>
-						<option>AndhraPradesh</option>
+						<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
+							<option value="Telangana">Telangana</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 					</select>
 				</div>
 			</div>
@@ -979,7 +987,8 @@ if(sRole != null && sRole.equals("Admin")){
 								enctype="multipart/form-data">
 						<div class="form-group col-md-7">
 							<label for="Upload Photo">Upload Farm Photo(s)</label> <input
-								id="editfileFarm"  name="editfileFarm" class="file form-control" type="file">
+								id="editfileFarm"  name="editfileFarm" class="file form-control" type="file"  multiple="multiple" onchange="fileCheck(this.id);"
+								accept="image/jpg,image/png,image/jpeg,image/gif,video/mp4,video/mov,video/wmv,video/flv,video/avi">
 						</div>
 						</form>
 					</div>
@@ -1029,6 +1038,38 @@ if(sRole != null && sRole.equals("Admin")){
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
 <script>
+$(document).ready(function() {
+    $('#memberEditProfession').click(function(e) {
+    	sortDropDownListByText("#memberEditProfession");
+    });
+    
+    $('#memberEditTitle').click(function(e) {
+    	sortDropDownListByText("#memberEditTitle");
+    });
+    
+    $('#memberEditState').click(function(e) {
+    	sortDropDownListByText("#memberEditState");
+    });
+    
+    $('#memberFarmEditFarmState').click(function(e) {
+    	sortDropDownListByText("#farmState");
+    });
+    
+    $('#editMemberType').click(function(e) {
+    	sortDropDownListByText("#editMemberType");
+    });
+
+});
+
+ function sortDropDownListByText(selItem) {
+	$(selItem).each(function() {
+		var selectedValue = $(this).val();
+		$(this).html($("option", $(this)).sort(function(a, b) {
+			return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+		}));
+		$(this).val(selectedValue);
+	});
+} 
 	$(function() {
 		if ($('[name="yesno"]:checked').val() == 'No') {
 			$('#moreFields').html('');
@@ -1044,10 +1085,7 @@ if(sRole != null && sRole.equals("Admin")){
 	})
 
 	function setRadioCheckedValue(radio_name, val) {
-		//alert("gets here");
-		//var oRadio = document.forms[0].elements[radio_name];
 		var oRadio = document.getElementById("yesno");
-		//alert("oRadio=="+oRadio.length);
 		for (var i = 0; i < oRadio.length; i++) {
 			if (oRadio[i].value == val) {
 				oRadio[i].checked;
@@ -1056,15 +1094,33 @@ if(sRole != null && sRole.equals("Admin")){
 	}
 
 	function showFarmData() {
-		//alert("memberFarmEditHaveFarm==" + $("#memberFarmEditHaveFarm").val());
 		if ($("#memberFarmEditHaveFarm").val() == 'Yes') {
 			document.getElementById("yesno").checked = 'true';
 			test();
 			var html = '';
 			html = $('#farmFields').html();
 			$('#moreFields').html(html);
+	}
+	}
+	function deleteFarm(){
+		//var farmId = $("#memberFarmEditFarmId").val();
+		//alert("in to delete farm======"+farmId);
+		var delConfirm = confirm("Are you sure to delete existing farm data");
+		if(delConfirm == false){
+			showFarmData();
+		}else{
+/* 			var farmObject = new Object();
+			farmObject.farmId = farmId;
+ 			$.ajax({
+				data : farmObject,
+				url : "emp/farmService/deleteFarm",
+				success : function(data) {
+					if (data.Msg = "success") {
+					}
+				}
+			});  */
 		}
-
+			
 	}
 </script>
 </body>

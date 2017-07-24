@@ -6,9 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -45,6 +48,8 @@ import com.dto.SmsDTO;
 import com.dto.StoriesFileDTO;
 import com.dto.UploadFileDTO;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.BodyPartEntity;
+import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
 
 import net.sf.json.JSONObject;
@@ -231,7 +236,6 @@ public class CommonUtils {
 			for(Map.Entry m:hmImages.entrySet()){
 				String sFileId  = (String) m.getKey();
 				String sFilePath  = (String) m.getValue();
-				System.out.println("bbbbbbbb sFileId"+sFileId+"-------- sFilePath"+sFilePath+"-------- sId"+sId);
 			// saving in to uploadFile Table
 			UploadFileDTO uploadFileDto = new UploadFileDTO();
 			uploadFileDto.setFileId(sFileId);
@@ -279,9 +283,7 @@ public class CommonUtils {
 		    	farmFileDto.setFileId(sFileId);
 		    	farmFileDto.setFarmId(sId);
 		    	FarmFileBO farmFileBo = new FarmFileBO();
-		    	System.out.println("in to farm page ");
 		    	sResult = farmFileBo.farmFile(farmFileDto);
-		    	System.out.println("after farm result"+sResult);
 		    }
 	
 		    session.setAttribute("UPLOADED_FILELIST", null);
@@ -416,9 +418,7 @@ public static SmsDTO getSmsProperties(ServletContext objContext) throws IOExcept
 		String destination = path;
 		HashMap<String, String> hm = null;
 		HttpSession session = request.getSession();
-		 System.out.println("fileDetail=========="+fileDetail);
 		 sFileExtn = FilenameUtils.getExtension(fileDetail.getFileName());
-		 System.out.println("sFileExtn=========="+sFileExtn);
 		if (uploadedInputStream != null && fileDetail != null && sFileExtn != null) {
 			
             
@@ -431,6 +431,131 @@ public static SmsDTO getSmsProperties(ServletContext objContext) throws IOExcept
 		if (hm != null && hm.size() > 0) {
 			session.setAttribute("UPLOADED_FILELIST", hm);
 		}
+	}
+	
+	public void saveFile(InputStream file, String filePath) {
+		try {
+			/* Change directory path */
+			java.nio.file.Path path = FileSystems.getDefault().getPath(filePath);
+			/* Save InputStream as file */
+			Files.copy(file, path);
+		} catch (IOException ie) {
+			ie.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void processFileUpload(List<FormDataBodyPart> bodyParts,HttpServletRequest request ) throws IOException{
+		HashMap<String, String> hm = null;
+		HttpSession session = request.getSession();
+		String path = request.getServletContext().getRealPath("/") + "images/uploads/";
+		
+/*		if(session.getAttribute("UPLOADED_FILELIST") != null){
+			hm = (HashMap<String,String>)session.getAttribute("UPLOADED_FILELIST");
+		}else{
+			hm = new HashMap<String, String>();
+		}*/
+		hm = new HashMap<String, String>();
+		for (int i = 0; i < bodyParts.size(); i++) {
+			BodyPartEntity bodyPartEntity = (BodyPartEntity) bodyParts.get(i).getEntity();
+			String fileName = bodyParts.get(i).getContentDisposition().getFileName();
+			InputStream uploadedInputStream = bodyPartEntity.getInputStream();
+			String sFileExtn = FilenameUtils.getExtension(fileName);
+			
+			if (uploadedInputStream != null && sFileExtn != null) {
+				if (StringUtils.isNotEmpty(sFileExtn) && sFileExtn.equalsIgnoreCase("zip")) {
+					hm = unZipIt(uploadedInputStream, path, hm);
+				} else {
+					hm = fileSave(uploadedInputStream, path, sFileExtn, hm);
+				}
+			}
+			System.out.println("file path sFileExtn"+sFileExtn);
+			System.out.println("file path "+path);
+		}
+		if (hm != null && hm.size() > 0) {
+			session.setAttribute("UPLOADED_FILELIST", hm);
+		}
+		
+	}
+	
+	private HashMap<String, String> fileSave(InputStream uploadedInputStream, String destination,String sFileExtn, HashMap<String, String> hm) throws IOException {
+		String uploadedFileLocation = null;
+		//HashMap<String, String> hm = new HashMap<String, String>();
+		if (uploadedInputStream != null && destination != null) {
+			try {
+				createFolderIfNotExists(destination);
+			} catch (SecurityException se) {
+			}
+			try {
+
+				String imageId = UUID.randomUUID().toString();
+				uploadedFileLocation = destination + imageId + "."+ sFileExtn;
+				String sDbFilePath = "images/uploads/" + imageId + "." + sFileExtn;
+				saveToFile(uploadedInputStream, uploadedFileLocation);
+				if (StringUtils.isNotEmpty(uploadedFileLocation)) {
+					hm.put(imageId, sDbFilePath);
+				}
+			} catch (IOException e) {
+				// return Response.status(500).entity("Can not save
+				// file").build();
+			}
+		}
+		return hm;
+	}
+	
+	public HashMap<String, String> unZipIt(InputStream inputStream, String destination, HashMap<String, String> hm) {
+		//HashMap<String, String> hm = new HashMap<String, String>();
+		boolean overwrite = false;
+
+		try {
+			byte[] buf = new byte[1024];
+			ZipInputStream zipinputstream = null;
+			ZipEntry zipentry;
+			zipinputstream = new ZipInputStream(inputStream);
+
+			zipentry = zipinputstream.getNextEntry();
+
+			while (zipentry != null) {
+				int n;
+				FileOutputStream fileoutputstream;
+
+				String sFileName = zipentry.getName();
+				String sFileExtn = sFileName.substring(sFileName.lastIndexOf(".") + 1);
+				String sImageId = UUID.randomUUID().toString();
+				File newFile = new File(sImageId + "." + sFileExtn);
+				if (zipentry.isDirectory()) {
+					newFile.mkdirs();
+					zipentry = zipinputstream.getNextEntry();
+					continue;
+				}
+
+				if (newFile.exists() && overwrite) {
+					newFile.delete();
+				}
+
+				String sOutFile = destination + sImageId + "." + sFileExtn;
+				String sDbFilePath = "images/uploads/" + sImageId + "." + sFileExtn;
+				if (StringUtils.isNotEmpty(sOutFile)) {
+					hm.put(sImageId, sDbFilePath);
+				}
+
+				fileoutputstream = new FileOutputStream(new File(sOutFile));
+
+				while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+					fileoutputstream.write(buf, 0, n);
+				}
+
+				fileoutputstream.close();
+				zipinputstream.closeEntry();
+				zipentry = zipinputstream.getNextEntry();
+
+			}
+
+			zipinputstream.close();
+		} catch (Exception e) {
+			throw new IllegalStateException("Can't unzip input stream", e);
+		}
+		return hm;
 	}
 	
 }

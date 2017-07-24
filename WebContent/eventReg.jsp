@@ -1,4 +1,12 @@
 <!doctype html>
+<%
+boolean bAdmin = false;
+String sRole=(String)session.getAttribute("LOGINROLE"); 
+if(sRole != null && sRole.equals("Admin")){
+	 bAdmin = true;
+} 
+
+%>
 <html>
 <head>
 <script type="text/javascript">
@@ -126,7 +134,6 @@ function saveEvent(){
 		var elmsGstTitle = document.querySelectorAll("[id='guestTitle']")
 		var elmsGstName = document.querySelectorAll("[id='guestName']")
 		var elmsGstDesi = document.querySelectorAll("[id='guestDesi']")
-		//alert("------elmsGstTitle length-----------"+elmsGstTitle.length+"------elmsGstName length-----------"+elmsGstName.length+"------elmsGstDesi length-----------"+elmsGstDesi.length);
 		var guestTitle = "";
 		var guestName = "";
 		var guestDesi = "";
@@ -161,7 +168,9 @@ function saveEvent(){
 		formData.append("state", state);
 		formData.append("landMark", landMark);
 		formData.append("pincode", pincode);
-		formData.append("file", file);
+		//formData.append('file',  $("#file")[0].files[1]);
+		for (var i = 0; i < $("#file")[0].files.length; i++)
+			formData.append('file',  $("#file")[0].files[i]);
 		
 		formData.append("guestTitle", guestTitle);
 		formData.append("guestName", guestName);
@@ -203,7 +212,20 @@ function pincodeCheck(fName, title, msg) {
 		return true;
 	}
 }
+function fileCheck(obj) {
+	//alert("in to file check"+$("#"+obj).val());
+	 var fileInput = document.getElementById('file');
+	    var filePath = fileInput.value;
+	    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.mp4|\.mov|\.wmv|\.flv|\.avi)$/i;
+	    if(!allowedExtensions.exec(filePath)){
+	        //alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+	        fileInput.value = '';
+	        return false;
+	    }else{
 
+	    }
+
+}
 </script>
 </head>
 <body>
@@ -273,8 +295,9 @@ function pincodeCheck(fName, title, msg) {
 						<label for="time_from">Date & Time From *</label> <span class="errMsg" id="errTimeFrom"></span>
 						<div class='input-group date' id="eventTimeFrom">
 							<input type='text' class="form-control" id="timeFrom"
-								name="timeFrom" maxlength="30" onkeyup="validateTitle(id,'Date & Time From','errTimeFrom',5,30);"/> <span class="input-group-addon"> <span
-								class="glyphicon glyphicon-calendar"></span>
+								name="timeFrom" maxlength="30" onkeyup="validateTitle(id,'Date & Time From','errTimeFrom',5,30);"/> 
+							<span class="input-group-addon"> 
+								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
 						</div>
 					</div>
@@ -328,10 +351,37 @@ function pincodeCheck(fName, title, msg) {
 				</div>
 				<div class="col-md-5">
 					<div class="form-group">
-						<label for="state"> State</label> <select class="form-control"
-							id="state">
+						<label for="state"> State</label> 
+						<select class="form-control" id="state">
+							<option value="Andra Pradesh">Andra Pradesh</option>
+							<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal Pradesh">Himachal Pradesh</option>
+							<option value="Jammu Kashmir">Jammu Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Madya Pradesh">Madya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Migoram">Migoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Odish">Odish</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamilnadu">Tamilnadu</option>
 							<option value="Telangana">Telangana</option>
-							<option value="AndhraPradesh">AndhraPradesh</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttarpradesh">Uttarpradesh</option>
+							<option value="Uttarakhand">Uttarakhand</option>
+							<option value="Westbengal">Westbengal</option>
 						</select>
 					</div>
 				</div>
@@ -354,20 +404,17 @@ function pincodeCheck(fName, title, msg) {
 							enctype="multipart/form-data">
 							<div class="form-group">
 								<label for="Upload Photo">Upload Event Photos / Videos</label> <input
-									id="file" name="file" class="file form-control" type="file">
+									id="file" name="file" class="file form-control" type="file" multiple="multiple" runat="server" onchange="fileCheck(this.id);">
 								<!-- <a href="#"><button
 										class="btn btn-success btn-sm text-right">Upload</button></a> -->
 							</div>
 						</form>
 					</div>
 				</div>
-				<!-- <div class="row"></div> -->
 			</div>
 
 		</div>
-		<!-- <div class="clearfix"></div> -->
 
-		<!-- </form> -->
 	</div>
 	<div class="clearfix"></div>
 
@@ -389,6 +436,11 @@ function pincodeCheck(fName, title, msg) {
 								<option value="Ms">Ms</option>
 								<option value="Dr">Dr</option>
 								<option value="Prof">Prof</option>
+								<option value="Mrs">Mrs</option>
+								<option value="Madam">Madam</option>
+								<option value="Captain">Captain</option>
+								<option value="Rev">Rev</option>
+								<option value="Hon">Hon</option>
 							</select>
 						</div>
 					</div>
@@ -421,6 +473,7 @@ function pincodeCheck(fName, title, msg) {
 	<!------------------------------guests form end--------------------------------------->
 
 	<!-------------------------submit button--------------------------------------->
+	<%if(bAdmin){ %>
 	<div class="col-md-10">
 		<div class="submit_button text-right">
 			<a href='#'><button class="btn btn-success btn-sm text-right "
@@ -434,7 +487,7 @@ function pincodeCheck(fName, title, msg) {
 		</div>
 
 	</div>
-
+	<%} %>
 	<!-------------------------submit button end--------------------------------------->
 	<div class="clearfix"></div>
 	<div id="guests_block" style="display: none;">
@@ -448,6 +501,11 @@ function pincodeCheck(fName, title, msg) {
 								<option value="Ms">Ms</option>
 								<option value="Dr">Dr</option>
 								<option value="Prof">Prof</option>
+								<option value="Mrs">Mrs</option>
+								<option value="Madam">Madam</option>
+								<option value="Captain">Captain</option>
+								<option value="Rev">Rev</option>
+								<option value="Hon">Hon</option>
 							</select>
 						</div>
 					</div>
@@ -506,7 +564,28 @@ function pincodeCheck(fName, title, msg) {
 	}
 </script>
 <script type="text/javascript">
-  
+$(document).ready(function() {
+    
+    $('#guestTitle').click(function(e) {
+    	sortDropDownListByText("#guestTitle");
+    });
+    
+    $('#state').click(function(e) {
+    	sortDropDownListByText("#state");
+    });
+    
+
+});
+
+ function sortDropDownListByText(selItem) {
+	$(selItem).each(function() {
+		var selectedValue = $(this).val();
+		$(this).html($("option", $(this)).sort(function(a, b) {
+			return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+		}));
+		$(this).val(selectedValue);
+	});
+} 
   
   $(document).ready(function() {
 	  $("#moreInfo").val("");

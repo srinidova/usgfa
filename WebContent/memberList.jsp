@@ -29,54 +29,6 @@ if(sRole != null && sRole.equals("Admin")){
 	<!----------------------banner end---------------------------------->
 
 	<style>
-#memberListData {
-	width: 100%;
-	float: left;
-	margin: auto;
-	display: inline-table;
-}
-
-tr td img {
-	width: 50px;
-	height: 50px;
-	float: left;
-	border: 1px #ccc solid;
-	padding: 3px;
-	border-radius: 3px;
-}
-
-tr td.e_img {
-	width: 50px;
-}
-
-tr td.e_mn {
-	width: 125px;
-}
-
-tr td.e_mn_1 {
-	width: 140px;
-}
-
-tr td.e_mn_2 {
-	width: 130px;
-}
-
-tr td.e_mn_3 {
-	width: 100px;
-}
-
-tr td.e_mn_4 {
-	width: 190px;
-}
-
-tr td.e_mn_5 {
-	width: 150px;
-}
-
-td ul.actions li {
-	/* display: inline-block; */
-	display: block;
-}
 </style>
 <head>
 
@@ -84,9 +36,17 @@ td ul.actions li {
 
 $(document).ready(function() {
 	getMemberDetails();
+    $('#searchMemProfession').click(function(e) {
+    	sortDropDownListByText("#searchMemProfession");
+    });
+    $('#searchMemMemberShip').click(function(e) {
+    	sortDropDownListByText("#searchMemMemberShip");
+    });
+    $('#searchMemHadFarm').click(function(e) {
+    	sortDropDownListByText("#searchMemHadFarm");
+    });
 });
 function getMemberDetails() {
-	//var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
 	$.ajax({
 				url : "emp/memberService/getMemberDetails",
 				success : function(data) {
@@ -121,17 +81,22 @@ function editMember(memberId){
 	
 }
 function deleteMember(memberId){
-	alert ("This is a warning message!");
-	var memberObject = new Object();
-	memberObject.memberId = memberId;
-	$.ajax({
-		data : memberObject,
-		url : "emp/memberService/deleteMember",
-		success : function(data) {
-			if (data.Msg = "success") {
+	var delConfirm = confirm("Are you sure to delete");
+	if(delConfirm == false){
+		return false;
+	}else{
+		var memberObject = new Object();
+		memberObject.memberId = memberId;
+		$.ajax({
+			data : memberObject,
+			url : "emp/memberService/deleteMember",
+			success : function(data) {
+				if (data.Msg = "success") {
+					window.location.href = "memberList.jsp";
+				}
 			}
-		}
-	});
+		});
+	}
 	
 }
 
@@ -145,15 +110,9 @@ function searchMember(){
 	var memberObject = new Object();
 	memberObject.firstName = firstName;
 	memberObject.profession = profession;
-	//alert("11111in to member search ");
 	memberObject.memberShip = memberShip;
-	//alert("222222in to member search ");
 	memberObject.place = place;
-	//alert("333333in to member search ");
 	memberObject.hadFarm = hadFarm;
-	//alert("444444in to member search ");
-	//alert("in to member search "+firstName);
-	//alert("zz in to member place "+place);
 	$.ajax({
 		data : memberObject,
 		url : "emp/memberService/searchMember",
@@ -165,8 +124,7 @@ function searchMember(){
 	});
 }
 function showMemberList(data){
-	//alert("qaqaqaq=========");
-	var html = '<div class="row"><div class="col-md-12"><table class="table table-bordered">';
+	var html = '';
 	$.each(
 			data.MemberDetails,
 			function(key, val) {
@@ -177,14 +135,14 @@ function showMemberList(data){
 							 	  +'<img src="'+data.MemberDetails[key].filePath+'" class="img-responsive" alt="" align="middle">'
 							 	+'</a>'
 					     +'</td>'
-						     + '<td class="e_mn">'+data.MemberDetails[key].firstName+' '+data.MemberDetails[key].middleName+'</td>'
-						     +  '<td class="e_mn_1" >'+data.MemberDetails[key].profession+'</td>'
-						     +  '<td class="e_mn_3">'+data.MemberDetails[key].memberType+'</td>'
-							 +  '<td class="e_mn_2">'+data.MemberDetails[key].amountPaid+'</td>'
-							 +  '<td class="e_mn_4">'+data.MemberDetails[key].place+'</td>'
-							 +  '<td class="e_mn_5">'+data.MemberDetails[key].updatedOn+'</td>'
+						     + '<td>'+data.MemberDetails[key].firstName+' '+data.MemberDetails[key].middleName+'</td>'
+						     +  '<td>'+data.MemberDetails[key].profession+'</td>'
+						     +  '<td>'+data.MemberDetails[key].memberType+'</td>'
+							 +  '<td>'+data.MemberDetails[key].amountPaid+'</td>'
+							 +  '<td>'+data.MemberDetails[key].place+'</td>'
+							 +  '<td>'+data.MemberDetails[key].updatedOn+'</td>'
 							 +  '<td>'+data.MemberDetails[key].haveFarm+'</td>'
-							 +  '<td class="e_mn">' 
+							 +  '<td style="width: 150px;">' 
 							 	+ '<ul class="actions">'
 							 		+ '<li>'
 							 			+ '<a href="memberProfile.jsp"> '
@@ -194,7 +152,7 @@ function showMemberList(data){
 							 			+ '</a>'
 							 		+ '</li>'
 							 		<%if(bAdmin){ %>
-							 		+ '<li>'
+							 		+ '<li style="margin:0 5px 0 5px;">'
 							 			+ '<a href="memberEdit.jsp"> '
 							 				+ '<button id='+data.MemberDetails[key].memberId+' class="btn btn-primary btn-sm" onclick="editMember(this.id)">'
 							 					+ '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' 
@@ -215,11 +173,9 @@ function showMemberList(data){
 			}
 	)
 	$(html).appendTo("#memberListData");
-	$(html).appendTo("</table></div></div>");
 	$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 }
 function clearMemSearch(){
-	//alert("in to clear");
 	$("#searchMemFirstName").val("");
 	$("#searchMemProfession").val("null");
 	$("#searchMemMemberShip").val("null");
@@ -244,14 +200,13 @@ function clearMemSearch(){
 </div>
 <div class="clearfix"></div>
 
-<div class="container">
+<!-- <div class="container">
 	<div class="row">
-		<div class="clearfix"></div>
+		<div class="clearfix"></div> -->
 		<div class="container" style="margin-top: 30px;">
 			<div class="row">
 				<div class="member_list">
-
-					<div class="col-md-12">
+					<div class="col-md-11">
 						<div class="  table-responsive">
 							<table class="table table-bordered">
 								<thead>
@@ -268,13 +223,13 @@ function clearMemSearch(){
 										</th>
 									</tr>
 								</thead>
-								<tbody>
+<!-- 								<tbody> -->
 									<tr>
 										<td>Image</td>
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text" name="searchMemFirstName" id="searchMemFirstName" placeholder='Member Name'
-														class="form-control " style="width: 120px;" onkeyup="searchMember();"/>
+														class="form-control " style="width: 120px;" maxlength = "30" onkeyup="searchMember();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
@@ -283,6 +238,32 @@ function clearMemSearch(){
 														<option value="null">Select</option>
 														<option value="Doctor">Doctor</option>
 														<option value="Professor">Professor</option>
+														<option value="Agriculture">Agriculture</option>
+														<option value="Poultry">Poultry</option>
+														<option value="Veterinary">Veterinary</option>
+														<option value="Physician">Physician</option>
+														<option value="Teacher">Teacher</option>
+														<option value="Technician">Technician</option>
+														<option value="Lawyer">Lawyer</option>
+														<option value="Engineer">Engineer</option>
+														<option value="Accountant">Accountant</option>
+														<option value="Pharmacist">Pharmacist</option>
+														<option value="Electrician">Electrician</option>
+														<option value="Mechanic">Mechanic</option>
+														<option value="Consultant">Consultant</option>
+														<option value="Chef">Chef</option>
+														<option value="Secretary">Secretary</option>
+														<option value="Surveyor">Surveyor</option>
+														<option value="Plumber">Plumber</option>
+														<option value="Writer">Writer</option>
+														<option value="Police">Police</option>
+														<option value="Scientist">Scientist</option>
+														<option value="Architect">Architect</option>
+														<option value="Tailor">Tailor</option>
+														<option value="Artist">Artist</option>
+														<option value="Welder">Welder</option>
+														<option value="Actor">Actor</option>
+														<option value="Other">Other</option>
 												</select>
 													<!-- <input type="text" name="searchMemProfession" id="searchMemProfession" placeholder='Profession'
 														class="form-control" style="width: 115px;" onkeyup="searchMember();"/> -->
@@ -306,7 +287,7 @@ function clearMemSearch(){
 										<td><div class="row">
 												<div class="col-md-12">
 													<input type="text" name="searchMemPlace" id="searchMemPlace" placeholder='Place/City'
-														class="form-control" style="" onkeyup="searchMember();"/>
+														class="form-control" style="" maxlength = "30" onkeyup="searchMember();"/>
 												</div>
 											</div></td>
 										<td><div class="row">
@@ -326,10 +307,11 @@ function clearMemSearch(){
 														class="form-control" style="width: 120px;" /> -->
 												</div>
 											</div></td>
-										<td><input type="button" value="CLEAR" onClick="clearMemSearch();"/></td>
+										<td align="center"><input type="button" value="CLEAR" class="btn btn-success btn-sm" onClick="clearMemSearch();"/></td>
 									</tr>
-
-								</tbody>
+									<tbody id="memberListData">
+									</tbody>
+								<!-- </tbody> -->
 							</table>
 						</div>
 						
@@ -363,29 +345,44 @@ function clearMemSearch(){
 								</div>
 							</div>
 						</div>
-						<div class="member_list">
-							<div class="row">
-								<div class="col-md-12">
-									<table class="table  table-bordered">
-										<div id="memberListData"></div>
-									</table>
-								</div>
-							</div>
-						</div>
 
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="clearfix"></div>
-	</div>
-</div>
+<!-- 	</div>
+</div> -->
 
 <!----------------------body_content end---------------------------->
 
 <!----------------------footer start ------------------------------->
 <jsp:include page="footer.jsp" />
 <!----------------------footer end --------------------------------->
+<script> 
+/* $(document).ready(function() {
+    $('#searchMemProfession').click(function(e) {
+    	sortDropDownListByText("#searchMemProfession");
+    });
+    $('#searchMemMemberShip').click(function(e) {
+    	sortDropDownListByText("#searchMemMemberShip");
+    });
+    $('#searchMemHadFarm').click(function(e) {
+    	sortDropDownListByText("#searchMemHadFarm");
+    });
+    
+}); */
+
+ function sortDropDownListByText(selItem) {
+	$(selItem).each(function() {
+		var selectedValue = $(this).val();
+		$(this).html($("option", $(this)).sort(function(a, b) {
+			return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+		}));
+		$(this).val(selectedValue);
+	});
+} 
+ </script>
 </body>
 </html>
 <jsp:include page="login.jsp" />

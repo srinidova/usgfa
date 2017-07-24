@@ -108,7 +108,6 @@ if(sRole != null && sRole.equals("Admin")){
 	}
 	
 	function deleteFileNews(fileId){
-		//alert("fileId--------"+fileId);
 		var newsObject = new Object();
 		newsObject.fileId = fileId; 
 		newsObject.type = "NEWS";
@@ -128,6 +127,7 @@ if(sRole != null && sRole.equals("Admin")){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispItem = '';
 	var dispImgCtrls = true;
 	if(data.NEWSFILES != null){
 	
@@ -135,7 +135,13 @@ if(sRole != null && sRole.equals("Admin")){
 			data.NEWSFILES,
 			function(key, val) {
 				dispImgCtrls = false;
-				//alert(data.NEWSFILES[key].filePath);
+				var filename = data.NEWSFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.NEWSFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
 				if(data.NEWSFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -153,7 +159,7 @@ if(sRole != null && sRole.equals("Admin")){
 						+'<div class="fff">'
 							+'<div class="thumbnail">'
 								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.NEWSFILES[key].filePath+'" data-target="#image-gallery">'
-								  +'<img src="'+data.NEWSFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								  +dispItem
 								+'</a>'
 							+'</div>'
 						+'</div>'
@@ -164,7 +170,6 @@ if(sRole != null && sRole.equals("Admin")){
 			document.getElementById("newsImages").innerHTML = dispImages;
 			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 	}
-			//alert("dispImgCtrls========"+dispImgCtrls);
 			if(dispImgCtrls){
 				document.getElementById("newsProfImgCtrl").style.display = 'none';
 			}
@@ -285,26 +290,6 @@ if(sRole != null && sRole.equals("Admin")){
 					<!----------------------photo_gallery end------------------------------>
 
                     <!----------------------video_gallery------------------------------>
-<!-- 					<div class="col-md-6">
-						<div class="row">
-
-							<div class="col-md-12 " style="margin-bottom: 10px;">
-								Controls
-								<div class="controls pull-right">
-									<a class="left fa fa-angle-left btn btn-default button-arrow"
-										href="#carousel-example1" data-slide="prev"></a> <a
-										class="right fa fa-angle-right btn btn-default button-arrow"
-										href="#carousel-example1" data-slide="next"></a>
-								</div>
-							</div>
-						</div>
-						<div id="carousel-example1" class="carousel slide "
-							data-ride="carousel">
-							Wrapper for slides
-							<div class="carousel-inner" id="newsImages">
-							</div>
-						</div>
-					</div> -->
 					<!----------------------video_gallery end------------------------------>
 
 				</div>

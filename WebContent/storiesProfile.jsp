@@ -90,13 +90,20 @@ if(sRole != null && sRole.equals("Admin")){
 		var dispImages = '';
 		var dispClas = '';
 		var dispChkd = '';
+		var dispItem = '';
 		var dispImgCtrls = true;
 		if(data.STORIESFILES != null){
 		$.each(
 				data.STORIESFILES,
 				function(key, val) {
 					dispImgCtrls = false;
-					//alert(data.STORIESFILES[key].showPublic);
+					var filename = data.STORIESFILES[key].filePath;
+					var fExt = filename.split('.').pop();
+					if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+						dispItem = '<iframe src="'+data.STORIESFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+					}else{
+						dispItem = '<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+					}
 					if(data.STORIESFILES[key].showPublic == 1){
 						dispChkd = 'checked';
 					}else{
@@ -114,7 +121,7 @@ if(sRole != null && sRole.equals("Admin")){
 							+'<div class="fff">'
 							+'<div class="thumbnail">'
 								+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.STORIESFILES[key].filePath+'" data-target="#image-gallery">'
-								  +'<img src="'+data.STORIESFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+								  +dispItem
 								+'</a>'
 							+'</div>'
 							+'</div>'
@@ -125,7 +132,6 @@ if(sRole != null && sRole.equals("Admin")){
 				document.getElementById("storiesProfImages").innerHTML = dispImages;
 				$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 		}
-				//alert("dispImgCtrls========"+dispImgCtrls);
 				if(dispImgCtrls){
 					document.getElementById("storiesProfImgCtrl").style.display = 'none';
 				}

@@ -53,14 +53,12 @@ public class EventBO {
 				if(eventList != null && eventList.size() > 0){
 					for (EventDTO eventDTO : eventList) {
 						String sEventId = eventDTO.getEventId();
-						//System.out.println("sMemberId==="+sMemberId);
 						
 						EventFileDTO eventFileDTO = new EventFileDTO();
 						eventFileDTO.setEventId(sEventId);
 						
 						EventFileBO eventFileBO = new EventFileBO();
 						ArrayList<UploadFileDTO> lstUploadFiledto = eventFileBO.getUploadFleByEventId(eventFileDTO);
-						//System.out.println("lstUploadFiledto.size==="+lstUploadFiledto.size());
 						
 						if(lstUploadFiledto != null && lstUploadFiledto.size() > 0){
 							for(UploadFileDTO uploadFileDTO : lstUploadFiledto){
@@ -71,7 +69,6 @@ public class EventBO {
 							String sDefaultPath = "images/uploads/blankMale.jpg";
 							sFilePath = sDefaultPath;
 						}
-						System.out.println("sEventId===="+sEventId+"========sFilePath==="+sFilePath);
 						eventDTO.setFilePath(sFilePath);
 					}
 				}
@@ -79,5 +76,9 @@ public class EventBO {
 				e.printStackTrace();
 			}
 	     return eventList;
+	}
+	public ArrayList<EventDTO> getEventDetailsHome(EventDTO eventDto) {
+		EventDAO dao= new EventDAO();
+		return dao.getEventDetailsHome(eventDto);
 	}
 }

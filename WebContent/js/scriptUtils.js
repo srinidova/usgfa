@@ -305,5 +305,15 @@ function emptyCheckTwoFields(fieldName1, fieldName2, title, msg) {
 	         return false;
  }
 	     }
+ 
+ function sortDropDownListByText(selItem) {
+		$(selItem).each(function() {
+			var selectedValue = $(this).val();
+			$(this).html($("option", $(this)).sort(function(a, b) {
+				return a.text.toUpperCase() == b.text.toUpperCase() ? 0 : a.text.toUpperCase() < b.text.toUpperCase() ? -1 : 1
+			}));
+			$(this).val(selectedValue);
+		});
+	}
 
 

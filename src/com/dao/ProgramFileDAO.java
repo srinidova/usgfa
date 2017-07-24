@@ -69,9 +69,7 @@ public class ProgramFileDAO {
 		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("programFileDto.getFileId =="+programFileDTO.getFileId());
 			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getProgramFilesByFileId", programFileDTO.getFileId());
-			System.out.println("uploadFiledto.size =="+uploadFiledto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,9 +82,7 @@ public class ProgramFileDAO {
 		ArrayList<ProgramFileDTO> programFileDto = new ArrayList<ProgramFileDTO>();
 		try {
 			SqlMapClient session = new IbatisFactory().getSession();
-			System.out.println("programFileDTO.getFileId =="+programFileDTO.getFileId());
 			programFileDto = (ArrayList<ProgramFileDTO>) session.queryForList("ProgramFile.getProgramFileByFileId", programFileDTO.getFileId());
-			System.out.println("programFileDTO.size =="+programFileDto.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

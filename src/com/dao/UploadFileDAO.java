@@ -3,6 +3,7 @@ package com.dao;
 import java.util.ArrayList;
 
 import com.connection.IbatisFactory;
+import com.dto.EventDTO;
 import com.dto.NewsDTO;
 import com.dto.NewsFileDTO;
 import com.dto.UploadFileDTO;
@@ -47,5 +48,37 @@ public class UploadFileDAO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	public ArrayList<UploadFileDTO> getPublicImagesHome(UploadFileDTO uploadFileDTO) {
+		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getPublicImagesHome", uploadFileDTO);
+			//System.out.println("in to news Update size"+newsdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return uploadFiledto;
+	}
+	public ArrayList<UploadFileDTO> getPublicVideosHome(UploadFileDTO uploadFileDTO) {
+		ArrayList<UploadFileDTO> uploadFiledto = new ArrayList<UploadFileDTO>();
+		boolean bAnd = false;
+		String sQuery = null;
+		try{
+			SqlMapClient session = new IbatisFactory().getSession();
+
+			uploadFiledto = (ArrayList<UploadFileDTO>) session.queryForList("UploadFile.getPublicVideosHome", uploadFileDTO);
+			//System.out.println("in to news Update size"+newsdto.size());
+	
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return uploadFiledto;
 	}
 }

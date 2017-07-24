@@ -105,6 +105,7 @@ function showProgramProfImages(data){
 	var dispImages = '';
 	var dispClas = '';
 	var dispChkd = '';
+	var dispItem = '';
 	var dispImgCtrls = true;
 	if(data.PROGRAMFILES != null){
 	
@@ -112,7 +113,13 @@ function showProgramProfImages(data){
 			data.PROGRAMFILES,
 			function(key, val) {
 				dispImgCtrls = false;
-				//alert(data.PROGRAMFILES[key].showPublic);
+				var filename = data.PROGRAMFILES[key].filePath;
+				var fExt = filename.split('.').pop();
+				if(fExt != null && ((fExt == 'mp4') || (fExt == 'wmv') || (fExt == 'avi') || (fExt == 'flv') || (fExt == 'mov'))){
+					dispItem = '<iframe src="'+data.PROGRAMFILES[key].filePath+'" autoplay="false" autostart="false" style="text-align: center;width: 100%" type="audio/mp4" height="100" width="100" align="middle"></iframe>';
+				}else{
+					dispItem = '<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">';
+				}
 				if(data.PROGRAMFILES[key].showPublic == 1){
 					dispChkd = 'checked';
 				}else{
@@ -130,7 +137,7 @@ function showProgramProfImages(data){
 						+'<div class="fff">'
 						+'<div class="thumbnail">'
 							+'<a class="g-image" href="#" data-image-id="" data-toggle="modal" data-title="" data-caption="" data-image="'+data.PROGRAMFILES[key].filePath+'" data-target="#image-gallery">'
-							  +'<img src="'+data.PROGRAMFILES[key].filePath+'" class="img-responsive" alt="" height="100" width="100" align="middle">'
+							  +dispItem
 							+'</a>'
 						+'</div>'
 						+'</div>'
@@ -141,7 +148,6 @@ function showProgramProfImages(data){
 			document.getElementById("programProfImages").innerHTML = dispImages;
 			$.getScript('http://dovasofttech.com/usgfa/js/popup.js');
 	}
-	//alert("dispImgCtrls========"+dispImgCtrls);
 	if(dispImgCtrls){
 		document.getElementById("programProfImgCtrl").style.display = 'none';
 	}

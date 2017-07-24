@@ -27,7 +27,6 @@
 					}
 				});
 			});
-
 	function getMembers() {
 		var memberObject = new Object();
 		memberObject.memberShip = "Life";
@@ -174,7 +173,7 @@
 					<div class="form-group">
 						<label for="land_mark">Display Order *</label> <input type="text"
 							class="form-control" id="comitteeEditDisplayOrder"
-							name="comitteeEditDisplayOrder" maxlength="30" tabindex="4"
+							name="comitteeEditDisplayOrder" maxlength="5" tabindex="4"
 							onkeyup="emptyCheckTwoFields('link', id,'Paper or Link/Url','errPaper');">
 					</div>
 				</div>
